@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "This is a QA check ticket asking whether all footer links work. The comments confirm they do and note that the newsletter description is missing. It has no description and no element spec. The screenshot shows a newsletter signup card with placeholder text, but the ticket does not define a reusable element."}, "in": 455, "out": 102}

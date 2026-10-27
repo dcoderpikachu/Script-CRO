@@ -1,0 +1,32 @@
+{
+  "model": "claude-sonnet-5-5",
+  "folders": 509,
+  "elements": 218,
+  "duplicates_merged": 3,
+  "skipped": 288,
+  "errors": 0,
+  "reused_from_cache": 509,
+  "interrupted": false,
+  "proposed_tags": {
+    "cro_types": [
+      "Product Media",
+      "Storytelling / Brand Content",
+      "Compliance / Legal Pricing",
+      "Experimentation Enablement"
+    ],
+    "element_type": [
+      "Snippet (embedded in theme section)"
+    ],
+    "page_types": [
+      "Content Page (Shopify page / custom page template)",
+      "Landing Page",
+      "Account"
+    ]
+  },
+  "tokens_this_run": {
+    "input": 0,
+    "output": 0
+  },
+  "cost_usd_this_run": 0.0,
+  "cost_usd_all_in_cache": 10.18
+}

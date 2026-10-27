@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has no description, comments, code or screenshots. Its title ('erneute QS?', roughly 'another QA round?') is a QA scheduling question, not a reusable CRO element."}, "in": 63, "out": 77}

@@ -1,0 +1,873 @@
+Step: 0
+Make a safe copy of your theme (Recommended)
+1) In Shopify admin go to Online Store > Themes.
+2) Click the three dots (⋯) next to your live theme > Duplicate. Work on the copy.
+3) When you’re done, preview the copy to test. Publish only after verifying.
+
+Step: 1
+Create a new snippet: ed-product-image-with-video.liquid
+Paste this code:
+<style>
+  .ed_product_image_with_video_wrap .product__info {
+    --product-info-width: calc(var(--grid-column-width) * 5 + var(--grid-gap) * 6);
+  }
+  .product.ed_product_image_with_video_wrap {
+    margin: 0;
+  }
+  ed-product-image-with-video.ed_product_image_with_video {
+    width: 100%;
+    padding-right: 3rem;
+    overflow: hidden;
+  }
+
+  .edImageWithVideoSwiper .swiper-button-next,
+  .edImageWithVideoSwiper .swiper-button-prev {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+  }
+
+  .edImageWithVideoSwiper .swiper-button-next:after,
+  .edImageWithVideoSwiper .swiper-button-prev:after {
+    font-size: 18px;
+    color: #000;
+  }
+
+  .edImageWithVideoSwiper .swiper-button-prev {
+    left: 0;
+  }
+
+  .edImageWithVideoSwiper .swiper-button-next {
+    right: 0;
+  }
+
+  .edImageWithVideoSwiper .swiper-button-prev.swiper-button-disabled,
+  .edImageWithVideoSwiper .swiper-button-next.swiper-button-disabled {
+    opacity: 0;
+  }
+
+  .edImageWithVideoSwiper .swiper-pagination-bullet {
+    width: 24px;
+    height: 1px;
+    border-radius: 3px;
+    background: #949494;
+    opacity: 1;
+  }
+
+  .edImageWithVideoSwiper .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #000;
+    height: 2px;
+  }
+
+  .edImageWithVideoSwiper
+    .swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets.swiper-pagination-horizontal {
+    bottom: 0;
+  }
+
+  .edImageWithVideoSwiper .swiper-scrollbar.swiper-scrollbar-horizontal {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+  }
+
+  /* vide controls */
+  .edImageWithVideoSwiper__video {
+    position: relative;
+  }
+
+  .edImageWithVideoSwiper__video_controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    gap: 8px;
+  }
+
+  button.edImageWithVideoSwiper__video_pause,
+  button.edImageWithVideoSwiper__video_play {
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  button.edImageWithVideoSwiper__video_pause.active,
+  button.edImageWithVideoSwiper__video_play.active {
+    display: flex;
+  }
+
+  button.edImageWithVideoSwiper__video_pause svg,
+  button.edImageWithVideoSwiper__video_play svg,
+  button.edImageWithVideoSwiper__video_fullscreen svg {
+    width: 24px;
+    height: 24px;
+  }
+  button.edImageWithVideoSwiper__video_fullscreen svg.svg_zoom_in {
+    display: block;
+    padding: 2px;
+  }
+  button.edImageWithVideoSwiper__video_fullscreen svg.svg_zoom_out {
+    display: none;
+    padding: 2px;
+  }
+  .edImageWithVideoSwiper__video.fullscreen_view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .edImageWithVideoSwiper__video.fullscreen_view .edImageWithVideoSwiper__video_controls {
+    color: #fff;
+  }
+  .edImageWithVideoSwiper__video.fullscreen_view button.edImageWithVideoSwiper__video_fullscreen svg.svg_zoom_out {
+    display: block;
+  }
+  .edImageWithVideoSwiper__video.fullscreen_view button.edImageWithVideoSwiper__video_fullscreen svg.svg_zoom_in {
+    display: none;
+  }
+  /* End:video controls */
+
+  /* video poup thumbnail css */
+  button.ed-video-thumbnail {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 500px;
+    overflow: hidden;
+  }
+
+  .ed-video-thumbnail-inner {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ed-video-thumbnail-inner img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ed-video-play-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .ed-video-play-icon svg {
+    width: 30px;
+    fill: #fff;
+  }
+
+  .ed-video-thumbnail-overlay {
+    background: rgb(0 0 0 / 12%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 999px) {
+    button.ed-video-thumbnail {
+      width: 54px;
+      height: 54px;
+      border: 2px solid #000;
+      top: 16px;
+      right: 16px;
+    }
+
+    .ed-video-play-icon svg {
+      width: 16px;
+    }
+  }
+
+  /* video popup code */
+  ed-video-popup.ed-video-popup {
+    display: none;
+  }
+  ed-video-popup.ed-video-popup.open {
+    display: block !important;
+  }
+
+  .ed-video-popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    background: #000000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .ed-video-popup-container video {
+    max-height: 90%;
+    width: 90%;
+    max-width: 90%;
+    height: 90%;
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    vertical-align: top;
+  }
+  ed-video-popup.ed-video-popup .btn-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999;
+    cursor: pointer;
+  }
+  ed-video-popup.ed-video-popup .btn-close svg {
+    width: 40px;
+    height: 40px;
+    color: #fff;
+  }
+  /* ENDPVideo modal popup css */
+
+  @media (max-width: 1000px) {
+    .edImageWithVideoSwiper .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+    .edImageWithVideoSwiper .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+      width: 10px;
+      margin: 0 2px !important;
+    }
+
+    .edImageWithVideoSwiper .swiper-pagination-bullet.swiper-pagination-bullet-active {
+      height: 2px;
+      width: 20px;
+    }
+    .edImageWithVideoSwiper .swiper-button-next,
+    .edImageWithVideoSwiper .swiper-button-prev {
+      width: 24px;
+      height: 40px;
+    }
+
+    .edImageWithVideoSwiper .swiper-button-next:after,
+    .edImageWithVideoSwiper .swiper-button-prev:after {
+      font-size: 12px;
+    }
+    .edImageWithVideoSwiper__video_controls {
+      padding: 8px;
+      gap: 4px;
+    }
+
+    button.edImageWithVideoSwiper__video_pause svg,
+    button.edImageWithVideoSwiper__video_play svg,
+    button.edImageWithVideoSwiper__video_fullscreen svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+
+<ed-product-image-with-video class="ed_product_image_with_video">
+  <div class="swiper edImageWithVideoSwiper">
+    <div class="swiper-wrapper">
+      {%- for media in product.media -%}
+        {%- assign alt = media.alt -%}
+        {%- assign is_media_filtered = false -%}
+        {%- assign media_id_as_string = media.id | append: '' -%}
+
+        {% if media.alt contains '#' %}
+          {%- assign alt = product.title -%}
+        {%- endif -%}
+
+        {%- if filtered_media_ids contains media_id_as_string and media.alt != product.title -%}
+          {%- assign is_media_filtered = true -%}
+        {%- endif -%}
+
+        <div class="swiper-slide">
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <div class="edImageWithVideoSwiper__image">
+                {%- assign should_reveal = false -%}
+                {%- assign loading = 'eager' -%}
+
+                {%- if settings.reveal_product_media and selected_media.id == media.id -%}
+                  {%- assign should_reveal = true -%}
+                {%- else -%}
+                  {%- assign loading = 'lazy' -%}
+                {%- endif -%}
+
+                {%- if should_reveal -%}
+                  {{-
+                    media
+                    | image_url: width: media.width
+                    | image_tag:
+                      loading: loading,
+                      sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                      widths: '400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800',
+                      reveal: true
+                  -}}
+                {%- else -%}
+                  {{-
+                    media
+                    | image_url: width: media.width
+                    | image_tag:
+                      loading: loading,
+                      sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                      widths: '400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800'
+                  -}}
+                {%- endif -%}
+
+                {% if product.metafields.standard.featured_video_thumbnail != blank %}
+                  {% assign featured_video_thumbnail = product.metafields.standard.featured_video_thumbnail %}
+                  <button type="button" class="ed-video-thumbnail">
+                    <div class="ed-video-thumbnail-inner">
+                      {{-
+                        featured_video_thumbnail
+                        | image_url: width: featured_video_thumbnail.width
+                        | image_tag: sizes: '100vw', widths: '100,150', alt: featured_video_thumbnail.alt
+                      -}}
+
+                      <div class="ed-video-play-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="ed-video-thumbnail-overlay"></div>
+                  </button>
+                {% endif %}
+              </div>
+
+            {%- when 'video' -%}
+              <div class="edImageWithVideoSwiper__video">
+                {{- media | video_tag: image_size: '1024x', controls: false, autoplay: true, loop: true }}
+
+                <div class="edImageWithVideoSwiper__video_controls">
+                  <button
+                    class="edImageWithVideoSwiper__video_pause active"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </button>
+                  <button
+                    class="edImageWithVideoSwiper__video_play"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+                    </svg>
+                  </button>
+
+                  <button class="edImageWithVideoSwiper__video_fullscreen" type="button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="svg_zoom_in"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                    </svg>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="svg_zoom_out"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            {%- when 'external_video' -%}
+              <external-video provider="{{ media.host | escape }}" class="video-wrapper">
+                {%- unless section.settings.enable_video_autoplay -%}
+                  <div class="video-wrapper__poster">
+                    {{
+                      media.preview_image
+                      | image_url: width: media.preview_image.width
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                        widths: '400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200',
+                        class: 'video-wrapper__poster-image'
+                    }}
+
+                    <div class="video-wrapper__poster-content">
+                      <button
+                        type="button"
+                        class="video-wrapper__play-button"
+                        title="{{ 'general.accessibility.play_video' | t | escape }}"
+                      >
+                        {%- render 'icon' with 'play', width: 72, height: 72 -%}
+                      </button>
+                    </div>
+                  </div>
+                {%- endunless -%}
+
+                <template>
+                  {%- if media.host == 'youtube' -%}
+                    {{-
+                      media
+                      | external_video_url:
+                        enablejsapi: true,
+                        loop: section.settings.enable_video_looping,
+                        mute: section.settings.enable_video_autoplay,
+                        autoplay: true,
+                        playlist: media.external_id
+                      | external_video_tag
+                    -}}
+                  {%- elsif media.host == 'vimeo' -%}
+                    {{-
+                      media
+                      | external_video_url:
+                        autopause: true,
+                        loop: section.settings.enable_video_looping,
+                        muted: section.settings.enable_video_autoplay,
+                        autoplay: true
+                      | external_video_tag
+                    -}}
+                  {%- else -%}
+                    {{- media | external_video_tag: image_size: '1024x' -}}
+                  {%- endif -%}
+                </template>
+              </external-video>
+
+            {%- when 'model' -%}
+              <model-media product-handle="{{ product.handle }}" class="model-wrapper">
+                {{- media | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true -}}
+              </model-media>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
+    {% comment %} <div class="swiper-scrollbar"></div> {% endcomment %}
+  </div>
+
+  <ed-video-popup class="ed-video-popup">
+    <div class="ed-video-popup-container">
+      {% if product.metafields.standard.featured_video %}
+        {% assign ed_video_popup_url = product.metafields.standard.featured_video | file_url %}
+      {% endif %}
+      <video src="{{ ed_video_popup_url }}" autoplay="false" controls=""></video>
+
+      <span class="btn-close">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </span>
+    </div>
+  </ed-video-popup>
+</ed-product-image-with-video>
+
+<script>
+  (function () {
+    // Init Swiper slider
+    function initImageWithVideoSwiper() {
+      // Initialize Swiper after script is loaded
+      var swiper = new Swiper('.edImageWithVideoSwiper', {
+        slidesPerView: 1,
+        slidesPerGroup: 1,
+        spaceBetween: 2,
+        loop: false,
+        speed: 600,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        scrollbar: {
+          el: '.swiper-scrollbar',
+          hide: true,
+        },
+        breakpoints: {
+          1024: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+            spaceBetween: 2,
+            autoHeight: true,
+          },
+        },
+      });
+    }
+
+    // Initialize custom Video Controls
+    function initCustomVideoControls(wrapperSelector = '.edImageWithVideoSwiper__video') {
+      const videoWrappers = document.querySelectorAll(wrapperSelector);
+      if (!videoWrappers.length) return;
+
+      videoWrappers.forEach((wrapper) => {
+        const video = wrapper.querySelector('video');
+        const playBtn = wrapper.querySelector('.edImageWithVideoSwiper__video_play');
+        const pauseBtn = wrapper.querySelector('.edImageWithVideoSwiper__video_pause');
+        const fullscreenBtn = wrapper.querySelector('.edImageWithVideoSwiper__video_fullscreen');
+
+        if (!video) return;
+
+        // Pause & Play
+        if (playBtn && pauseBtn) {
+          playBtn.addEventListener('click', () => {
+            video.play();
+            playBtn.classList.remove('active');
+            pauseBtn.classList.add('active');
+          });
+
+          pauseBtn.addEventListener('click', () => {
+            video.pause();
+            pauseBtn.classList.remove('active');
+            playBtn.classList.add('active');
+          });
+
+          video.addEventListener('pause', () => {
+            pauseBtn.classList.remove('active');
+            playBtn.classList.add('active');
+          });
+
+          video.addEventListener('play', () => {
+            playBtn.classList.remove('active');
+            pauseBtn.classList.add('active');
+          });
+        }
+
+        // Fullscreen Handling
+        if (fullscreenBtn) {
+          fullscreenBtn.addEventListener('click', () => {
+            const elem = wrapper;
+
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+              // Exit fullscreen
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+              }
+            } else {
+              // Enter fullscreen
+              if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+              } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+              } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+              } else {
+                console.warn('Fullscreen API not supported');
+              }
+            }
+          });
+
+          // Track Fullscreen Changes
+          document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement === wrapper) {
+              wrapper.classList.add('fullscreen_view');
+            } else {
+              wrapper.classList.remove('fullscreen_view');
+            }
+          });
+
+          // Support for Safari and legacy prefixes
+          document.addEventListener('webkitfullscreenchange', () => {
+            if (document.webkitFullscreenElement === wrapper) {
+              wrapper.classList.add('fullscreen_view');
+            } else {
+              wrapper.classList.remove('fullscreen_view');
+            }
+          });
+
+          document.addEventListener('msfullscreenchange', () => {
+            if (document.msFullscreenElement === wrapper) {
+              wrapper.classList.add('fullscreen_view');
+            } else {
+              wrapper.classList.remove('fullscreen_view');
+            }
+          });
+        }
+      });
+    }
+
+    // Initialize Video Modal popup
+    function initVideoPopup() {
+      const openButtons = document.querySelectorAll('.ed-video-thumbnail');
+      const videoPopup = document.querySelector('.ed-video-popup');
+      const closeBtn = document.querySelector('.ed-video-popup .btn-close');
+      const video = videoPopup.querySelector('video');
+      video.pause();
+
+      if (openButtons.length && videoPopup && closeBtn && video) {
+        openButtons.forEach((button) => {
+          button.addEventListener('click', function () {
+            videoPopup.classList.add('open');
+            video.play();
+          });
+        });
+
+        closeBtn.addEventListener('click', function () {
+          closePopup();
+        });
+
+        videoPopup.addEventListener('click', function (event) {
+          if (!video.contains(event.target) && !event.target.closest('.ed-video-thumbnail')) {
+            closePopup();
+          }
+        });
+      }
+
+      function closePopup() {
+        videoPopup.classList.remove('open');
+        video.pause();
+        video.currentTime = 0; // Reset video to the beginning
+      }
+    }
+
+    // Run the function to load resources and initialize Swiper
+    document.addEventListener('DOMContentLoaded', async function () {
+      await initImageWithVideoSwiper();
+      initCustomVideoControls();
+      initVideoPopup();
+    });
+
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', async function () {
+        await initImageWithVideoSwiper();
+        initCustomVideoControls();
+        initVideoPopup();
+      });
+    }
+  })();
+</script>
+
+<script>
+  /* Changing slide based on URL variant ID */
+  (function () {
+    // Pass in the product JSON as a parameter
+    function setupVariantSwiperSync(product, swiperSelector = '.edImageWithVideoSwiper') {
+      function getVariantIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('variant');
+      }
+
+      function normalizeSrc(src) {
+        return src?.split('?')[0].replace(/^https?:/, '');
+      }
+
+      function findSlideIndex(sliderEl, variantImgSrc) {
+        const slides = sliderEl.querySelectorAll('.swiper-slide img');
+        const normalizedTarget = normalizeSrc(variantImgSrc);
+
+        for (let i = 0; i < slides.length; i++) {
+          const img = slides[i];
+          if (normalizeSrc(img.src).includes(normalizedTarget)) {
+            return i;
+          }
+        }
+        return -1;
+      }
+
+      function updateSliderForVariant(sliderEl) {
+        const swiper = sliderEl.swiper;
+        if (!swiper) return;
+
+        const variantId = getVariantIdFromUrl();
+        if (!variantId) return;
+
+        const variant = product.variants.find((v) => v.id == variantId);
+        if (!variant || !variant.featured_image) return;
+
+        const index = findSlideIndex(sliderEl, variant.featured_image.src);
+        if (index !== -1) swiper.slideTo(index);
+      }
+
+      function attachLocationChangeEvents() {
+        if (window._variantSwiperEventsAttached) return;
+        window._variantSwiperEventsAttached = true;
+
+        const origPush = history.pushState;
+        history.pushState = function () {
+          origPush.apply(this, arguments);
+          window.dispatchEvent(new Event('locationchange'));
+        };
+
+        const origReplace = history.replaceState;
+        history.replaceState = function () {
+          origReplace.apply(this, arguments);
+          window.dispatchEvent(new Event('locationchange'));
+        };
+
+        window.addEventListener('popstate', () => {
+          window.dispatchEvent(new Event('locationchange'));
+        });
+      }
+
+      function init() {
+        const sliders = document.querySelectorAll(swiperSelector);
+        if (!sliders.length) return;
+
+        sliders.forEach((sliderEl) => {
+          updateSliderForVariant(sliderEl);
+        });
+
+        window.addEventListener('locationchange', () => {
+          sliders.forEach((sliderEl) => {
+            updateSliderForVariant(sliderEl);
+          });
+        });
+      }
+
+      attachLocationChangeEvents();
+      init();
+
+      // Shopify editor live reload
+      if (Shopify.designMode) {
+        document.addEventListener('shopify:section:load', init);
+      }
+    }
+
+    // Run the function to load resources and initialize Swiper
+    document.addEventListener('DOMContentLoaded', async function () {
+      const product = {{ product | json }};
+      setupVariantSwiperSync(product);
+    });
+
+    if (Shopify.designMode) {
+      document.addEventListener('shopify:section:load', async function () {
+        const product = {{ product | json }};
+      setupVariantSwiperSync(product);
+      });
+    }
+  })();
+</script>
+
+
+
+Step: 2
+Add Swiper files to your theme (exact placement)
+File to edit: layout/theme.liquid
+
+Paste the CSS BEFORE the closing </head> tag (on its own line):
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+Paste the JS BEFORE the closing </body> tag (on its own line):
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+Notes:
+- If your theme already loads Swiper, skip adding it again to avoid duplicates.
+- If your store blocks external CDNs, upload the Swiper files to Assets and include them:
+  CSS: {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+  JS:  {{ 'swiper-bundle.min.js'  | asset_url | script_tag }}
+  (Shopify admin > Online Store > Themes > Edit code > Assets > Add files)
+
+
+
+Step: 3
+Insert the gallery into your product page (by theme)
+
+Where to edit (common theme file names/paths):
+- Shopify free OS 2.0 themes (Dawn, Refresh, Sense, Craft, Origin, Taste, Studio, Publisher): sections/main-product.liquid
+- Many popular premium themes (Impulse, Motion, Prestige, Warehouse, Streamline, etc.): sections/product-template.liquid or sections/product.liquid
+- If you can't find the file above: open templates/product.json and note the main section type (often "main-product"), then open the matching file in sections/ (e.g., sections/main-product.liquid)
+
+How to locate the exact insertion point:
+1) Open the product section file from the list above.
+2) Find and remove or comment out the theme’s default media gallery block. Look for one of these patterns:
+   - {%- render 'product-media-gallery' -%} or {% section 'product-media-gallery' %}
+   - {% section 'product-gallery' %} or a similarly named gallery section/snippet
+   - <media-gallery ...> ... </media-gallery>
+   - A loop like: {% for media in product.media %} ... {% endfor %}
+   - A container with classes like product__media or media-gallery
+3) Insert our render line in the exact place where the old gallery was (inside the left media column/container, not inside the product form/right column):
+   {%- render 'ed-product-image-with-video', product: product, section: section -%}
+
+Notes:
+- Keeping the render inside the same wrapper ensures layout and CSS sizing remain correct.
+- If two galleries appear, you missed a leftover gallery include—remove/comment it out so only our render remains.
+
+
+
+Step: 4
+Create Product Metafields with below details:
+Where to create and fill metafields (for non-technical users):
+1) In Shopify admin go to Settings > Custom data > Products.
+2) Create both metafield definitions below (one Video file, one Image file). Save.
+3) Go to Products > pick a product > Metafields section at the bottom:
+   - Featured video: upload/select the video file.
+   - Featured video thumbnail: upload/select the image to show as the round play button.
+4) Save the product.
+
+Metafield:
+Name: Featured video
+Namespace and key: standard.featured_video
+File > One file 
+Accept specific file types = videos
+
+Metafield:
+Name: Featured video thumbnail
+Namespace and key: standard.featured_video_thumbnail
+File > One file 
+Accept specific file types = Images
+
+
+
+Step: 5
+Test and publish safely
+1) Preview the duplicated theme (from Step 0) on a product with images and a video metafield filled.
+2) Confirm the gallery shows, arrows/pagination work, and the play/pause/fullscreen buttons respond.
+3) Switch variants and confirm the slide updates accordingly.
+4) When everything looks good, Publish the theme copy.
+
+Troubleshooting / FAQ
+- I see two galleries: Hide/remove the theme’s default Product media block or comment out its markup, leaving only the custom render line.
+- "Swiper is not defined": Ensure the JS tag is added BEFORE </body> in layout/theme.liquid and that the CDN isn’t blocked. If blocked, upload Swiper files to Assets and include via asset_url (see Step 2 notes).
+- Video doesn’t start: Make sure you uploaded a video in the product metafield and that the video file is processed. Autoplay can be restricted by browsers; use the play button if needed.
+- Nothing shows: Verify the snippet name is exactly ed-product-image-with-video.liquid and that you included the render line in the correct template/section.

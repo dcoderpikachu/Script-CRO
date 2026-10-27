@@ -1,0 +1,253 @@
+Step-1: Go to main-product.liquid and add a new block with below snippet:
+{
+      "type": "cro_pdp_size_slider",
+      "name": "CRO | Size Slider",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Metafields (Required)",
+          "info": "This section relies on the proper setup of [Metaobjects](/admin/settings/custom_data) and [Metafields](/admin/settings/custom_data/product/metafields) in your store. It will only be visible on the product page once you have added Metaobject and Metafield values for a product."
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "content_size",
+          "min": 10,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Content size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "corner_radius",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 6
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show border",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#eeeae9"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#282828"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "range",
+          "id": "scale_size",
+          "min": 1,
+          "max": 8,
+          "step": 0.5,
+          "unit": "px",
+          "label": "Scale size",
+          "default": 4
+        },
+        {
+          "type": "color",
+          "id": "scale_color",
+          "label": "Scale color",
+          "default": "#D9D9D9"
+        },
+        {
+          "type": "color",
+          "id": "active_scale_color",
+          "label": "Active scale color",
+          "default": "#010101"
+        }
+      ]
+},
+
+
+Step-2: Go to product-form.liquid and add below code:
+{%- when 'cro_pdp_size_slider' -%}
+        {% render 'ed-cro-pdp-size-slider', product: product, block: block %}
+
+
+Step-3: Create ed-cro-pdp-size-slider.liquid snippet with below code:
+{% if product.metafields.standard.cro_size_slider.value %}
+  {% assign size_slider_data = product.metafields.standard.cro_size_slider.value %}
+  {% assign size_slider_labels = size_slider_data.labels.value %}
+  {% assign size_slider_position = size_slider_data.scale_position.value %}
+
+  <style>
+    .cro_pdp_size_slider {
+        {% if block.settings.background != 'rgba(0,0,0,0)' %}
+            background-color: {{ block.settings.background }};
+        {% endif %}
+        {% if block.settings.show_border %}
+            border: 1px solid {{ block.settings.border_color }};
+            padding: 16px;
+        {% endif %}
+
+        margin-top: {{  block.settings.space_top }}px;
+        margin-bottom: {{ block.settings.space_bottom }}px;
+        border-radius: {{  block.settings.corner_radius -}}px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cro_pdp_size_slider h5.heading {
+      margin: 0;
+      font-size: {{ block.settings.heading_size }}px;
+      font-weight: normal;
+      {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+        color: {{ block.settings.text_color }};
+      {% endif %}
+    }
+
+    .cro_pdp_size_slider h5.heading strong,
+    .cro_pdp_size_slider h5.heading b {
+      font-weight: 600;
+    }
+
+    span.cro_pdp_scale_bar {
+      position: relative;
+      width: 100%;
+      height: {{ block.settings.scale_size }}px;
+      display: block;
+      background: {{ block.settings.scale_color }};
+      border-radius: 6px;
+    }
+
+    span.cro_pdp_scale_bar:before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: {{ block.settings.active_scale_color }};
+      border-radius: 9999px;
+      position: absolute;
+      top: calc(50% - 8px);
+      left: {{ size_slider_position -}}%;
+    }
+
+    .cro_pdp_size_slider > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .cro_pdp_size_slider > ul > li span {
+      font-size: {{ block.settings.content_size }}px;
+      {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+        color: {{ block.settings.text_color }};
+      {% endif %}
+    }
+  </style>
+  <div class="cro_pdp_size_slider">
+    {% if size_slider_data.heading != blank %}
+      <span class="visually-hidden">{{ size_slider_data.heading }}</span>
+      <h5 class="heading">{{ size_slider_data.heading }}</h5>
+    {% endif %}
+
+    <span class="cro_pdp_scale_bar"></span>
+
+    {% if size_slider_labels != blank %}
+      <ul>
+        {% for item in size_slider_labels %}
+          <li>
+            <span class="visually-hidden">{{ item }}</span>
+            <span>{{ item }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endif %}
+
+
+Ste-4: Setup Metaobject & Metafield with below details:
+Metaobjects:
+Custom data > Metaobject > Add definition 
+Name: CRO | PDP |  Size Slider
+Type: cro_pdp_size_slider
+
+Fields:
+Name: Name
+Type: Single line text
+Key: cro_pdp_size_slider.name
+Description: Enter the product name. This will help you easily identify this metaobject later.
+Use this field as display name
+Required field
+
+Name: Heading
+Type: Single line text
+Key: cro_pdp_size_slider.heading
+
+Name: Labels
+Type: Single line text
+key: cro_pdp_size_slider.labels
+List of Values
+Required field
+
+
+Name: Scale position
+Type: Integer
+key: cro_pdp_size_slider.scale_position
+Description: Percentage value 0–100%
+Min: 0
+Max: 100
+Required field
+
+
+
+Metafield:
+Custom data > products > metafield > add definition:
+Name: CRO | Size Slider
+Namespace and key:  standard.cro_size_slider
+Select type: Mixed reference
+References: CRO | PDP | Size Slider
+

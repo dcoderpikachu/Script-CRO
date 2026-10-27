@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is a QA/audit question (\"Is the total always calculated correctly? Keyword: individual shop analysis\") with an empty description and a one-word comment (\"Yes\"). It describes no reusable CRO element, UI, or spec."}, "in": 114, "out": 97}

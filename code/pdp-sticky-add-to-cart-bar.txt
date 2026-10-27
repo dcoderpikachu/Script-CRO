@@ -1,0 +1,978 @@
+Step 1: Add this schema in the  main-product.liquid
+{
+        "type" : "header",
+        "content" : "Sticky Add to Cart"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sticky_atc",
+        "label": "Enable sticky add to cart",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sticky_atc_show_title",
+        "label": "Show product title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sticky_atc_show_price",
+        "label": "Show price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sticky_atc_show_variants",
+        "label": "Show variant selectors",
+        "default": true
+      }
+
+Step 2: Add this code in the main-product.liquid inside section tag 
+ {%- if section.settings.show_sticky_atc and product.available -%}
+      {%- render 'sticky-atc-button', product: product, section: section -%}
+    {%- endif -%}
+
+
+Step: 3: Create snippet sticky-atc-button.liquid
+{%- assign product_form_id = 'product-form-' | append: section.id | append: '-' | append: product.id -%}
+{% assign payment_container_id = 'MainPaymentContainer' %}
+{% assign atc_button_text = 'product.form.add_to_cart' | t %}
+{% assign atc_button_soldout = 'product.form.sold_out' | t %}
+{% assign savings_label_text = 'Du Sparst' %}
+{% assign header_selector = '.shopify-section--header' %}
+<!-- The variant:changed event needs to be updated to align with the theme's variant change function -->
+<div
+  class="universal-sticky-atc"
+  data-product-id="{{ product.id }}"
+  hidden
+  id="product-{{ product.id }}"
+  data-variants='{{ product.variants | json }}'
+>
+  <div class="sticky-atc-container">
+    <div class="sticky-atc-content">
+      <div class="sticky-atc-image-wrapper">
+        {%- assign featured_media = product.selected_or_first_available_variant.featured_image
+          | default: product.featured_media
+        -%}
+        {{ featured_media | image_url: width: 200 | image_tag: class: 'sticky-atc-image' }}
+      </div>
+
+      <div class="sticky-atc-info">
+        <div class="sticky-atc-title">{{ product.title }}</div>
+
+        <div class="sticky-atc-price" data-price-container>
+          <span class="sticky-atc-current-price">
+            {%- if settings.currency_code_enabled -%}
+              {{- product.selected_or_first_available_variant.price | money_with_currency -}}
+            {%- else -%}
+              {{- product.selected_or_first_available_variant.price | money -}}
+            {%- endif -%}
+          </span>
+          {%- if product.selected_or_first_available_variant.compare_at_price
+              > product.selected_or_first_available_variant.price
+          -%}
+            <span class="sticky-atc-compare-price">
+              {%- if settings.currency_code_enabled -%}
+                {{- product.selected_or_first_available_variant.compare_at_price | money_with_currency -}}
+              {%- else -%}
+                {{- product.selected_or_first_available_variant.compare_at_price | money -}}
+              {%- endif -%}
+            </span>
+            <span class="sticky-atc-sale-badge">
+              {%- assign savings = product.selected_or_first_available_variant.compare_at_price
+                | minus: product.selected_or_first_available_variant.price
+              -%}
+              {{ savings_label_text }}
+              {{ savings | money }}
+            </span>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky-atc-form">
+      {%- unless product.has_only_default_variant -%}
+        <div class="sticky-atc-variants" data-variants-container>
+          {% assign selected_variant = product.selected_or_first_available_variant %}
+          {% assign options = product.options_with_values %}
+
+          {% for option in options %}
+            {% assign option_index = option.position | minus: 1 %}
+
+            {% if option.name == 'Farbe'
+              or option.name == 'Color'
+              or option.name == 'farbe'
+              or option.name == 'color'
+            %}
+              <div class="sticky-atc-color-swatch swatch-container index{{ forloop.index }}">
+                <div class="swatch-list">
+                  {% for value in option.values %}
+                    {%- assign color_swatch_config = settings.color_swatch_config | newline_to_br | split: '<br />' -%}
+                    {%- assign color_value_downcase = value | downcase -%}
+
+                    {% for variant in product.variants %}
+                      {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                        {% assign matched_variant = variant %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+
+                    <div
+                      class="
+                        swatch
+                        {% if selected_variant.options[option_index] == value %} active {% endif %}
+                        {% unless matched_variant.available %} soldout_variant {% endunless %}
+                      "
+                      data-value="{{ value }}"
+                      data-option-index="{{ option.position }}"
+                      style="{% render 'color-swatch-style', color_swatch_config: color_swatch_config, value: color_value_downcase %}"
+                      title="{{ value }}"
+                    ></div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% else %}
+              <div class="sticky-atc-dropdown-container index{{ forloop.index }}">
+                <div class="sticky-atc-dropdown">
+                  <button class="sticky-atc-dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="sticky-atc-dropdown-selected">
+                      {{ selected_variant.options[option_index] | default: option.values.first }}
+                    </span>
+                    <svg
+                      focusable="false"
+                      width="{{ width | default: 12 }}"
+                      height="{{ height | default: 8 }}"
+                      class="{{ icon_class }}"
+                      viewBox="0 0 12 8"
+                    >
+                      <path fill="none" d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="{{ settings.icon_stroke_width }}"></path>
+                    </svg>
+                  </button>
+                  <div class="sticky-atc-dropdown-menu">
+                    {% for value in option.values %}
+                      {% for variant in product.variants %}
+                        {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                          {% assign matched_variant = variant %}
+                          {% break %}
+                        {% endif %}
+                      {% endfor %}
+                      <div
+                        class="
+                          sticky-atc-dropdown-item
+                          {% if selected_variant.options[option_index] == value %} active {% endif %}
+                          {% unless matched_variant.available %} soldout_variant {% endunless %}
+                        "
+                        data-value="{{ value }}"
+                        data-option-index="{{ option.position }}"
+                      >
+                        {{ value }}
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {%- endunless -%}
+
+      <button
+        type="button"
+        class="sticky-atc-button"
+        data-add-to-cart
+        {% unless product.selected_or_first_available_variant.available %}
+          disabled
+        {% endunless %}
+      >
+        {% if product.selected_or_first_available_variant.available %}
+          {{ atc_button_text }}
+        {% else %}
+          {{ atc_button_soldout }}
+        {% endif %}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+   .universal-sticky-atc {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px 0;
+    border-top: 1px solid #e1e1e1;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .universal-sticky-atc[hidden] {
+    display: block !important;
+    transform: translateY(100%);
+  }
+
+  .universal-sticky-atc.active {
+    transform: translateY(0);
+  }
+
+  .sticky-atc-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0 15px;
+    /* only for focal theme */
+    max-width: var(--container-max-width);
+    padding-left: var(--container-gutter);
+    padding-right: var(--container-gutter);
+  }
+
+  .sticky-atc-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  .sticky-atc-image-wrapper {
+    width: 55px;
+    height: 55px;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  .sticky-atc-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .sticky-atc-info {
+    flex-grow: 1;
+  }
+
+  .sticky-atc-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+
+  .sticky-atc-price {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    gap: 5px;
+  }
+
+  .sticky-atc-compare-price {
+    font-size: 14px;
+    text-decoration: line-through;
+    color: #000;
+    order: -1;
+    opacity: 0.6;
+  }
+
+  .sticky-atc-sale-badge {
+    background: #ff0000;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+
+  .sticky-atc-form {
+    display: flex;
+    align-items: center;
+  }
+
+  .sticky-atc-variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-right: 10px;
+    align-items: center;
+  }
+
+  .sticky-atc-color-swatch {
+    margin-right: 10px;
+  }
+
+  .sticky-atc-color-swatch:last-child {
+    margin-right: 0;
+  }
+
+  .swatch-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sticky-atc-color-swatch .swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid #e1e1e1;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .sticky-atc-color-swatch .swatch.active {
+    box-shadow: 0 0 0 2px #000;
+  }
+
+  .sticky-atc-color-swatch .swatch.soldout_variant {
+    opacity: 0.5;
+    position: relative;
+  }
+
+  .sticky-atc-color-swatch .swatch.soldout_variant::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ff0000;
+    transform: rotate(-45deg);
+  }
+
+  .sticky-atc-dropdown-container {
+    position: relative;
+    min-width: 120px;
+    margin-right: 10px;
+  }
+
+  .sticky-atc-dropdown-container:last-child {
+    margin-right: 0;
+  }
+
+  .sticky-atc-dropdown {
+    position: relative;
+  }
+
+  .sticky-atc-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .sticky-atc-dropdown-toggle svg {
+    width: 12px;
+    height: 12px;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+  }
+
+  .sticky-atc-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .sticky-atc-dropdown-menu.show {
+    display: block;
+  }
+
+  .sticky-atc-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .sticky-atc-dropdown-item:hover {
+    background-color: #f5f5f5;
+  }
+
+  .sticky-atc-dropdown-item.active {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .sticky-atc-dropdown-item.soldout_variant {
+    opacity: 0.5;
+    text-decoration: line-through;
+  }
+
+  .sticky-atc-button {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+    min-width: 120px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .sticky-atc-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 767px) {
+    .sticky-atc-container {
+      flex-direction: column;
+      padding: 10px;
+    }
+
+    .sticky-atc-content {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .sticky-atc-form {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .sticky-atc-variants {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+
+    .sticky-atc-color-swatch,
+    .sticky-atc-dropdown-container {
+      width: 100%;
+      margin-right: 0;
+    }
+
+    .sticky-atc-dropdown-container {
+      margin-bottom: 8px;
+    }
+
+    .sticky-atc-button {
+      width: 100%;
+    }
+
+    .sticky-atc-dropdown-menu {
+      bottom: 100%;
+      top: unset;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .universal-sticky-atc {
+      bottom: unset;
+      opacity: 0;
+      visiblity: hidden;
+      transform: translateY(-20px);
+      top: var(--sticky-top-position);
+    }
+    .universal-sticky-atc[hidden] {
+      transform: none;
+      transform: translateY(-20px);
+    }
+
+    .universal-sticky-atc.active {
+      transform: translateY(0);
+      top: var(--sticky-top-position);
+      opacity: 1;
+      visiblity: visible;
+    }
+  }
+
+  {% unless section.settings.sticky_atc_show_title %}
+    .sticky-atc-title{
+      display: none !important;
+    }
+  {% endunless %}
+    {% unless section.settings.sticky_atc_show_price %}
+    .sticky-atc-price{
+      display: none !important;
+    }
+  {% endunless %}
+   {% unless section.settings.sticky_atc_show_variants %}
+    .sticky-atc-variants{
+      display: none !important;
+    }
+  {% endunless %}
+</style>
+
+<script>
+class UniversalStickyATC {
+  constructor() {
+    this.stickyATC = document.querySelector(".universal-sticky-atc");
+    if (!this.stickyATC) return;
+
+    this.productId = this.stickyATC.dataset.productId;
+    this.originalForm = document.getElementById(`{{ product_form_id }}`);
+    this.paymentContainer = document.getElementById(
+      "{{ payment_container_id }}"
+    );
+
+    this.init();
+    this.setupVariantSelectors();
+    this.setupDropdowns();
+  }
+
+  init() {
+    this.setupEventListeners();
+    this.setupIntersectionObserver();
+    this.updateStickyPosition();
+    window.addEventListener("resize", () => this.updateStickyPosition());
+  }
+
+  updateStickyPosition() {
+    const header = document.querySelector("{{ header_selector }}");
+    if (header && this.stickyATC) {
+      const headerBottom =
+        header.getBoundingClientRect().bottom + window.scrollY;
+      this.stickyATC.style.setProperty(
+        "--sticky-top-position",
+        `${headerBottom}px`
+      );
+    }
+  }
+
+  setupDropdowns() {
+    const dropdownToggles = this.stickyATC.querySelectorAll(
+      ".sticky-atc-dropdown-toggle"
+    );
+
+    dropdownToggles.forEach((toggle) => {
+      toggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const dropdown = toggle.closest(".sticky-atc-dropdown");
+        const menu = dropdown.querySelector(".sticky-atc-dropdown-menu");
+
+        document.querySelectorAll(".sticky-atc-dropdown-menu").forEach((m) => {
+          if (m !== menu) m.classList.remove("show");
+        });
+
+        menu.classList.toggle("show");
+
+        const icon = toggle.querySelector("svg");
+        if (menu.classList.contains("show")) {
+          icon.style.transform = "rotate(180deg)";
+        } else {
+          icon.style.transform = "rotate(0)";
+        }
+      });
+    });
+
+    document.addEventListener("click", () => {
+      this.stickyATC
+        .querySelectorAll(".sticky-atc-dropdown-menu")
+        .forEach((menu) => {
+          menu.classList.remove("show");
+        });
+      this.stickyATC
+        .querySelectorAll(".sticky-atc-dropdown-toggle svg")
+        .forEach((icon) => {
+          icon.style.transform = "rotate(0)";
+        });
+    });
+  }
+
+  setupVariantSelectors() {
+    const colorSwatches = this.stickyATC.querySelectorAll(
+      ".sticky-atc-color-swatch .swatch"
+    );
+    colorSwatches.forEach((swatch) => {
+      swatch.addEventListener("click", () => {
+        const container = swatch.closest(".sticky-atc-color-swatch");
+        container
+          .querySelectorAll(".swatch")
+          .forEach((s) => s.classList.remove("active"));
+        swatch.classList.add("active");
+        this.handleVariantChange();
+      });
+    });
+
+    const dropdownItems = this.stickyATC.querySelectorAll(
+      ".sticky-atc-dropdown-item"
+    );
+    dropdownItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        const dropdown = item.closest(".sticky-atc-dropdown");
+        const menu = dropdown.querySelector(".sticky-atc-dropdown-menu");
+        const toggle = dropdown.querySelector(".sticky-atc-dropdown-toggle");
+        const selectedValue = dropdown.querySelector(
+          ".sticky-atc-dropdown-selected"
+        );
+
+        menu
+          .querySelectorAll(".sticky-atc-dropdown-item")
+          .forEach((i) => i.classList.remove("active"));
+        item.classList.add("active");
+
+        selectedValue.textContent = item.dataset.value;
+
+        menu.classList.remove("show");
+        toggle.querySelector("svg").style.transform = "rotate(0)";
+
+        this.handleVariantChange();
+      });
+    });
+  }
+
+  handleVariantChange() {
+    const selectedOptions = this.getSelectedOptions();
+    const variant = this.findVariant(selectedOptions);
+
+    if (variant) {
+      this.updateVariantInfo(variant);
+      this.updateSoldOutStates(selectedOptions);
+      this.dispatchVariantChange(variant);
+    }
+  }
+
+  getSelectedOptions() {
+    const selectedOptions = [];
+    const optionContainers = this.stickyATC.querySelectorAll(
+      ".swatch-container, .sticky-atc-dropdown-container"
+    );
+
+    optionContainers.forEach((container) => {
+      if (container.classList.contains("sticky-atc-color-swatch")) {
+        const activeSwatch = container.querySelector(".swatch.active");
+        selectedOptions.push(activeSwatch ? activeSwatch.dataset.value : null);
+      } else {
+        const activeItem = container.querySelector(
+          ".sticky-atc-dropdown-item.active"
+        );
+        selectedOptions.push(activeItem ? activeItem.dataset.value : null);
+      }
+    });
+
+    return selectedOptions;
+  }
+
+  findVariant(selectedOptions) {
+    const variants = JSON.parse(
+      document.querySelector(`#product-${this.productId}`).dataset.variants
+    );
+
+    return variants.find((variant) => {
+      return (
+        variant.option1 === selectedOptions[0] &&
+        (!selectedOptions[1] || variant.option2 === selectedOptions[1]) &&
+        (!selectedOptions[2] || variant.option3 === selectedOptions[2])
+      );
+    });
+  }
+
+  updateSoldOutStates(selectedOptions) {
+    const variants = JSON.parse(
+      document.querySelector(`#product-${this.productId}`).dataset.variants
+    );
+    const optionContainers = this.stickyATC.querySelectorAll(
+      ".swatch-container, .sticky-atc-dropdown-container"
+    );
+
+    optionContainers.forEach((container, index) => {
+      let items;
+
+      if (container.classList.contains("sticky-atc-color-swatch")) {
+        items = container.querySelectorAll(".swatch");
+      } else {
+        items = container.querySelectorAll(".sticky-atc-dropdown-item");
+      }
+
+      items.forEach((item) => {
+        const testOptions = [...selectedOptions];
+        testOptions[index] = item.dataset.value;
+
+        const variant = this.findVariant(testOptions);
+        if (variant && !variant.available) {
+          item.classList.add("soldout_variant");
+        } else {
+          item.classList.remove("soldout_variant");
+        }
+      });
+    });
+  }
+
+  setupEventListeners() {
+    document.addEventListener("variant:changed", (event) => {
+      // only for focal theme
+      this.updateVariantInfo(event.detail.variant);
+      this.syncSelectorsWithVariant(event.detail.variant);
+    });
+
+    const addToCartButton = this.stickyATC.querySelector("[data-add-to-cart]");
+    if (addToCartButton) {
+      addToCartButton.addEventListener("click", () => {
+        if (this.originalForm) {
+          this.originalForm.dispatchEvent(
+            new Event("submit", { bubbles: true })
+          );
+        }
+      });
+    }
+  }
+
+  syncSelectorsWithVariant(variant) {
+    const optionContainers = this.stickyATC.querySelectorAll(
+      ".swatch-container, .sticky-atc-dropdown-container"
+    );
+
+    optionContainers.forEach((container, index) => {
+      const optionValue = variant[`option${index + 1}`];
+
+      if (container.classList.contains("sticky-atc-color-swatch")) {
+        const swatches = container.querySelectorAll(".swatch");
+        swatches.forEach((swatch) => {
+          swatch.classList.remove("active");
+          if (swatch.dataset.value === optionValue) {
+            swatch.classList.add("active");
+          }
+        });
+      } else {
+        const items = container.querySelectorAll(".sticky-atc-dropdown-item");
+        const selectedValue = container.querySelector(
+          ".sticky-atc-dropdown-selected"
+        );
+
+        items.forEach((item) => {
+          item.classList.remove("active");
+          if (item.dataset.value === optionValue) {
+            item.classList.add("active");
+            selectedValue.textContent = optionValue;
+          }
+        });
+      }
+    });
+  }
+
+  dispatchVariantChange(variant) {
+    const variantId = variant.id;
+    const newUrl = new URL(window.location.href);
+    if (variantId) {
+      newUrl.searchParams.set("variant", variantId);
+    } else {
+      newUrl.searchParams.delete("variant");
+    }
+    window.history.replaceState(
+      { path: newUrl.toString() },
+      "",
+      newUrl.toString()
+    );
+    const idInput = this.originalForm.querySelector('[name="id"]');
+    if (idInput) {
+      idInput.value = variantId;
+    }
+
+    // only for focal theme
+    this.originalForm.dispatchEvent(
+      new CustomEvent("variant:changed", {
+        bubbles: true,
+        detail: {
+          variant: variant,
+        },
+      })
+    );
+    const variantSelector = document.querySelector("product-variants");
+    variantSelector.selectVariant(variantId);
+    variantSelector._onMasterSelectorChanged();
+  }
+
+  setupIntersectionObserver() {
+    if (!this.paymentContainer || !this.stickyATC) {
+      console.warn("Missing required elements for sticky ATC");
+      return;
+    }
+
+    let lastScrollY = window.scrollY;
+    let hasUserScrolled = false;
+    let isPaymentContainerPassed = false;
+
+    const paymentContainerOffset =
+      this.paymentContainer.offsetTop + this.paymentContainer.offsetHeight;
+
+    window.addEventListener("scroll", () => {
+      const currentScrollY = window.scrollY;
+      const isScrollingDown = currentScrollY > lastScrollY;
+      lastScrollY = currentScrollY;
+
+      if (!hasUserScrolled && currentScrollY > 0) {
+        hasUserScrolled = true;
+      }
+
+      const isContainerPassed = currentScrollY > paymentContainerOffset;
+
+      isPaymentContainerPassed = isContainerPassed;
+
+      const shouldShowStickyATC = hasUserScrolled && isPaymentContainerPassed;
+
+      if (shouldShowStickyATC) {
+        this.stickyATC.classList.add("active");
+      } else {
+        this.stickyATC.classList.remove("active");
+      }
+    });
+  }
+
+  updateVariantInfo(variant) {
+    if (!variant) return;
+
+    const priceContainer = this.stickyATC.querySelector(
+      "[data-price-container]"
+    );
+    if (priceContainer) {
+      const priceHTML = this.formatMoney(variant.price);
+      let priceContent = `<span class="sticky-atc-current-price">${priceHTML}</span>`;
+
+      if (variant.compare_at_price > variant.price) {
+        const comparePriceHTML = this.formatMoney(variant.compare_at_price);
+        const savings = variant.compare_at_price - variant.price;
+        priceContent += `
+          <span class="sticky-atc-compare-price">${comparePriceHTML}</span>
+          <span class="sticky-atc-sale-badge">{{ savings_label_text }} ${this.formatMoney(
+            savings
+          )}</span>
+        `;
+      }
+
+      priceContainer.innerHTML = priceContent;
+    }
+    const addToCartButton = this.stickyATC.querySelector("[data-add-to-cart]");
+    if (addToCartButton) {
+      if (variant.available) {
+        addToCartButton.disabled = false;
+        addToCartButton.textContent = "{{atc_button_text}}";
+      } else {
+        addToCartButton.disabled = true;
+        addToCartButton.textContent = "{{atc_button_soldout}}";
+      }
+    }
+
+    if (variant.featured_media) {
+      const imageElement = this.stickyATC.querySelector(".sticky-atc-image");
+      if (imageElement) {
+        imageElement.src = this.getSizedImageUrl(
+          variant.featured_media,
+          "165x"
+        );
+        imageElement.srcset = this.getImageSrcset(
+          variant.featured_media,
+          [55, 110, 165]
+        );
+        imageElement.alt = variant.featured_media.alt || "";
+      }
+    }
+  }
+
+  formatMoney(cents, format) {
+    if (typeof cents === "string") {
+      cents = cents.replace(".", "");
+    }
+    const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/,
+      formatString = format || window.themeVariables.settings.moneyFormat;
+    function defaultTo(value2, defaultValue) {
+      return value2 == null || value2 !== value2 ? defaultValue : value2;
+    }
+    function formatWithDelimiters(number, precision, thousands, decimal) {
+      precision = defaultTo(precision, 2);
+      thousands = defaultTo(thousands, ",");
+      decimal = defaultTo(decimal, ".");
+      if (isNaN(number) || number == null) {
+        return 0;
+      }
+      number = (number / 100).toFixed(precision);
+      let parts = number.split("."),
+        dollarsAmount = parts[0].replace(
+          /(\d)(?=(\d\d\d)+(?!\d))/g,
+          "$1" + thousands
+        ),
+        centsAmount = parts[1] ? decimal + parts[1] : "";
+      return dollarsAmount + centsAmount;
+    }
+    let value = "";
+    switch (formatString.match(placeholderRegex)[1]) {
+      case "amount":
+        value = formatWithDelimiters(cents, 2);
+        break;
+      case "amount_no_decimals":
+        value = formatWithDelimiters(cents, 0);
+        break;
+      case "amount_with_space_separator":
+        value = formatWithDelimiters(cents, 2, " ", ".");
+        break;
+      case "amount_with_comma_separator":
+        value = formatWithDelimiters(cents, 2, ".", ",");
+        break;
+      case "amount_with_apostrophe_separator":
+        value = formatWithDelimiters(cents, 2, "'", ".");
+        break;
+      case "amount_no_decimals_with_comma_separator":
+        value = formatWithDelimiters(cents, 0, ".", ",");
+        break;
+      case "amount_no_decimals_with_space_separator":
+        value = formatWithDelimiters(cents, 0, " ");
+        break;
+      case "amount_no_decimals_with_apostrophe_separator":
+        value = formatWithDelimiters(cents, 0, "'");
+        break;
+    }
+    if (formatString.indexOf("with_comma_separator") !== -1) {
+      return formatString.replace(placeholderRegex, value);
+    } else {
+      return formatString.replace(placeholderRegex, value);
+    }
+  }
+
+  getSizedImageUrl(media, size) {
+    if (!media || !media.preview_image) return "";
+    return (
+      media.preview_image.src.split("?")[0] +
+      `?width=${size.split("x")[0]}&height=${
+        size.split("x")[1] || size.split("x")[0]
+      }&crop=center`
+    );
+  }
+
+  getImageSrcset(media, sizes) {
+    if (!media || !media.preview_image) return "";
+    return sizes
+      .map((size) => {
+        return `${this.getSizedImageUrl(media, `${size}x`)} ${size}w`;
+      })
+      .join(", ");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  new UniversalStickyATC();
+});
+
+if (typeof Shopify !== "undefined") {
+  document.addEventListener("shopify:section:load", () => {
+    new UniversalStickyATC();
+  });
+}
+
+</script>

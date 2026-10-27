@@ -1,0 +1,1766 @@
+Step: 1
+Create a section: ed-pdp-bulk-discounts.liquid
+Paste this code:
+
+<style>
+  :root {
+    --space-top: 100px;
+    --space-bottom: 100px;
+    --space-left: 0px;
+    --space-right: 0px;
+    --text-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+    --section-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+
+    --card-corner-radius: 16px;
+    --card-image-size: 40px;
+    --card-badge-size: 10px;
+    --card-heading-size: 24px;
+    --card-content-size: 14px;
+    --card-discount-size: 32px;
+    --card-footer-title-size: 24px;
+    --card-footer-content-size: 13px;
+    --nav-tab-color: {{ settings.text_color }};
+    --nav-tab-background: #EDEEEA;
+    --nav-tab-border-color: #D0D1CE;
+    --nav-tab-hover-color: {{ settings.text_color }};
+    --nav-tab-hover-background: #EDEEEA;
+    --nav-tab-active-color: #ffffff;
+    --nav-tab-active-background: #000000;
+    --card-text-color: {{ settings.text_color }};
+    --card-border-color: #E9E9E3;
+    --card-background: #E9E9E3;
+    --card-active-text-color: {{ settings.text_color }};
+    --card-active-border-color: #D5D5D5;
+    --card-active-background: #FFFFFF;
+    --card-badge-corner-radius: 4px;
+    --card-badge-color: #ffffff;
+    --card-badge-background: #48AB76;
+    --card-footer-color: {{ settings.text_color }};
+    --card-footer-background: #F6F6F6;
+    --card-footer-corner-radius: 16px;
+    --card-footer-button-color: #e5e4dd;
+    --card-footer-button-bg: #6667aa;
+    --card-footer-button-bg-active: #7678ca;
+  }
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+      --space-left: {{ section.settings.space_left_mobile -}}px;
+      --space-right: {{ section.settings.space_right_mobile -}}px;
+
+      --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+
+
+    {% if section.settings.tab_nav_text_color != 'rgba(0,0,0,0)' %}
+        --nav-tab-color: {{ section.settings.tab_nav_text_color }};
+    {% else %}
+        --nav-tab-color: {{ settings.text_color }};
+    {% endif %}
+
+    --nav-tab-background: {{ section.settings.tab_nav_background }};
+    --nav-tab-border-color: {{ section.settings.tab_nav_border_color }};
+
+    {% if section.settings.tab_nav_text_color_hover != 'rgba(0,0,0,0)' %}
+        --nav-tab-hover-color: {{ section.settings.tab_nav_text_color_hover }};
+        {% else %}
+        --nav-tab-hover-color: {{ settings.text_color }};
+    {% endif %}
+
+    {% if section.settings.tab_nav_background_hover != 'rgba(0,0,0,0)' %}
+        --nav-tab-hover-background: {{ section.settings.tab_nav_background_hover }};
+        {% else %}
+        --nav-tab-hover-background: {{ section.settings.tab_nav_background }};
+    {% endif %}
+
+    {% if section.settings.tab_nav_active_color != 'rgba(0,0,0,0)' %}
+        --nav-tab-active-color: {{ section.settings.tab_nav_active_color }};
+        {% else %}
+        --nav-tab-active-color: {{ settings.text_color }};
+    {% endif %}
+
+    --nav-tab-active-background: {{ section.settings.tab_nav_active_background }};
+    {% if section.settings.card_text_color != 'rgba(0,0,0,0)' %}
+        --card-text-color: {{ section.settings.card_text_color }};
+        {% else %}
+        --card-text-color: {{ settings.text_color }};
+    {% endif %}
+    --card-border-color: {{ section.settings.card_border_color }};
+    --card-background: {{ section.settings.card_background }};
+    {% if section.settings.card_active_text_color != 'rgba(0,0,0,0)' %}
+        --card-active-text-color: {{ section.settings.card_active_text_color }};
+        {% else %}
+        --card-active-text-color: {{ settings.text_color }};
+    {% endif %}
+    --card-active-border-color: {{ section.settings.card_active_border_color }};
+    --card-active-background: {{ section.settings.card_active_background }};
+    --card-badge-corner-radius: {{ section.settings.badge_corner_radius }}px;
+    --card-badge-color: {{ section.settings.badge_text_color }};
+    --card-badge-background: {{ section.settings.badge_background_color }};
+    {% if section.settings.footer_text_color != 'rgba(0,0,0,0)' %}
+        --card-footer-color: {{ section.settings.footer_text_color }};
+        {% else %}
+        --card-footer-color: {{ settings.text_color }};
+    {% endif %}
+    --card-footer-background: {{ section.settings.footer_background }};
+    --card-footer-corner-radius: {{ section.settings.footer_corner_radius }}px;
+    --card-footer-button-color: {{ section.settings.footer_button_color }};
+    --card-footer-button-bg: {{ section.settings.footer_button_background }};
+    --card-footer-button-bg-active: {{ section.settings.footer_active_button_background }};
+  }
+
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} {
+        --card-corner-radius: {{ section.settings.card_corner_radius_mobile -}}px;
+        --card-image-size: {{ section.settings.card_image_size_mobile -}}px;
+        --card-badge-size: {{ section.settings.badge_size_mobile -}}px;
+        --card-heading-size: {{ section.settings.heading_size_mobile -}}px;
+        --card-content-size: {{ section.settings.content_size_mobile -}}px;
+        --card-discount-size: {{ section.settings.discount_size_mobile -}}px;
+        --card-footer-title-size: {{ section.settings.footer_title_size_mobile }}px;
+        --card-footer-content-size: {{ section.settings.footer_content_size_mobile }}px;
+    }
+  }
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} {
+        --card-corner-radius: {{ section.settings.card_corner_radius -}}px;
+        --card-image-size: {{ section.settings.card_image_size -}}px;
+        --card-badge-size: {{ section.settings.badge_size -}}px;
+        --card-heading-size: {{ section.settings.heading_size -}}px;
+        --card-content-size: {{ section.settings.content_size -}}px;
+        --card-discount-size: {{ section.settings.discount_size -}}px;
+        --card-footer-title-size: {{ section.settings.footer_title_size }}px;
+        --card-footer-content-size: {{ section.settings.footer_content_size }}px;
+    }
+  }
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          --space-top: {{ section.settings.space_top -}}px;
+          --space-bottom: {{ section.settings.space_bottom -}}px;
+          --space-left: {{ section.settings.space_left -}}px;
+          --space-right: {{ section.settings.space_right -}}px;
+      }
+  }
+
+  .ed_pdp_bulk_discounts {
+        display: block;
+        color: rgb(var(--text-color));
+        background: rgb(var(--section-background));
+        {% if section.settings.background == 'rgba(0,0,0,0)' %}
+        margin-top: var(--space-top);
+        margin-bottom: var(--space-bottom);
+        padding-left: var(--space-left);
+        padding-right: var(--space-right);
+        {% else %}
+        padding-top: var(--space-top);
+        padding-bottom: var(--space-bottom);
+        padding-left: var(--space-left);
+        padding-right: var(--space-right);
+        {% endif %}
+    }
+    {% if section.settings.enable_custom_max_width %}
+        .your_section_name > .container {
+        max-width: var(--section-max-width);
+        margin-left: auto;
+        margin-right: auto;
+        }
+    {% endif %}
+
+    .ed_pdp_bulk_discounts__main  {}
+    .ed_pdp_bulk_discounts__main skb-universal-tabs-wrap.skb_universal_tabs_wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tabs_wrap {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 14px;
+        padding-bottom: 20px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tabs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ed_pdp_bulk_discounts_buttons {
+        display: inline-flex;
+        margin: 0 auto;
+        width: auto;
+        flex-direction: row;
+        border-radius: 40px;
+        position: relative;
+        gap: 8px;
+        padding: 5px;
+        overflow-x: auto;
+        justify-content: center;
+        scrollbar-width: thin;
+        position: relative;
+        color: var(--nav-tab-color);
+        border: 1px solid var(--nav-tab-border-color);
+        background-color: var(--nav-tab-background);
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 40px;
+        font-size: 16px;
+        line-height: 1;
+        letter-spacing: .02px;
+        position: relative;
+        user-select: none;
+        z-index: 1;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab:hover {
+        color: var(--nav-tab-hover-color);
+        background-color: var(--nav-tab-hover-background);
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_nav__position {
+        border: 1px solid var(--nav-tab-active-background);
+        position: absolute;
+        bottom: 0;
+        border-radius: 50px;
+        transition: transform 0.3s ease, width 0.3s ease;
+        left: 0;
+        top: 5px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab,
+    .ed_pdp_bulk_discounts__main .skb_tab_nav__position {
+        height: 42px;
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab.skb_active,
+    .ed_pdp_bulk_discounts__main .skb_tab_nav__position {
+        color: var(--nav-tab-active-color);
+        background-color: var(--nav-tab-active-background);
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab.skb_active:hover {
+      background: transparent !important;
+      color: var(--nav-tab-active-color) !important;
+    }
+
+
+    .ed_pdp_bulk_discounts__main .skb_tab_contents {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab_content {
+        opacity: 0;
+        visibility: hidden;
+        padding: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab_content.skb_show {
+        opacity: 1;
+        transition: opacity 0s ease;
+        visibility: visible;
+        position: relative;
+        pointer-events: auto;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-next {
+        right: 8px;
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-prev {
+        left: 8px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-prev,
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-next {
+        --swiper-navigation-size: 40px;
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-top: 0;
+        background: rgb(255 255 255 / 55%);
+        border-radius: 500px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-prev:after,
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-next:after {
+        font-size: 16px;
+        color: rgb(var(--text-color));
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-pagination {
+        --swiper-pagination-color: rgb(var(--text-color));
+        bottom: -8px;
+    }
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-prev,
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-button-next,
+    .ed_pdp_bulk_discounts__main .skb_tab_contents .swiper-pagination {
+        {% comment %} display: none !important; {% endcomment %}
+    }
+
+    .ed_bulk_discunts_card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 16px 42px;
+        color: var(--card-text-color);
+        background-color: var(--card-background);
+        border-radius: var(--card-corner-radius);
+        border: 1px solid var(--card-border-color);
+        height: 100%;
+        justify-content: center;
+        gap: 32px;
+        position: relative;
+    }
+    .ed_bulk_discunts_card.has_badge {
+        color: var(--card-active-text-color);
+        background-color: var(--card-active-background);
+        border-color: var(--card-active-border-color);
+    }
+
+    span.edbd_card--badge {
+        display: block;
+        padding: 7px;
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        line-height: 1;
+        font-size: var(--card-badge-size);
+        color: var(--card-badge-color);
+        background-color: var(--card-badge-background);
+        border-radius: var(--card-badge-corner-radius);
+    }
+
+    .edbd_card--image {
+        display: flex;
+    }
+
+    .edbd_card--image > img,
+    .edbd_card--image > svg {
+        width: var(--card-image-size);
+        height: var(--card-image-size);
+        display: flex;
+        object-fit: contain;
+        align-items: center;
+        justify-content: center;
+    }
+    .edbd_card--content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .heading.edbd_card--title {
+        font-size: var(--card-heading-size);
+        line-height: 1;
+        letter-spacing: -0.01em;
+        text-align: center;
+        margin: 0;
+    }
+
+    .edbd_card--content p {
+        font-size: var(--card-content-size);
+        line-height: 157%;
+        letter-spacing: -0.01em;
+        text-align: center;
+        margin: 0;
+    }
+
+    .heading.edbd_card--discount {
+        font-size: var(--card-discount-size);
+        text-align: center;
+        margin: 0;
+        line-height: 1;
+        font-weight: bold;
+    }
+
+    .ed_pdp_bulk_discounts__footer {
+        margin-top: 20px;
+        width: 100%;
+        border-radius: var(--card-footer-corner-radius);
+        color: var(--card-footer-color);
+        background-color: var(--card-footer-background);
+        padding: 35px 30px;
+        display: flex;
+        gap: 46px;
+    }
+
+
+  .ed_pdp_bdf_footer_title_block {
+      display: flex;
+      flex-direction: column;
+      gap: 23px;
+  }
+
+  .ed_pdp_bdf_footer_title_block h3.heading {
+      font-size: var(--card-footer-title-size);
+      line-height: 120%;
+      letter-spacing: -0.01em;
+      margin: 0;
+  }
+
+  .skb-btn-primary {
+      color: var(--card-footer-button-color);
+      background-color: var(--card-footer-button-bg);
+      height: 3.2rem;
+      min-height: 3.2rem;
+      cursor: pointer;
+      border-radius: 70px;
+      justify-content: center;
+      align-items: center;
+      padding-left: 1.5rem;
+      padding-right: .5rem;
+      display: inline-flex;
+      position: relative;
+      overflow: hidden;
+      transition: .4s;
+      width: fit-content;
+      text-decoration: none;
+  }
+
+  .skb-btn-primary:hover {
+      background-color: var(--card-footer-button-bg-active);
+  }
+
+  .skb-btn-primary span {
+      font-size: 16px;
+      white-space: nowrap;
+      color: inherit;
+      line-height: 26px;
+      font-weight: 400;
+  }
+
+  .skb-btn-icon {
+      background-color: #19191c;
+      z-index: 1;
+      width: 2.4rem;
+      height: 2.4rem;
+      min-height: 2.4rem;
+      min-width: 2.4rem;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      margin-left: .8rem;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+  }
+
+  .skb-btn-icon > svg {
+      transition: .4s;
+      position: absolute;
+      color: #e5e4dd;
+  }
+
+  .skb-btn-icon > svg:first-of-type {
+      transform: translate3d(0%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d
+  }
+
+  .skb-btn-icon > svg:last-of-type {
+      transform: translate3d(-200%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d
+  }
+
+  .skb-btn-primary:hover .skb-btn-icon > svg:first-of-type {
+      transform: translate3d(180%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg) !important;
+      transform-style: preserve-3d
+  }
+
+  .skb-btn-primary:hover .skb-btn-icon > svg:last-of-type {
+      transform: translate3d(0%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg) !important;
+      transform-style: preserve-3d
+  }
+  .ed_pdp_bdf_footer_content ul {
+      list-style-type: initial;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 1rem;
+  }
+
+  .ed_pdp_bdf_footer_content ul *, .ed_pdp_bdf_footer_content ul li {
+      list-style-type: initial;
+      font-size: var(--card-footer-content-size);
+      line-height: 123%;
+  }
+
+
+  @media (max-width: 767px) {
+    .ed_pdp_bulk_discounts__main .skb_tab {
+        font-size: 14px;
+        gap: 6px;
+        padding: 6px 12px;
+    }
+
+    .ed_pdp_bulk_discounts__main .skb_tab, .ed_pdp_bulk_discounts__main .skb_tab_nav__position {
+        height: 30px;
+    }
+
+    .ed_pdp_bulk_discounts_buttons {
+        scrollbar-width: none;
+        flex-wrap: wrap;
+    }
+
+    .heading.edbd_card--title {
+        font-size: 16px;
+    }
+    .edbd_card--content p {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    .heading.edbd_card--discount {
+        font-size: 24px;
+    }
+
+    .ed_pdp_bulk_discounts__footer {
+        flex-direction: column;
+        gap: 24px;
+    }
+    .ed_pdp_bdf_footer_title_block {
+        gap: 16px;
+    }
+  }
+
+  {% unless section.settings.display_section %}
+    #shopify-section-{{ section.id }} {
+        display: none;
+    }
+  {% endunless %}  
+</style>
+
+<div class="ed_pdp_bulk_discounts">
+  <div class="container">
+    <div class="ed_pdp_bulk_discounts__main">
+      <skb-universal-tabs-wrap class="skb_universal_tabs_wrap" data-tabs>
+        <div class="skb_tabs">
+          <div class="ed_pdp_bulk_discounts_buttons">
+            {% for block in section.blocks %}
+              {% if block.type == 'tab_item' %}
+                <button
+                  class="
+                    skb_tab {% if forloop.first %}
+                        skb_active
+                    {% endif %}
+                  "
+                  data-skb-tab-button="bulk_discounts_tab_{{ forloop.index }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.button_text }}
+                </button>
+              {% endif %}
+            {% endfor %}
+            <span class="skb_tab_nav__position"></span>
+          </div>
+        </div>
+
+        <div class="skb_tab_contents">
+          {% for block in section.blocks %}
+            {% if block.type == 'tab_item' %}
+              <div
+                class="
+                  skb_tab_content {% if forloop.first %}
+                      skb_show
+                  {% endif %}
+                "
+                data-skb-tab-content="bulk_discounts_tab_{{ forloop.index }}"
+              >
+                <div
+                  class="swiper bulkDiscountsSwiper_{{ forloop.index }}"
+                  {% if block.settings.show_pagination %}
+                    style="padding-bottom: 24px;"
+                  {% endif %}
+                >
+                  <div class="swiper-wrapper">
+                    {%- for i in (1..8) -%}
+                      {%- assign badge_key = 'badge_text_' | append: i -%}
+                      {%- assign image_key = 'card_image_' | append: i -%}
+                      {%- assign icon_key = 'icon_as_svg_' | append: i -%}
+                      {%- assign title_key = 'card_title_' | append: i -%}
+                      {%- assign content_key = 'card_content_' | append: i -%}
+                      {%- assign discount_key = 'card_discount_' | append: i -%}
+                      {%- assign item_badge_text = block.settings[badge_key] -%}
+                      {%- assign item_image = block.settings[image_key] -%}
+                      {%- assign item_icon = block.settings[icon_key] -%}
+                      {%- assign item_title = block.settings[title_key] -%}
+                      {%- assign item_content = block.settings[content_key] -%}
+                      {%- assign item_discount = block.settings[discount_key] -%}
+
+                      {% if item_image != blank
+                        or item_icon != blank
+                        or item_title != blank
+                        or item_content != blank
+                        or item_discount != blank
+                      %}
+                        <div class="swiper-slide">
+                          <div class="ed_bulk_discunts_card {% if item_badge_text != blank %}has_badge{% endif %}">
+                            {% if item_badge_text != blank %}
+                              <span class="edbd_card--badge">Bester Wert</span>
+                            {% endif %}
+
+                            <div class="edbd_card--image">
+                              {% if item_icon != blank %}
+                                {{ item_icon }}
+                              {% elsif item_image != blank %}
+                                {{-
+                                  item_image
+                                  | image_url: width: item_image.width
+                                  | image_tag: sizes: '100vw', widths: '25,50,75,100', alt: item_image.alt
+                                -}}
+                              {% endif %}
+                            </div>
+                            <div class="edbd_card--content">
+                              <h5 class="heading edbd_card--title">{{ item_title }}</h5>
+                              <p>{{ item_content }}</p>
+                              <h4 class="heading edbd_card--discount">{{ item_discount }}</h4>
+                            </div>
+                          </div>
+                        </div>
+                      {% endif %}
+                    {%- endfor -%}
+                  </div>
+
+                  <div class="swiper-button-next bulkDiscountsSwiper_next_{{ forloop.index }}"></div>
+                  <div class="swiper-button-prev bulkDiscountsSwiper_prev_{{ forloop.index }}"></div>
+                  {% if block.settings.show_pagination %}
+                    <div class="swiper-pagination bulkDiscountsSwiperPagination_{{ forloop.index }}"></div>
+                  {% endif %}
+                </div>
+                <script>
+                  var bulk_swiper_{{ forloop.index }} = new Swiper('.bulkDiscountsSwiper_{{ forloop.index }}', {
+                    slidesPerView: 1.5,
+                    spaceBetween: 13,
+                    loop: false,
+                    navigation: {
+                      nextEl: '.bulkDiscountsSwiper_next_{{ forloop.index }}',
+                      prevEl: '.bulkDiscountsSwiper_prev_{{ forloop.index }}',
+                    },
+                    pagination: {
+                      el: '.bulkDiscountsSwiperPagination_{{ forloop.index }}',
+                      clickable: true,
+                    },
+                    breakpoints: {
+                      768: {
+                        slidesPerView: 2.5,
+                        spaceBetween: 13,
+                      },
+                      1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 20,
+                      },
+                    },
+                  });
+                </script>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </skb-universal-tabs-wrap>
+    </div>
+
+    {% for block in section.blocks %}
+      {% if block.type == 'footer' %}
+        <div class="ed_pdp_bulk_discounts__footer" {{ block.shopify_attributes }}>
+          <div class="ed_pdp_bdf_footer_title_block">
+            <h3 class="heading">{{ block.settings.heading }}</h3>
+
+            {% if block.settings.button_text != blank %}
+              <a
+                href="{{ block.settings.button_url }}"
+                class="skb-btn-primary"
+                {% if block.settings.open_btn_new_window %}
+                  target="_blank"
+                {% endif %}
+              >
+                <span>{{ block.settings.button_text }}</span>
+                <span class="skb-btn-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
+                    <path d="M9.44922 1L16.2742 7.825L9.44922 14.65" stroke="currentColor"></path>
+                    <path d="M16.275 7.82812H0" stroke="currentColor"></path>
+                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
+                    <path d="M9.44922 1L16.2742 7.825L9.44922 14.65" stroke="currentColor"></path>
+                    <path d="M16.275 7.82812H0" stroke="currentColor"></path>
+                  </svg>
+                </span>
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="ed_pdp_bdf_footer_content">
+            {{ block.settings.content }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+
+<script>
+  // Universal Multi-Tabs
+  (function () {
+    function initSKBUniversalMultiTabs(scope = document) {
+      const containers = scope.querySelectorAll('.skb_universal_tabs_wrap');
+
+      containers.forEach((container) => {
+        const tabs = container.querySelectorAll('[data-skb-tab-button]');
+        const contents = container.querySelectorAll('[data-skb-tab-content]');
+        const indicator = container.querySelector('.skb_tab_nav__position'); // Optional
+
+        // Move indicator under active tab
+        function moveIndicator(tab) {
+          if (!indicator) return; // Skip if indicator is not found
+          const tabRect = tab.getBoundingClientRect();
+          const parentRect = tab.parentElement.getBoundingClientRect();
+          const leftOffset = tabRect.left - parentRect.left;
+          indicator.style.width = `${tabRect.width}px`;
+          indicator.style.transform = `translateX(${leftOffset}px)`;
+        }
+
+        // Set initial state
+        const firstActiveTab = container.querySelector('.skb_tab.skb_active') || tabs[0];
+        if (firstActiveTab) {
+          firstActiveTab.classList.add('skb_active');
+          moveIndicator(firstActiveTab);
+          const firstTarget = firstActiveTab.getAttribute('data-skb-tab-button');
+          const firstContent = container.querySelector(`[data-skb-tab-content="${firstTarget}"]`);
+          if (firstContent) {
+            firstContent.classList.add('skb_show');
+            firstContent.style.position = 'relative';
+          }
+        }
+
+        // Add click events
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-skb-tab-button');
+
+            tabs.forEach((t) => t.classList.remove('skb_active'));
+            tab.classList.add('skb_active');
+
+            moveIndicator(tab);
+
+            contents.forEach((content) => {
+              content.classList.remove('skb_show');
+              content.style.position = 'absolute';
+            });
+
+            const next = container.querySelector(`[data-skb-tab-content="${target}"]`);
+            if (next) {
+              next.classList.add('skb_show');
+              next.style.position = 'relative';
+            }
+          });
+        });
+
+        // Recalculate on window resize
+        if (indicator) {
+          window.addEventListener('resize', () => {
+            const activeTab = container.querySelector('.skb_tab.skb_active');
+            if (activeTab) moveIndicator(activeTab);
+          });
+        }
+      });
+    }
+
+    // DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBUniversalMultiTabs();
+    });
+
+    // Shopify section reload support
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        initSKBUniversalMultiTabs(e.target);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "PDP | Bulk Discounts",
+  "settings": [
+    {
+        "type": "checkbox",
+        "id": "display_section",
+        "label": "Display Section",
+        "info": "Uncheck to hide this section. To show it during an A/B test, use the following CSS code: .ed_pdp_bulk_discounts { display: block !important; }",
+        "default": true
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left space",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right space",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Tabs Button Settings"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_background",
+      "label": "Background",
+      "default": "#EDEEEA"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_border_color",
+      "label": "Border color",
+      "default": "#D0D1CE"
+    },
+    {
+      "type": "paragraph",
+      "content": "Mouseover settings"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_text_color_hover",
+      "label": "Mouseover Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_background_hover",
+      "label": "Mouseover Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Active settings"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_active_color",
+      "label": "Active Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tab_nav_active_background",
+      "label": "Active Background",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Tabs Card Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "card_corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_image_size",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Image size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge size",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 14,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "content_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "discount_size",
+      "min": 14,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "label": "Discount size",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Border color",
+      "default": "#E9E9E3"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Background",
+      "default": "#E9E9E3"
+    },
+    {
+      "type": "color",
+      "id": "card_active_text_color",
+      "label": "Active color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "card_active_border_color",
+      "label": "Active Border",
+      "default": "#D5D5D5"
+    },
+    {
+      "type": "color",
+      "id": "card_active_background",
+      "label": "Active Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "paragraph",
+      "content": "Badge settings"
+    },
+    {
+      "type": "range",
+      "id": "badge_corner_radius",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge corner radius",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "badge_background_color",
+      "label": "Badge Background",
+      "default": "#48AB76"
+    },
+
+    {
+      "type": "header",
+      "content": "Footer content settings"
+    },
+    {
+      "type": "color",
+      "id": "footer_text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "footer_background",
+      "label": "Background",
+      "default": "#F6F6F6"
+    },
+    {
+      "type": "range",
+      "id": "footer_corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "footer_title_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "footer_content_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 13
+    },
+    {
+      "type": "color",
+      "id": "footer_button_color",
+      "label": "Button color",
+      "default": "#e5e4dd"
+    },
+    {
+      "type": "color",
+      "id": "footer_button_background",
+      "label": "Button Background",
+      "default": "#6667aa"
+    },
+    {
+      "type": "color",
+      "id": "footer_active_button_background",
+      "label": "Active Button Background",
+      "default": "#7678ca"
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left space (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right space (mobile)",
+      "default": 0
+    },
+    {
+      "type": "paragraph",
+      "content": "other settings"
+    },
+    {
+      "type": "range",
+      "id": "card_corner_radius_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius (mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_image_size_mobile",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Image size (mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "badge_size_mobile",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Badge size (mobile)",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size (mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "content_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "discount_size_mobile",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Discount size (mobile)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "footer_title_size_mobile",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Footer title size (mobile)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "footer_content_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Footer content size (mobile)",
+      "default": 13
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_item",
+      "name": "Tab-item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "header",
+          "content": "Card: 01 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_1",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_1",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_1",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_1",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_1",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_1",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 02 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_2",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_2",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_2",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_2",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_2",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_2",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 03 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_3",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_3",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_3",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_3",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_3",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_3",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 04 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_4",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_4",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_4",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_4",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_4",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_4",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 05 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_5",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_5",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_5",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_5",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_5",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_5",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 06 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_6",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_6",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_6",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_6",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_6",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_6",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 07 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_7",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_7",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_7",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_7",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_7",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_7",
+          "label": "Discount"
+        },
+        {
+          "type": "header",
+          "content": "Card: 08 settings"
+        },
+        {
+          "type": "text",
+          "id": "badge_text_8",
+          "label": "Badge text"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image_8",
+          "label": "Image Icon"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg_8",
+          "label": "Icon as SVG",
+          "info": "It will replace Image Icon"
+        },
+        {
+          "type": "text",
+          "id": "card_title_8",
+          "label": "Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "card_content_8",
+          "label": "Content"
+        },
+        {
+          "type": "text",
+          "id": "card_discount_8",
+          "label": "Discount"
+        }
+      ]
+    },
+    {
+      "type": "footer",
+      "name": "Footer",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "We take care of your office"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Order today"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_btn_new_window",
+          "label": "Open button at new window?",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Test</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP | Bulk Discounts",
+      "settings": {
+        "background": "#edeeea",
+        "tab_nav_background": "#EDEEEA",
+        "tab_nav_border_color": "#D0D1CE",
+        "tab_nav_background_hover": "#e9e9e3",
+        "tab_nav_active_color": "#ffffff",
+        "tab_nav_active_background": "#000000",
+        "card_border_color": "#E9E9E3",
+        "card_background": "#E9E9E3",
+        "card_active_border_color": "#D5D5D5",
+        "card_active_background": "#FFFFFF",
+        "badge_background_color": "#48AB76",
+        "footer_background": "#F6F6F6",
+        "footer_button_color": "#e5e4dd",
+        "footer_button_background": "#6667aa",
+        "footer_active_button_background": "#7678ca"
+      },
+      "blocks": [
+        {
+          "type": "tab_item",
+          "settings": {
+            "button_text": "Desks",
+            "badge_text_1": "Best Value",
+            "icon_as_svg_1": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H43V9.675C43 9.38989 42.8867 9.11646 42.6851 8.91486C42.4835 8.71326 42.2101 8.6 41.925 8.6H34.4V1.075C34.4 0.789892 34.2867 0.516462 34.0851 0.31486C33.8835 0.113259 33.6101 0 33.325 0H11.825C11.5399 0 11.2665 0.113259 11.0649 0.31486C10.8633 0.516462 10.75 0.789892 10.75 1.075V8.6H3.225C2.93989 8.6 2.66646 8.71326 2.46486 8.91486C2.26326 9.11646 2.15 9.38989 2.15 9.675V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM4.3 40.85V10.75H10.75V40.85H4.3ZM19.35 40.85V32.25H25.8V40.85H19.35ZM27.95 40.85V32.25C27.95 31.6798 27.7235 31.1329 27.3203 30.7297C26.9171 30.3265 26.3702 30.1 25.8 30.1H19.35C18.7798 30.1 18.2329 30.3265 17.8297 30.7297C17.4265 31.1329 17.2 31.6798 17.2 32.25V40.85H12.9V2.15H32.25V40.85H27.95ZM34.4 40.85V10.75H40.85V40.85H34.4ZM29.025 6.9875V9.1375C29.025 9.42261 28.9117 9.69604 28.7101 9.89764C28.5085 10.0992 28.2351 10.2125 27.95 10.2125C27.6649 10.2125 27.3915 10.0992 27.1899 9.89764C26.9883 9.69604 26.875 9.42261 26.875 9.1375V6.9875C26.875 6.70239 26.9883 6.42896 27.1899 6.22736C27.3915 6.02576 27.6649 5.9125 27.95 5.9125C28.2351 5.9125 28.5085 6.02576 28.7101 6.22736C28.9117 6.42896 29.025 6.70239 29.025 6.9875ZM23.65 6.9875V9.1375C23.65 9.42261 23.5367 9.69604 23.3351 9.89764C23.1335 10.0992 22.8601 10.2125 22.575 10.2125C22.2899 10.2125 22.0165 10.0992 21.8149 9.89764C21.6133 9.69604 21.5 9.42261 21.5 9.1375V6.9875C21.5 6.70239 21.6133 6.42896 21.8149 6.22736C22.0165 6.02576 22.2899 5.9125 22.575 5.9125C22.8601 5.9125 23.1335 6.02576 23.3351 6.22736C23.5367 6.42896 23.65 6.70239 23.65 6.9875ZM18.275 6.9875V9.1375C18.275 9.42261 18.1617 9.69604 17.9601 9.89764C17.7585 10.0992 17.4851 10.2125 17.2 10.2125C16.9149 10.2125 16.6415 10.0992 16.4399 9.89764C16.2383 9.69604 16.125 9.42261 16.125 9.1375V6.9875C16.125 6.70239 16.2383 6.42896 16.4399 6.22736C16.6415 6.02576 16.9149 5.9125 17.2 5.9125C17.4851 5.9125 17.7585 6.02576 17.9601 6.22736C18.1617 6.42896 18.275 6.70239 18.275 6.9875ZM29.025 15.05V17.2C29.025 17.4851 28.9117 17.7585 28.7101 17.9601C28.5085 18.1617 28.2351 18.275 27.95 18.275C27.6649 18.275 27.3915 18.1617 27.1899 17.9601C26.9883 17.7585 26.875 17.4851 26.875 17.2V15.05C26.875 14.7649 26.9883 14.4915 27.1899 14.2899C27.3915 14.0883 27.6649 13.975 27.95 13.975C28.2351 13.975 28.5085 14.0883 28.7101 14.2899C28.9117 14.4915 29.025 14.7649 29.025 15.05ZM23.65 15.05V17.2C23.65 17.4851 23.5367 17.7585 23.3351 17.9601C23.1335 18.1617 22.8601 18.275 22.575 18.275C22.2899 18.275 22.0165 18.1617 21.8149 17.9601C21.6133 17.7585 21.5 17.4851 21.5 17.2V15.05C21.5 14.7649 21.6133 14.4915 21.8149 14.2899C22.0165 14.0883 22.2899 13.975 22.575 13.975C22.8601 13.975 23.1335 14.0883 23.3351 14.2899C23.5367 14.4915 23.65 14.7649 23.65 15.05ZM18.275 15.05V17.2C18.275 17.4851 18.1617 17.7585 17.9601 17.9601C17.7585 18.1617 17.4851 18.275 17.2 18.275C16.9149 18.275 16.6415 18.1617 16.4399 17.9601C16.2383 17.7585 16.125 17.4851 16.125 17.2V15.05C16.125 14.7649 16.2383 14.4915 16.4399 14.2899C16.6415 14.0883 16.9149 13.975 17.2 13.975C17.4851 13.975 17.7585 14.0883 17.9601 14.2899C18.1617 14.4915 18.275 14.7649 18.275 15.05ZM29.025 22.575V24.725C29.025 25.0101 28.9117 25.2835 28.7101 25.4851C28.5085 25.6867 28.2351 25.8 27.95 25.8C27.6649 25.8 27.3915 25.6867 27.1899 25.4851C26.9883 25.2835 26.875 25.0101 26.875 24.725V22.575C26.875 22.2899 26.9883 22.0165 27.1899 21.8149C27.3915 21.6133 27.6649 21.5 27.95 21.5C28.2351 21.5 28.5085 21.6133 28.7101 21.8149C28.9117 22.0165 29.025 22.2899 29.025 22.575ZM23.65 22.575V24.725C23.65 25.0101 23.5367 25.2835 23.3351 25.4851C23.1335 25.6867 22.8601 25.8 22.575 25.8C22.2899 25.8 22.0165 25.6867 21.8149 25.4851C21.6133 25.2835 21.5 25.0101 21.5 24.725V22.575C21.5 22.2899 21.6133 22.0165 21.8149 21.8149C22.0165 21.6133 22.2899 21.5 22.575 21.5C22.8601 21.5 23.1335 21.6133 23.3351 21.8149C23.5367 22.0165 23.65 22.2899 23.65 22.575ZM18.275 22.575V24.725C18.275 25.0101 18.1617 25.2835 17.9601 25.4851C17.7585 25.6867 17.4851 25.8 17.2 25.8C16.9149 25.8 16.6415 25.6867 16.4399 25.4851C16.2383 25.2835 16.125 25.0101 16.125 24.725V22.575C16.125 22.2899 16.2383 22.0165 16.4399 21.8149C16.6415 21.6133 16.9149 21.5 17.2 21.5C17.4851 21.5 17.7585 21.6133 17.9601 21.8149C18.1617 22.0165 18.275 22.2899 18.275 22.575ZM8.6 16.6625V18.8125C8.6 19.0976 8.48674 19.371 8.28514 19.5726C8.08354 19.7742 7.81011 19.8875 7.525 19.8875C7.23989 19.8875 6.96646 19.7742 6.76486 19.5726C6.56326 19.371 6.45 19.0976 6.45 18.8125V16.6625C6.45 16.3774 6.56326 16.104 6.76486 15.9024C6.96646 15.7008 7.23989 15.5875 7.525 15.5875C7.81011 15.5875 8.08354 15.7008 8.28514 15.9024C8.48674 16.104 8.6 16.3774 8.6 16.6625ZM8.6 24.725V26.875C8.6 27.1601 8.48674 27.4335 8.28514 27.6351C8.08354 27.8367 7.81011 27.95 7.525 27.95C7.23989 27.95 6.96646 27.8367 6.76486 27.6351C6.56326 27.4335 6.45 27.1601 6.45 26.875V24.725C6.45 24.4399 6.56326 24.1665 6.76486 23.9649C6.96646 23.7633 7.23989 23.65 7.525 23.65C7.81011 23.65 8.08354 23.7633 8.28514 23.9649C8.48674 24.1665 8.6 24.4399 8.6 24.725ZM8.6 32.25V34.4C8.6 34.6851 8.48674 34.9585 8.28514 35.1601C8.08354 35.3617 7.81011 35.475 7.525 35.475C7.23989 35.475 6.96646 35.3617 6.76486 35.1601C6.56326 34.9585 6.45 34.6851 6.45 34.4V32.25C6.45 31.9649 6.56326 31.6915 6.76486 31.4899C6.96646 31.2883 7.23989 31.175 7.525 31.175C7.81011 31.175 8.08354 31.2883 8.28514 31.4899C8.48674 31.6915 8.6 31.9649 8.6 32.25ZM38.7 16.6625V18.8125C38.7 19.0976 38.5867 19.371 38.3851 19.5726C38.1835 19.7742 37.9101 19.8875 37.625 19.8875C37.3399 19.8875 37.0665 19.7742 36.8649 19.5726C36.6633 19.371 36.55 19.0976 36.55 18.8125V16.6625C36.55 16.3774 36.6633 16.104 36.8649 15.9024C37.0665 15.7008 37.3399 15.5875 37.625 15.5875C37.9101 15.5875 38.1835 15.7008 38.3851 15.9024C38.5867 16.104 38.7 16.3774 38.7 16.6625ZM38.7 24.725V26.875C38.7 27.1601 38.5867 27.4335 38.3851 27.6351C38.1835 27.8367 37.9101 27.95 37.625 27.95C37.3399 27.95 37.0665 27.8367 36.8649 27.6351C36.6633 27.4335 36.55 27.1601 36.55 26.875V24.725C36.55 24.4399 36.6633 24.1665 36.8649 23.9649C37.0665 23.7633 37.3399 23.65 37.625 23.65C37.9101 23.65 38.1835 23.7633 38.3851 23.9649C38.5867 24.1665 38.7 24.4399 38.7 24.725ZM38.7 32.25V34.4C38.7 34.6851 38.5867 34.9585 38.3851 35.1601C38.1835 35.3617 37.9101 35.475 37.625 35.475C37.3399 35.475 37.0665 35.3617 36.8649 35.1601C36.6633 34.9585 36.55 34.6851 36.55 34.4V32.25C36.55 31.9649 36.6633 31.6915 36.8649 31.4899C37.0665 31.2883 37.3399 31.175 37.625 31.175C37.9101 31.175 38.1835 31.2883 38.3851 31.4899C38.5867 31.6915 38.7 31.9649 38.7 32.25Z\"></path>\n</svg>",
+            "card_title_1": "50+ Desks",
+            "card_content_1": "For large companies",
+            "card_discount_1": "20% Discount",
+            "badge_text_2": "",
+            "icon_as_svg_2": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H41.925V20.425C41.925 20.1399 41.8117 19.8665 41.6101 19.6649C41.4085 19.4633 41.1351 19.35 40.85 19.35H31.175V1.075C31.175 0.789892 31.0617 0.516462 30.8601 0.31486C30.6585 0.113259 30.3851 0 30.1 0H4.3C4.01489 0 3.74146 0.113259 3.53986 0.31486C3.33826 0.516462 3.225 0.789892 3.225 1.075V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM13.975 40.85V32.25H20.425V40.85H13.975ZM22.575 40.85V32.25C22.575 31.6798 22.3485 31.1329 21.9453 30.7297C21.5421 30.3265 20.9952 30.1 20.425 30.1H13.975C13.4048 30.1 12.8579 30.3265 12.4547 30.7297C12.0515 31.1329 11.825 31.6798 11.825 32.25V40.85H5.375V2.15H29.025V40.85H22.575ZM31.175 40.85V21.5H39.775V40.85H31.175ZM15.05 24.725C15.05 25.0101 14.9367 25.2835 14.7351 25.4851C14.5335 25.6867 14.2601 25.8 13.975 25.8H10.75C10.4649 25.8 10.1915 25.6867 9.98986 25.4851C9.78826 25.2835 9.675 25.0101 9.675 24.725C9.675 24.4399 9.78826 24.1665 9.98986 23.9649C10.1915 23.7633 10.4649 23.65 10.75 23.65H13.975C14.2601 23.65 14.5335 23.7633 14.7351 23.9649C14.9367 24.1665 15.05 24.4399 15.05 24.725ZM24.725 24.725C24.725 25.0101 24.6117 25.2835 24.4101 25.4851C24.2085 25.6867 23.9351 25.8 23.65 25.8H20.425C20.1399 25.8 19.8665 25.6867 19.6649 25.4851C19.4633 25.2835 19.35 25.0101 19.35 24.725C19.35 24.4399 19.4633 24.1665 19.6649 23.9649C19.8665 23.7633 20.1399 23.65 20.425 23.65H23.65C23.9351 23.65 24.2085 23.7633 24.4101 23.9649C24.6117 24.1665 24.725 24.4399 24.725 24.725ZM15.05 19.35C15.05 19.6351 14.9367 19.9085 14.7351 20.1101C14.5335 20.3117 14.2601 20.425 13.975 20.425H10.75C10.4649 20.425 10.1915 20.3117 9.98986 20.1101C9.78826 19.9085 9.675 19.6351 9.675 19.35C9.675 19.0649 9.78826 18.7915 9.98986 18.5899C10.1915 18.3883 10.4649 18.275 10.75 18.275H13.975C14.2601 18.275 14.5335 18.3883 14.7351 18.5899C14.9367 18.7915 15.05 19.0649 15.05 19.35ZM24.725 19.35C24.725 19.6351 24.6117 19.9085 24.4101 20.1101C24.2085 20.3117 23.9351 20.425 23.65 20.425H20.425C20.1399 20.425 19.8665 20.3117 19.6649 20.1101C19.4633 19.9085 19.35 19.6351 19.35 19.35C19.35 19.0649 19.4633 18.7915 19.6649 18.5899C19.8665 18.3883 20.1399 18.275 20.425 18.275H23.65C23.9351 18.275 24.2085 18.3883 24.4101 18.5899C24.6117 18.7915 24.725 19.0649 24.725 19.35ZM15.05 8.6C15.05 8.88511 14.9367 9.15854 14.7351 9.36014C14.5335 9.56174 14.2601 9.675 13.975 9.675H10.75C10.4649 9.675 10.1915 9.56174 9.98986 9.36014C9.78826 9.15854 9.675 8.88511 9.675 8.6C9.675 8.31489 9.78826 8.04146 9.98986 7.83986C10.1915 7.63826 10.4649 7.525 10.75 7.525H13.975C14.2601 7.525 14.5335 7.63826 14.7351 7.83986C14.9367 8.04146 15.05 8.31489 15.05 8.6ZM24.725 8.6C24.725 8.88511 24.6117 9.15854 24.4101 9.36014C24.2085 9.56174 23.9351 9.675 23.65 9.675H20.425C20.1399 9.675 19.8665 9.56174 19.6649 9.36014C19.4633 9.15854 19.35 8.88511 19.35 8.6C19.35 8.31489 19.4633 8.04146 19.6649 7.83986C19.8665 7.63826 20.1399 7.525 20.425 7.525H23.65C23.9351 7.525 24.2085 7.63826 24.4101 7.83986C24.6117 8.04146 24.725 8.31489 24.725 8.6ZM15.05 13.975C15.05 14.2601 14.9367 14.5335 14.7351 14.7351C14.5335 14.9367 14.2601 15.05 13.975 15.05H10.75C10.4649 15.05 10.1915 14.9367 9.98986 14.7351C9.78826 14.5335 9.675 14.2601 9.675 13.975C9.675 13.6899 9.78826 13.4165 9.98986 13.2149C10.1915 13.0133 10.4649 12.9 10.75 12.9H13.975C14.2601 12.9 14.5335 13.0133 14.7351 13.2149C14.9367 13.4165 15.05 13.6899 15.05 13.975ZM24.725 13.975C24.725 14.2601 24.6117 14.5335 24.4101 14.7351C24.2085 14.9367 23.9351 15.05 23.65 15.05H20.425C20.1399 15.05 19.8665 14.9367 19.6649 14.7351C19.4633 14.5335 19.35 14.2601 19.35 13.975C19.35 13.6899 19.4633 13.4165 19.6649 13.2149C19.8665 13.0133 20.1399 12.9 20.425 12.9H23.65C23.9351 12.9 24.2085 13.0133 24.4101 13.2149C24.6117 13.4165 24.725 13.6899 24.725 13.975ZM36.55 25.5313V36.8188C36.55 37.1039 36.4367 37.3773 36.2351 37.5789C36.0335 37.7805 35.7601 37.8938 35.475 37.8938C35.1899 37.8938 34.9165 37.7805 34.7149 37.5789C34.5133 37.3773 34.4 37.1039 34.4 36.8188V25.5313C34.4 25.2461 34.5133 24.9727 34.7149 24.7711C34.9165 24.5695 35.1899 24.4563 35.475 24.4563C35.7601 24.4563 36.0335 24.5695 36.2351 24.7711C36.4367 24.9727 36.55 25.2461 36.55 25.5313Z\"></path>\n</svg>",
+            "card_title_2": "20–49 Desks",
+            "card_content_2": "For fast-growing companies",
+            "card_discount_2": "15% Discount",
+            "badge_text_3": "",
+            "icon_as_svg_3": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 37 43\" height=\"43\" width=\"37\">\n<path fill=\"#19191C\" d=\"M16.125 24.725C16.125 25.0101 16.0117 25.2835 15.8101 25.4851C15.6085 25.6867 15.3351 25.8 15.05 25.8H11.825C11.5399 25.8 11.2665 25.6867 11.0649 25.4851C10.8633 25.2835 10.75 25.0101 10.75 24.725C10.75 24.4399 10.8633 24.1665 11.0649 23.9649C11.2665 23.7633 11.5399 23.65 11.825 23.65H15.05C15.3351 23.65 15.6085 23.7633 15.8101 23.9649C16.0117 24.1665 16.125 24.4399 16.125 24.725ZM24.725 23.65H21.5C21.2149 23.65 20.9415 23.7633 20.7399 23.9649C20.5383 24.1665 20.425 24.4399 20.425 24.725C20.425 25.0101 20.5383 25.2835 20.7399 25.4851C20.9415 25.6867 21.2149 25.8 21.5 25.8H24.725C25.0101 25.8 25.2835 25.6867 25.4851 25.4851C25.6867 25.2835 25.8 25.0101 25.8 24.725C25.8 24.4399 25.6867 24.1665 25.4851 23.9649C25.2835 23.7633 25.0101 23.65 24.725 23.65ZM15.05 18.275H11.825C11.5399 18.275 11.2665 18.3883 11.0649 18.5899C10.8633 18.7915 10.75 19.0649 10.75 19.35C10.75 19.6351 10.8633 19.9085 11.0649 20.1101C11.2665 20.3117 11.5399 20.425 11.825 20.425H15.05C15.3351 20.425 15.6085 20.3117 15.8101 20.1101C16.0117 19.9085 16.125 19.6351 16.125 19.35C16.125 19.0649 16.0117 18.7915 15.8101 18.5899C15.6085 18.3883 15.3351 18.275 15.05 18.275ZM24.725 18.275H21.5C21.2149 18.275 20.9415 18.3883 20.7399 18.5899C20.5383 18.7915 20.425 19.0649 20.425 19.35C20.425 19.6351 20.5383 19.9085 20.7399 20.1101C20.9415 20.3117 21.2149 20.425 21.5 20.425H24.725C25.0101 20.425 25.2835 20.3117 25.4851 20.1101C25.6867 19.9085 25.8 19.6351 25.8 19.35C25.8 19.0649 25.6867 18.7915 25.4851 18.5899C25.2835 18.3883 25.0101 18.275 24.725 18.275ZM15.05 7.525H11.825C11.5399 7.525 11.2665 7.63826 11.0649 7.83986C10.8633 8.04146 10.75 8.31489 10.75 8.6C10.75 8.88511 10.8633 9.15854 11.0649 9.36014C11.2665 9.56174 11.5399 9.675 11.825 9.675H15.05C15.3351 9.675 15.6085 9.56174 15.8101 9.36014C16.0117 9.15854 16.125 8.88511 16.125 8.6C16.125 8.31489 16.0117 8.04146 15.8101 7.83986C15.6085 7.63826 15.3351 7.525 15.05 7.525ZM24.725 7.525H21.5C21.2149 7.525 20.9415 7.63826 20.7399 7.83986C20.5383 8.04146 20.425 8.31489 20.425 8.6C20.425 8.88511 20.5383 9.15854 20.7399 9.36014C20.9415 9.56174 21.2149 9.675 21.5 9.675H24.725C25.0101 9.675 25.2835 9.56174 25.4851 9.36014C25.6867 9.15854 25.8 8.88511 25.8 8.6C25.8 8.31489 25.6867 8.04146 25.4851 7.83986C25.2835 7.63826 25.0101 7.525 24.725 7.525ZM15.05 12.9H11.825C11.5399 12.9 11.2665 13.0133 11.0649 13.2149C10.8633 13.4165 10.75 13.6899 10.75 13.975C10.75 14.2601 10.8633 14.5335 11.0649 14.7351C11.2665 14.9367 11.5399 15.05 11.825 15.05H15.05C15.3351 15.05 15.6085 14.9367 15.8101 14.7351C16.0117 14.5335 16.125 14.2601 16.125 13.975C16.125 13.6899 16.0117 13.4165 15.8101 13.2149C15.6085 13.0133 15.3351 12.9 15.05 12.9ZM24.725 12.9H21.5C21.2149 12.9 20.9415 13.0133 20.7399 13.2149C20.5383 13.4165 20.425 13.6899 20.425 13.975C20.425 14.2601 20.5383 14.5335 20.7399 14.7351C20.9415 14.9367 21.2149 15.05 21.5 15.05H24.725C25.0101 15.05 25.2835 14.9367 25.4851 14.7351C25.6867 14.5335 25.8 14.2601 25.8 13.975C25.8 13.6899 25.6867 13.4165 25.4851 13.2149C25.2835 13.0133 25.0101 12.9 24.725 12.9ZM36.55 41.925C36.55 42.2101 36.4367 42.4835 36.2351 42.6851C36.0335 42.8867 35.7601 43 35.475 43H1.075C0.789892 43 0.516462 42.8867 0.31486 42.6851C0.113259 42.4835 0 42.2101 0 41.925C0 41.6399 0.113259 41.3665 0.31486 41.1649C0.516462 40.9633 0.789892 40.85 1.075 40.85H3.225V1.075C3.225 0.789892 3.33826 0.516462 3.53986 0.31486C3.74146 0.113259 4.01489 0 4.3 0H32.25C32.5351 0 32.8085 0.113259 33.0101 0.31486C33.2117 0.516462 33.325 0.789892 33.325 1.075V40.85H35.475C35.7601 40.85 36.0335 40.9633 36.2351 41.1649C36.4367 41.3665 36.55 41.6399 36.55 41.925ZM21.5 40.85V32.25H15.05V40.85H21.5ZM31.175 40.85V2.15H5.375V40.85H12.9V32.25C12.9 31.6798 13.1265 31.1329 13.5297 30.7297C13.9329 30.3265 14.4798 30.1 15.05 30.1H21.5C22.0702 30.1 22.6171 30.3265 23.0203 30.7297C23.4235 31.1329 23.65 31.6798 23.65 32.25V40.85H31.175Z\"></path>\n</svg>",
+            "card_title_3": "10–19 Desks",
+            "card_content_3": "For small companies",
+            "card_discount_3": "12% Discount",
+            "badge_text_4": "",
+            "icon_as_svg_4": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 47 40\" height=\"40\" width=\"47\">\n<path fill=\"#19191C\" d=\"M45.5556 37.7778H42.2222V11.1111H43.1544C43.5729 11.1109 43.9828 10.9925 44.3369 10.7697C44.6911 10.5468 44.9751 10.2284 45.1563 9.85125C45.3375 9.47408 45.4086 9.05341 45.3613 8.63765C45.3139 8.22189 45.1502 7.82793 44.8889 7.50111L39.2222 0.416667C39.1181 0.286591 38.986 0.181605 38.8358 0.10948C38.6856 0.0373547 38.5211 -6.24406e-05 38.3544 7.82161e-08H8.31222C8.14559 -6.24406e-05 7.98108 0.0373547 7.83087 0.10948C7.68066 0.181605 7.54859 0.286591 7.44445 0.416667L1.77778 7.50111C1.51646 7.82793 1.35272 8.22189 1.30541 8.63765C1.25811 9.05341 1.32915 9.47408 1.51036 9.85125C1.69157 10.2284 1.9756 10.5468 2.32975 10.7697C2.6839 10.9925 3.09378 11.1109 3.51222 11.1111H4.44444V37.7778H1.11111C0.816426 37.7778 0.533811 37.8948 0.325437 38.1032C0.117063 38.3116 0 38.5942 0 38.8889C0 39.1836 0.117063 39.4662 0.325437 39.6746C0.533811 39.8829 0.816426 40 1.11111 40H45.5556C45.8502 40 46.1329 39.8829 46.3412 39.6746C46.5496 39.4662 46.6667 39.1836 46.6667 38.8889C46.6667 38.5942 46.5496 38.3116 46.3412 38.1032C46.1329 37.8948 45.8502 37.7778 45.5556 37.7778ZM3.51222 8.88889L8.84556 2.22222H37.8211L43.1544 8.88889H3.51222ZM20 37.7778V22.2222H26.6667V37.7778H20ZM28.8889 37.7778V22.2222C28.8889 21.6329 28.6548 21.0676 28.238 20.6509C27.8213 20.2341 27.256 20 26.6667 20H20C19.4106 20 18.8454 20.2341 18.4287 20.6509C18.0119 21.0676 17.7778 21.6329 17.7778 22.2222V37.7778H6.66667V11.1111H40V37.7778H28.8889ZM36.6667 25.5556H32.2222C31.9275 25.5556 31.6449 25.6726 31.4365 25.881C31.2282 26.0894 31.1111 26.372 31.1111 26.6667V31.1111C31.1111 31.4058 31.2282 31.6884 31.4365 31.8968C31.6449 32.1052 31.9275 32.2222 32.2222 32.2222H36.6667C36.9614 32.2222 37.244 32.1052 37.4523 31.8968C37.6607 31.6884 37.7778 31.4058 37.7778 31.1111V26.6667C37.7778 26.372 37.6607 26.0894 37.4523 25.881C37.244 25.6726 36.9614 25.5556 36.6667 25.5556ZM35.5556 30H33.3333V27.7778H35.5556V30ZM14.4444 25.5556H10C9.70532 25.5556 9.4227 25.6726 9.21432 25.881C9.00595 26.0894 8.88889 26.372 8.88889 26.6667V31.1111C8.88889 31.4058 9.00595 31.6884 9.21432 31.8968C9.4227 32.1052 9.70532 32.2222 10 32.2222H14.4444C14.7391 32.2222 15.0217 32.1052 15.2301 31.8968C15.4385 31.6884 15.5556 31.4058 15.5556 31.1111V26.6667C15.5556 26.372 15.4385 26.0894 15.2301 25.881C15.0217 25.6726 14.7391 25.5556 14.4444 25.5556ZM13.3333 30H11.1111V27.7778H13.3333V30ZM36.6667 16.6667H32.2222C31.9275 16.6667 31.6449 16.7837 31.4365 16.9921C31.2282 17.2005 31.1111 17.4831 31.1111 17.7778V22.2222C31.1111 22.5169 31.2282 22.7995 31.4365 23.0079C31.6449 23.2163 31.9275 23.3333 32.2222 23.3333H36.6667C36.9614 23.3333 37.244 23.2163 37.4523 23.0079C37.6607 22.7995 37.7778 22.5169 37.7778 22.2222V17.7778C37.7778 17.4831 37.6607 17.2005 37.4523 16.9921C37.244 16.7837 36.9614 16.6667 36.6667 16.6667ZM35.5556 21.1111H33.3333V18.8889H35.5556V21.1111ZM14.4444 16.6667H10C9.70532 16.6667 9.4227 16.7837 9.21432 16.9921C9.00595 17.2005 8.88889 17.4831 8.88889 17.7778V22.2222C8.88889 22.5169 9.00595 22.7995 9.21432 23.0079C9.4227 23.2163 9.70532 23.3333 10 23.3333H14.4444C14.7391 23.3333 15.0217 23.2163 15.2301 23.0079C15.4385 22.7995 15.5556 22.5169 15.5556 22.2222V17.7778C15.5556 17.4831 15.4385 17.2005 15.2301 16.9921C15.0217 16.7837 14.7391 16.6667 14.4444 16.6667ZM13.3333 21.1111H11.1111V18.8889H13.3333V21.1111Z\"></path>\n</svg>",
+            "card_title_4": "5–9 Desks",
+            "card_content_4": "For start-ups",
+            "card_discount_4": "10% Discount",
+            "badge_text_5": "",
+            "icon_as_svg_5": "",
+            "card_title_5": "",
+            "card_content_5": "",
+            "card_discount_5": "",
+            "badge_text_6": "",
+            "icon_as_svg_6": "",
+            "card_title_6": "",
+            "card_content_6": "",
+            "card_discount_6": "",
+            "badge_text_7": "",
+            "icon_as_svg_7": "",
+            "card_title_7": "",
+            "card_content_7": "",
+            "card_discount_7": "",
+            "badge_text_8": "",
+            "icon_as_svg_8": "",
+            "card_title_8": "",
+            "card_content_8": "",
+            "card_discount_8": ""
+          }
+        },
+        {
+          "type": "tab_item",
+          "settings": {
+            "button_text": "Chairs",
+            "badge_text_1": "Best Value",
+            "icon_as_svg_1": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H43V9.675C43 9.38989 42.8867 9.11646 42.6851 8.91486C42.4835 8.71326 42.2101 8.6 41.925 8.6H34.4V1.075C34.4 0.789892 34.2867 0.516462 34.0851 0.31486C33.8835 0.113259 33.6101 0 33.325 0H11.825C11.5399 0 11.2665 0.113259 11.0649 0.31486C10.8633 0.516462 10.75 0.789892 10.75 1.075V8.6H3.225C2.93989 8.6 2.66646 8.71326 2.46486 8.91486C2.26326 9.11646 2.15 9.38989 2.15 9.675V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM4.3 40.85V10.75H10.75V40.85H4.3ZM19.35 40.85V32.25H25.8V40.85H19.35ZM27.95 40.85V32.25C27.95 31.6798 27.7235 31.1329 27.3203 30.7297C26.9171 30.3265 26.3702 30.1 25.8 30.1H19.35C18.7798 30.1 18.2329 30.3265 17.8297 30.7297C17.4265 31.1329 17.2 31.6798 17.2 32.25V40.85H12.9V2.15H32.25V40.85H27.95ZM34.4 40.85V10.75H40.85V40.85H34.4ZM29.025 6.9875V9.1375C29.025 9.42261 28.9117 9.69604 28.7101 9.89764C28.5085 10.0992 28.2351 10.2125 27.95 10.2125C27.6649 10.2125 27.3915 10.0992 27.1899 9.89764C26.9883 9.69604 26.875 9.42261 26.875 9.1375V6.9875C26.875 6.70239 26.9883 6.42896 27.1899 6.22736C27.3915 6.02576 27.6649 5.9125 27.95 5.9125C28.2351 5.9125 28.5085 6.02576 28.7101 6.22736C28.9117 6.42896 29.025 6.70239 29.025 6.9875ZM23.65 6.9875V9.1375C23.65 9.42261 23.5367 9.69604 23.3351 9.89764C23.1335 10.0992 22.8601 10.2125 22.575 10.2125C22.2899 10.2125 22.0165 10.0992 21.8149 9.89764C21.6133 9.69604 21.5 9.42261 21.5 9.1375V6.9875C21.5 6.70239 21.6133 6.42896 21.8149 6.22736C22.0165 6.02576 22.2899 5.9125 22.575 5.9125C22.8601 5.9125 23.1335 6.02576 23.3351 6.22736C23.5367 6.42896 23.65 6.70239 23.65 6.9875ZM18.275 6.9875V9.1375C18.275 9.42261 18.1617 9.69604 17.9601 9.89764C17.7585 10.0992 17.4851 10.2125 17.2 10.2125C16.9149 10.2125 16.6415 10.0992 16.4399 9.89764C16.2383 9.69604 16.125 9.42261 16.125 9.1375V6.9875C16.125 6.70239 16.2383 6.42896 16.4399 6.22736C16.6415 6.02576 16.9149 5.9125 17.2 5.9125C17.4851 5.9125 17.7585 6.02576 17.9601 6.22736C18.1617 6.42896 18.275 6.70239 18.275 6.9875ZM29.025 15.05V17.2C29.025 17.4851 28.9117 17.7585 28.7101 17.9601C28.5085 18.1617 28.2351 18.275 27.95 18.275C27.6649 18.275 27.3915 18.1617 27.1899 17.9601C26.9883 17.7585 26.875 17.4851 26.875 17.2V15.05C26.875 14.7649 26.9883 14.4915 27.1899 14.2899C27.3915 14.0883 27.6649 13.975 27.95 13.975C28.2351 13.975 28.5085 14.0883 28.7101 14.2899C28.9117 14.4915 29.025 14.7649 29.025 15.05ZM23.65 15.05V17.2C23.65 17.4851 23.5367 17.7585 23.3351 17.9601C23.1335 18.1617 22.8601 18.275 22.575 18.275C22.2899 18.275 22.0165 18.1617 21.8149 17.9601C21.6133 17.7585 21.5 17.4851 21.5 17.2V15.05C21.5 14.7649 21.6133 14.4915 21.8149 14.2899C22.0165 14.0883 22.2899 13.975 22.575 13.975C22.8601 13.975 23.1335 14.0883 23.3351 14.2899C23.5367 14.4915 23.65 14.7649 23.65 15.05ZM18.275 15.05V17.2C18.275 17.4851 18.1617 17.7585 17.9601 17.9601C17.7585 18.1617 17.4851 18.275 17.2 18.275C16.9149 18.275 16.6415 18.1617 16.4399 17.9601C16.2383 17.7585 16.125 17.4851 16.125 17.2V15.05C16.125 14.7649 16.2383 14.4915 16.4399 14.2899C16.6415 14.0883 16.9149 13.975 17.2 13.975C17.4851 13.975 17.7585 14.0883 17.9601 14.2899C18.1617 14.4915 18.275 14.7649 18.275 15.05ZM29.025 22.575V24.725C29.025 25.0101 28.9117 25.2835 28.7101 25.4851C28.5085 25.6867 28.2351 25.8 27.95 25.8C27.6649 25.8 27.3915 25.6867 27.1899 25.4851C26.9883 25.2835 26.875 25.0101 26.875 24.725V22.575C26.875 22.2899 26.9883 22.0165 27.1899 21.8149C27.3915 21.6133 27.6649 21.5 27.95 21.5C28.2351 21.5 28.5085 21.6133 28.7101 21.8149C28.9117 22.0165 29.025 22.2899 29.025 22.575ZM23.65 22.575V24.725C23.65 25.0101 23.5367 25.2835 23.3351 25.4851C23.1335 25.6867 22.8601 25.8 22.575 25.8C22.2899 25.8 22.0165 25.6867 21.8149 25.4851C21.6133 25.2835 21.5 25.0101 21.5 24.725V22.575C21.5 22.2899 21.6133 22.0165 21.8149 21.8149C22.0165 21.6133 22.2899 21.5 22.575 21.5C22.8601 21.5 23.1335 21.6133 23.3351 21.8149C23.5367 22.0165 23.65 22.2899 23.65 22.575ZM18.275 22.575V24.725C18.275 25.0101 18.1617 25.2835 17.9601 25.4851C17.7585 25.6867 17.4851 25.8 17.2 25.8C16.9149 25.8 16.6415 25.6867 16.4399 25.4851C16.2383 25.2835 16.125 25.0101 16.125 24.725V22.575C16.125 22.2899 16.2383 22.0165 16.4399 21.8149C16.6415 21.6133 16.9149 21.5 17.2 21.5C17.4851 21.5 17.7585 21.6133 17.9601 21.8149C18.1617 22.0165 18.275 22.2899 18.275 22.575ZM8.6 16.6625V18.8125C8.6 19.0976 8.48674 19.371 8.28514 19.5726C8.08354 19.7742 7.81011 19.8875 7.525 19.8875C7.23989 19.8875 6.96646 19.7742 6.76486 19.5726C6.56326 19.371 6.45 19.0976 6.45 18.8125V16.6625C6.45 16.3774 6.56326 16.104 6.76486 15.9024C6.96646 15.7008 7.23989 15.5875 7.525 15.5875C7.81011 15.5875 8.08354 15.7008 8.28514 15.9024C8.48674 16.104 8.6 16.3774 8.6 16.6625ZM8.6 24.725V26.875C8.6 27.1601 8.48674 27.4335 8.28514 27.6351C8.08354 27.8367 7.81011 27.95 7.525 27.95C7.23989 27.95 6.96646 27.8367 6.76486 27.6351C6.56326 27.4335 6.45 27.1601 6.45 26.875V24.725C6.45 24.4399 6.56326 24.1665 6.76486 23.9649C6.96646 23.7633 7.23989 23.65 7.525 23.65C7.81011 23.65 8.08354 23.7633 8.28514 23.9649C8.48674 24.1665 8.6 24.4399 8.6 24.725ZM8.6 32.25V34.4C8.6 34.6851 8.48674 34.9585 8.28514 35.1601C8.08354 35.3617 7.81011 35.475 7.525 35.475C7.23989 35.475 6.96646 35.3617 6.76486 35.1601C6.56326 34.9585 6.45 34.6851 6.45 34.4V32.25C6.45 31.9649 6.56326 31.6915 6.76486 31.4899C6.96646 31.2883 7.23989 31.175 7.525 31.175C7.81011 31.175 8.08354 31.2883 8.28514 31.4899C8.48674 31.6915 8.6 31.9649 8.6 32.25ZM38.7 16.6625V18.8125C38.7 19.0976 38.5867 19.371 38.3851 19.5726C38.1835 19.7742 37.9101 19.8875 37.625 19.8875C37.3399 19.8875 37.0665 19.7742 36.8649 19.5726C36.6633 19.371 36.55 19.0976 36.55 18.8125V16.6625C36.55 16.3774 36.6633 16.104 36.8649 15.9024C37.0665 15.7008 37.3399 15.5875 37.625 15.5875C37.9101 15.5875 38.1835 15.7008 38.3851 15.9024C38.5867 16.104 38.7 16.3774 38.7 16.6625ZM38.7 24.725V26.875C38.7 27.1601 38.5867 27.4335 38.3851 27.6351C38.1835 27.8367 37.9101 27.95 37.625 27.95C37.3399 27.95 37.0665 27.8367 36.8649 27.6351C36.6633 27.4335 36.55 27.1601 36.55 26.875V24.725C36.55 24.4399 36.6633 24.1665 36.8649 23.9649C37.0665 23.7633 37.3399 23.65 37.625 23.65C37.9101 23.65 38.1835 23.7633 38.3851 23.9649C38.5867 24.1665 38.7 24.4399 38.7 24.725ZM38.7 32.25V34.4C38.7 34.6851 38.5867 34.9585 38.3851 35.1601C38.1835 35.3617 37.9101 35.475 37.625 35.475C37.3399 35.475 37.0665 35.3617 36.8649 35.1601C36.6633 34.9585 36.55 34.6851 36.55 34.4V32.25C36.55 31.9649 36.6633 31.6915 36.8649 31.4899C37.0665 31.2883 37.3399 31.175 37.625 31.175C37.9101 31.175 38.1835 31.2883 38.3851 31.4899C38.5867 31.6915 38.7 31.9649 38.7 32.25Z\"></path>\n</svg>",
+            "card_title_1": "50+ Chairs",
+            "card_content_1": "For large companies",
+            "card_discount_1": "20% Discount",
+            "badge_text_2": "",
+            "icon_as_svg_2": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H41.925V20.425C41.925 20.1399 41.8117 19.8665 41.6101 19.6649C41.4085 19.4633 41.1351 19.35 40.85 19.35H31.175V1.075C31.175 0.789892 31.0617 0.516462 30.8601 0.31486C30.6585 0.113259 30.3851 0 30.1 0H4.3C4.01489 0 3.74146 0.113259 3.53986 0.31486C3.33826 0.516462 3.225 0.789892 3.225 1.075V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM13.975 40.85V32.25H20.425V40.85H13.975ZM22.575 40.85V32.25C22.575 31.6798 22.3485 31.1329 21.9453 30.7297C21.5421 30.3265 20.9952 30.1 20.425 30.1H13.975C13.4048 30.1 12.8579 30.3265 12.4547 30.7297C12.0515 31.1329 11.825 31.6798 11.825 32.25V40.85H5.375V2.15H29.025V40.85H22.575ZM31.175 40.85V21.5H39.775V40.85H31.175ZM15.05 24.725C15.05 25.0101 14.9367 25.2835 14.7351 25.4851C14.5335 25.6867 14.2601 25.8 13.975 25.8H10.75C10.4649 25.8 10.1915 25.6867 9.98986 25.4851C9.78826 25.2835 9.675 25.0101 9.675 24.725C9.675 24.4399 9.78826 24.1665 9.98986 23.9649C10.1915 23.7633 10.4649 23.65 10.75 23.65H13.975C14.2601 23.65 14.5335 23.7633 14.7351 23.9649C14.9367 24.1665 15.05 24.4399 15.05 24.725ZM24.725 24.725C24.725 25.0101 24.6117 25.2835 24.4101 25.4851C24.2085 25.6867 23.9351 25.8 23.65 25.8H20.425C20.1399 25.8 19.8665 25.6867 19.6649 25.4851C19.4633 25.2835 19.35 25.0101 19.35 24.725C19.35 24.4399 19.4633 24.1665 19.6649 23.9649C19.8665 23.7633 20.1399 23.65 20.425 23.65H23.65C23.9351 23.65 24.2085 23.7633 24.4101 23.9649C24.6117 24.1665 24.725 24.4399 24.725 24.725ZM15.05 19.35C15.05 19.6351 14.9367 19.9085 14.7351 20.1101C14.5335 20.3117 14.2601 20.425 13.975 20.425H10.75C10.4649 20.425 10.1915 20.3117 9.98986 20.1101C9.78826 19.9085 9.675 19.6351 9.675 19.35C9.675 19.0649 9.78826 18.7915 9.98986 18.5899C10.1915 18.3883 10.4649 18.275 10.75 18.275H13.975C14.2601 18.275 14.5335 18.3883 14.7351 18.5899C14.9367 18.7915 15.05 19.0649 15.05 19.35ZM24.725 19.35C24.725 19.6351 24.6117 19.9085 24.4101 20.1101C24.2085 20.3117 23.9351 20.425 23.65 20.425H20.425C20.1399 20.425 19.8665 20.3117 19.6649 20.1101C19.4633 19.9085 19.35 19.6351 19.35 19.35C19.35 19.0649 19.4633 18.7915 19.6649 18.5899C19.8665 18.3883 20.1399 18.275 20.425 18.275H23.65C23.9351 18.275 24.2085 18.3883 24.4101 18.5899C24.6117 18.7915 24.725 19.0649 24.725 19.35ZM15.05 8.6C15.05 8.88511 14.9367 9.15854 14.7351 9.36014C14.5335 9.56174 14.2601 9.675 13.975 9.675H10.75C10.4649 9.675 10.1915 9.56174 9.98986 9.36014C9.78826 9.15854 9.675 8.88511 9.675 8.6C9.675 8.31489 9.78826 8.04146 9.98986 7.83986C10.1915 7.63826 10.4649 7.525 10.75 7.525H13.975C14.2601 7.525 14.5335 7.63826 14.7351 7.83986C14.9367 8.04146 15.05 8.31489 15.05 8.6ZM24.725 8.6C24.725 8.88511 24.6117 9.15854 24.4101 9.36014C24.2085 9.56174 23.9351 9.675 23.65 9.675H20.425C20.1399 9.675 19.8665 9.56174 19.6649 9.36014C19.4633 9.15854 19.35 8.88511 19.35 8.6C19.35 8.31489 19.4633 8.04146 19.6649 7.83986C19.8665 7.63826 20.1399 7.525 20.425 7.525H23.65C23.9351 7.525 24.2085 7.63826 24.4101 7.83986C24.6117 8.04146 24.725 8.31489 24.725 8.6ZM15.05 13.975C15.05 14.2601 14.9367 14.5335 14.7351 14.7351C14.5335 14.9367 14.2601 15.05 13.975 15.05H10.75C10.4649 15.05 10.1915 14.9367 9.98986 14.7351C9.78826 14.5335 9.675 14.2601 9.675 13.975C9.675 13.6899 9.78826 13.4165 9.98986 13.2149C10.1915 13.0133 10.4649 12.9 10.75 12.9H13.975C14.2601 12.9 14.5335 13.0133 14.7351 13.2149C14.9367 13.4165 15.05 13.6899 15.05 13.975ZM24.725 13.975C24.725 14.2601 24.6117 14.5335 24.4101 14.7351C24.2085 14.9367 23.9351 15.05 23.65 15.05H20.425C20.1399 15.05 19.8665 14.9367 19.6649 14.7351C19.4633 14.5335 19.35 14.2601 19.35 13.975C19.35 13.6899 19.4633 13.4165 19.6649 13.2149C19.8665 13.0133 20.1399 12.9 20.425 12.9H23.65C23.9351 12.9 24.2085 13.0133 24.4101 13.2149C24.6117 13.4165 24.725 13.6899 24.725 13.975ZM36.55 25.5313V36.8188C36.55 37.1039 36.4367 37.3773 36.2351 37.5789C36.0335 37.7805 35.7601 37.8938 35.475 37.8938C35.1899 37.8938 34.9165 37.7805 34.7149 37.5789C34.5133 37.3773 34.4 37.1039 34.4 36.8188V25.5313C34.4 25.2461 34.5133 24.9727 34.7149 24.7711C34.9165 24.5695 35.1899 24.4563 35.475 24.4563C35.7601 24.4563 36.0335 24.5695 36.2351 24.7711C36.4367 24.9727 36.55 25.2461 36.55 25.5313Z\"></path>\n</svg>",
+            "card_title_2": "20–49 Chairs",
+            "card_content_2": "For fast-growing companies",
+            "card_discount_2": "15% Discount",
+            "badge_text_3": "",
+            "icon_as_svg_3": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 37 43\" height=\"43\" width=\"37\">\n<path fill=\"#19191C\" d=\"M16.125 24.725C16.125 25.0101 16.0117 25.2835 15.8101 25.4851C15.6085 25.6867 15.3351 25.8 15.05 25.8H11.825C11.5399 25.8 11.2665 25.6867 11.0649 25.4851C10.8633 25.2835 10.75 25.0101 10.75 24.725C10.75 24.4399 10.8633 24.1665 11.0649 23.9649C11.2665 23.7633 11.5399 23.65 11.825 23.65H15.05C15.3351 23.65 15.6085 23.7633 15.8101 23.9649C16.0117 24.1665 16.125 24.4399 16.125 24.725ZM24.725 23.65H21.5C21.2149 23.65 20.9415 23.7633 20.7399 23.9649C20.5383 24.1665 20.425 24.4399 20.425 24.725C20.425 25.0101 20.5383 25.2835 20.7399 25.4851C20.9415 25.6867 21.2149 25.8 21.5 25.8H24.725C25.0101 25.8 25.2835 25.6867 25.4851 25.4851C25.6867 25.2835 25.8 25.0101 25.8 24.725C25.8 24.4399 25.6867 24.1665 25.4851 23.9649C25.2835 23.7633 25.0101 23.65 24.725 23.65ZM15.05 18.275H11.825C11.5399 18.275 11.2665 18.3883 11.0649 18.5899C10.8633 18.7915 10.75 19.0649 10.75 19.35C10.75 19.6351 10.8633 19.9085 11.0649 20.1101C11.2665 20.3117 11.5399 20.425 11.825 20.425H15.05C15.3351 20.425 15.6085 20.3117 15.8101 20.1101C16.0117 19.9085 16.125 19.6351 16.125 19.35C16.125 19.0649 16.0117 18.7915 15.8101 18.5899C15.6085 18.3883 15.3351 18.275 15.05 18.275ZM24.725 18.275H21.5C21.2149 18.275 20.9415 18.3883 20.7399 18.5899C20.5383 18.7915 20.425 19.0649 20.425 19.35C20.425 19.6351 20.5383 19.9085 20.7399 20.1101C20.9415 20.3117 21.2149 20.425 21.5 20.425H24.725C25.0101 20.425 25.2835 20.3117 25.4851 20.1101C25.6867 19.9085 25.8 19.6351 25.8 19.35C25.8 19.0649 25.6867 18.7915 25.4851 18.5899C25.2835 18.3883 25.0101 18.275 24.725 18.275ZM15.05 7.525H11.825C11.5399 7.525 11.2665 7.63826 11.0649 7.83986C10.8633 8.04146 10.75 8.31489 10.75 8.6C10.75 8.88511 10.8633 9.15854 11.0649 9.36014C11.2665 9.56174 11.5399 9.675 11.825 9.675H15.05C15.3351 9.675 15.6085 9.56174 15.8101 9.36014C16.0117 9.15854 16.125 8.88511 16.125 8.6C16.125 8.31489 16.0117 8.04146 15.8101 7.83986C15.6085 7.63826 15.3351 7.525 15.05 7.525ZM24.725 7.525H21.5C21.2149 7.525 20.9415 7.63826 20.7399 7.83986C20.5383 8.04146 20.425 8.31489 20.425 8.6C20.425 8.88511 20.5383 9.15854 20.7399 9.36014C20.9415 9.56174 21.2149 9.675 21.5 9.675H24.725C25.0101 9.675 25.2835 9.56174 25.4851 9.36014C25.6867 9.15854 25.8 8.88511 25.8 8.6C25.8 8.31489 25.6867 8.04146 25.4851 7.83986C25.2835 7.63826 25.0101 7.525 24.725 7.525ZM15.05 12.9H11.825C11.5399 12.9 11.2665 13.0133 11.0649 13.2149C10.8633 13.4165 10.75 13.6899 10.75 13.975C10.75 14.2601 10.8633 14.5335 11.0649 14.7351C11.2665 14.9367 11.5399 15.05 11.825 15.05H15.05C15.3351 15.05 15.6085 14.9367 15.8101 14.7351C16.0117 14.5335 16.125 14.2601 16.125 13.975C16.125 13.6899 16.0117 13.4165 15.8101 13.2149C15.6085 13.0133 15.3351 12.9 15.05 12.9ZM24.725 12.9H21.5C21.2149 12.9 20.9415 13.0133 20.7399 13.2149C20.5383 13.4165 20.425 13.6899 20.425 13.975C20.425 14.2601 20.5383 14.5335 20.7399 14.7351C20.9415 14.9367 21.2149 15.05 21.5 15.05H24.725C25.0101 15.05 25.2835 14.9367 25.4851 14.7351C25.6867 14.5335 25.8 14.2601 25.8 13.975C25.8 13.6899 25.6867 13.4165 25.4851 13.2149C25.2835 13.0133 25.0101 12.9 24.725 12.9ZM36.55 41.925C36.55 42.2101 36.4367 42.4835 36.2351 42.6851C36.0335 42.8867 35.7601 43 35.475 43H1.075C0.789892 43 0.516462 42.8867 0.31486 42.6851C0.113259 42.4835 0 42.2101 0 41.925C0 41.6399 0.113259 41.3665 0.31486 41.1649C0.516462 40.9633 0.789892 40.85 1.075 40.85H3.225V1.075C3.225 0.789892 3.33826 0.516462 3.53986 0.31486C3.74146 0.113259 4.01489 0 4.3 0H32.25C32.5351 0 32.8085 0.113259 33.0101 0.31486C33.2117 0.516462 33.325 0.789892 33.325 1.075V40.85H35.475C35.7601 40.85 36.0335 40.9633 36.2351 41.1649C36.4367 41.3665 36.55 41.6399 36.55 41.925ZM21.5 40.85V32.25H15.05V40.85H21.5ZM31.175 40.85V2.15H5.375V40.85H12.9V32.25C12.9 31.6798 13.1265 31.1329 13.5297 30.7297C13.9329 30.3265 14.4798 30.1 15.05 30.1H21.5C22.0702 30.1 22.6171 30.3265 23.0203 30.7297C23.4235 31.1329 23.65 31.6798 23.65 32.25V40.85H31.175Z\"></path>\n</svg>",
+            "card_title_3": "10–19 Chairs",
+            "card_content_3": "For small companies",
+            "card_discount_3": "12% Discount",
+            "badge_text_4": "",
+            "icon_as_svg_4": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 47 40\" height=\"40\" width=\"47\">\n<path fill=\"#19191C\" d=\"M45.5556 37.7778H42.2222V11.1111H43.1544C43.5729 11.1109 43.9828 10.9925 44.3369 10.7697C44.6911 10.5468 44.9751 10.2284 45.1563 9.85125C45.3375 9.47408 45.4086 9.05341 45.3613 8.63765C45.3139 8.22189 45.1502 7.82793 44.8889 7.50111L39.2222 0.416667C39.1181 0.286591 38.986 0.181605 38.8358 0.10948C38.6856 0.0373547 38.5211 -6.24406e-05 38.3544 7.82161e-08H8.31222C8.14559 -6.24406e-05 7.98108 0.0373547 7.83087 0.10948C7.68066 0.181605 7.54859 0.286591 7.44445 0.416667L1.77778 7.50111C1.51646 7.82793 1.35272 8.22189 1.30541 8.63765C1.25811 9.05341 1.32915 9.47408 1.51036 9.85125C1.69157 10.2284 1.9756 10.5468 2.32975 10.7697C2.6839 10.9925 3.09378 11.1109 3.51222 11.1111H4.44444V37.7778H1.11111C0.816426 37.7778 0.533811 37.8948 0.325437 38.1032C0.117063 38.3116 0 38.5942 0 38.8889C0 39.1836 0.117063 39.4662 0.325437 39.6746C0.533811 39.8829 0.816426 40 1.11111 40H45.5556C45.8502 40 46.1329 39.8829 46.3412 39.6746C46.5496 39.4662 46.6667 39.1836 46.6667 38.8889C46.6667 38.5942 46.5496 38.3116 46.3412 38.1032C46.1329 37.8948 45.8502 37.7778 45.5556 37.7778ZM3.51222 8.88889L8.84556 2.22222H37.8211L43.1544 8.88889H3.51222ZM20 37.7778V22.2222H26.6667V37.7778H20ZM28.8889 37.7778V22.2222C28.8889 21.6329 28.6548 21.0676 28.238 20.6509C27.8213 20.2341 27.256 20 26.6667 20H20C19.4106 20 18.8454 20.2341 18.4287 20.6509C18.0119 21.0676 17.7778 21.6329 17.7778 22.2222V37.7778H6.66667V11.1111H40V37.7778H28.8889ZM36.6667 25.5556H32.2222C31.9275 25.5556 31.6449 25.6726 31.4365 25.881C31.2282 26.0894 31.1111 26.372 31.1111 26.6667V31.1111C31.1111 31.4058 31.2282 31.6884 31.4365 31.8968C31.6449 32.1052 31.9275 32.2222 32.2222 32.2222H36.6667C36.9614 32.2222 37.244 32.1052 37.4523 31.8968C37.6607 31.6884 37.7778 31.4058 37.7778 31.1111V26.6667C37.7778 26.372 37.6607 26.0894 37.4523 25.881C37.244 25.6726 36.9614 25.5556 36.6667 25.5556ZM35.5556 30H33.3333V27.7778H35.5556V30ZM14.4444 25.5556H10C9.70532 25.5556 9.4227 25.6726 9.21432 25.881C9.00595 26.0894 8.88889 26.372 8.88889 26.6667V31.1111C8.88889 31.4058 9.00595 31.6884 9.21432 31.8968C9.4227 32.1052 9.70532 32.2222 10 32.2222H14.4444C14.7391 32.2222 15.0217 32.1052 15.2301 31.8968C15.4385 31.6884 15.5556 31.4058 15.5556 31.1111V26.6667C15.5556 26.372 15.4385 26.0894 15.2301 25.881C15.0217 25.6726 14.7391 25.5556 14.4444 25.5556ZM13.3333 30H11.1111V27.7778H13.3333V30ZM36.6667 16.6667H32.2222C31.9275 16.6667 31.6449 16.7837 31.4365 16.9921C31.2282 17.2005 31.1111 17.4831 31.1111 17.7778V22.2222C31.1111 22.5169 31.2282 22.7995 31.4365 23.0079C31.6449 23.2163 31.9275 23.3333 32.2222 23.3333H36.6667C36.9614 23.3333 37.244 23.2163 37.4523 23.0079C37.6607 22.7995 37.7778 22.5169 37.7778 22.2222V17.7778C37.7778 17.4831 37.6607 17.2005 37.4523 16.9921C37.244 16.7837 36.9614 16.6667 36.6667 16.6667ZM35.5556 21.1111H33.3333V18.8889H35.5556V21.1111ZM14.4444 16.6667H10C9.70532 16.6667 9.4227 16.7837 9.21432 16.9921C9.00595 17.2005 8.88889 17.4831 8.88889 17.7778V22.2222C8.88889 22.5169 9.00595 22.7995 9.21432 23.0079C9.4227 23.2163 9.70532 23.3333 10 23.3333H14.4444C14.7391 23.3333 15.0217 23.2163 15.2301 23.0079C15.4385 22.7995 15.5556 22.5169 15.5556 22.2222V17.7778C15.5556 17.4831 15.4385 17.2005 15.2301 16.9921C15.0217 16.7837 14.7391 16.6667 14.4444 16.6667ZM13.3333 21.1111H11.1111V18.8889H13.3333V21.1111Z\"></path>\n</svg>",
+            "card_title_4": "5–9 Chairs",
+            "card_content_4": "For start-ups",
+            "card_discount_4": "10% Discount",
+            "badge_text_5": "",
+            "icon_as_svg_5": "",
+            "card_title_5": "",
+            "card_content_5": "",
+            "card_discount_5": "",
+            "badge_text_6": "",
+            "icon_as_svg_6": "",
+            "card_title_6": "",
+            "card_content_6": "",
+            "card_discount_6": "",
+            "badge_text_7": "",
+            "icon_as_svg_7": "",
+            "card_title_7": "",
+            "card_content_7": "",
+            "card_discount_7": "",
+            "badge_text_8": "",
+            "icon_as_svg_8": "",
+            "card_title_8": "",
+            "card_content_8": "",
+            "card_discount_8": ""
+          }
+        },
+        {
+          "type": "tab_item",
+          "settings": {
+            "button_text": "Frames",
+            "badge_text_1": "Best Value",
+            "icon_as_svg_1": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H43V9.675C43 9.38989 42.8867 9.11646 42.6851 8.91486C42.4835 8.71326 42.2101 8.6 41.925 8.6H34.4V1.075C34.4 0.789892 34.2867 0.516462 34.0851 0.31486C33.8835 0.113259 33.6101 0 33.325 0H11.825C11.5399 0 11.2665 0.113259 11.0649 0.31486C10.8633 0.516462 10.75 0.789892 10.75 1.075V8.6H3.225C2.93989 8.6 2.66646 8.71326 2.46486 8.91486C2.26326 9.11646 2.15 9.38989 2.15 9.675V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM4.3 40.85V10.75H10.75V40.85H4.3ZM19.35 40.85V32.25H25.8V40.85H19.35ZM27.95 40.85V32.25C27.95 31.6798 27.7235 31.1329 27.3203 30.7297C26.9171 30.3265 26.3702 30.1 25.8 30.1H19.35C18.7798 30.1 18.2329 30.3265 17.8297 30.7297C17.4265 31.1329 17.2 31.6798 17.2 32.25V40.85H12.9V2.15H32.25V40.85H27.95ZM34.4 40.85V10.75H40.85V40.85H34.4ZM29.025 6.9875V9.1375C29.025 9.42261 28.9117 9.69604 28.7101 9.89764C28.5085 10.0992 28.2351 10.2125 27.95 10.2125C27.6649 10.2125 27.3915 10.0992 27.1899 9.89764C26.9883 9.69604 26.875 9.42261 26.875 9.1375V6.9875C26.875 6.70239 26.9883 6.42896 27.1899 6.22736C27.3915 6.02576 27.6649 5.9125 27.95 5.9125C28.2351 5.9125 28.5085 6.02576 28.7101 6.22736C28.9117 6.42896 29.025 6.70239 29.025 6.9875ZM23.65 6.9875V9.1375C23.65 9.42261 23.5367 9.69604 23.3351 9.89764C23.1335 10.0992 22.8601 10.2125 22.575 10.2125C22.2899 10.2125 22.0165 10.0992 21.8149 9.89764C21.6133 9.69604 21.5 9.42261 21.5 9.1375V6.9875C21.5 6.70239 21.6133 6.42896 21.8149 6.22736C22.0165 6.02576 22.2899 5.9125 22.575 5.9125C22.8601 5.9125 23.1335 6.02576 23.3351 6.22736C23.5367 6.42896 23.65 6.70239 23.65 6.9875ZM18.275 6.9875V9.1375C18.275 9.42261 18.1617 9.69604 17.9601 9.89764C17.7585 10.0992 17.4851 10.2125 17.2 10.2125C16.9149 10.2125 16.6415 10.0992 16.4399 9.89764C16.2383 9.69604 16.125 9.42261 16.125 9.1375V6.9875C16.125 6.70239 16.2383 6.42896 16.4399 6.22736C16.6415 6.02576 16.9149 5.9125 17.2 5.9125C17.4851 5.9125 17.7585 6.02576 17.9601 6.22736C18.1617 6.42896 18.275 6.70239 18.275 6.9875ZM29.025 15.05V17.2C29.025 17.4851 28.9117 17.7585 28.7101 17.9601C28.5085 18.1617 28.2351 18.275 27.95 18.275C27.6649 18.275 27.3915 18.1617 27.1899 17.9601C26.9883 17.7585 26.875 17.4851 26.875 17.2V15.05C26.875 14.7649 26.9883 14.4915 27.1899 14.2899C27.3915 14.0883 27.6649 13.975 27.95 13.975C28.2351 13.975 28.5085 14.0883 28.7101 14.2899C28.9117 14.4915 29.025 14.7649 29.025 15.05ZM23.65 15.05V17.2C23.65 17.4851 23.5367 17.7585 23.3351 17.9601C23.1335 18.1617 22.8601 18.275 22.575 18.275C22.2899 18.275 22.0165 18.1617 21.8149 17.9601C21.6133 17.7585 21.5 17.4851 21.5 17.2V15.05C21.5 14.7649 21.6133 14.4915 21.8149 14.2899C22.0165 14.0883 22.2899 13.975 22.575 13.975C22.8601 13.975 23.1335 14.0883 23.3351 14.2899C23.5367 14.4915 23.65 14.7649 23.65 15.05ZM18.275 15.05V17.2C18.275 17.4851 18.1617 17.7585 17.9601 17.9601C17.7585 18.1617 17.4851 18.275 17.2 18.275C16.9149 18.275 16.6415 18.1617 16.4399 17.9601C16.2383 17.7585 16.125 17.4851 16.125 17.2V15.05C16.125 14.7649 16.2383 14.4915 16.4399 14.2899C16.6415 14.0883 16.9149 13.975 17.2 13.975C17.4851 13.975 17.7585 14.0883 17.9601 14.2899C18.1617 14.4915 18.275 14.7649 18.275 15.05ZM29.025 22.575V24.725C29.025 25.0101 28.9117 25.2835 28.7101 25.4851C28.5085 25.6867 28.2351 25.8 27.95 25.8C27.6649 25.8 27.3915 25.6867 27.1899 25.4851C26.9883 25.2835 26.875 25.0101 26.875 24.725V22.575C26.875 22.2899 26.9883 22.0165 27.1899 21.8149C27.3915 21.6133 27.6649 21.5 27.95 21.5C28.2351 21.5 28.5085 21.6133 28.7101 21.8149C28.9117 22.0165 29.025 22.2899 29.025 22.575ZM23.65 22.575V24.725C23.65 25.0101 23.5367 25.2835 23.3351 25.4851C23.1335 25.6867 22.8601 25.8 22.575 25.8C22.2899 25.8 22.0165 25.6867 21.8149 25.4851C21.6133 25.2835 21.5 25.0101 21.5 24.725V22.575C21.5 22.2899 21.6133 22.0165 21.8149 21.8149C22.0165 21.6133 22.2899 21.5 22.575 21.5C22.8601 21.5 23.1335 21.6133 23.3351 21.8149C23.5367 22.0165 23.65 22.2899 23.65 22.575ZM18.275 22.575V24.725C18.275 25.0101 18.1617 25.2835 17.9601 25.4851C17.7585 25.6867 17.4851 25.8 17.2 25.8C16.9149 25.8 16.6415 25.6867 16.4399 25.4851C16.2383 25.2835 16.125 25.0101 16.125 24.725V22.575C16.125 22.2899 16.2383 22.0165 16.4399 21.8149C16.6415 21.6133 16.9149 21.5 17.2 21.5C17.4851 21.5 17.7585 21.6133 17.9601 21.8149C18.1617 22.0165 18.275 22.2899 18.275 22.575ZM8.6 16.6625V18.8125C8.6 19.0976 8.48674 19.371 8.28514 19.5726C8.08354 19.7742 7.81011 19.8875 7.525 19.8875C7.23989 19.8875 6.96646 19.7742 6.76486 19.5726C6.56326 19.371 6.45 19.0976 6.45 18.8125V16.6625C6.45 16.3774 6.56326 16.104 6.76486 15.9024C6.96646 15.7008 7.23989 15.5875 7.525 15.5875C7.81011 15.5875 8.08354 15.7008 8.28514 15.9024C8.48674 16.104 8.6 16.3774 8.6 16.6625ZM8.6 24.725V26.875C8.6 27.1601 8.48674 27.4335 8.28514 27.6351C8.08354 27.8367 7.81011 27.95 7.525 27.95C7.23989 27.95 6.96646 27.8367 6.76486 27.6351C6.56326 27.4335 6.45 27.1601 6.45 26.875V24.725C6.45 24.4399 6.56326 24.1665 6.76486 23.9649C6.96646 23.7633 7.23989 23.65 7.525 23.65C7.81011 23.65 8.08354 23.7633 8.28514 23.9649C8.48674 24.1665 8.6 24.4399 8.6 24.725ZM8.6 32.25V34.4C8.6 34.6851 8.48674 34.9585 8.28514 35.1601C8.08354 35.3617 7.81011 35.475 7.525 35.475C7.23989 35.475 6.96646 35.3617 6.76486 35.1601C6.56326 34.9585 6.45 34.6851 6.45 34.4V32.25C6.45 31.9649 6.56326 31.6915 6.76486 31.4899C6.96646 31.2883 7.23989 31.175 7.525 31.175C7.81011 31.175 8.08354 31.2883 8.28514 31.4899C8.48674 31.6915 8.6 31.9649 8.6 32.25ZM38.7 16.6625V18.8125C38.7 19.0976 38.5867 19.371 38.3851 19.5726C38.1835 19.7742 37.9101 19.8875 37.625 19.8875C37.3399 19.8875 37.0665 19.7742 36.8649 19.5726C36.6633 19.371 36.55 19.0976 36.55 18.8125V16.6625C36.55 16.3774 36.6633 16.104 36.8649 15.9024C37.0665 15.7008 37.3399 15.5875 37.625 15.5875C37.9101 15.5875 38.1835 15.7008 38.3851 15.9024C38.5867 16.104 38.7 16.3774 38.7 16.6625ZM38.7 24.725V26.875C38.7 27.1601 38.5867 27.4335 38.3851 27.6351C38.1835 27.8367 37.9101 27.95 37.625 27.95C37.3399 27.95 37.0665 27.8367 36.8649 27.6351C36.6633 27.4335 36.55 27.1601 36.55 26.875V24.725C36.55 24.4399 36.6633 24.1665 36.8649 23.9649C37.0665 23.7633 37.3399 23.65 37.625 23.65C37.9101 23.65 38.1835 23.7633 38.3851 23.9649C38.5867 24.1665 38.7 24.4399 38.7 24.725ZM38.7 32.25V34.4C38.7 34.6851 38.5867 34.9585 38.3851 35.1601C38.1835 35.3617 37.9101 35.475 37.625 35.475C37.3399 35.475 37.0665 35.3617 36.8649 35.1601C36.6633 34.9585 36.55 34.6851 36.55 34.4V32.25C36.55 31.9649 36.6633 31.6915 36.8649 31.4899C37.0665 31.2883 37.3399 31.175 37.625 31.175C37.9101 31.175 38.1835 31.2883 38.3851 31.4899C38.5867 31.6915 38.7 31.9649 38.7 32.25Z\"></path>\n</svg>",
+            "card_title_1": "50+ Frames",
+            "card_content_1": "For large companies",
+            "card_discount_1": "20% Discount",
+            "badge_text_2": "",
+            "icon_as_svg_2": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 46 43\" height=\"43\" width=\"46\">\n<path fill=\"#19191C\" d=\"M44.075 40.85H41.925V20.425C41.925 20.1399 41.8117 19.8665 41.6101 19.6649C41.4085 19.4633 41.1351 19.35 40.85 19.35H31.175V1.075C31.175 0.789892 31.0617 0.516462 30.8601 0.31486C30.6585 0.113259 30.3851 0 30.1 0H4.3C4.01489 0 3.74146 0.113259 3.53986 0.31486C3.33826 0.516462 3.225 0.789892 3.225 1.075V40.85H1.075C0.789892 40.85 0.516462 40.9633 0.31486 41.1649C0.113259 41.3665 0 41.6399 0 41.925C0 42.2101 0.113259 42.4835 0.31486 42.6851C0.516462 42.8867 0.789892 43 1.075 43H44.075C44.3601 43 44.6335 42.8867 44.8351 42.6851C45.0367 42.4835 45.15 42.2101 45.15 41.925C45.15 41.6399 45.0367 41.3665 44.8351 41.1649C44.6335 40.9633 44.3601 40.85 44.075 40.85ZM13.975 40.85V32.25H20.425V40.85H13.975ZM22.575 40.85V32.25C22.575 31.6798 22.3485 31.1329 21.9453 30.7297C21.5421 30.3265 20.9952 30.1 20.425 30.1H13.975C13.4048 30.1 12.8579 30.3265 12.4547 30.7297C12.0515 31.1329 11.825 31.6798 11.825 32.25V40.85H5.375V2.15H29.025V40.85H22.575ZM31.175 40.85V21.5H39.775V40.85H31.175ZM15.05 24.725C15.05 25.0101 14.9367 25.2835 14.7351 25.4851C14.5335 25.6867 14.2601 25.8 13.975 25.8H10.75C10.4649 25.8 10.1915 25.6867 9.98986 25.4851C9.78826 25.2835 9.675 25.0101 9.675 24.725C9.675 24.4399 9.78826 24.1665 9.98986 23.9649C10.1915 23.7633 10.4649 23.65 10.75 23.65H13.975C14.2601 23.65 14.5335 23.7633 14.7351 23.9649C14.9367 24.1665 15.05 24.4399 15.05 24.725ZM24.725 24.725C24.725 25.0101 24.6117 25.2835 24.4101 25.4851C24.2085 25.6867 23.9351 25.8 23.65 25.8H20.425C20.1399 25.8 19.8665 25.6867 19.6649 25.4851C19.4633 25.2835 19.35 25.0101 19.35 24.725C19.35 24.4399 19.4633 24.1665 19.6649 23.9649C19.8665 23.7633 20.1399 23.65 20.425 23.65H23.65C23.9351 23.65 24.2085 23.7633 24.4101 23.9649C24.6117 24.1665 24.725 24.4399 24.725 24.725ZM15.05 19.35C15.05 19.6351 14.9367 19.9085 14.7351 20.1101C14.5335 20.3117 14.2601 20.425 13.975 20.425H10.75C10.4649 20.425 10.1915 20.3117 9.98986 20.1101C9.78826 19.9085 9.675 19.6351 9.675 19.35C9.675 19.0649 9.78826 18.7915 9.98986 18.5899C10.1915 18.3883 10.4649 18.275 10.75 18.275H13.975C14.2601 18.275 14.5335 18.3883 14.7351 18.5899C14.9367 18.7915 15.05 19.0649 15.05 19.35ZM24.725 19.35C24.725 19.6351 24.6117 19.9085 24.4101 20.1101C24.2085 20.3117 23.9351 20.425 23.65 20.425H20.425C20.1399 20.425 19.8665 20.3117 19.6649 20.1101C19.4633 19.9085 19.35 19.6351 19.35 19.35C19.35 19.0649 19.4633 18.7915 19.6649 18.5899C19.8665 18.3883 20.1399 18.275 20.425 18.275H23.65C23.9351 18.275 24.2085 18.3883 24.4101 18.5899C24.6117 18.7915 24.725 19.0649 24.725 19.35ZM15.05 8.6C15.05 8.88511 14.9367 9.15854 14.7351 9.36014C14.5335 9.56174 14.2601 9.675 13.975 9.675H10.75C10.4649 9.675 10.1915 9.56174 9.98986 9.36014C9.78826 9.15854 9.675 8.88511 9.675 8.6C9.675 8.31489 9.78826 8.04146 9.98986 7.83986C10.1915 7.63826 10.4649 7.525 10.75 7.525H13.975C14.2601 7.525 14.5335 7.63826 14.7351 7.83986C14.9367 8.04146 15.05 8.31489 15.05 8.6ZM24.725 8.6C24.725 8.88511 24.6117 9.15854 24.4101 9.36014C24.2085 9.56174 23.9351 9.675 23.65 9.675H20.425C20.1399 9.675 19.8665 9.56174 19.6649 9.36014C19.4633 9.15854 19.35 8.88511 19.35 8.6C19.35 8.31489 19.4633 8.04146 19.6649 7.83986C19.8665 7.63826 20.1399 7.525 20.425 7.525H23.65C23.9351 7.525 24.2085 7.63826 24.4101 7.83986C24.6117 8.04146 24.725 8.31489 24.725 8.6ZM15.05 13.975C15.05 14.2601 14.9367 14.5335 14.7351 14.7351C14.5335 14.9367 14.2601 15.05 13.975 15.05H10.75C10.4649 15.05 10.1915 14.9367 9.98986 14.7351C9.78826 14.5335 9.675 14.2601 9.675 13.975C9.675 13.6899 9.78826 13.4165 9.98986 13.2149C10.1915 13.0133 10.4649 12.9 10.75 12.9H13.975C14.2601 12.9 14.5335 13.0133 14.7351 13.2149C14.9367 13.4165 15.05 13.6899 15.05 13.975ZM24.725 13.975C24.725 14.2601 24.6117 14.5335 24.4101 14.7351C24.2085 14.9367 23.9351 15.05 23.65 15.05H20.425C20.1399 15.05 19.8665 14.9367 19.6649 14.7351C19.4633 14.5335 19.35 14.2601 19.35 13.975C19.35 13.6899 19.4633 13.4165 19.6649 13.2149C19.8665 13.0133 20.1399 12.9 20.425 12.9H23.65C23.9351 12.9 24.2085 13.0133 24.4101 13.2149C24.6117 13.4165 24.725 13.6899 24.725 13.975ZM36.55 25.5313V36.8188C36.55 37.1039 36.4367 37.3773 36.2351 37.5789C36.0335 37.7805 35.7601 37.8938 35.475 37.8938C35.1899 37.8938 34.9165 37.7805 34.7149 37.5789C34.5133 37.3773 34.4 37.1039 34.4 36.8188V25.5313C34.4 25.2461 34.5133 24.9727 34.7149 24.7711C34.9165 24.5695 35.1899 24.4563 35.475 24.4563C35.7601 24.4563 36.0335 24.5695 36.2351 24.7711C36.4367 24.9727 36.55 25.2461 36.55 25.5313Z\"></path>\n</svg>",
+            "card_title_2": "20–49 Frames",
+            "card_content_2": "For fast-growing companies",
+            "card_discount_2": "15% Discount",
+            "badge_text_3": "",
+            "icon_as_svg_3": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 37 43\" height=\"43\" width=\"37\">\n<path fill=\"#19191C\" d=\"M16.125 24.725C16.125 25.0101 16.0117 25.2835 15.8101 25.4851C15.6085 25.6867 15.3351 25.8 15.05 25.8H11.825C11.5399 25.8 11.2665 25.6867 11.0649 25.4851C10.8633 25.2835 10.75 25.0101 10.75 24.725C10.75 24.4399 10.8633 24.1665 11.0649 23.9649C11.2665 23.7633 11.5399 23.65 11.825 23.65H15.05C15.3351 23.65 15.6085 23.7633 15.8101 23.9649C16.0117 24.1665 16.125 24.4399 16.125 24.725ZM24.725 23.65H21.5C21.2149 23.65 20.9415 23.7633 20.7399 23.9649C20.5383 24.1665 20.425 24.4399 20.425 24.725C20.425 25.0101 20.5383 25.2835 20.7399 25.4851C20.9415 25.6867 21.2149 25.8 21.5 25.8H24.725C25.0101 25.8 25.2835 25.6867 25.4851 25.4851C25.6867 25.2835 25.8 25.0101 25.8 24.725C25.8 24.4399 25.6867 24.1665 25.4851 23.9649C25.2835 23.7633 25.0101 23.65 24.725 23.65ZM15.05 18.275H11.825C11.5399 18.275 11.2665 18.3883 11.0649 18.5899C10.8633 18.7915 10.75 19.0649 10.75 19.35C10.75 19.6351 10.8633 19.9085 11.0649 20.1101C11.2665 20.3117 11.5399 20.425 11.825 20.425H15.05C15.3351 20.425 15.6085 20.3117 15.8101 20.1101C16.0117 19.9085 16.125 19.6351 16.125 19.35C16.125 19.0649 16.0117 18.7915 15.8101 18.5899C15.6085 18.3883 15.3351 18.275 15.05 18.275ZM24.725 18.275H21.5C21.2149 18.275 20.9415 18.3883 20.7399 18.5899C20.5383 18.7915 20.425 19.0649 20.425 19.35C20.425 19.6351 20.5383 19.9085 20.7399 20.1101C20.9415 20.3117 21.2149 20.425 21.5 20.425H24.725C25.0101 20.425 25.2835 20.3117 25.4851 20.1101C25.6867 19.9085 25.8 19.6351 25.8 19.35C25.8 19.0649 25.6867 18.7915 25.4851 18.5899C25.2835 18.3883 25.0101 18.275 24.725 18.275ZM15.05 7.525H11.825C11.5399 7.525 11.2665 7.63826 11.0649 7.83986C10.8633 8.04146 10.75 8.31489 10.75 8.6C10.75 8.88511 10.8633 9.15854 11.0649 9.36014C11.2665 9.56174 11.5399 9.675 11.825 9.675H15.05C15.3351 9.675 15.6085 9.56174 15.8101 9.36014C16.0117 9.15854 16.125 8.88511 16.125 8.6C16.125 8.31489 16.0117 8.04146 15.8101 7.83986C15.6085 7.63826 15.3351 7.525 15.05 7.525ZM24.725 7.525H21.5C21.2149 7.525 20.9415 7.63826 20.7399 7.83986C20.5383 8.04146 20.425 8.31489 20.425 8.6C20.425 8.88511 20.5383 9.15854 20.7399 9.36014C20.9415 9.56174 21.2149 9.675 21.5 9.675H24.725C25.0101 9.675 25.2835 9.56174 25.4851 9.36014C25.6867 9.15854 25.8 8.88511 25.8 8.6C25.8 8.31489 25.6867 8.04146 25.4851 7.83986C25.2835 7.63826 25.0101 7.525 24.725 7.525ZM15.05 12.9H11.825C11.5399 12.9 11.2665 13.0133 11.0649 13.2149C10.8633 13.4165 10.75 13.6899 10.75 13.975C10.75 14.2601 10.8633 14.5335 11.0649 14.7351C11.2665 14.9367 11.5399 15.05 11.825 15.05H15.05C15.3351 15.05 15.6085 14.9367 15.8101 14.7351C16.0117 14.5335 16.125 14.2601 16.125 13.975C16.125 13.6899 16.0117 13.4165 15.8101 13.2149C15.6085 13.0133 15.3351 12.9 15.05 12.9ZM24.725 12.9H21.5C21.2149 12.9 20.9415 13.0133 20.7399 13.2149C20.5383 13.4165 20.425 13.6899 20.425 13.975C20.425 14.2601 20.5383 14.5335 20.7399 14.7351C20.9415 14.9367 21.2149 15.05 21.5 15.05H24.725C25.0101 15.05 25.2835 14.9367 25.4851 14.7351C25.6867 14.5335 25.8 14.2601 25.8 13.975C25.8 13.6899 25.6867 13.4165 25.4851 13.2149C25.2835 13.0133 25.0101 12.9 24.725 12.9ZM36.55 41.925C36.55 42.2101 36.4367 42.4835 36.2351 42.6851C36.0335 42.8867 35.7601 43 35.475 43H1.075C0.789892 43 0.516462 42.8867 0.31486 42.6851C0.113259 42.4835 0 42.2101 0 41.925C0 41.6399 0.113259 41.3665 0.31486 41.1649C0.516462 40.9633 0.789892 40.85 1.075 40.85H3.225V1.075C3.225 0.789892 3.33826 0.516462 3.53986 0.31486C3.74146 0.113259 4.01489 0 4.3 0H32.25C32.5351 0 32.8085 0.113259 33.0101 0.31486C33.2117 0.516462 33.325 0.789892 33.325 1.075V40.85H35.475C35.7601 40.85 36.0335 40.9633 36.2351 41.1649C36.4367 41.3665 36.55 41.6399 36.55 41.925ZM21.5 40.85V32.25H15.05V40.85H21.5ZM31.175 40.85V2.15H5.375V40.85H12.9V32.25C12.9 31.6798 13.1265 31.1329 13.5297 30.7297C13.9329 30.3265 14.4798 30.1 15.05 30.1H21.5C22.0702 30.1 22.6171 30.3265 23.0203 30.7297C23.4235 31.1329 23.65 31.6798 23.65 32.25V40.85H31.175Z\"></path>\n</svg>",
+            "card_title_3": "10–19 Frames",
+            "card_content_3": "For small companies",
+            "card_discount_3": "12% Discount",
+            "badge_text_4": "",
+            "icon_as_svg_4": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 47 40\" height=\"40\" width=\"47\">\n<path fill=\"#19191C\" d=\"M45.5556 37.7778H42.2222V11.1111H43.1544C43.5729 11.1109 43.9828 10.9925 44.3369 10.7697C44.6911 10.5468 44.9751 10.2284 45.1563 9.85125C45.3375 9.47408 45.4086 9.05341 45.3613 8.63765C45.3139 8.22189 45.1502 7.82793 44.8889 7.50111L39.2222 0.416667C39.1181 0.286591 38.986 0.181605 38.8358 0.10948C38.6856 0.0373547 38.5211 -6.24406e-05 38.3544 7.82161e-08H8.31222C8.14559 -6.24406e-05 7.98108 0.0373547 7.83087 0.10948C7.68066 0.181605 7.54859 0.286591 7.44445 0.416667L1.77778 7.50111C1.51646 7.82793 1.35272 8.22189 1.30541 8.63765C1.25811 9.05341 1.32915 9.47408 1.51036 9.85125C1.69157 10.2284 1.9756 10.5468 2.32975 10.7697C2.6839 10.9925 3.09378 11.1109 3.51222 11.1111H4.44444V37.7778H1.11111C0.816426 37.7778 0.533811 37.8948 0.325437 38.1032C0.117063 38.3116 0 38.5942 0 38.8889C0 39.1836 0.117063 39.4662 0.325437 39.6746C0.533811 39.8829 0.816426 40 1.11111 40H45.5556C45.8502 40 46.1329 39.8829 46.3412 39.6746C46.5496 39.4662 46.6667 39.1836 46.6667 38.8889C46.6667 38.5942 46.5496 38.3116 46.3412 38.1032C46.1329 37.8948 45.8502 37.7778 45.5556 37.7778ZM3.51222 8.88889L8.84556 2.22222H37.8211L43.1544 8.88889H3.51222ZM20 37.7778V22.2222H26.6667V37.7778H20ZM28.8889 37.7778V22.2222C28.8889 21.6329 28.6548 21.0676 28.238 20.6509C27.8213 20.2341 27.256 20 26.6667 20H20C19.4106 20 18.8454 20.2341 18.4287 20.6509C18.0119 21.0676 17.7778 21.6329 17.7778 22.2222V37.7778H6.66667V11.1111H40V37.7778H28.8889ZM36.6667 25.5556H32.2222C31.9275 25.5556 31.6449 25.6726 31.4365 25.881C31.2282 26.0894 31.1111 26.372 31.1111 26.6667V31.1111C31.1111 31.4058 31.2282 31.6884 31.4365 31.8968C31.6449 32.1052 31.9275 32.2222 32.2222 32.2222H36.6667C36.9614 32.2222 37.244 32.1052 37.4523 31.8968C37.6607 31.6884 37.7778 31.4058 37.7778 31.1111V26.6667C37.7778 26.372 37.6607 26.0894 37.4523 25.881C37.244 25.6726 36.9614 25.5556 36.6667 25.5556ZM35.5556 30H33.3333V27.7778H35.5556V30ZM14.4444 25.5556H10C9.70532 25.5556 9.4227 25.6726 9.21432 25.881C9.00595 26.0894 8.88889 26.372 8.88889 26.6667V31.1111C8.88889 31.4058 9.00595 31.6884 9.21432 31.8968C9.4227 32.1052 9.70532 32.2222 10 32.2222H14.4444C14.7391 32.2222 15.0217 32.1052 15.2301 31.8968C15.4385 31.6884 15.5556 31.4058 15.5556 31.1111V26.6667C15.5556 26.372 15.4385 26.0894 15.2301 25.881C15.0217 25.6726 14.7391 25.5556 14.4444 25.5556ZM13.3333 30H11.1111V27.7778H13.3333V30ZM36.6667 16.6667H32.2222C31.9275 16.6667 31.6449 16.7837 31.4365 16.9921C31.2282 17.2005 31.1111 17.4831 31.1111 17.7778V22.2222C31.1111 22.5169 31.2282 22.7995 31.4365 23.0079C31.6449 23.2163 31.9275 23.3333 32.2222 23.3333H36.6667C36.9614 23.3333 37.244 23.2163 37.4523 23.0079C37.6607 22.7995 37.7778 22.5169 37.7778 22.2222V17.7778C37.7778 17.4831 37.6607 17.2005 37.4523 16.9921C37.244 16.7837 36.9614 16.6667 36.6667 16.6667ZM35.5556 21.1111H33.3333V18.8889H35.5556V21.1111ZM14.4444 16.6667H10C9.70532 16.6667 9.4227 16.7837 9.21432 16.9921C9.00595 17.2005 8.88889 17.4831 8.88889 17.7778V22.2222C8.88889 22.5169 9.00595 22.7995 9.21432 23.0079C9.4227 23.2163 9.70532 23.3333 10 23.3333H14.4444C14.7391 23.3333 15.0217 23.2163 15.2301 23.0079C15.4385 22.7995 15.5556 22.5169 15.5556 22.2222V17.7778C15.5556 17.4831 15.4385 17.2005 15.2301 16.9921C15.0217 16.7837 14.7391 16.6667 14.4444 16.6667ZM13.3333 21.1111H11.1111V18.8889H13.3333V21.1111Z\"></path>\n</svg>",
+            "card_title_4": "5–9 Frames",
+            "card_content_4": "For start-ups",
+            "card_discount_4": "10% Discount",
+            "badge_text_5": "",
+            "icon_as_svg_5": "",
+            "card_title_5": "",
+            "card_content_5": "",
+            "card_discount_5": "",
+            "badge_text_6": "",
+            "icon_as_svg_6": "",
+            "card_title_6": "",
+            "card_content_6": "",
+            "card_discount_6": "",
+            "badge_text_7": "",
+            "icon_as_svg_7": "",
+            "card_title_7": "",
+            "card_content_7": "",
+            "card_discount_7": "",
+            "badge_text_8": "",
+            "icon_as_svg_8": "",
+            "card_title_8": "",
+            "card_content_8": "",
+            "card_discount_8": ""
+          }
+        },
+        {
+          "type": "footer",
+          "settings": {
+            "heading": "We take care of your office",
+            "button_text": "Order today",
+            "button_url": "",
+            "open_btn_new_window": false,
+            "content": "<ul><li>Free shipping</li><li>30-day money-back guarantee</li><li>Excellent customer service</li><li>Extended warranty</li></ul>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

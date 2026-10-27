@@ -1,0 +1,67 @@
+Step: 1
+Go to config: settings_schema.json
+Paste this code:
+
+{
+    "name": "Collections",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_price_on_collections",
+        "label": "The activation hides all price information on featured collections and collection pages.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_teaser_on_collection",
+        "info": "Fill the metafield 'Product Teaser' in the backend.",
+        "label": "Show product teaser on collection page",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "color_teaser_on_collection",
+        "label": "Product teaser"
+      },
+      {
+        "type": "header",
+        "content": "Badges"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_badge",
+        "label": "Enable badge",
+        "default": true
+      },
+      {
+        "type": "color",
+        "id": "color_badge",
+        "label": "Badge background",
+        "default": "#E9E9E9"
+      },
+      {
+        "type": "color",
+        "id": "color_badge_text",
+        "label": "Badge text",
+        "default": "#000000"
+      }
+    ]
+},
+
+
+
+
+
+Step: 2
+Go to snippet: product-item.liquid
+Add below code at the end of </product-item> tag:
+{% if settings.show_price_on_collections == true %}
+  <style>
+    .shopify-section--featured-collections .product-item-meta__price-list-container, .shopify-section--main-collection .product-item-meta__price-list-container {
+        display: none;
+    }
+  </style>
+{% endif %}
+
+
+

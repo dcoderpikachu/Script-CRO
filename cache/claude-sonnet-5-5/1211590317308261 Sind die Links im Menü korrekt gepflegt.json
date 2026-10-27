@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "This is a QA/bug-check question about whether menu links are maintained correctly. The ticket has no description, and the comment only confirms the desktop links go to the 'all' collection and notes that mobile has no 'all products' link. It describes no reusable CRO element."}, "in": 220, "out": 99}

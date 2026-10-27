@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "Empty ticket: the title ('Define Stripe payment process') points to a payment-flow definition task, but there is no description, comments, code or screenshots. It describes no reusable CRO element or UI."}, "in": 69, "out": 80}

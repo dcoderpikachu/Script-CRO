@@ -1,0 +1,131 @@
+Step 1: Add this schema in the main-collection.liquid section
+   {
+      "type" : "checkbox",
+      "label" : "Enable Infinite Scroll",
+      "id" : "enable_infinite_scroll",
+      "default" : false
+    },
+
+Step 2: Add this before schema tag in the main-collection.liquid section
+{% if section.settings.enable_infinite_scroll %}
+<style>
+  page-pagination {
+  opacity: 0 !important; 
+  pointer-events: none !important;
+}
+</style>
+{% endif %}
+
+Step 3: Add this after {%- endpaginate -%}  in the main-collection.liquid section
+ {% if section.settings.enable_infinite_scroll %}
+   <infinite-scroll></infinite-scroll>
+ {% endif %}
+
+
+Step 4: Add this code in the theme.js
+var InfiniteScroll = class extends CustomHTMLElement {
+    constructor() {
+      super();
+      this.loading = false;
+      this.observer = new IntersectionObserver(
+        this._onIntersection.bind(this),
+        {
+          rootMargin: "100px",
+          threshold: 0.1,
+        }
+      );
+    }
+
+    connectedCallback() {
+      this.innerHTML = `<div class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                      </div>`;
+
+      this.loader = this.querySelector(".loading-spinner");
+      this.paginationElement = document.querySelector("page-pagination");
+      this.nextPageLink =
+        this.paginationElement?.querySelector("a[rel='next']");
+
+      if (this.nextPageLink) {
+        this.observer.observe(this.paginationElement);
+      }
+    }
+
+    _onIntersection(entries) {
+      if (this.loading) return;
+
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        this.loadNextPage();
+      }
+    }
+
+    async loadNextPage() {
+      if (!this.nextPageLink) return;
+
+      this.loading = true;
+      this.loader.style.display = "block";
+      const url = this.nextPageLink.href;
+
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, "text/html");
+
+        const newProducts = doc.querySelectorAll(
+          "#facet-main .product-list__inner .product-item"
+        );
+        const productContainer = document.querySelector(
+          "#facet-main .product-list__inner"
+        );
+
+        if (newProducts.length > 0 && productContainer) {
+          newProducts.forEach((product) =>
+            productContainer.appendChild(product)
+          );
+        }
+
+        this.paginationElement.innerHTML =
+          doc.querySelector("page-pagination")?.innerHTML || "";
+
+        this.nextPageLink =
+          this.paginationElement.querySelector("a[rel='next']");
+        if (!this.nextPageLink) {
+          this.observer.disconnect();
+        }
+      } catch (error) {
+        console.error("Error loading next page:", error);
+      } finally {
+        this.loading = false;
+        this.loader.style.display = "none";
+      }
+    }
+  };
+
+  window.customElements.define("infinite-scroll", InfiniteScroll);
+
+
+Step 5: Add this code in the custom.css
+.loading-spinner {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.product-item[reveal]{
+  opacity: 1; 
+}

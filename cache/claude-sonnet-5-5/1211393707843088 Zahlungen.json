@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket \"Zahlungen\" (Payments) has no description, and its only comment is an admin status note about setting up a new PayPal account. Shopify Payments is already configured. This is store setup work, not a reusable CRO element, and there are no screenshots or UI."}, "in": 121, "out": 103}

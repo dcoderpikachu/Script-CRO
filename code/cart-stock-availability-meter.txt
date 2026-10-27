@@ -1,0 +1,377 @@
+CRO | Cart | Stock Availability — Setup Guide (No‑Code Friendly)
+
+What this adds
+A stock availability meter on each cart item showing remaining stock percentage.
+Two layouts (Default and Classic) with customizable colors and text in Theme settings.
+Uses a Variant metafield "Original Quantity" to calculate percentages (defaults to 100 when empty).
+
+Before you start
+Duplicate your live theme: Online Store → Themes → … (Actions) → Duplicate. Work on the copy.
+You’ll use Edit code for one snippet and paste one settings block. The rest is point‑and‑click.
+
+Step 1: Add the snippet
+In the theme code editor: Snippets → Add a new snippet → name it exactly: ed_cro_stock_availability
+Paste EVERYTHING below into that new snippet and Save.
+
+{% assign original_inventory = 100 %}
+{% if line_item.variant.metafields.standard.cro_original_quantity != blank %}
+  {% assign original_inventory = line_item.variant.metafields.standard.cro_original_quantity.value %}
+{% endif %}
+
+{% assign active_stock_number = line_item.variant.inventory_quantity | plus: 0 %}
+{% assign original_inventory_number = original_inventory | plus: 0 %}
+
+{% assign active_status = 0 %}
+{% if original_inventory_number > 0 %}
+  {% assign active_status = active_stock_number | times: 100 | divided_by: original_inventory_number %}
+  {% assign active_status = active_status | round %}
+  {% if active_status > 100 %}
+    {% assign active_status = 100 %}
+  {% endif %}
+{% endif %}
+
+{% comment %} Number formatter {% endcomment %}
+{% if active_stock_number >= 1000 and active_stock_number < 10000 %}
+  {% assign first_digit = active_stock_number | divided_by: 1000 %}
+  {% assign remaining_digits = active_stock_number | modulo: 1000 %}
+  {% assign formatted_number = first_digit | append: ',' | append: remaining_digits %}
+{% else %}
+  {% assign formatted_number = active_stock_number %}
+{% endif %}
+{% comment %} END:Number formatter {% endcomment %}
+
+{% if active_stock_number > 0 and line_item.variant.inventory_management == 'shopify' %}
+  <style>
+    cro-stock-availability.cro_stock_availability_wrap {
+        margin-top: 0;
+        display: block;
+        margin-left: 116px;
+    }
+
+    .cro_stock_availability {
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        border-radius: 35px;
+        gap: 12px;
+        border: 1px solid rgba(0,0,0,0.03);
+        color: {{  settings.cro_stock_text_color }};
+        background-color: {{ settings.cro_stock_background }};
+    }
+
+    .cro_stock_availability__title {
+        margin: 0;
+        line-height: 1;
+        font-size: 12px;
+        flex: 0 1 auto;
+    }
+
+    .cro_stock_availability__status {
+        flex: 1 1 50%;
+        position: relative;
+        height: 8px;
+        border-radius: 35px;
+        color: {{ settings.cro_stock_btn_color }};
+        background: {{ settings.cro_stock_btn_background }};
+        overflow: hidden;
+    }
+
+    .cro_stock_availability__status_active {
+        height: 100%;
+        display: flex;
+        background: {{ settings.cro_stock_btn_active_background }};
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 35px;
+    }
+
+    /* Classic layout */
+    .cro_stock_availability_classic {
+        display: block;
+        color: {{ settings.cro_stock_text_color }};
+        background-color: {{ settings.cro_stock_background }};
+        padding: 6px 12px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.03) inset;
+    }
+
+    .cro_stock_availability__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    p.cro_stock_availability__header-title {
+        margin: 0;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    p.cro_stock_availability__header-subtitle {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .cro_stock_availability_classic .cro_stock_availability__status {
+        height: 12px;
+        margin-top: 6px;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.06) inset;
+    }
+
+    span.cro_stock_availability__status_active_text {
+        position: absolute;
+        font-size: 8px;
+        left: 16px;
+        letter-spacing: 0;
+        font-weight: 600;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    @media (max-width: 767px) {
+        cro-stock-availability.cro_stock_availability_wrap {
+            margin-top: 6px;
+            display: block;
+            margin-left: 103px;
+        }
+        .cro_stock_availability.cro_stock_default {
+            gap: 4px;
+            flex-wrap: wrap;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .cro_stock_default .cro_stock_availability__status {
+            width: 100%;
+            flex: 1 1 100%;
+        }
+
+        .cro_stock_default .cro_stock_availability__title {
+            flex: 1 1 100%;
+        }
+
+        .cro_stock_default .cro_stock_availability__status {
+            flex: 1 1 100%;
+        }
+    }
+  </style>
+
+  {%- if settings.cro_stock_availability_layout == 'default' -%}
+    <cro-stock-availability class="cro_stock_availability_wrap">
+      <div class="cro_stock_availability cro_stock_default">
+        <p class="cro_stock_availability__title">
+          {{ settings.cro_stock_default_text_before }}
+          {{ formatted_number }}
+          {{ settings.cro_stock_default_text_after }}
+        </p>
+        <div class="cro_stock_availability__status" style="width: 100%;">
+          <span class="cro_stock_availability__status_active" style="width:{{ active_status }}%;"></span>
+        </div>
+      </div>
+    </cro-stock-availability>
+  {% elsif settings.cro_stock_availability_layout == 'classic' %}
+    <cro-stock-availability class="cro_stock_availability_wrap">
+      <div class="cro_stock_availability_classic">
+        <div class="cro_stock_availability__header">
+          <p class="cro_stock_availability__header-title">{{ settings.cro_stock_classic_title }}</p>
+          <p class="cro_stock_availability__header-subtitle">{{ settings.cro_stock_classic_subtitle }}</p>
+        </div>
+
+        <div class="cro_stock_availability__status" style="width: 100%;">
+          <span class="cro_stock_availability__status_active" style="width:{{ active_status }}%;"></span>
+          <span class="cro_stock_availability__status_active_text">
+            {{ settings.cro_stock_classic_btn_text_before }}
+            {{ active_status }}%
+            {{ settings.cro_stock_classic_btn_text_after }}
+          </span>
+        </div>
+      </div>
+    </cro-stock-availability>
+  {%- endif -%}
+{% endif %}
+
+Step 2: Add Theme Settings (paste only)
+Open config/settings_schema.json in the code editor.
+search for "name": "Cart". If you see a group for Cart, paste the block below inside it. If not, paste this block near the end of the file (before the final ]). If you paste at the end of an array, add a comma BEFORE this block, and make sure there’s NO trailing comma after the last item in the file.
+
+{
+    "type": "header",
+    "content": "CRO | Stock Availability"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_cro_stock_availability",
+    "label": "Show Stock Availability",
+    "default": true
+  },
+  {
+    "type": "color",
+    "id": "cro_stock_text_color",
+    "label": "Text Color",
+    "default": "#282828"
+  },
+  {
+    "type": "color",
+    "id": "cro_stock_background",
+    "label": "Background",
+    "default": "#FFFCFA"
+  },
+  {
+    "type": "color",
+    "id": "cro_stock_btn_color",
+    "label": "Button Text",
+    "default": "#ffffff"
+  },
+  {
+    "type": "color",
+    "id": "cro_stock_btn_background",
+    "label": "Button BG",
+    "default": "#E8E4DE"
+  },
+  {
+    "type": "color",
+    "id": "cro_stock_btn_active_background",
+    "label": "Active BG",
+    "default": "#DB5F60"
+  },
+  {
+    "type": "select",
+    "id": "cro_stock_availability_layout",
+    "label": "Layout",
+    "options": [
+        {
+            "value": "default",
+            "label": "Default"
+        },
+        {
+            "value": "classic",
+            "label": "Classic"
+        }
+    ],
+    "default": "default"
+  },
+  {
+    "type": "header",
+    "content": "Default Layout Settings"
+  },
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_default_text_before",
+    "label": "Before stock",
+    "default": "Noch"
+  },      
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_default_text_after",
+    "label": "After stock",
+    "default": "auf Lager"
+  },
+  {
+    "type": "header",
+    "content": "Classic Layout Settings"
+  },
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_classic_title",
+    "label": "Title",
+    "default": "Verfügbarkeit"
+  },
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_classic_subtitle",
+    "label": "Subtitle",
+    "default": "Nur solange der Vorrat reicht!"
+  },
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_classic_btn_text_before",
+    "label": "Before stock",
+    "default": "Nur noch"
+  },
+  {
+    "type": "inline_richtext",
+    "id": "cro_stock_classic_btn_text_after",
+    "label": "After stock",
+    "default": "verfügbar"
+  }
+
+Step 3: Create the Variant Metafield (no code)
+Shopify Admin → Settings → Custom data → Variants → Add definition:
+  Name: CRO | Original Quantity
+  Namespace and key: standard.cro_original_quantity
+  Type: Integer
+  Description: Original quantity
+  Minimum: 0
+Save.
+
+
+Step 4: Insert the snippet into your cart (works on any theme)
+You’ll paste a short line inside the cart items loop. Exact files vary by theme.
+Mini cart / Cart drawer (look for any of these):
+ snippets/cart-drawer-items.liquid
+ snippets/cart-drawer.liquid
+ sections/cart-drawer.liquid
+ snippets/mini-cart.liquid
+
+Main cart page (look for any of these):
+ sections/main-cart-items.liquid
+ sections/main-cart.liquid
+ templates/cart.liquid
+ snippets/cart-line-item.liquid
+
+Inside the file you find, locate the loop that renders items (often 'for line_item in cart.items' or 'for item in cart.items'). Paste this line where each product is displayed (near the product title/quantity), preferably before the closing of that item block.
+
+{%- if settings.show_cro_stock_availability -%}
+  {% render 'ed_cro_stock_availability', line_item: line_item %}  
+{%- endif -%}
+
+If your loop variable is 'item' (not 'line_item'), use:
+
+{%- if settings.show_cro_stock_availability -%}
+  {% render 'ed_cro_stock_availability', line_item: item %}  
+{%- endif -%}
+
+Tips to find the right spot
+ Use the code editor search for: cart.items, cart-drawer, line-item, mini-cart.
+ In table-based carts, look for a cell like: <td class="line-item__product">.
+ Ensure you paste INSIDE the loop, so the snippet runs once per cart item.
+
+Step 5: Customize the look (no code)
+ Online Store → Customize → Theme settings or Cart settings:
+   Toggle "Show Stock Availability".
+   Choose layout (Default or Classic).
+   Adjust colors and text to match your brand.
+ Save.
+
+Step 6: Test
+ Preview the theme.
+ Add a product with tracked inventory to the cart.
+ Open the mini cart and the main cart page; confirm the bar and text render.
+ Check on mobile.
+
+Troubleshooting
+ Nothing shows:
+   The render line must be inside the items loop ('for … in cart.items').
+   Verify the loop variable name matches ('line_item' vs 'item').
+   Turn on "Show Stock Availability" in Theme settings.
+ Bar shows 0%:
+   Ensure the variant’s inventory tracking is enabled (Product → Variant → Track quantity).
+   If you set the metafield, ensure it’s greater than 0.
+ Error saving settings_schema.json:
+   Usually a comma error. If you pasted at the end of a list, add a comma BEFORE your block and avoid a trailing comma at the very end of the file.
+ EU number formatting:
+   The snippet formats 1,000–9,999 as "1,234". Change the comma to a dot in the Number formatter section if desired.
+
+Uninstall
+ Remove the render lines you added in cart files.
+ Delete the snippet ed_cro_stock_availability.
+ (Optional) Remove the settings block from config/settings_schema.json.
+ (Optional) Delete the metafield definition in Settings → Custom data → Variants.
+
+Need theme‑specific help?
+ Tell us the theme name (e.g., Dawn, Impulse, Prestige) and we can point to the exact file and line region to paste the render.

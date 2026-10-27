@@ -1,0 +1,207 @@
+Step 1: Add this inside settings_schema.json
+{
+    "name": "Product Badges",
+    "settings": [
+      {
+        "type": "color",
+        "id": "product_custom_label_color",
+        "label": "Custom label color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "product_custom_label_background",
+        "label": "Custom label background color",
+        "info": "[Learn more](https://support.maestrooo.com/article/75-collection-displaying-custom-label)",
+        "default": "#1e316a"
+      },
+      {
+        "type": "color",
+        "id": "product_custom_label_2_color",
+        "label": "Custom label2 color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "product_custom_label_2_background",
+        "label": "Custom label 2 background color",
+        "info": "[Learn more](https://support.maestrooo.com/article/75-collection-displaying-custom-label)",
+        "default": "#1e316a"
+      },
+      {
+        "type": "select",
+        "id": "labels_position",
+        "label": "Position",
+        "options": [
+          {
+            "value": "top_left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top_right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom_left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom_right",
+            "label": "Bottom Right"
+          }
+        ],
+        "default": "top_left"
+      },
+      {
+        "type": "range",
+        "id": "labels_border_radious",
+        "label": "Corner radius",
+        "min": 0,
+        "max": 100,
+        "unit": "px",
+        "default": 0
+      }
+    ]
+  },
+
+
+Step 2: Create snippet product-labels.liquid
+{%- capture product_labels -%}
+  {%- for tag in product.tags -%}
+    {%- if tag contains '__label' -%}
+      {% assign label = tag | split: ':' | last %}
+
+      {% for entity in shop.metaobjects.product_badge.values %}
+        {% if label == entity.badge_name %}
+          {% assign label_color = entity.color %}
+          {% assign label_bg_color = entity.background_color %}
+        {% endif %}
+      {% endfor %}
+
+      <span style="{% if label_color and label_bg_color %} color:{{ label_color }} !important; background-color:{{ label_bg_color }} !important; {% endif %}" 
+            class="label label--custom{% if tag contains '__label2' %}2{% endif %}">
+        {{ tag | split: ':' | last }}
+      </span>
+      {% assign label_color = "" %}
+       {% assign label_bg_color = "" %}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- unless product.available -%}
+    <span class="label label--subdued">{{ 'collection.product.sold_out' | t }}</span>
+  {%- endunless -%}
+
+  {%- assign cheapest_variant = product.variants | sort: 'price' | first -%}
+
+  {%- if settings.show_discount and product.available and product.price < product.compare_at_price and cheapest_variant.compare_at_price != blank -%}
+    {%- if settings.discount_mode == 'percentage' -%}
+      {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round | append: '%' -%}
+    {%- else -%}
+      {%- capture savings -%}{{ product.compare_at_price | minus: product.price | money }}{%- endcapture -%}
+    {%- endif -%}
+
+    <span class="label label--highlight">{{ 'collection.product.discount_html' | t: savings: savings }}</span>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if product_labels != blank and reduced_content != true -%}
+  <div class="product-item__label-list label-list">
+    {{- product_labels -}}
+  </div>
+{%- endif -%}
+
+<style>
+  .label {
+    display: inline-block;
+    padding: 0 5px;
+    vertical-align: top;
+    font-family: var(--text-font-family);
+    font-style: var(--text-font-style);
+    font-weight: var(--text-font-bold-weight);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .label--custom {
+    background: {{settings.product_custom_label_background}};
+    color: {{settings.product_custom_label_color}};
+  }
+
+  .label--custom2 {
+    background: {{settings.product_custom_label_2_background}};
+    color: {{settings.product_custom_label_2_color}};
+  }
+
+  .label-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+
+  .label-list:not(.label-list--horizontal) .label:not(:last-child) {
+    margin-bottom: 4px;
+  }
+
+  .label-list--horizontal {
+    flex-direction: row;
+  }
+
+  [dir="ltr"] .label-list--horizontal .label:not(:last-child) {
+    margin-right: 4px;
+  }
+
+  [dir="rtl"] .label-list--horizontal .label:not(:last-child) {
+    margin-left: 4px;
+  }
+
+  .product-item__label-list {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+  }
+
+  @media screen and (min-width: 741px) {
+    .label {
+      font-size: 12px;
+    }
+  }
+
+  {% if settings.labels_position == "top_left" %}
+    body #main .product-item__label-list {
+      top: 10px;
+      left: 10px;
+    }
+  {% elsif settings.labels_position == "top_right" %}
+    body #main .product-item__label-list {
+      top: 10px;
+      right: 10px;
+      left: unset;
+    }
+  {% elsif settings.labels_position == "bottom_left" %}
+    body #main .product-item__label-list {
+      top: unset;
+      left: 10px;
+      bottom: 10px;
+    }
+  {% else %}
+    body #main .product-item__label-list {
+      top: unset;
+      left: unset;
+      bottom: 10px;
+      right: 10px;
+    }
+  {% endif %}
+
+  body #main .product-item__label-list .label {
+    border-radius: {{ settings.labels_border_radious }}px;
+  }
+</style>
+
+Step 3: Insert the following code within the .product-item__image-wrapper element in the product-item.liquid file
+
+ {% render 'product-labels', product: product, reduced_content: reduced_content %}
+
+Step 4: Insert the following code within the .product__media-image-wrapper element in the product-media.liquid file
+ {% render 'product-labels', product: product, reduced_content: false %}    

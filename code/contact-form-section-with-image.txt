@@ -1,0 +1,408 @@
+<div class="page-width cro-contact section-{{ section.id }}" style="background-color: {{ section.settings.background_color }}">
+  <div class="cro-contact__wrapper {% if section.settings.image != blank %}has-image{% endif %} image-position-{{ section.settings.image_position }}">
+    
+    <div class="cro-contact__form" style="text-align: {{ section.settings.text_align }}">
+      {% if section.settings.title != blank %}
+        <h2 class="{{ section.settings.heading_style }} {{ section.settings.heading_font }}"
+            style="font-size: {{ section.settings.heading_size }}px; 
+                   color: {{ section.settings.heading_color }}">
+          {{ section.settings.title }}
+        </h2>
+      {% endif %}
+
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <p class="form-success">
+            {{ 'contact.form.post_success' | t }}
+          </p>
+        {% endif %}
+
+        {{ form.errors | default_errors }}
+
+        <div class="form-field">
+          <label for="ContactFormName" 
+                 class="{{ section.settings.label_style }} {{ section.settings.label_font }}"
+                 style="font-size: {{ section.settings.label_size }}px; 
+                        color: {{ section.settings.label_color }}">
+            {{ 'contact.form.name' | t }}
+          </label>
+          <input type="text" 
+                 id="ContactFormName" 
+                 class="contact-input {{ section.settings.input_style }}"
+                 style="background-color: {{ section.settings.input_background }};
+                        color: {{ section.settings.input_text_color }};
+                        font-family: {{ section.settings.input_font.family }};"
+                 name="contact[name]" 
+                 value="{% if form.name %}{{ form.name }}{% endif %}">
+        </div>
+
+        <div class="form-field">
+          <label for="ContactFormEmail" 
+                 class="{{ section.settings.label_style }} {{ section.settings.label_font }}"
+                 style="font-size: {{ section.settings.label_size }}px; 
+                        color: {{ section.settings.label_color }}">
+            {{ 'contact.form.email' | t }}
+          </label>
+          <input type="email" 
+                 id="ContactFormEmail" 
+                 class="contact-input {{ section.settings.input_style }}"
+                 style="background-color: {{ section.settings.input_background }};
+                        color: {{ section.settings.input_text_color }};
+                        font-family: {{ section.settings.input_font.family }};"
+                 name="contact[email]" 
+                 value="{% if form.email %}{{ form.email }}{% endif %}"
+                 spellcheck="false"
+                 autocomplete="off"
+                 autocapitalize="off"
+                 required>
+        </div>
+
+        <div class="form-field">
+          <label for="ContactFormMessage" 
+                 class="{{ section.settings.label_style }} {{ section.settings.label_font }}"
+                 style="font-size: {{ section.settings.label_size }}px; 
+                        color: {{ section.settings.label_color }}">
+            {{ 'contact.form.message' | t }}
+          </label>
+          <textarea rows="10" 
+                    id="ContactFormMessage" 
+                    class="contact-input {{ section.settings.input_style }}"
+                    style="background-color: {{ section.settings.input_background }};
+                           color: {{ section.settings.input_text_color }};
+                           font-family: {{ section.settings.input_font.family }};"
+                    name="contact[body]" 
+                    required>{% if form.body %}{{ form.body }}{% endif %}</textarea>
+        </div>
+
+        {% if section.settings.show_phone %}
+          <div class="form-field">
+            <label for="ContactFormPhone" 
+                   class="{{ section.settings.label_style }} {{ section.settings.label_font }}"
+                   style="font-size: {{ section.settings.label_size }}px; 
+                          color: {{ section.settings.label_color }}">
+              {{ 'contact.form.phone' | t }}
+            </label>
+            <input type="tel" 
+                   id="ContactFormPhone" 
+                   class="contact-input {{ section.settings.input_style }}"
+                   style="background-color: {{ section.settings.input_background }};
+                          color: {{ section.settings.input_text_color }};
+                          font-family: {{ section.settings.input_font.family }};"
+                   name="contact[phone]"
+                   value="{% if form.phone %}{{ form.phone }}{% endif %}">
+          </div>
+        {% endif %}
+
+        <button type="submit" 
+                class="button {{ section.settings.button_style }}"
+                style="background-color: {{ section.settings.button_background }};
+                       color: {{ section.settings.button_text_color }};
+                       font-family: {{ section.settings.button_font.family }};
+                       font-size: {{ section.settings.button_size }}px;">
+          {{ section.settings.button_text }}
+        </button>
+      {% endform %}
+    </div>
+
+    {% if section.settings.image != blank %}
+      <div class="cro-contact__image">
+        <img src="{{ section.settings.image | img_url: 'master' }}"
+             alt="{{ section.settings.image.alt | escape }}"
+             loading="lazy"
+             width="{{ section.settings.image.width }}"
+             height="{{ section.settings.image.height }}">
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "CRO | Kontakt",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout-Einstellungen"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Hintergrundfarbe",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text-Ausrichtung",
+      "options": [
+        {
+          "value": "left",
+          "label": "Linksbündig"
+        },
+        {
+          "value": "center",
+          "label": "Zentriert"
+        },
+        {
+          "value": "right",
+          "label": "Rechtsbündig"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Bild-Einstellungen"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bild"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Bildposition",
+      "options": [
+        {
+          "value": "left",
+          "label": "Links"
+        },
+        {
+          "value": "right",
+          "label": "Rechts"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Überschrift-Einstellungen"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Überschrift",
+      "default": "Kontaktieren Sie uns"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Überschrift Schriftart",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Überschrift Größe",
+      "min": 16,
+      "max": 60,
+      "step": 1,
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Überschrift Farbe",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Label-Einstellungen"
+    },
+    {
+      "type": "font_picker",
+      "id": "label_font",
+      "label": "Label Schriftart",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Label Größe",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Label Farbe",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Eingabefeld-Einstellungen"
+    },
+    {
+      "type": "font_picker",
+      "id": "input_font",
+      "label": "Eingabefeld Schriftart",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Eingabefeld Hintergrund",
+      "default": "#F5F5F5"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Eingabefeld Textfarbe",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Button-Einstellungen"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button-Text",
+      "default": "Nachricht senden"
+    },
+    {
+      "type": "font_picker",
+      "id": "button_font",
+      "label": "Button Schriftart",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "button_size",
+      "label": "Button Schriftgröße",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button Hintergrund",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Textfarbe",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button-Stil",
+      "options": [
+        {
+          "value": "button-normal",
+          "label": "Normal"
+        },
+        {
+          "value": "button-rounded",
+          "label": "Abgerundet"
+        },
+        {
+          "value": "button-pill",
+          "label": "Pill"
+        }
+      ],
+      "default": "button-normal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Telefonnummer-Feld anzeigen",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Kontakt",
+      "category": "Formular"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.cro-contact {
+  padding: 2rem 0;
+}
+
+.cro-contact__wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.cro-contact__wrapper.has-image .cro-contact__form {
+  width: 50%;
+}
+
+.cro-contact__image {
+  width: 50%;
+}
+
+.cro-contact__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-position-left {
+  flex-direction: row-reverse;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.contact-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.form-success {
+  color: var(--success-color);
+  margin-bottom: 1rem;
+}
+
+.button {
+  padding: 1rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-normal {
+  border-radius: 0;
+}
+
+.button-rounded {
+  border-radius: 8px;
+}
+
+.button-pill {
+  border-radius: 50px;
+}
+
+.button:hover {
+  opacity: 0.9;
+}
+
+@media screen and (max-width: 768px) {
+  .cro-contact__wrapper {
+    flex-direction: column;
+  }
+
+  .cro-contact__wrapper.has-image .cro-contact__form,
+  .cro-contact__image {
+    width: 100%;
+  }
+}
+{% endstylesheet %}

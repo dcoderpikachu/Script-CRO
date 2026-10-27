@@ -1,0 +1,307 @@
+Step: 1
+Go to main-product.liquid
+Search "type": "description"
+Update section schema block with below code:
+
+{
+    "type": "description",
+    "name": "Description",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "range",
+          "id": "ugc_section_space_top",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top space",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "ugc_section_space_bottom",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom space",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "section_layout",
+          "label": "Layout",
+          "options": [
+                {
+                    "value": "collapsible",
+                    "label": "Collapsible"
+                },
+                {
+                    "value": "normal",
+                    "label": "Normal"
+                }
+                
+            ],
+            "default": "normal"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_button_as_default",
+          "label": "Open button as default",
+          "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "collapsible_show_border",
+            "label": "Show border bottom",
+            "default": true
+        },
+        {
+          "type": "text",
+          "id": "collapsible_button_content",
+          "label": "Content",
+          "default": "Description"
+        },
+        {
+          "type": "range",
+          "id": "collapsible_button_size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Button size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "collapsible_button_padding",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Button padding TB",
+          "default": 20
+        },
+        {
+            "type": "color",
+            "id": "button_border_color",
+            "label": "Border color",
+            "default": "#E4E4E4"
+        },
+        {
+            "type": "color",
+            "id": "button_arrow_color",
+            "label": "Arrow color",
+            "default": "#1a1a1a"
+        },
+        {
+            "type": "color",
+            "id": "button_arrow_background",
+            "label": "Arrow BG",
+            "default": "#E8E8E8"
+        },
+    ]
+},
+
+
+Step: 2
+Create a snippet: ed-collapsible-description.liquid
+Paste this code:
+<div class="ed_collapsible_description_section">
+    <style>
+    .ed_collapsible_description_section {
+        margin-top: {{ block.settings.ugc_section_space_top -}}px;
+        margin-bottom: {{ block.settings.ugc_section_space_bottom -}}px;
+        overflow: hidden;
+    }
+    .ed-collapsible-toggle {
+        user-select: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        {%- if block.settings.collapsible_show_border -%}
+        border-bottom: 1px solid {{ block.settings.button_border_color }};
+        {%- endif -%}
+        padding: {{ block.settings.collapsible_button_padding }}px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        overflow: visible;
+        background: none;
+        border-radius: 0;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        touch-action: manipulation;
+    }
+    .ed-collapsible-toggle p.heading {
+        font-size: {{  block.settings.collapsible_button_size -}}px;
+        line-height: 1.5;
+        margin: 0;
+    }
+    
+    .ed-animated-arrow-down {
+        width: 24px;
+        height: 24px;
+        background: {{ block.settings.button_arrow_background }};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+    }
+    .ed-animated-arrow-down svg path {
+        stroke: {{ block.settings.button_arrow_color }};
+    }
+    
+    .ed-collapsible-toggle svg {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .ed-collapsible-toggle[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+    }
+    
+    .ed-collapsible-content {
+        overflow: hidden;
+        transition: height 0.5s ease, opacity 0.25s ease;
+        opacity: 1;
+    }
+    
+    .ed-collapsible-content:not([data-open]) {
+        display: block;
+        height: 0;
+        opacity: 0;
+    }          
+    </style>
+
+    {% if block.settings.section_layout == 'collapsible' %}
+    <button class="ed-collapsible-toggle" aria-controls="block-id-2" aria-expanded="{{ block.settings.open_button_as_default }}">
+        <p class="heading">{{  block.settings.collapsible_button_content }}</p>
+        <span class="ed-animated-arrow-down">
+            <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5" />
+            </svg>
+        </span>
+    </button>
+
+    <div id="block-id-2" class="ed-collapsible-content" {% if block.settings.open_button_as_default == true %} data-open{% endif %}>
+        <div class="ed-collapsible__content">
+        {%- if product.description != blank -%}
+            <div class="product-form__description rte" {{ block.shopify_attributes }}>
+            {{- product.description -}}
+            </div>
+        {%- endif -%}
+        </div>
+    </div>
+
+    <script>
+        // JS code for Custom Collapsible Toggle
+        function initCollapsibleToggle() {
+        const toggles = document.querySelectorAll(".ed-collapsible-toggle");
+        
+        toggles.forEach((toggle) => {
+            const contentId = toggle.getAttribute("aria-controls");
+            const content = document.getElementById(contentId);
+        
+            if (!content) return;
+        
+            toggle.addEventListener("click", () => {
+            const isOpen = toggle.getAttribute("aria-expanded") === "true";
+            toggle.setAttribute("aria-expanded", String(!isOpen));
+            toggle.classList.toggle("is-open", !isOpen);
+        
+            if (!isOpen) {
+                openContent(content);
+            } else {
+                closeContent(content);
+            }
+            });
+        });
+        
+        function openContent(element) {
+            element.style.overflow = "hidden";
+            const height = element.scrollHeight;
+        
+            const keyframes = {
+            height: ["0px", `${height}px`],
+            visibility: ["hidden", "visible"],
+            opacity: element.hasAttribute("data-animate-items") ? [0, 0] : [1, 1],
+            };
+        
+            const animation = element.animate(keyframes, {
+            duration: 500,
+            direction: "normal",
+            easing: "cubic-bezier(0.75, 0, 0.175, 1)",
+            fill: "forwards"
+            });
+        
+            animation.onfinish = () => {
+            element.style.overflow = "visible";
+            element.style.height = `${height}px`;
+            element.setAttribute("data-open", "");
+            };
+        
+            if (element.hasAttribute("data-animate-items")) {
+            element.animate({
+                opacity: [0, 1],
+                transform: ["translateY(10px)", "translateY(0)"]
+            }, {
+                duration: 250,
+                delay: 250,
+                easing: "cubic-bezier(0.75, 0, 0.175, 1)",
+                fill: "forwards"
+            });
+            }
+        }
+        
+        function closeContent(element) {
+            const height = element.scrollHeight;
+            element.style.overflow = "hidden";
+            const animation = element.animate({
+            height: [`${height}px`, "0px"],
+            visibility: ["visible", "hidden"],
+            opacity: element.hasAttribute("data-animate-items") ? [0, 0] : [1, 0],
+            }, {
+            duration: 500,
+            direction: "normal",
+            easing: "cubic-bezier(0.75, 0, 0.175, 1)",
+            fill: "forwards"
+            });
+        
+            animation.onfinish = () => {
+            element.style.overflow = "hidden";
+            element.removeAttribute("data-open");
+            };
+        }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+        initCollapsibleToggle();
+        });
+        
+        if (typeof Shopify !== "undefined" && Shopify.designMode) {
+        document.addEventListener("shopify:section:load", function () {
+            initCollapsibleToggle();
+        });
+        }
+    </script>
+    {%- else -%}
+    {%- if product.description != blank -%}
+        <div class="product-form__description rte" {{ block.shopify_attributes }}>
+        {{- product.description -}}
+        </div>
+    {%- endif -%}
+    {%- endif -%}
+</div>
+
+
+
+
+Step: 3
+Go to product-form.liquid
+Search when 'description'
+Replace with below code:
+{%- when 'description' -%}
+    {% render 'ed-collapsible-description', section: section, block: block, product: product  %}

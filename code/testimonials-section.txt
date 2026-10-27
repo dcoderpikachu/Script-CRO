@@ -1,0 +1,274 @@
+Step: 1
+Create a section: ed-testimonials-one.liquid
+Paste this code:
+
+{%- capture flickity_config -%}
+    {
+        "adaptiveHeight": true,
+        "dragThreshold": 10,
+        "initialIndex": ".is-initial-selected",
+        "fade": true,
+        "contain": true,
+        "cellSelector": ".skb_testimonial-item:not(.is-filtered)",
+        "percentPosition": false,
+        "pageDots": false,
+        "prevNextButtons": false,
+        "wrapAround": true,
+        "arrowShape": "M0.541,32.7493 C0.526,32.7843 0.521,32.8213 0.507,32.8563 C0.189,33.6663 0,34.5413 0,35.4633 C0,36.3853 0.189,37.2603 0.507,38.0693 C0.521,38.1043 0.526,38.1423 0.541,38.1773 C0.904,39.0593 1.433,39.8533 2.097,40.5183 L30.413,68.8333 C33.203,71.6243 37.723,71.6243 40.513,68.8333 C43.304,66.0433 43.304,61.5233 40.513,58.7333 L24.386,42.6053 L92.857,42.6053 C96.803,42.6053 100,39.4063 100,35.4633 C100,31.5203 96.803,28.3203 92.857,28.3203 L24.386,28.3203 L40.513,12.1923 C43.304,9.4023 43.304,4.8833 40.513,2.0933 C39.118,0.6973 37.291,0.0003 35.463,0.0003 C33.636,0.0003 31.808,0.6973 30.413,2.0933 L2.097,30.4083 C1.433,31.0723 0.904,31.8673 0.541,32.7493"
+    }
+{%- endcapture -%}
+
+<style>
+  .skb_testimonials-list {
+      display: block;
+      min-width: 100%;
+      text-align: center;
+  }
+
+  .skb_testimonial-item {
+      width: calc(100% / 1);
+  }
+
+  section.ed-testimonials-section {
+      padding: var(--vertical-breather) 0;
+      overflow: hidden;
+  }
+
+  .ed-testimonial-ratings {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+  }
+
+  .ed-testimonial-ratings svg {
+      width: 20px;
+      height: auto;
+  }
+
+  blockquote.ed-testimonial-quote.blockquote.h3 {
+      text-transform: initial;
+      margin: 2rem auto 3rem;
+  }
+
+  blockquote.ed-testimonial-quote.blockquote.h3:before {
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='86' height='55' viewBox='0 0 86 55' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M71.3163 54.6H42.5163L60.3163 0.400024H85.5163L71.3163 54.6ZM29.3163 54.6H0.716309L18.9163 0.400024H44.1163L29.3163 54.6Z' fill='%23252627'/%3E%3C/svg%3E%0A");
+      mask-image: url("data:image/svg+xml,%3Csvg width='86' height='55' viewBox='0 0 86 55' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M71.3163 54.6H42.5163L60.3163 0.400024H85.5163L71.3163 54.6ZM29.3163 54.6H0.716309L18.9163 0.400024H44.1163L29.3163 54.6Z' fill='%23252627'/%3E%3C/svg%3E%0A");
+      mask-size: 70px 45px;
+      top: 0;
+      left: 3rem;
+      width: 70px;
+      height: 45px;
+  }
+
+  blockquote.ed-testimonial-quote.blockquote.h3 {
+  }
+
+  flickity-controls.ed-flickity-controls-cirlce {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+  }
+  flickity-controls.ed-flickity-controls-cirlce {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3rem;
+  }
+  .ed-flickity-controls-dots-nav button.dots-nav__item {
+      border-radius: 9999px;
+  }
+  button.ed-flickity-controls-prev-next {
+      width: 48px;
+      height: 48px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  @media (max-width: 1000px) {
+      blockquote.ed-testimonial-quote.blockquote.h3:before {
+          width: 50px;
+          height: 35px;
+          mask-size: 50px 35px;
+          left: 0px;
+          top: 6px;
+      }
+
+      blockquote.ed-testimonial-quote.blockquote.h3 {
+          padding-left: 0;
+          padding-right: 0;
+          margin: 0rem auto 2rem;
+      }
+
+      flickity-controls.ed-flickity-controls-cirlce {
+          margin-top: 2rem;
+      }
+
+      .ed-testimonial-ratings svg {
+          width: 14px;
+      }
+  }
+</style>
+
+<style>
+  #shopify-section-{{ section.id }} section.ed-testimonials-section {
+      background: {{ section.settings.background }};
+  }
+</style>
+
+<section class="ed-testimonials-section">
+  <div class="container container--small">
+    <flickity-carousel
+      flickity-config="{{ flickity_config | escape }}"
+      id="flickity-{{ section.id }}"
+      class="skb_testimonials-list"
+    >
+      {%- for block in section.blocks -%}
+        <div class="skb_testimonial-item" id="skb_flickity-{{- section.id -}}item-{{- block.id -}}">
+          <div class="ed-testimonial" {{ block.shopify_attributes }}>
+            <div class="ed-testimonial-ratings">
+              {% assign rating = block.settings.ratings %}
+              {% assign rating_empty = 5 | minus: rating %}
+              {%- for i in (1..rating) -%}
+                {%- render 'icon' with 'rating-star', class: 'rating__star' -%}
+              {%- endfor -%}
+              {%- if rating_empty > 0 -%}
+                {%- for i in (1..rating_empty) -%}
+                  {%- render 'icon' with 'rating-star', class: 'rating__star rating__star--empty' -%}
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+            <blockquote class="ed-testimonial-quote blockquote h3">
+              {{ block.settings.content }}
+            </blockquote>
+            <div class="ed-testimonial-author">{{ block.settings.author }}</div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </flickity-carousel>
+
+    {% render 'ed-flickity-control',
+      show_next_prev: section.settings.show_next_prev_arrow,
+      show_dots: section.settings.show_slide_dots
+    %}
+  </div>
+</section>
+
+{% schema %}
+{
+    "name": "CRO | Testimonial 01",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "show_slide_dots",
+            "label": "Show dots",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "show_next_prev_arrow",
+            "label": "Show next-prev",
+            "default": false
+        },
+        {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#F0F0F0"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "testimonial",
+            "name": "Testimonial",
+            "settings": [
+                {
+                    "type": "range",
+                    "id": "ratings",
+                    "min": 1,
+                    "max": 5,
+                    "step": 1,
+                    "label": "Ratings",
+                    "default": 5
+                },
+                {
+                    "type": "textarea",
+                    "id": "content",
+                    "label": "Content",
+                    "default": "They're stylish and lightweight despite being made from premium materials, and the battery has yet to die. Most importantly, of course, they sound amazing."
+                },
+                {
+                    "type": "text",
+                    "id": "author",
+                    "label": "Author",
+                    "default": "John corner."
+                },
+            ]
+        },
+    ],
+    "presets": [
+        {
+          "name": "CRO | Testimonial 01",
+          "blocks": [
+                {
+                    "type": "testimonial",
+                    "settings": {
+                        "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, assumenda modi. Repellat nostrum sequi nesciunt? Maxime, harum! Maiores, labore minima.",
+                        "author": "William Kara"
+                    }
+                },
+                {
+                    "type": "testimonial",
+                    "settings": {
+                        "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio, esse vel eius consequatur laboriosam repellat voluptas quibusdam! Delectus placeat vero odio sapiente doloremque consectetur, labore voluptatibus, incidunt voluptates non reiciendis.",
+                        "author": "John D."
+                    }
+                },
+                {
+                    "type": "testimonial",
+                    "settings": {
+                        "content": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio, esse vel eius consequatur laboriosam repellat voluptas quibusdam! Delectus placeat vero odio sapiente doloremque incidunt voluptates non reiciendis.",
+                        "author": "Michael"
+                    }
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}
+
+
+
+
+
+Step: 2
+Create a snippet: ed-flickity-control.liquid
+Paste this code:
+
+<flickity-controls controls="flickity-{{ section.id }}" class="ed-flickity-controls-cirlce" {% if show_next_prev == false %} style="justify-content: center"{%  endif %}>
+    {% if show_next_prev == true %}
+      <button class="ed-flickity-controls-prev-next {% if section.settings.show_next_prev %}hidden-pocket{% endif %} tap-area tap-area--large" aria-label="{{ 'general.accessibility.previous' | t }}" data-action="prev">
+        {%- render 'icon' with 'nav-arrow-left', direction_aware: true -%}
+      </button>
+    {%  endif %}
+
+     {%- if show_dots -%}
+       <div class="ed-flickity-controls-dots-nav dots-nav dots-nav--centered">
+         {%- for block in section.blocks -%}
+            <button type="button" tabindex="-1" class="dots-nav__item tap-area" aria-current="true" aria-controls="skb_flickity-{{- section.id -}}item-{{- block.id -}}" data-action="select">
+                <span class="visually-hidden">{{ 'general.accessibility.go_to_slide' | t: num: forloop.index }}</span>
+            </button>
+         {%- endfor -%}
+       </div>
+    {%- endif -%}
+
+   {% if show_next_prev == true %}
+     <button class="ed-flickity-controls-prev-next {% if section.settings.show_next_prev %}hidden-pocket{% endif %} tap-area tap-aera--large" aria-label="{{ 'general.accessibility.next' | t }}" data-action="next">
+       {%- render 'icon' with 'nav-arrow-right', direction_aware: true -%}
+     </button>
+   {%- endif -%}
+</flickity-controls>

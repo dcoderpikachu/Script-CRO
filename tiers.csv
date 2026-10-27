@@ -1,0 +1,219 @@
+id,name,tier,reuse,reason
+pdp-up-cross-selling,PDP Up-/Cross-Selling (Add-on Product Slider/Stack),Core,5,Proven add-on module near the ATC that lifts AOV.
+cart-up-cross-selling,Cart Up-/Cross-Selling Carousel,Core,5,Classic cart upsell at a high-intent moment; works almost everywhere.
+cart-shipping-progress-bar-free-gift,Cart Shipping Progress Bar with Free Gift Milestones,Core,5,Free-shipping progress bar is a proven pattern for raising AOV.
+global-payment-icons-bar,Payment Icons Bar (PDP & Cart),Core,5,"Standard trust badges at the decision point, reusable everywhere."
+pdp-store-benefits,PDP Store Benefits (Icon + Text USP Section with Normal / Tabbed-Slider Layouts),Core,5,USP icons near the buy button handle common objections in any store.
+collection-card-color-swatches,Collection Card Color Swatches (CRO | Artikel Farben),Core,5,Proven grid swatches for any store with color variants.
+global-announcement-bar,"Announcement Bar (Benefits, Reviews.io, Countdown, Dismissible Promo Bar)",Core,5,"Universal top bar for USPs, offers and trust messages."
+pdp-delivery-time-stock-status-block,PDP Delivery Time & Stock Status Communication,Core,5,Proven delivery and stock messaging that reduces anxiety near the ATC button.
+payment-icons-section,"Payment Icons (selectable, sortable trust badges)",Core,5,Classic payment trust badges that work in almost every store.
+cart-shipping-cost-breakdown,Cart Shipping Cost Communication (Subtotal / Shipping / Total),Core,5,Transparent shipping costs prevent surprise-cost cart abandonment.
+product-badges,Product Badges (Tag-driven image labels),Core,5,Tag-driven bestseller and sale badges are proven and universal.
+sticky-atc-button,Sticky Add-to-Cart Button,Core,5,Proven sticky add-to-cart pattern; spec is thin but the pattern is standard.
+pdp-product-tabs,"PDP Product Tabs (Tabs on Desktop, Accordion on Mobile)",Core,5,Standard tabs and accordion that organise PDP info anywhere.
+pdp-quantity-buttons-tiered-pricing,PDP Quantity Buttons & Tiered Pricing,Core,5,Quantity breaks are a proven AOV pattern across many stores.
+pdp-bulletpoints-usp-list,PDP Bulletpoints (USP List with Custom Icons),Core,5,Scannable benefit bullets near the CTA work almost everywhere.
+pdp-sticky-add-to-cart-bar,PDP Sticky Add-to-Cart Bar,Core,5,Classic proven pattern keeping the buy button always reachable.
+cart-store-benefits,Cart Store Benefits (Icon + Text USP Strip with Optional Slider),Core,5,Trust and USP strip in the cart reduces last-minute doubt.
+pdp-review-spotlight,PDP Review Spotlight (Review Carousel Block),Core,5,"Curated reviews in the buy box are proven, universal social proof."
+sub-collection-bubbles-nav,Sub-Collection Bubble Navigation Bar,Core,5,"Visual category bubbles are a proven, easy navigation shortcut."
+optimized-cart-drawer-sectionfy,"Optimized Cart Drawer (delivery promise, free-shipping bar, social proof, payment trust)",Core,5,"Combines free-shipping bar, delivery promise and trust signals; proven drawer pattern."
+cart-free-gift-progress-bar,Cart Free Gift Progress Bar,Core,5,Threshold reward bar is a proven AOV driver across stores.
+sub-collection-bubble-navigation,Sub-Collection Bubble Navigation (Sectionfy),Core,5,Visual collection shortcuts are a widely proven navigation pattern.
+social-proof-banner,Social Proof Banner (Avatars + Customer Count),Core,5,"Avatars plus customer count is cheap, proven reassurance near the price."
+pdp-upsell-grid-metafield-driven,"PDP Upsell / Cross-Sell Grid (""Goes perfectly with it"")",Core,5,Proven PDP cross-sell near the CTA with social proof; fits most stores.
+cro-benefits-section,CRO | Benefits (USP / Benefits Bar),Core,5,Classic USP/trust bar with existing code; works on any store.
+cart-drawer-shipping-bar-free-gift,Cart Drawer Free Shipping Progress Bar with Auto-Added Free Gift,Core,5,Free-shipping progress bar is a proven AOV lever everywhere.
+pdp-color-variant-selector,PDP Color Variant Selector (Swatches / Product Images / Text Buttons),Core,5,Visual swatches and image variants are a proven PDP standard.
+pdp-variant-cards-popular-badge-savings,"PDP Variant Cards with Unit Price, Savings Badge & Popular Variant Label",Core,5,Quantity-break cards with savings and bestseller badge; proven AOV pattern.
+cart-free-gift-with-progress-bar,Cart Free Gift with Progress Bar (€0 Gift Line Item),Core,5,Proven threshold reward mechanic that lifts AOV in most stores.
+bestseller-tabs-by-category,Bestsellers with Category Tabs,Core,5,Bestseller grid with tabs works for almost any catalogue.
+pdp-product-badges,"PDP Product Badges (metafield-driven, up to 3)",Core,5,"Metafield badges are simple, proven cues on any PDP."
+announcement-bar-slider,Announcement Bar with Slideshow (Trust/Rating Ticker),Core,5,Top-bar trust and benefit ticker works on almost any store.
+pdp-quantity-discounts,PDP Quantity Discounts (Volume Pricing),Core,5,"Quantity breaks are a proven AOV lever, though spec is thin."
+cart-upsell-metafield-driven-cross-sell,Cart Drawer Up-/Cross-Sell Block (Product-Metafield Driven),Core,5,Cart cross-sell is a proven AOV pattern with flexible setup.
+cart-free-shipping-progress-bar,Cart Free-Shipping Progress Bar,Core,5,"Free-shipping progress bar is a classic, proven AOV booster."
+pdp-bulletpoints-usp-block,PDP Bulletpoints (USP list) Block,Core,5,"Buy-box benefit bullets are a proven, universal PDP pattern."
+sub-collection-bubble-navigation,Sub-Collection Bubble Navigation (Full-Width Row),Core,5,Visual collection shortcuts are a widely proven navigation pattern.
+reviewsio-star-ratings-announcement-bar-pdp-cards,Reviews.io Star Ratings (Announcement Bar + PDP Buybox + Product Cards),Core,5,Star ratings across the site are a top proven trust signal.
+cart-free-gift-shipping-progress-bar,Cart Free Gift & Free Shipping Progress Bar,Core,5,Classic proven AOV booster with milestone rewards.
+recommended-products-carousel,"Recommended Products Carousel (""You'll also like this"")",Core,5,Proven cross-sell carousel that raises AOV on any store.
+ugc-customer-photo-section,UGC Customer Photo & Review Section,Core,5,"Customer photo gallery is a universal, proven social proof pattern."
+testimonials-carousel-section,Testimonials Carousel Section (Customer Review Cards),Core,5,Testimonial card carousel is a proven pattern that works everywhere.
+faq-accordion-section,FAQ Accordion Section,Core,5,FAQ accordion handles objections on every store type.
+pdp-payment-bar-installment-invoice,PDP Payment Bar with Installment / Invoice Message,Core,4,"Payment trust plus pay-later messaging, both proven across many stores."
+pdp-social-proof-banner,PDP Social Proof Banner (Avatar Stack + Rating Pill),Core,4,Rating summary near the title is a proven trust builder.
+cart-drawer-sticky-checkout-progress-payment,"Cart Drawer Sticky Elements & Scroll Settings (Sticky Checkout Button, Progress Bar, Payment Icons)",Core,4,Keeps the checkout CTA and shipping progress visible in every cart drawer.
+collection-quick-add-to-cart-size-picker,Collection Quick Add to Cart with Size Picker (Fashion),Core,4,"Quick add from collection is a proven, widely reusable shortcut."
+pdp-highlight-guarantees-block,Highlight Guarantees (Guarantee Card with Social-Proof Footer Bar),Core,4,Risk-reversal guarantee near the CTA is broadly proven.
+pdp-ugc-customer-photo-carousel,PDP UGC Customer Photo Carousel (Product Block),Core,4,Customer photos near the add-to-cart button are widely proven social proof.
+compare-section-static,Compare Section (Static Product Comparison Table),Core,4,Comparison tables reduce choice overload for any multi-product range.
+product-teaser-text-metafield,Product Teaser Text (Metafield-Driven Subtitle on Collection Cards & PDP),Core,4,Simple tagline under title clarifies products in any catalogue.
+logo-slider,Logo Slider (As Seen In / Trusted By),Core,4,Standard 'as seen in' authority pattern; easy and widely applicable.
+cart-tiered-rewards-progress-bar,Cart Tiered Rewards Progress Bar (Free Shipping + 3 Free Gifts),Core,4,Tiered rewards bar is a proven goal-gradient AOV booster.
+faq-with-tabs-category-filter,FAQ Section with Category Tabs and Thumbnail (Variant 2),Core,4,FAQ accordion handles objections everywhere; built and configurable.
+exciting-content-accordion-with-image,"Exciting Content Elements (Image + Accordion Section, Variant 2)",Core,4,"Generic, coded benefits accordion with image; fits most stores."
+homepage-testimonial-masonry-wall-photo-reviews,Homepage Testimonial Masonry Wall with Customer Photos and Verified Buyer Reviews,Core,4,Photo review wall is proven social proof across verticals.
+pdp-compare-products-table,PDP Compare Products Table (Compare with Our Other Products),Core,4,In-range comparison aids choice and upsell for multi-model catalogues.
+pdp-size-slider,PDP Size Slider (Fit Scale),Core,4,Fit scale cuts sizing doubt and returns in apparel.
+sold-out-pdp-alternative-product-highlight,Sold-Out PDP: Back-in-Stock Notify + Alternative Product Highlight,Core,4,Back-in-stock capture plus alternative is a proven fix for dead ends.
+pdp-social-proof-banner,PDP Social Proof & Rating Banner,Core,4,Rating summary near the title is a proven trust builder.
+collection-quick-add-to-cart-size-drawer,Collection Grid Quick Add to Cart (with Mobile Bottom Size Picker),Core,4,Quick add from the grid cuts friction across many catalogues.
+pdp-product-image-badges,PDP Product Image Badges (Top-Right Overlay Labels),Core,4,"Bestseller and new badges are a simple, widely proven pattern."
+cart-line-item-promo-banner,Cart Line-Item Promo Banner (Free Gift Bar),Core,4,Proven quantity-break nudge in cart; easy to vary per store.
+product-teaser-text-metafield,Product Teaser Text (Tagline under Product Title),Core,4,Simple tagline under title clarifies products in any catalogue.
+ugc-customer-carousel-section,UGC Customer Photo/Video Carousel Section,Core,4,"UGC review carousel is a proven, reusable social-proof format."
+competitor-comparison-table,Competitor Comparison Table (Us vs. Others),Core,4,Highlighted brand column comparison is a reusable trust builder.
+competitor-comparison-table,Competitor Comparison Table (Us vs. Competitors),Core,4,Highlighted brand column comparison is a reusable trust builder.
+competitor-comparison-table,Competitor Comparison Table (Us vs. Other Providers vs. Freelancers),Core,4,Highlighted brand column comparison is a reusable trust builder.
+known-from-logo-bar,Known From / Logo Bar (press & logo strip with marquee or slider),Specific,4,"Useful, but only works when the brand has real press logos."
+testimonials-section,"Testimonials Section (3 Styles: Quote Slider, Card Carousel, Card Grid)",Specific,4,"Broadly useful, but three separate styles make it a loose spec."
+faq-accordion-section-with-intro-block,FAQ Accordion Section with Support Intro Block (Variant 1),Specific,4,"FAQ helps, but the avatar support block depends on the brand."
+product-teaser-texts,Product Teaser Texts (Metafield-driven subtitle under product title),Specific,4,"Useful subtitle pattern, but depends on per-product copywriting effort."
+cart-payment-icons-installment-bar,Cart Payment Icons & Installment/Invoice Payment Bar,Specific,4,Duplicates the payment icons and PDP installment elements.
+global-spacer-section,Spacing Section (Spacer),Specific,4,"Useful layout utility, but not a conversion pattern itself."
+competitor-comparison-table-category-tabs,Competitor Comparison Table with Product-Category Tabs,Specific,4,"Us-vs-them works, but content and tabs are brand-specific."
+pdp-global-bulletpoints,PDP Global Bullet Points (Metaobject-Driven USP List),Specific,4,"USP bullets are useful, but this metaobject setup is Sectionfy-specific."
+bestseller-product-section,Bestseller Product Section,Specific,4,"Common idea, but this one is inferred from feedback with no spec."
+cro-rich-text-section,"CRO | Rich Text Section (Headline, Subheadline, Text & Button)",Specific,3,Generic content block that most themes already include; small CRO lift.
+sub-collections-bubble-nav,Sub-Collections (Category Bubble / Title Navigation Strip),Specific,3,"Helpful navigation, but value depends on catalogue size and structure."
+shop-the-look-hotspot-lookbook,Shop the Look (Shoppable Lifestyle Image with Hotspots + Product Carousel),Specific,3,Fits fashion and home stores; needs strong lifestyle imagery.
+collection-spotlight,"Collection Page Spotlight (in-grid banner, video, product and reviews tiles)",Specific,3,Complex build with four variants; impact still unproven.
+cro-image-with-text,CRO | Image with Text,Specific,3,Standard theme section with little distinct CRO mechanic.
+cart-good-choice-message-banner,"Cart ""Good Choice"" Reassurance Banner",Specific,3,"Nice reassurance touch, but the lift is unproven."
+global-countdown-timer,Countdown Timer Section (Global),Specific,3,Only useful during real promotions; fake urgency hurts trust.
+highlighted-sticky-search-bar-with-predictive-drawer,Highlighted Search Bar with Predictive Search Drawer,Specific,3,Valuable mainly for large catalogues; small stores gain little.
+pdp-image-info-buttons,PDP Image Info Buttons (Info Bar Overlay with Tooltip),Specific,3,Custom image-overlay mechanic with content written per brand.
+pdp-product-thumbnails-gallery,PDP Product Thumbnails Gallery (Theme-Agnostic Slider),Specific,3,Rebuilds a standard theme gallery and adds little new CRO value.
+configurable-pdp-buy-box,"Configurable PDP Buy Box (fully block-based, with variant, subscription, payment and price-per-portion options)",Specific,3,"Large, thinly specified rebuild with no code provided."
+collection-product-cards-configurable,Configurable Product Cards (Collection Grid),Specific,3,"Broad, brand-styled card rebuild with no code."
+collection-product-card-type-badges,Collection Page Type Badges (Product Card Attribute Pill),Specific,3,Attribute pills suit narrow verticals like skincare.
+product-title-badges,Product Title Badges (Badges Above Product Title),Specific,3,Overlaps product badges and depends on metafield content.
+competitor-product-comparison-table,Competitor / Product Comparison Table Section,Specific,3,"Valuable, but content is heavily brand and competitor specific."
+collection-product-card-image-slider,Collection Product Card Image Slider (CP Product Slider),Specific,3,Common but mixed results; mainly suits fashion catalogues.
+collection-infinite-scroll,Collection Page Infinite Scroll (Toggle vs. Pagination),Specific,3,"Results are mixed; best treated as a test, not a sure win."
+application-steps-tabbed-gallery,Application Steps (Tabbed Image Steps with Progress Bar),Specific,3,How-to steps suit routine products like skincare; narrow use case.
+testimonial-videos-slider,Testimonial Videos Slider,Specific,3,"Good proof format, but depends on brand having video UGC."
+pdp-sales-count-social-proof-below-atc,Product Sales Count Message Below Add-to-Cart,Specific,3,"Thinly specified, no code, and sales claims risk credibility."
+pdp-multiple-product-videos,Multiple Product Videos (Story-Style Video Popups),Specific,3,Story-style videos need per-product video content; novelty UI.
+cart-promo-banner-quantity-upsell,Cart Promo Banner (Quantity Upsell),Specific,3,Complex discount-linked mechanic tied to a specific promo setup.
+cart-stock-availability-meter,Cart Stock Availability Meter,Specific,3,Scarcity meter is complex and needs reliable stock baselines.
+pdp-highlight-discount-code-block,PDP Highlighted Discount Code Block (Copy-to-Clipboard),Specific,3,Promo-specific card. Only useful while a code campaign runs.
+social-proof-social-media-gallery,Social Proof | Social Media Gallery (UGC Slider/Stack with Shoppable Cart Icon),Specific,3,Needs a strong UGC community and photo curation per brand.
+pdp-product-gallery-with-video-slider,PDP Product Gallery Slider with Video,Specific,3,Custom gallery rebuild. Themes already cover this natively.
+cart-free-goodie-progress,Cart Free Gift (Goodie) Row with Progress Bar and Variant Selector,Specific,3,"Promising, but low confidence, no code and campaign-dependent."
+pdp-competitor-comparison-table,Competitor Comparison Table Section,Specific,3,Content is brand-specific. No code and medium confidence.
+cro-content-section-testimonial-slider,CRO | Content Section (Quote/Testimonial Slider with Image),Specific,3,Generic content slider that depends on press or quote assets.
+testimonial-carousel-with-product-cards,Testimonial Carousel with Product Review Cards,Specific,3,"Low confidence, no code, needs customer photo reviews."
+homepage-featured-collection-slider-with-filter-tags,"Homepage Featured Collection (Bestsellers Slider with Filter Tags, Quick ATC & Variant Swatches)",Specific,3,Mostly a standard theme feature; filter tags fit specific catalogues.
+shop-the-look-info-hotspots,Shop the Look Info (Image Hotspot Section),Specific,3,Hotspot imagery is content-heavy and has an uncertain conversion lift.
+collection-product-image-slider,Collection Page Product Image Slider (Card Carousel),Specific,3,Thinly specified; card sliders show mixed results.
+announcement-bar-with-countdown-and-reviews,Announcement Bar with Countdown Timer and Reviews Widget,Specific,3,Tied to the Reviews.io app and campaign countdowns; urgency can backfire.
+testimonial-videos-section,Testimonial Videos Section (with brand-name badge),Specific,3,Needs real video testimonials; low confidence and thin spec.
+testimonial-videos-section,Testimonial Videos Section (Customer Video Carousel with Badge),Specific,3,Needs real video testimonials; low confidence and thin spec.
+contact-form-section-with-image,Contact Form Section with Optional Image,Specific,3,Basic utility section with little conversion impact.
+global-spacer,Spacer (Adjustable Vertical Whitespace Section),Specific,3,Layout utility with no spec; no conversion pattern to build on.
+pdp-multiple-product-videos-bubbles,PDP Multiple Product Videos (Story Bubbles with Popup),Specific,3,Complex custom story-bubble mechanic; heavy per-product content.
+icon-benefit-tabs-slider,Benefit Slider with Icon Tabs and Description,Specific,3,Variation of the benefits bar; the slider adds complexity without clear gain.
+testimonial-videos-section,Testimonial Videos Section (Carousel with Social Proof Badge),Specific,3,Needs real video testimonials; low confidence and thin spec.
+pdp-gallery-video-play-button,PDP Gallery Featured Video Play Button (with GIF/animated thumbnail),Specific,3,Small gallery enhancement; depends on stores having product video.
+product-compare-table-section,Product Compare Section (Comparison Table),Specific,3,Useful only for catalogues with comparable products; complex build.
+pdp-buy-box-container,PDP Buy Box (Bordered Container with Sticky Option),Specific,3,Cosmetic styling toggle; low impact.
+pdp-collapsible-description-default-open,PDP Collapsible Description with Default-Open Option,Specific,3,Minor layout test toggle with low expected impact.
+universal-header-separate-mobile-desktop-menu,Universal Header with Separate Mobile & Desktop Menu,Specific,3,"Theme-infrastructure header rebuild, not a conversion pattern."
+pdp-quantity-selector-next-to-atc,PDP Quantity Selector Beside Add-to-Cart Button,Specific,3,Basic theme control; low impact and only matters for consumables.
+global-headline-section,Global Headline Section (Customizable Heading + Subheading),Specific,3,Generic text section with no direct conversion mechanic.
+pdp-multiple-product-videos-via-metafields,PDP Multiple Product Videos (metaobject-driven section),Specific,3,Complex custom video popup tied to specific content setup.
+pdp-product-attributes-slider-rating,PDP Product Attributes (Customer Rating Sliders),Specific,3,"Fit scales help, but they rely on brand-specific rating data."
+collection-product-card-image-slider,Collection Product Card Image Slider,Specific,3,Common but mixed results; mainly suits fashion catalogues.
+image-with-slides-synced-carousel,Image with Slides (Synced Image + Content Carousel),Specific,3,"Decorative storytelling carousel, low impact, not a proven conversion lever."
+pdp-multiple-product-videos-via-metafields,"PDP Multiple Product Videos (Metafield-driven, Popup)",Specific,3,Complex custom video popup tied to specific content setup.
+homepage-shoppable-spotlight-dynamic-product,Homepage Shoppable Lifestyle Image with Dynamic Product Spotlight,Specific,3,"Complex hotspot section, suits lifestyle and furniture brands mainly."
+pdp-benefits-slider,PDP Benefits Slider (Infinite Icon Marquee),Specific,3,"Auto-scrolling marquee is a styling choice, unproven conversion impact."
+pdp-bulk-discount-tiers,PDP Bulk Discount Tiers (Tabbed),Specific,3,B2B volume tiers with product-type tabs; narrow use case.
+pdp-fullscreen-image-slider-sticky-buybox,PDP Fullscreen Image Slider with Floating Buy Box,Specific,3,"Premium layout overhaul, not a drop-in proven pattern."
+pdp-product-tabs-accordion-cards,PDP Product Tabs (Expandable Image Cards),Specific,3,Complex card variant of standard content tabs.
+pdp-shop-the-look-bundle-section,PDP Shop the Look Bundle Section,Specific,3,"Fashion-only outfit module, low confidence, no code."
+pdp-shop-the-look-outfit-cross-sell,PDP Shop the Look / Complete the Look (Outfit Cross-Sell),Specific,3,"Only screenshots, mixed patterns; fashion vertical."
+collection-quantity-tier-spotlight-card,Quantity Tier Discount Spotlight Card (Collection Grid),Specific,3,Promo grid card depends on store running quantity tiers.
+floating-video-play-button,Floating Video Play Button (Mobile),Specific,3,Needs a strong video asset; persistent overlay is unproven.
+before-vs-after-image-compare-slider,Before vs. After Image Compare Slider,Specific,3,Useful only for visual transformation or modular products.
+collection-product-card-image-slider,Collection Product Card Image Slider (CRO | CP | Product Slider),Specific,3,Common but mixed results; mainly suits fashion catalogues.
+pdp-collapsible-info-box-with-video,PDP Collapsible Info Box with Tooltip & Video,Specific,3,Built for advice-heavy products; content-dependent.
+pdp-compare-chart,PDP Product Comparison Chart (Metaobject-driven),Specific,3,Works for close product pairs only; complex metaobject setup.
+free-gift-progress-bar-cart-drawer,Free Gift Progress Bar with Quantity-Locked Gift Line Item (Cart Drawer),Specific,3,Gift logic depends on margin and offer; low confidence.
+cart-drawer-free-gift-progress-bar-cross-sell,Cart Drawer Free-Gift Progress Bar + Cross-sell Carousel,Specific,3,Brand-specific bundle that duplicates core cart elements.
+cart-drawer-upsell-and-free-gift,Cart Drawer Upsell Carousel + Free Gift Block,Specific,3,Combined bundle overlaps the core upsell; gift part is offer-specific.
+collection-card-image-slider-quick-add,Collection Product Card Image Slider + Quick Add to Cart,Specific,3,Bundle of two features copied from one brand reference.
+product-media-slider-indicator,Product Image Slider with Progress-Bar / Dot Indicator,Specific,3,"Minor styling detail, not a conversion lever on its own."
+ab-test-ready-section-visibility-toggle,"A/B Test-Ready Section Visibility Toggle (""Display Section"")",Specific,3,"Internal testing utility, not a shopper-facing CRO element."
+section-spacing-controls,Section Spacing Controls (Spacing Section + per-section margin/padding),Specific,3,Theme utility with no direct conversion mechanism.
+feature-bubbles,Feature Bubbles (Interactive Thumbnail Selector with Content Panel),Specific,3,"Nice interactive layout, but the lift is unproven and content-dependent."
+cart-promo-banner,Cart Promo Banner (Automatic Quantity Discount Message),Specific,3,Thinly specified; a message layer over a native discount.
+pdp-testimonial-videos,Testimonial Videos Carousel with Social-Proof Badge,Specific,3,Needs a brand's own video content; copy is client-specific.
+pdp-product-compare-chart-carousel,"PDP Product Compare Chart (Horizontal Carousel, BuyBox + Full-Width)",Specific,3,"Useful, but needs catalogue-specific attributes and setup."
+mobile-burger-menu-accordion,"Mobile Burger Menu with Image Icons, Accordion Sub-Navigation and Pinned Account Area",Specific,3,Theme-specific menu rebuild; low confidence.
+hero-banner-social-proof-product-mockup,"Hero Banner with Social Proof Pill, Headline, CTA and Product Mockup",Specific,3,Copy and mockup tied to Sectionfy's own brand.
+client-logo-scrolling-bar,"Client Logo Bar (Scrolling ""Trusted By"" Strip)",Specific,3,"Mostly a content decision about which logos to show, specific to this brand."
+customer-testimonials-carousel,Customer Testimonials Carousel,Specific,3,Generic testimonial cards; overlaps UGC carousel; low confidence.
+collection-subcollection-icon-pills,Sub-Collection Icon Pill Navigation,Specific,3,Overlaps bubble nav; needs a custom icon set per store.
+pdp-gallery-review-collage-image,PDP Gallery Review Collage Image (customer quotes + client logos),Specific,3,Static designed image; nice idea but content-bound and unproven.
+how-it-works-3-step-accordion,How It Works – 3-Step Accordion Section,Specific,3,Duplicate of the step section; content is brand-specific.
+how-it-works-3-step-accordion,How It Works – 3-Step Accordion Cards,Specific,3,Duplicate of the step section; content is brand-specific.
+as-seen-in-logo-slider,As Seen In / Press Logo Slider,Specific,3,Only placeholder content; needs real press logos to work.
+live-chat-faq-ai-whatsapp-widget,"Live Chat Widget with FAQ, AI Answers & WhatsApp (Chatty)",Specific,3,"App installation and setup, not a buildable element pattern."
+before-vs-after-comparison-slider,Before vs. After Comparison Slider,Specific,2,"Only suits transformation verticals like beauty, cleaning or home."
+pdp-technical-specifications-accordion,PDP Technical Specifications Accordion with 'Included in the Box' Panel,Specific,2,Built for electronics and spec-heavy products only.
+product-comparison-table,Product Comparison Table (Compare Function),Specific,2,"No code yet, low confidence, and tied to a headphone catalogue."
+cart-hide-remove-button-toggle,"Cart Hide ""Remove"" Button Toggle",Specific,2,Low impact and risky for trust; a dark-pattern edge case.
+exciting-content-elements-counter-stats,Exciting Content Elements (Animated Counter Stats Section),Specific,2,Decorative stats section; value depends on having credible numbers.
+product-short-videos,Product Short Videos (Story-Style Video Thumbnails),Specific,2,"No code, low confidence, and needs video content."
+optimized-price-communication,Optimized Price Communication (Old Price → New Price → Savings),Specific,2,Store-specific pricing decision; unit price is legally required in some markets.
+collection-price-hide-toggle,Collection Page Price Hide Toggle (CRO | Prices),Specific,2,"Unproven, risky tactic that only suits premium or high-consideration stores."
+pdp-video-play-button,PDP Video Play Button (Gallery Overlay with Fullscreen Video Popup),Specific,2,Placement and design unspecified; needs product video content.
+cart-reservation-scarcity-label,Cart Reservation Label (Static Notice / Countdown Timer),Specific,2,"Fake-urgency risk, so its fit depends on the brand."
+collection-model-view-toggle,Collection Model View Toggle (Product vs. Model Images),Specific,2,Needs on-model imagery; mostly fits fashion and jewelry.
+price-breakdown-transparency,Price Breakdown (Fair Pricing Transparency),Specific,2,Niche transparency storytelling that suits only certain brands.
+auto-apply-manual-discount-codes,Auto-Apply Manual Discount Codes (Customer-Tag Based),Specific,2,Complex custom mechanic with low confidence and no code.
+pdp-model-fit-info-bar,PDP Model & Fit Info Bar (Passform),Specific,2,Apparel-only element needing model and size metafield data.
+pdp-shop-the-look-image-hotspots,Shop-the-Look Hotspots in PDP Gallery Image,Specific,2,Fashion-leaning hotspot cross-sell needing curated lifestyle imagery.
+pdp-anchor-link-product-details-nav,"PDP Anchor-Link Navigation for Product Details (Expanded Content, Scroll-to-Section)",Specific,2,"Unproven layout idea, thinly specified, no code."
+multi-level-mega-menu,Multi-Level Mega Menu with Image Thumbnails (Desktop + Mobile Drawer),Specific,2,Only for large deep catalogues. Complex and no code.
+cost-transparency-section,Cost Transparency (Price Breakdown) Section,Specific,2,"Price breakdown needs brand-specific data; niche, unproven trust mechanic."
+pdp-product-attributes-rating-bars,PDP Product Attributes (Rating Slider Bars),Specific,2,Duplicate of the slider version; scales are product-specific and need data.
+pdp-gallery-infinite-swipe-dots,PDP Image Gallery – Infinite Swipe Loop & Configurable Dots,Specific,2,Minor gallery polish with low impact and low confidence.
+collection-model-view-toggle,"Collection Page Model View Toggle (""Tragebilder"")",Specific,2,Needs on-model imagery; mostly fits fashion and jewelry.
+pdp-video-play-button,PDP Video Play Button (Product Video Trigger),Specific,2,Placement and design unspecified; needs product video content.
+cart-gift-wrap-upsell,Cart Gift Wrap Upsell,Specific,2,Narrow gift-occasion add-on with low confidence.
+global-image-carousel,Auto-Rotating Image Carousel (Hero Slider with Text and CTA),Specific,2,Hero carousels usually underperform; generic theme feature.
+swipeable-auto-rotating-slider,Swipeable Auto-Rotating Slider (Configurable Slide Interval),Specific,2,Generic slider setting; thinly specified and low impact.
+team-introduction-section,"Team Introduction Section (""Dein Team"")",Specific,2,Fits founder-led brands; impact unproven.
+pdp-product-attributes-rating-bars,PDP Product Attributes (Customer Rating Scales),Specific,2,Duplicate of the slider version; scales are product-specific and need data.
+pdp-gallery-image-info-bar,"PDP Gallery Image Info Bar (""More info"" Band with Popover)",Specific,2,"Complex metaobject overlay, one-off custom mechanic."
+cart-drawer-upsell-carousel-with-timer-and-trust-strip,"Cart Drawer Revision: Social-Proof Upsell Carousel with Variant Popup, Reservation Timer and Trust Strip",Specific,2,Client-specific A/B revision bundling many mechanics; low confidence.
+feature-bubbles-tabbed-product-benefits,Feature Bubbles (Tabbed Product Component Benefits),Specific,2,Designed around bundle components; tied to set-style catalogues.
+collection-model-view-toggle,Model View Toggle (Worn-Image Switch) for Collection Pages,Specific,2,Needs on-model imagery; mostly fits fashion and jewelry.
+manual-scarcity-message,Manually Configurable Scarcity Message,Specific,2,"Single-line ticket, no spec; fake scarcity risks trust."
+pdp-product-attributes-sliders,PDP Product Attributes (Slider Scales),Specific,2,"Custom brand-specific rating scales, mainly for toys."
+pdp-gallery-image-info-bar,"PDP Gallery Image Info Bar with ""More Info"" Button",Specific,2,"Complex metaobject overlay, one-off custom mechanic."
+pdp-animated-time-indicator,PDP Animated Time Indicator (Progress Ring Counter),Specific,2,"Novelty animation suited mainly to bulky, assembly-heavy products."
+homepage-hover-expand-topic-list,Homepage Hover-Expand Topic List (FAQ / Guide Teaser with Image Panel),Specific,2,Low-confidence hover teaser copied from Samsung reference.
+post-add-to-cart-protection-plan-popup,Post-Add-to-Cart Protection Plan Pop-up (Warranty Upsell),Specific,2,Warranty upsell suits only high-value goods; confidence low.
+purchase-affirmation-cta,"Purchase Affirmation CTA (""Good choice!"")",Specific,2,"Novelty copy tweak with small, unproven emotional effect."
+pdp-interactive-product-benefits-explorer,PDP Interactive Product Benefits Explorer (Hotspot Overview with Feature Tabs),Specific,2,Custom hotspot mechanic needing heavy per-product content.
+ardap-conversion-pdp-buybox-template,"Conversion-Optimized PDP Template (Gallery Labels, Savings Badge, Variant Picker, Info Box, Rating Sliders, Cross-Sell, Comparison Table)",Specific,2,"Full brand-specific template; reuse its parts, not the whole."
+homepage-desktop-only-navigation,Homepage-Only Desktop Navigation (Header Menu Override),Specific,2,Niche header override with unclear conversion benefit.
+pdp-gallery-info-button-caption,PDP Gallery Image Info Button (Caption + Tooltip),Specific,2,Low-impact image note; complex build for small gain.
+optimized-price-communication,Optimized Price Communication (Global Price Display Simplification),Specific,2,Store-specific pricing decision; unit price is legally required in some markets.
+sidebar-article-product-glossary-section,Sidebar + Article Glossary Section with Embedded Product Card,Specific,2,Content-heavy glossary layout tied to one brand's articles.
+typeform-quiz-button-pdp,"Typeform Quiz Button (PDP, Metafield-Driven)",Specific,2,One-off quantity calculator tied to a third-party tool.
+article-sidebar-product-cards-metaobject,Article Page Sticky Sidebar & Inline Product Cards (Metaobject-driven),Specific,2,Content-commerce layout specific to one client's articles.
+custom-unit-price-label-metafield,Custom Unit Price Label (Metafield Override),Specific,2,Localisation fix for German unit labels; narrow use.
+my-account-order-docs-and-invoice-download,My Account: Product Documentation & Invoice Download,Specific,2,"Complex, B2B-leaning account feature with unproven CRO impact."
+metafield-driven-delivery-time-message,Metafield-Driven Delivery Time Message (with/without Installation Service),Specific,2,Install-service delivery logic only fits digital sections products.
+my-account-invoice-pdf-download,My Account Order History Invoice PDF Download,Specific,2,"Post-purchase utility with low impact, mainly for B2B."
+tiered-feature-comparison-table-image,Tiered Package Feature Comparison Table (Product Image),Specific,2,Static image of one brand's community package tiers.
+cost-transparency-breakdown-section,Cost Transparency Breakdown Section,Specific,2,Niche value-justification idea; unproven and placeholder only.
+pdp-cost-transparency-price-breakdown-image,Cost Transparency Price Breakdown (PDP Image),Specific,2,Brand-specific cost image; narrow and unproven tactic.
+metaobject-pest-cards-grid,Pest Cards (Metaobject-Driven Tile Grid),Specific,1,Narrow pest-control vertical; low confidence.

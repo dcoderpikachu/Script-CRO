@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "This is a customer order and handoff ticket. It only links to two other tasks and mentions 'Testimonial Videos' and 'Shipping Bar' in documentation links. It contains no UI spec, settings, code or screenshots, so the elements should be captured from the linked tickets instead."}, "in": 1317, "out": 307}

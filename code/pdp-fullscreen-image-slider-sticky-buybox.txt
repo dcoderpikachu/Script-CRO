@@ -1,0 +1,562 @@
+Step: 1
+Go to sections: main-product.liquid
+Add new schema block "Fullscreen slider Settings"
+Paste this code:
+
+{
+    "type": "header",
+    "content": "Fullscreen slider Settings"
+},
+{
+    "type": "range",
+    "id": "fl_slider_images_per_slide",
+    "min": 1,
+    "max": 4,
+    "step": 0.2,
+    "label": "Slides per view",
+    "default": 1.8
+},
+{
+    "type": "range",
+    "id": "fl_slider_images_per_slide_tablet",
+    "min": 1,
+    "max": 4,
+    "step": 0.2,
+    "label": "Slides per view (Tablet)",
+    "default": 1.8
+},
+{
+    "type": "range",
+    "id": "fl_slider_images_per_slide_mobile",
+    "min": 1,
+    "max": 3,
+    "step": 1,
+    "label": "Slides per view (Mobile)",
+    "default": 1
+},
+{
+    "type": "range",
+    "id": "fl_slider_next_slide_view_mobile",
+    "min": 0,
+    "max": 9,
+    "step": 1,
+    "unit": "%",
+    "label": "Next slide view (Mobile)",
+    "default": 5
+},
+{
+    "type": "checkbox",
+    "id": "fl_slider_enable_video_autoplay",
+    "label": "Enable video autoplay",
+    "info": "Video are muted automatically to allow autoplay",
+    "default": true
+},
+{
+    "type": "checkbox",
+    "id": "show_fl_slider_pagination",
+    "label": "Pagination",
+    "default": false
+},
+{
+    "type": "checkbox",
+    "id": "show_fl_slider_next_prev_arrows",
+    "label": "Next-Prev arrows",
+    "default": true
+},
+{
+    "type": "checkbox",
+    "id": "autoplay_fl_slider",
+    "label": "Autoplay",
+    "default": true
+},
+{
+    "type": "checkbox",
+    "id": "fl_slider_autoplay_freemode",
+    "label": "autoplay freeMode",
+    "default": true
+},
+{
+    "type": "range",
+    "id": "autplay_fl_slider_duration",
+    "min": 1,
+    "max": 10,
+    "step": 1,
+    "unit": "s",
+    "label": "Duration",
+    "default": 3
+},
+{
+    "type": "checkbox",
+    "id": "stop_autplay_fl_slider_on_interaction",
+    "label": "Stop autoplay on user interaction",
+    "default": true
+},
+{
+    "type": "paragraph",
+    "content": "Product Info Box settings"
+},
+{
+    "type": "range",
+    "id": "fl_slider_product_info_right",
+    "min": 0,
+    "max": 200,
+    "step": 5,
+    "unit": "px",
+    "label": "Info Box From Right",
+    "default": 80
+},
+{
+    "type": "range",
+    "id": "fl_slider_product_info_bottom",
+    "min": 0,
+    "max": 200,
+    "step": 5,
+    "unit": "px",
+    "label": "Info Box From Bottom",
+    "default": 60
+},
+
+
+
+
+
+
+Step: 2
+Create a new snippet: pdp-fullscreen-image-slider.liquid
+Paste this code:
+
+<style>
+  @media (min-width: 1000px) {
+    .ed_pdp_fullscreen_product_template {
+      width: 100%;
+      height: calc(100vh - var(--header-height, 0px) - var(--announcement-bar-height, 0px));
+      display: flex;
+      position: relative;
+      min-height: min-content;
+      align-items: flex-end;
+      flex-direction: row;
+    }
+    .ed_pdp_fullscreen_product_template .product__info {
+      margin-left: auto;
+      margin-right: {{  section.settings.fl_slider_product_info_right }}px;
+      margin-bottom: {{ section.settings.fl_slider_product_info_bottom }}px;
+      z-index: 1;
+    }
+    .pdpFullscreenSlider__wrapper {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
+
+  .pdpFullscreenSlider {
+    user-select: none;
+    height: 100%;
+  }
+  .pdpFullscreenSlider .swiper-slide > img {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 1000px) {
+      .pdpFullscreenSlider__image {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+    }
+  }
+
+  .pdpFullscreenSlider__image > * {
+      object-fit: cover;
+      object-position: center;
+      height: 100%;
+      width: 100%;
+  }
+  .pdpFullscreenSlider span.swiper-pagination-bullet {
+    --swiper-pagination-color: #151515;
+  }
+  .swiper-button-next.pdpFullscreenSlider_button_next {
+    left: calc(20vw + 40px);
+    bottom: 32px;
+    top: auto;
+  }
+
+  .swiper-button-prev.pdpFullscreenSlider_button_prev {
+    left: 20vw;
+    bottom: 32px;
+    top: auto;
+  }
+
+  .swiper-button-next.pdpFullscreenSlider_button_next,
+  .swiper-button-prev.pdpFullscreenSlider_button_prev {
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 50px;
+    display: flex;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .swiper-button-next.pdpFullscreenSlider_button_next:after,
+  .swiper-button-prev.pdpFullscreenSlider_button_prev:after {
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .swiper-button-next.pdpFullscreenSlider_button_next:hover,
+  .swiper-button-prev.pdpFullscreenSlider_button_prev:hover {
+    background: #000000;
+  }
+
+  external-video.pdpFullscreenSlider__external_video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    background: #000;
+  }
+
+  external-video.pdpFullscreenSlider__external_video > * {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    object-fit: cover;
+  }
+  .pdpFullscreenSlider__video {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .pdpFullscreenSlider__video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* collapsible video */
+   .ed_cro_pdp_collapsible_box__video {
+       position: relative;
+       height: 100%;
+   }
+
+   .cro_pdp_collapsible_box_video_poster_shadow {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0,0,0,0.2);
+   }
+
+   button.cro_pdp_collapsible_box_video_control_btn {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       cursor: pointer;
+       z-index: 1;
+   }
+
+   button.cro_pdp_collapsible_box_video_control_btn > svg {
+       width: 45px;
+       height: auto;
+   }
+   .ed_cro_pdp_collapsible_box__video.active .cro_pdp_collapsible_box_video_poster_shadow,
+   .ed_cro_pdp_collapsible_box__video.active button.cro_pdp_collapsible_box_video_control_btn{
+       display: none;
+   }
+   button.cro_pdp_collapsible_box_video_control_btn > svg {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 50px;
+      display: flex;
+      justify-content: center;
+      padding: 17px;
+      transition: all 0.3s ease;
+  }
+
+  button.cro_pdp_collapsible_box_video_control_btn > svg > path {
+      fill: rgba(255, 255, 255, 0.85);
+  }
+  /* END: collapsible video */
+
+  @media (max-width: 999px) {
+    .ed_pdp_fullscreen_product_template .product__info {
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-bottom: 50px;
+    }
+    .ed_pdp_fullscreen_product_template .product__info .ed-pdp-buy-box {
+      margin-top: 24px;
+    }
+  }
+</style>
+
+<div class="pdpFullscreenSlider__wrapper">
+  <div class="swiper pdpFullscreenSlider">
+    <div class="swiper-wrapper">
+      {%- for media in product.media -%}
+        {% assign media_index = forloop.index %}
+        {% for block in section.blocks %}
+          {% if block.type == 'cro_crosssale_items'
+            and media_index == block.settings.crosssale_position
+            and block.settings.image != blank
+          %}
+            {% render 'ed_cro_cross_sale_in_product_image', block: block %}
+          {% endif %}
+        {% endfor %}
+
+        <div class="swiper-slide">
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <div class="pdpFullscreenSlider__image">
+                {%- assign should_reveal = false -%}
+                {%- assign loading = 'eager' -%}
+
+                {%- if settings.reveal_product_media and selected_media.id == media.id -%}
+                  {%- assign should_reveal = true -%}
+                {%- else -%}
+                  {%- assign loading = 'lazy' -%}
+                {%- endif -%}
+
+                {%- if should_reveal -%}
+                  {{-
+                    media
+                    | image_url: width: media.width
+                    | image_tag:
+                      loading: loading,
+                      sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                      widths: '400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800',
+                      reveal: true
+                  -}}
+                {%- else -%}
+                  {{-
+                    media
+                    | image_url: width: media.width
+                    | image_tag:
+                      loading: loading,
+                      sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                      widths: '400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800'
+                  -}}
+                {%- endif -%}
+              </div>
+
+            {%- when 'video' -%}
+              <div class="pdpFullscreenSlider__video">
+                <div class="ed_cro_pdp_collapsible_box__video {% if section.settings.fl_slider_enable_video_autoplay %}active{% endif %}">
+                  <div class="cro_pdp_collapsible_box_video_poster_shadow"></div>
+                  <button class="cro_pdp_collapsible_box_video_control_btn">
+                    <svg
+                      width="28"
+                      height="29"
+                      viewBox="0 0 28 29"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M26.25 14.6856C26.2507 14.9827 26.1745 15.2749 26.0289 15.5339C25.8832 15.7928 25.673 16.0096 25.4188 16.1633L9.66 25.8036C9.39431 25.9663 9.09001 26.0551 8.77852 26.0609C8.46703 26.0666 8.15965 25.9891 7.88813 25.8364C7.61918 25.686 7.39515 25.4667 7.23905 25.2011C7.08296 24.9354 7.00045 24.6329 7 24.3248V5.04639C7.00045 4.73826 7.08296 4.43581 7.23905 4.17015C7.39515 3.90449 7.61918 3.68519 7.88813 3.53482C8.15965 3.38208 8.46703 3.30459 8.77852 3.31036C9.09001 3.31613 9.39431 3.40494 9.66 3.56764L25.4188 13.2079C25.673 13.3616 25.8832 13.5784 26.0289 13.8374C26.1745 14.0963 26.2507 14.3885 26.25 14.6856Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </button>
+                  {{-
+                    media
+                    | video_tag:
+                      image_size: '1024x',
+                      controls: false,
+                      autoplay: section.settings.fl_slider_enable_video_autoplay,
+                      loop: section.settings.enable_video_looping,
+                      playsinline: true
+                  }}
+                </div>
+              </div>
+            {%- when 'external_video' -%}
+              {% comment %}
+                <external-video provider="{{ media.host | escape }}" class="pdpFullscreenSlider__external_video">
+                  {%- unless section.settings.fl_slider_enable_video_autoplay -%}
+                    <div class="video-wrapper__poster">
+                      {{
+                        media.preview_image
+                        | image_url: width: media.preview_image.width
+                        | image_tag:
+                          loading: 'lazy',
+                          sizes: '(max-width: 999px) calc(100vw - 48px), 640px',
+                          widths: '400,500,600,700,800,900,1000,1200,1400,1600,1800,2000,2200',
+                          class: 'video-wrapper__poster-image'
+                      }}
+
+                      <div class="video-wrapper__poster-content">
+                        <button
+                          type="button"
+                          class="video-wrapper__play-button"
+                          title="{{ 'general.accessibility.play_video' | t | escape }}"
+                        >
+                          {%- render 'icon' with 'play', width: 72, height: 72 -%}
+                        </button>
+                      </div>
+                    </div>
+                  {%- endunless -%}
+
+                  {%- if media.host == 'youtube' -%}
+                    {{-
+                      media
+                      | external_video_url:
+                        enablejsapi: true,
+                        loop: section.settings.enable_video_looping,
+                        mute: section.settings.fl_slider_enable_video_autoplay,
+                        autoplay: true,
+                        playlist: media.external_id
+                      | external_video_tag
+                    -}}
+                  {%- elsif media.host == 'vimeo' -%}
+                    {{-
+                      media
+                      | external_video_url:
+                        autopause: true,
+                        loop: section.settings.enable_video_looping,
+                        muted: section.settings.fl_slider_enable_video_autoplay,
+                        autoplay: true
+                      | external_video_tag
+                    -}}
+                  {%- else -%}
+                    {{- media | external_video_tag: image_size: '1024x' -}}
+                  {%- endif -%}
+                </external-video>
+              {% endcomment %}
+
+            {%- when 'model' -%}
+              {% comment %}
+                <model-media product-handle="{{ product.handle }}" class="model-wrapper">
+                  {{- media | model_viewer_tag: image_size: '1024x', reveal: 'interaction', toggleable: true -}}
+                </model-media>
+              {% endcomment %}
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    {% if section.settings.show_fl_slider_pagination %}
+      <div class="swiper-pagination pdpFullscreenSlider_pagination"></div>
+    {% endif %}
+
+    {% if section.settings.show_fl_slider_next_prev_arrows %}
+      <div class="swiper-button-next pdpFullscreenSlider_button_next"></div>
+      <div class="swiper-button-prev pdpFullscreenSlider_button_prev"></div>
+    {% endif %}
+  </div>
+
+  <script>
+    // Store the Swiper instance globally
+    let pdpFullscreenSwiper = null;
+
+    function initPdpFullscreenSwiper() {
+      if (pdpFullscreenSwiper) {
+        pdpFullscreenSwiper.destroy(true, true);
+      }
+
+      pdpFullscreenSwiper = new Swiper('.pdpFullscreenSlider', {
+        slidesPerView: {{ section.settings.fl_slider_images_per_slide_mobile -}}.0{{- section.settings.fl_slider_next_slide_view_mobile -}},
+        spaceBetween: -1,
+        loop: true,
+        grabCursor: true,
+        navigation: {
+          nextEl: '.pdpFullscreenSlider_button_next',
+          prevEl: '.pdpFullscreenSlider_button_prev',
+        },
+        pagination: {
+          el: '.pdpFullscreenSlider_pagination',
+          clickable: true,
+        },
+        {% if section.settings.autoplay_fl_slider and section.settings.fl_slider_autoplay_freemode == false %}
+          autoplay: {
+            delay: {{ section.settings.autplay_fl_slider_duration -}}000,
+            disableOnInteraction: {{ section.settings.stop_autplay_fl_slider_on_interaction }},
+          },
+        {% endif %}
+        breakpoints: {
+          740: {
+            slidesPerView: {{ section.settings.fl_slider_images_per_slide_tablet }},
+            spaceBetween: -1,
+          },
+          1000: {
+            slidesPerView: {{ section.settings.fl_slider_images_per_slide }},
+            spaceBetween: -1,
+          },
+        },
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initPdpFullscreenSwiper);
+    /*
+      document.addEventListener('variant:changed', (event) => {
+        console.log('Variant changed:', event.detail.variant.id);
+        initPdpFullscreenSwiper();
+      });
+    */
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', initPdpFullscreenSwiper);
+    }
+  </script>
+
+  <script>
+    // Play/Pause video in collapsible box
+    (function () {
+      const container = document.querySelector('.ed_cro_pdp_collapsible_box__video');
+      if (!container) return; // Exit if container is not found
+
+      const playButton = container.querySelector('.cro_pdp_collapsible_box_video_control_btn');
+      const video = container.querySelector('video');
+
+      // Exit if button or video is missing
+      if (!playButton || !video) return;
+
+      // Play video and show active state
+      playButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        video.play();
+        container.classList.add('active');
+      });
+
+      // Pause video and remove active state
+      video.addEventListener('click', function () {
+        if (!video.paused) {
+          video.pause();
+          container.classList.remove('active');
+        }
+      });
+    })();
+  </script>
+</div>
+
+
+
+Step: 3
+Go to layout: theme.liquid
+Paste this code:
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+
+Step: 4
+Go to section: main-product.liquid
+Replace default slider with new. 
+Paste this code:
+  {% render 'pdp-fullscreen-image-slider', product: product, section: section %}

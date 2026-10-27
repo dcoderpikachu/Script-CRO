@@ -1,0 +1,1488 @@
+Step: 1
+Create a section: ed-cro-pdp-technical-specifications.liquid
+Paste this code:
+
+{% if product.metafields.standard.cro_pdp_technical_specifications %}
+  {% assign technical_spec_attributes = product.metafields.standard.cro_pdp_technical_specifications.value %}
+
+  <style>
+    :root {
+      --space-top: 100px;
+      --space-bottom: 100px;
+      --space-left: 0px;
+      --space-right: 0px;
+      --text-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+      --section-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+
+      --heading-alignment: left;
+      --heading-font-size: 45px;
+      --heading-space-bottom: 45px;
+
+      --accordion-border-color: #E5E5E5;
+      --accordion-padding-tb: 32px;
+      --accordion-button-size: 20px;
+      --accordion-button-weight: 600;
+      --accordion-content-size: 18px;
+
+      --box-background: #F9F9F9;
+      --box-corner-radius: 16px;
+      --box-title-size: 24px;
+      --box-icon-siz: 50px;
+      --box-icon-background: #ffffff;
+      --box-label-size: 16px;
+    }
+    #shopify-section-{{ section.id }} {
+        {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+            {%- assign text_color = settings.text_color -%}
+          {%- else -%}
+            {%- assign text_color = section.settings.text_color -%}
+        {%- endif -%}
+
+        {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+            {%- assign section_background = settings.background -%}
+          {%- else -%}
+            {%- assign section_background = section.settings.background -%}
+        {%- endif %}
+
+        --space-top: {{ section.settings.space_top_mobile -}}px;
+        --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+        --space-left: {{ section.settings.space_left_mobile -}}px;
+        --space-right: {{ section.settings.space_right_mobile -}}px;
+
+        --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+        {%- if section.settings.enable_custom_max_width -%}
+          --section-max-width: {{ section.settings.custom_max_width -}}px;
+        {% endif %}
+    }
+
+    @media (min-width: 1000px) {
+        #shopify-section-{{ section.id }} {
+            --space-top: {{ section.settings.space_top -}}px;
+            --space-bottom: {{ section.settings.space_bottom -}}px;
+            --space-left: {{ section.settings.space_left -}}px;
+            --space-right: {{ section.settings.space_right -}}px;
+        }
+    }
+
+    {%- for block in section.blocks -%}
+      {% case block.type %}
+        {% when 'header' %}
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ section_color }};
+                {% else %}
+                    --heading-color: {{ settings.heading_color }};
+                {% endif %}
+
+                {% if block.settings.enable_custom_max_width %}
+                    --heading-max-width: {{ block.settings.custom_max_width -}}px;
+                    {% assign alignment = block.settings.alignment %}
+                    {%- if alignment == 'left'  -%}
+                        --heading-margin-left: 0;
+                        --heading-margin-right: auto;
+                    {%- elsif alignment == 'right'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: 0;
+                    {%- elsif alignment == 'center'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: auto;
+                    {%- endif -%}
+                {%- else -%}
+                    --heading-max-width: unset;
+                    --heading-margin-left: unset;
+                    --heading-margin-right: unset;
+                {% endif %}
+
+                --heading-weight: bold;
+                {% if block.settings.custom_font_family %}
+                    --heading-family: {{ block.settings.font_family.family }};
+                    --heading-weight: {{ block.settings.font_family.weight }};
+                {%- else -%}
+                    --heading-weight: {{ block.settings.font_weight }};
+                {% endif %}
+
+                --heading-alignment: {{ block.settings.alignment }};
+                --heading-transform: {{ block.settings.text_transform }};
+                --heading-font-size: {{ block.settings.font_size -}}px;
+                --heading-line-height: {{ block.settings.line_height }};
+                --heading-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --heading-space-top: {{ block.settings.space_top -}}px;
+                --heading-space-bottom: {{ block.settings.space_bottom -}}px;
+            }
+            @media (max-width: 999px) {
+                #shopify-section-{{ section.id }} {
+                    --heading-alignment: {{ block.settings.alignment_mobile }};
+                    --heading-font-size: {{ block.settings.font_size_mobile -}}px;
+                    --heading-line-height: {{ block.settings.line_height_mobile }};
+                    --heading-letter-spacing: {{ block.settings.letter_spacing_mobile -}}px;
+                    --heading-weight: {{ block.settings.font_weight_mobile }};
+                    --heading-space-top: {{ block.settings.space_top_mobile -}}px;
+                    --heading-space-bottom: {{ block.settings.space_bottom_mobile -}}px;
+                }
+            }
+        {% when 'accordion' %}
+          #shopify-section-{{ section.id }} {
+            --accordion-border-color: {{ block.settings.border_color }};
+            --accordion-padding-tb: {{ block.settings.padding_top_bottom }}px;
+            {% if block.settings.button_text_color != 'rgba(0,0,0,0)' %}
+              --accordion-button-color: {{ block.settings.button_text_color }};
+            {% else %}
+              --accordion-button-color: unset;
+            {% endif %}
+            {% if block.settings.button_background != 'rgba(0,0,0,0)' %}
+              --accordion-button-background: {{ block.settings.button_background }};
+            {% else %}
+              --accordion-button-background: unset;
+            {% endif %}
+
+            --accordion-button-size: {{ block.settings.button_size }}px;
+            --accordion-button-weight: {{ block.settings.button_weight }};
+
+            {% if block.settings.content_text_color != 'rgba(0,0,0,0)' %}
+              --accordion-content-color: {{ block.settings.content_text_color }};
+              {% else %}
+                --accordion-content-color: unset;
+            {% endif %}
+            {% if block.settings.content_background != 'rgba(0,0,0,0)' %}
+              --accordion-content-background: {{ block.settings.content_background }};
+              {% else %}
+                --accordion-content-background: unset;
+            {% endif %}
+            --accordion-content-size: {{ block.settings.content_text_color }}px;
+          }
+
+          @media (max-width: 999px) {
+            #shopify-section-{{ section.id }} {
+              --accordion-padding-tb: {{ block.settings.padding_top_bottom_mobile }}px;
+              --accordion-button-size: {{ block.settings.button_size_mobile }}px;
+              --accordion-content-size: {{ block.settings.content_content_size_mobile }}px;
+            }
+          }
+
+        {% when 'in_the_box' %}
+          #shopify-section-{{ section.id }} {
+            {% if block.settings.text_color != 'rgba(0,0,0,0)' %}
+              --box-text-color: {{ block.settings.text_color }};
+              {% else %}
+                --box-text-color: unset;
+            {% endif %}
+            {% if block.settings.background != 'rgba(0,0,0,0)' %}
+              --box-background: {{ block.settings.background }};
+              {% else %}
+                --box-background: unset;
+            {% endif %}
+            --box-corner-radius: {{  block.settings.corner_radius }}px;
+            --box-title-size: {{  block.settings.title_font_size }}px;
+            --box-icon-size: {{  block.settings.icon_size }}px;
+            --box-icon-background: {{  block.settings.icon_background }};
+            --box-label-size: {{  block.settings.label_size }}px;
+          }
+
+          @media (max-width: 999px) {
+            #shopify-section-{{ section.id }} {
+              --box-corner-radius: {{  block.settings.corner_radius_mobile -}}px;
+              --box-title-size: {{  block.settings.title_font_size_mobile -}}px;
+              --box-icon-size: {{  block.settings.icon_size_mobile -}}px;
+              --box-icon-background: {{  block.settings.icon_background }};
+              --box-label-size: {{  block.settings.label_size_mobile -}}px;
+            }
+          }
+      {% endcase %}
+    {%- endfor -%}
+
+    .cro_technical_specifications {
+      display: block;
+      color: rgb(var(--text-color));
+      background: rgb(var(--section-background));
+      {% if section.settings.background == 'rgba(0,0,0,0)' %}
+        margin-top: var(--space-top);
+        margin-bottom: var(--space-bottom);
+      {% else %}
+        padding-top: var(--space-top);
+        padding-bottom: var(--space-bottom);
+      {% endif %}
+    }
+    .cro_technical_specifications_inner {
+      max-width: var(--section-max-width);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--space-left);
+      padding-right: var(--space-right);
+    }
+    /* Header CSS */
+    .cro_technical_specifications__header {
+        padding-top: var(--heading-space-top);
+        padding-bottom: var(--heading-space-bottom);
+        max-width: var(--heading-max-width);
+        margin-left: var(--heading-margin-left);
+        margin-right: var(--heading-margin-right);
+    }
+    .cro_richtext__header {
+        color: var(--heading-color);
+        font-family: var(--heading-family);
+        font-weight: var(--heading-weight);
+        text-align: var(--heading-alignment);
+        text-transform: var(--heading-transform);
+        font-size: var(--heading-font-size);
+        line-height: var(--heading-line-height);
+        letter-spacing: var(--heading-letter-spacing);
+    }
+    /* END:Header CSS */
+
+    .cro_technical_specifications__main {
+      display: flex;
+      gap: 60px;
+      flex-direction: row;
+    }
+
+    .cro_technical_specifications__main_accordions {
+      flex-grow: 1;
+    }
+
+    .cro_technical_specifications__main_box {
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+
+    /* Collapsible accordion */
+    .crots_collapsible_accordion_wrap .ed-collapsible-toggle {
+      user-select: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      padding: var(--accordion-padding-tb) 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      overflow: visible;
+      background: none;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+      gap: 8px;
+      color: var(--accordion-button-color);
+      background: var(--accordion-button-background);
+    }
+    .crots_collapsible_accordion_wrap ed-collapsible {
+      border-bottom: 1px solid var(--accordion-border-color);
+      display: block;
+      background: var(--accordion-content-background);
+    }
+
+    .crots_collapsible_accordion_wrap  ed-collapsible:last-child {
+      border-bottom: 0;
+    }
+    .cro_technical_specifications__main {
+      gap: 40px;
+    }
+    .crots_collapsible_accordion_wrap .ed-collapsible__content {
+      padding-right: 0px;
+      padding-bottom: 0px;
+    }
+    .crots_collapsible_accordion_wrap .ed-collapsible-toggle .heading {
+      margin: 0;
+      font-size: var(--accordion-button-size);
+      font-weight: var(--accordion-button-weight);
+    }
+
+    .crots_collapsible_accordion_wrap .ed-collapsible-toggle-icon > svg {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease-in-out;
+      flex-shrink: 0;
+    }
+
+    .crots_collapsible_accordion_wrap .ed-collapsible-toggle .ed-collapsible-toggle-icon > svg {
+      transition: transform 0.2s ease-in-out;
+      transform: rotate(0deg);
+    }
+
+    .crots_collapsible_accordion_wrap .ed-collapsible-toggle[aria-expanded="true"] .ed-collapsible-toggle-icon > svg {
+      transform: rotate(-45deg);
+    }
+
+    .crots_collapsible_accordion_wrap .ed-collapsible-content {
+      overflow: hidden;
+      transition: height 0.5s ease, opacity 0.25s ease;
+      opacity: 1;
+    }
+
+    .crots_collapsible_accordion_wrap .ed-collapsible-content:not([data-open]) {
+      display: block;
+      height: 0;
+      opacity: 0;
+    }
+    .cro_technical_spec_collapsible__content {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      padding-bottom: 24px;
+      color: var(--accordion-content-color);
+      background: var(--accordion-content-background);
+    }
+    .cro_technical_spec_collapsible__content > div {
+      font-size: var(--accordion-content-size);
+    }
+
+    .cro_technical_spec_collapsible__content div > strong {
+      display: block;
+      font-weight: bold;
+    }
+    /* END:collapsible accordion */
+
+    /* Box */
+    .cro_technical_specifications__box {
+      background: var(--box-background);
+      border-radius: var(--box-corner-radius);
+      padding: 40px 60px;
+    }
+    @media (min-width: 1000px) {
+      .cro_technical_specifications__box.sticky {
+        position: sticky;
+        top: 100px;
+      }
+    }
+
+    .ctsbox-icon {
+      width: 14rem;
+      margin-top: -110px;
+      margin-bottom: 45px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .ctsbox-icon svg {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    .ctsbox-title {
+      margin: 0;
+      font-size: var(--box-title-size);
+      margin-bottom: 32px;
+      letter-spacing: -0.5px;
+      text-align: center;
+      display: block;
+      font-weight: bold;
+      color: var(--box-text-color);
+    }
+
+    ul.ctsbox-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 380px;
+    }
+
+    li.ctsbox-list-item {
+      width: 100px;
+      text-align: center;
+    }
+
+    .ctsbox-list-item-media {
+      width: 100px;
+      height: 100px;
+      background: var(--box-icon-background);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+    }
+
+    .ctsbox-list-item-media img {
+      width: var(--box-icon-size);
+      height: var(--box-icon-size);
+      object-fit: cover;
+    }
+
+    p.ctsbox-list-item-title {
+      line-height: 1.5;
+      margin-top: 12px;
+      font-size: var(--box-label-size);
+      color: var(--box-text-color);
+    }
+
+    .ctsbox-icon svg rect {
+      fill: {{ settings.background }};
+    }
+
+    .ctsbox-icon svg circle {
+      fill: {{ settings.background }};
+    }
+    /* END:Box */
+
+    @media (max-width: 767px) {
+      .cro_technical_specifications__main {
+          flex-direction: column;
+      }
+
+      .cro_technical_specifications__main_box {
+          padding-top: 68px;
+      }
+
+      .cro_technical_specifications__box {
+        padding: 32px;
+      }
+
+      .crots_collapsible_accordion_wrap .ed-collapsible-toggle {
+          padding: 20px 0;
+      }
+
+      .cro_technical_spec_collapsible__content {
+          gap: 30px 20px;
+      }
+
+      .ctsbox-list-item-media {
+          width: 70px;
+          height: 70px;
+      }
+
+      li.ctsbox-list-item {
+          width: 90px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      ul.ctsbox-list {
+          gap: 24px;
+      }
+
+      .ctsbox-list-item-media img {
+          width: 30px;
+          height: 30px;
+      }
+      .ctsbox-title {
+        margin-bottom: 24px;
+      }
+
+      .ctsbox-icon {
+        width: 12rem;
+        margin-top: -89px;
+      }
+      p.ctsbox-list-item-title {
+        margin-top: 10px;
+        line-height: 1.4;
+      }
+
+      .crots_collapsible_accordion_wrap .ed-collapsible-toggle-icon > svg {
+        width: 18px;
+        height: auto;
+      }
+
+      .cro_technical_spec_collapsible__content {
+        padding-bottom: 16px;
+      }
+    }
+  </style>
+
+  <div class="cro_technical_specifications">
+    <div class="{{ section.settings.section_width }}">
+      <div class="cro_technical_specifications_inner">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'header' and technical_spec_attributes.heading != blank -%}
+            <div class="cro_technical_specifications__header" {{ block.shopify_attributes }}>
+              <h4 class="heading cro_richtext__header">
+                {{ technical_spec_attributes.heading }}
+              </h4>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="cro_technical_specifications__main">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'accordion' %}
+                <div class="cro_technical_specifications__main_accordions" {{ block.shopify_attributes }}>
+                  <ed-collapsible-wrap class="crots_collapsible_accordion_wrap">
+                    {%- for i in (1..4) -%}
+                      {%- assign collapsible_title_key = 'collapsible_title_0' | append: i -%}
+                      {%- assign collapsible_content_key = 'collapsible_content_0' | append: i -%}
+                      {%- assign collapsible_title = technical_spec_attributes[collapsible_title_key] -%}
+                      {%- assign collapsible_content = technical_spec_attributes[collapsible_content_key] -%}
+
+                      <ed-collapsible>
+                        <button
+                          class="ed-collapsible-toggle"
+                          aria-controls="crots-block-id-{{ i }}"
+                          {% if forloop.first %}
+                            aria-expanded="true"
+                          {% else %}
+                            aria-expanded="false"
+                          {% endif %}
+                        >
+                          <p class="heading">{{ collapsible_title }}</p>
+                          <span class="ed-collapsible-toggle-icon">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="size-6"
+                            >
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                          </span>
+                        </button>
+
+                        <div
+                          id="crots-block-id-{{ i }}"
+                          class="ed-collapsible-content"
+                          {% if forloop.first %}
+                            data-open
+                          {% endif %}
+                        >
+                          <div class="ed-collapsible__content">
+                            <div class="cro_technical_spec_collapsible__content">
+                              {{ collapsible_content }}
+                            </div>
+                          </div>
+                        </div>
+                      </ed-collapsible>
+                    {%- endfor -%}
+                  </ed-collapsible-wrap>
+                </div>
+              {% when 'in_the_box' %}
+                <div class="cro_technical_specifications__main_box" {{ block.shopify_attributes }}>
+                  <div class="cro_technical_specifications__box {% if block.settings.enable_sticky_feature %}sticky{% endif %}">
+                    <div class="ctsbox-icon">
+                      <svg viewBox="0 0 234 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 20C0 8.95431 8.95431 0 20 0H214C225.046 0 234 8.9543 234 20V74H0V20Z" fill="currentColor"></path>
+                        <rect x="58" y="32" width="118" height="19" rx="9.5" class="fill"></rect>
+                        <circle cx="117.5" cy="32.5" r="11.5" class="fill"></circle>
+                      </svg>
+                    </div>
+
+                    <p class="heading ctsbox-title">{{ technical_spec_attributes.box_heading }}</p>
+
+                    <ul class="ctsbox-list">
+                      {%- for i in (1..5) -%}
+                        {%- assign box_icon_key = 'box_icon_0' | append: i -%}
+                        {%- assign box_icon_label_key = 'box_icon_label_0' | append: i -%}
+                        {%- assign box_icon = technical_spec_attributes[box_icon_key] -%}
+                        {%- assign box_icon_label = technical_spec_attributes[box_icon_label_key] -%}
+
+                        {%- if box_icon != blank -%}
+                          <li class="ctsbox-list-item">
+                            <div class="ctsbox-list-item-media">
+                              {{-
+                                box_icon
+                                | image_url: width: box_icon.width
+                                | image_tag: sizes: '100vw', widths: '100, 150, 200', alt: box_icon.alt
+                              -}}
+                            </div>
+                            <p class="ctsbox-list-item-title">{{ box_icon_label }}</p>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Universal Collapsible by Rana
+    (function () {
+      const singleOpen = true; // Set to false for multiple open accordions
+      function openContent(element) {
+        element.style.overflow = 'hidden';
+        const height = element.scrollHeight;
+
+        const keyframes = {
+          height: ['0px', `${height}px`],
+          visibility: ['hidden', 'visible'],
+          opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+        };
+
+        const animation = element.animate(keyframes, {
+          duration: 500,
+          direction: 'normal',
+          easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+          fill: 'forwards',
+        });
+
+        animation.onfinish = () => {
+          element.style.overflow = 'visible';
+          element.style.height = `${height}px`;
+          element.setAttribute('data-open', '');
+        };
+
+        if (element.hasAttribute('data-animate-items')) {
+          element.animate(
+            {
+              opacity: [0, 1],
+              transform: ['translateY(10px)', 'translateY(0)'],
+            },
+            {
+              duration: 250,
+              delay: 250,
+              easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+              fill: 'forwards',
+            }
+          );
+        }
+      }
+
+      function closeContent(element) {
+        const height = element.scrollHeight;
+        element.style.overflow = 'hidden';
+
+        const animation = element.animate(
+          {
+            height: [`${height}px`, '0px'],
+            visibility: ['visible', 'hidden'],
+            opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+          },
+          {
+            duration: 500,
+            direction: 'normal',
+            easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+            fill: 'forwards',
+          }
+        );
+
+        animation.onfinish = () => {
+          element.style.overflow = 'hidden';
+          element.removeAttribute('data-open');
+        };
+      }
+
+      function initTechnicalSpecCollapsible(scope = document) {
+        const wraps = scope.querySelectorAll('ed-collapsible-wrap');
+
+        wraps.forEach((wrap) => {
+          const toggles = wrap.querySelectorAll('.ed-collapsible-toggle');
+
+          toggles.forEach((toggle) => {
+            if (toggle.dataset.initialized === 'true') return;
+
+            toggle.dataset.initialized = 'true';
+
+            const contentId = toggle.getAttribute('aria-controls');
+            const content = wrap.querySelector(`#${contentId}`);
+            if (!content) return;
+
+            // Keep initial state as-is (open or closed)
+            const isInitiallyOpen = content.hasAttribute('data-open');
+            toggle.setAttribute('aria-expanded', String(isInitiallyOpen));
+            toggle.classList.toggle('is-open', isInitiallyOpen);
+
+            toggle.addEventListener('click', () => {
+              const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+              // If singleOpen is true, close all other open accordions in the same wrap
+              if (singleOpen && !isOpen) {
+                const openToggles = wrap.querySelectorAll('.ed-collapsible-toggle[aria-expanded="true"]');
+                openToggles.forEach((otherToggle) => {
+                  if (otherToggle !== toggle) {
+                    const otherContentId = otherToggle.getAttribute('aria-controls');
+                    const otherContent = wrap.querySelector(`#${otherContentId}`);
+                    if (otherContent && otherContent.hasAttribute('data-open')) {
+                      otherToggle.setAttribute('aria-expanded', 'false');
+                      otherToggle.classList.remove('is-open');
+                      closeContent(otherContent);
+                    }
+                  }
+                });
+              }
+
+              toggle.setAttribute('aria-expanded', String(!isOpen));
+              toggle.classList.toggle('is-open', !isOpen);
+
+              if (!isOpen) {
+                openContent(content);
+              } else {
+                closeContent(content);
+              }
+            });
+          });
+        });
+      }
+
+      // Initialize when DOM is ready
+      document.addEventListener('DOMContentLoaded', function () {
+        initTechnicalSpecCollapsible();
+      });
+
+      // Reinitialize for each section dynamically loaded
+      if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+        document.addEventListener('shopify:section:load', function (e) {
+          const section = e.target;
+          initTechnicalSpecCollapsible(section);
+        });
+      }
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "CRO | Technical Specific",
+  "class": "cro_technical_specifications_section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "This section relies on the proper setup of [Metaobjects](/admin/settings/custom_data) and [Metafields](/admin/settings/custom_data/product/metafields) in your store. It will only be visible on the product page once you have added Metaobject and Metafield values for a product."
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right (mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "header",
+      "name": "Header",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "px",
+          "label": "Space Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "px",
+          "label": "Space Bottom",
+          "default": 45
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 25,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 800
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 16,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 45
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "range",
+          "id": "font_weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "label": "Font-weight",
+          "default": 600
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Bottom (Mobile)",
+          "default": 20
+        },
+        {
+          "type": "select",
+          "id": "alignment_mobile",
+          "label": "Alignment (mobile)",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height (Mobile)",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing (Mobile)",
+          "default": -0.3
+        },
+        {
+          "type": "range",
+          "id": "font_weight_mobile",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "label": "Font-weight (mobile)",
+          "default": 600
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#E5E5E5"
+        },
+        {
+          "type": "header",
+          "content": "Button settings"
+        },
+        {
+          "type": "range",
+          "id": "padding_top_bottom",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding TB",
+          "default": 32
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": "Background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "range",
+          "id": "button_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Button size",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "button_weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "label": "Button weight",
+          "default": 600
+        },
+        {
+          "type": "header",
+          "content": "Content settings"
+        },
+        {
+          "type": "color",
+          "id": "content_text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "content_background",
+          "label": "Background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "range",
+          "id": "content_content_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Content size",
+          "default": 18
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "padding_top_bottom_mobile",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding TB (mobile)",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "button_size_mobile",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Button size (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "content_content_size_mobile",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Content size (mobile)",
+          "default": 14
+        }
+      ]
+    },
+    {
+      "type": "in_the_box",
+      "name": "In the Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_sticky_feature",
+          "label": "Enable sticky feature",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_as_image",
+          "label": "TOP Icon as image"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg",
+          "label": "TOP Icon as SVG",
+          "info": "SVG will replace the image icon",
+          "default": "<svg viewbox=\"0 0 234 74\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n <path d=\"M0 20C0 8.95431 8.95431 0 20 0H214C225.046 0 234 8.9543 234 20V74H0V20Z\" fill=\"currentColor\"></path>\n <rect x=\"58\" y=\"32\" width=\"118\" height=\"19\" rx=\"9.5\" class=\"fill\"></rect>\n <circle cx=\"117.5\" cy=\"32.5\" r=\"11.5\" class=\"fill\"></circle>\n </svg>"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#F9F9F9"
+        },
+        {
+          "type": "range",
+          "id": "corner_radius",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "title_font_size",
+          "min": 16,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Title size",
+          "default": 40
+        },
+        {
+          "type": "paragraph",
+          "content": "List items settings"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 30,
+          "max": 80,
+          "step": 5,
+          "unit": "px",
+          "label": "Icon size",
+          "default": 50
+        },
+        {
+          "type": "color",
+          "id": "icon_background",
+          "label": "Icon Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "label_size",
+          "min": 10,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Label size",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "corner_radius_mobile",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "title_font_size_mobile",
+          "min": 16,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Title size (mobile)",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "icon_size_mobile",
+          "min": 30,
+          "max": 80,
+          "step": 5,
+          "unit": "px",
+          "label": "Icon size (mobile)",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "label_size_mobile",
+          "min": 10,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Label size (mobile)",
+          "default": 14
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Technical Specifications",
+      "blocks": [
+        {
+          "type": "header"
+        },
+        {
+          "type": "accordion"
+        },
+        {
+          "type": "in_the_box"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
+
+
+
+Step: 2
+Create Metafield & Metaobjects with below Details:
+
+Metaobjects:
+============
+Name: CRO | PDP | Technical Specifications
+
+Fields:
+=========
+name: Name
+Key: cro_pdp_technical_specifications.name
+Use this field as display name
+Description: Name of the product.
+Required field
+
+
+Name: Heading
+Key: cro_pdp_technical_specifications.heading
+Single line text
+
+
+Name: Collapsible Title: 01
+Key: cro_pdp_technical_specifications.collapsible_title_01
+Single line text
+
+Name: Collapsible Content: 01
+Key: cro_pdp_technical_specifications.collapsible_content_01
+Multi-line text
+Description: 
+Please wrap each specification block in a <div>. Use <strong> for bold titles and <br> for line breaks between items if needed.   Example: <div>   <strong>Title</strong> Description line one <br>   Description line two </div>
+
+
+Name: Collapsible Title: 02
+Key: cro_pdp_technical_specifications.collapsible_title_02
+Single line text
+
+Name: Collapsible Content: 02
+Key: cro_pdp_technical_specifications.collapsible_content_02
+Multi-line text
+Description: 
+Please wrap each specification block in a <div>. Use <strong> for bold titles and <br> for line breaks between items if needed.   Example: <div>   <strong>Title</strong> Description line one <br>   Description line two </div>
+
+
+Name: Collapsible Title: 03
+Key: cro_pdp_technical_specifications.collapsible_title_03
+Single line text
+
+Name: Collapsible Content: 03
+Key: cro_pdp_technical_specifications.collapsible_content_03
+Multi-line text
+Description: 
+Please wrap each specification block in a <div>. Use <strong> for bold titles and <br> for line breaks between items if needed.   Example: <div>   <strong>Title</strong> Description line one <br>   Description line two </div>
+
+Name: Collapsible Title: 04
+Key: cro_pdp_technical_specifications.collapsible_title_04
+Single line text
+
+Name: Collapsible Content: 04
+Key: cro_pdp_technical_specifications.collapsible_content_04
+Multi-line text
+Description: 
+Please wrap each specification block in a <div>. Use <strong> for bold titles and <br> for line breaks between items if needed.   Example: <div>   <strong>Title</strong> Description line one <br>   Description line two </div>
+
+
+Name: Box Heading
+Key: cro_pdp_technical_specifications.box_heading
+Single line text
+
+Name: Box Icon: 01
+Key: cro_pdp_technical_specifications.box_icon_01
+File > Images
+
+Name: Box Icon Label: 01
+Key: cro_pdp_technical_specifications.box_icon_label_01
+Single line text
+
+
+Name: Box Icon: 02
+Key: cro_pdp_technical_specifications.box_icon_02
+File > Images
+
+Name: Box Icon Label: 02
+Key: cro_pdp_technical_specifications.box_icon_label_02
+Single line text
+
+
+Name: Box Icon: 03
+Key: cro_pdp_technical_specifications.box_icon_03
+File > Images
+
+Name: Box Icon Label: 03
+Key: cro_pdp_technical_specifications.box_icon_label_03
+Single line text
+
+
+Name: Box Icon: 04
+Key: cro_pdp_technical_specifications.box_icon_04
+File > Images
+
+Name: Box Icon Label: 04
+Key: cro_pdp_technical_specifications.box_icon_label_04
+Single line text
+
+
+Name: Box Icon: 05
+Key: cro_pdp_technical_specifications.box_icon_05
+File > Images
+
+Name: Box Icon Label: 05
+Key: cro_pdp_technical_specifications.box_icon_label_05
+Single line text
+
+
+
+Metafield:
+============
+Name: CRO | PDP | Technical Specifications
+Namespace and key: standard.cro_pdp_technical_specifications
+Reference: CRO | PDP | Technical Specifications

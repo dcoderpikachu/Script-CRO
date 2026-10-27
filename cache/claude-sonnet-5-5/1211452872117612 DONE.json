@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is empty: its name is only 'DONE' (a status marker, not an element), and it has no description, comments, code, custom fields, or screenshots. There is no CRO element to document."}, "in": 60, "out": 76}

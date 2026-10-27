@@ -1,0 +1,746 @@
+Step: 1
+Create a new section: ed-pdp-time-indicator.liquid
+Paste this code: 
+
+<style>
+  :root {
+    --space-top: 100px;
+    --space-bottom: 100px;
+    --space-left: 0px;
+    --space-right: 0px;
+    --section-background: #F5F5F5;
+    --ring-width: 5;
+    --card-size: 250px;
+    --number-box-size: 70%;
+    --number-font-size: 48px;
+    --number-box-direction: column;
+    --number-box-gap: 8px;
+    --unit-font-size: 16px;
+    --headline-font-size: 18px;
+    --number-box-color: 40 40 40;
+    --number-box-background: 255 255 255;
+    --ring-color: 90 84 233;
+    --active-ring-color: 224 224 224;
+
+  }
+
+
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      {%- if section.settings.content_background == 'rgba(0,0,0,0)' -%}
+          {%- assign content_background = settings.background -%}
+        {%- else -%}
+          {%- assign content_background = section.settings.content_background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+      --space-left: {{ section.settings.space_left_mobile -}}px;
+      --space-right: {{ section.settings.space_right_mobile -}}px;
+
+      --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      --content-background: {{ content_background.red }}, {{ content_background.green }}, {{ content_background.blue }};
+
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+      --number-box-direction: {{ section.settings.content_direction }};
+  }
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} {
+      --ring-width: {{  section.settings.ring_width }};
+      --card-size: {{ section.settings.card_size }}px;
+      --card-items-gap: {{  section.settings.gap_cards }}rem;
+      --number-box-size: {{ section.settings.content_width }}%;
+      --number-font-size: {{ section.settings.number_size }}px;
+      --number-box-gap: {{ section.settings.content_gap }}px;
+      --unit-font-size: {{ section.settings.unit_size }}px;
+      --headline-font-size: {{ section.settings.heading_size }}px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} {
+      --ring-width: {{  section.settings.ring_width_mobile }};
+      --card-size: {{ section.settings.card_size_mobile }}px;
+      --card-items-gap: {{  section.settings.gap_cards_mobile }}rem;
+      --number-box-size: {{ section.settings.content_width_mobile }}%;
+      --number-box-gap: {{ section.settings.content_gap_mobile }}px;
+      --number-font-size: {{ section.settings.number_size_mobile }}px;
+      --unit-font-size: {{ section.settings.unit_size_mobile }}px;
+      --headline-font-size: {{ section.settings.heading_size_mobile }}px;
+    }
+  }
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          --space-top: {{ section.settings.space_top -}}px;
+          --space-bottom: {{ section.settings.space_bottom -}}px;
+          --space-left: {{ section.settings.space_left -}}px;
+          --space-right: {{ section.settings.space_right -}}px;
+      }
+  }
+
+  .ed_pdp_timer_indicator {
+    display: block;
+    color: rgb(var(--text-color));
+    background: rgb(var(--section-background));
+    {% if section.settings.background == 'rgba(0,0,0,0)' %}
+      margin-top: var(--space-top);
+      margin-bottom: var(--space-bottom);
+      padding-left: var(--space-left);
+      padding-right: var(--space-right);
+    {% else %}
+      padding-top: var(--space-top);
+      padding-bottom: var(--space-bottom);
+      padding-left: var(--space-left);
+      padding-right: var(--space-right);
+    {% endif %}
+  }
+  {% if section.settings.enable_custom_max_width %}
+    .ed_pdp_timer_indicator > .container {
+      max-width: var(--section-max-width);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  {% endif %}
+
+  .ed_pdp_timer_indicator_inner {
+    display: flex;
+    justify-content: center;
+    gap: var(--card-items-gap);
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  /* Progress Ring CSS */
+  .skb-time-card {
+    padding: 16px 0;
+    text-align: center;
+  }
+
+  .skb-progress-ring {
+    position: relative;
+    width: var(--card-size);
+    height: var(--card-size);
+    margin: 0 auto;
+  }
+
+  .skb-progress-ring svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .skb-progress-ring circle {
+    fill: none;
+    stroke-width: var(--ring-width);
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+  }
+
+  .skb-progress-ring__background {
+    stroke: rgb(var(--ring-color));
+    fill: var(--number-box-fill) !important;
+  }
+
+  .skb-progress-ring__circle {
+    stroke: rgb(var(--active-ring-color));
+    transform: rotate(-90deg);
+  }
+
+  .skb-time-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 500px;
+    width: var(--number-box-size);
+    height: var(--number-box-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--number-box-gap);
+    flex-direction: var(--number-box-direction);
+    background: rgb(var(--number-box-background));
+  }
+
+  .skb-time-number .skb-value {
+    font-size: var(--number-font-size);
+    color: rgb(var(--number-box-color));
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .skb-time-number .skb-unit {
+    line-height: 1.5;
+    font-size: var(--unit-font-size);
+    color: rgb(var(--number-box-color));
+  }
+
+  .skb-headline {
+    margin-top: 16px;
+  }
+
+  .skb-headline * {
+    margin: 0;
+    color: rgb(var(--text-color));
+    font-weight: bold;
+    line-height: 1.5;
+    font-size: var(--headline-font-size);
+   }
+  /* END:Progress Ring CSS */
+</style>
+
+<div class="ed_pdp_timer_indicator">
+  <div class="container">
+    <div class="ed_pdp_timer_indicator_inner">
+      {% for block in section.blocks %}
+        <div
+          class="skb-time-card"
+          {{ block.shopify_attributes }}
+          style="
+            {%- if block.settings.box_color == 'rgba(0,0,0,0)' -%}
+                {%- assign box_color = settings.text_color -%}
+              {%- else -%}
+                {%- assign box_color = block.settings.box_color -%}
+            {%- endif -%}
+
+            {%- if block.settings.box_background == 'rgba(0,0,0,0)' -%}
+                {%- assign box_background = settings.background -%}
+              {%- else -%}
+                {%- assign box_background = block.settings.box_background -%}
+            {%- endif -%}
+
+            --number-box-color: {{ box_color.red }}, {{ box_color.green }}, {{ box_color.blue }};
+            --number-box-background: {{ box_background.red }}, {{ box_background.green }}, {{ box_background.blue }};
+            --number-box-fill: {{ block.settings.box_fill }};
+            --ring-color: {{ block.settings.ring_color.red }}, {{ block.settings.ring_color.green }}, {{ block.settings.ring_color.blue }};
+            --active-ring-color: {{ block.settings.active_ring_color.red }}, {{ block.settings.active_ring_color.green }}, {{ block.settings.active_ring_color.blue }};
+          "
+        >
+          <div class="skb-progress-ring" data-target="{{ block.settings.time }}">
+            <svg viewBox="0 0 100 100">
+              <circle class="skb-progress-ring__background" cx="50" cy="50" r="45"></circle>
+              <circle class="skb-progress-ring__circle" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div class="skb-time-number">
+              <div class="skb-value">0</div>
+              <div class="skb-unit">{{ block.settings.unit }}</div>
+            </div>
+          </div>
+          <div class="skb-headline">
+            {{ block.settings.heading }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+<script>
+  (function () {
+    /**
+     * Initializes progress ring animations within the given scope.
+     * - Animates numbers and SVG rings when they enter the viewport.
+     * - Prevents double initialization on dynamically loaded Shopify sections or blocks
+     */
+    function initProgressRing(scope = document) {
+      const rings = scope.querySelectorAll('.skb-progress-ring');
+      if (!rings.length) return;
+
+      rings.forEach((ring) => {
+        if (ring.dataset.initialized === 'true') return;
+        ring.dataset.initialized = 'true';
+
+        const circle = ring.querySelector('.skb-progress-ring__circle');
+        const number = ring.querySelector('.skb-value');
+        const target = parseInt(ring.getAttribute('data-target'), 10);
+
+        if (!circle || !number || isNaN(target)) return;
+
+        const radius = circle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = circumference;
+
+        function animate() {
+          let current = 0;
+          const duration = 1200;
+          const stepTime = 20;
+          const steps = duration / stepTime;
+          const increment = target / steps;
+          const offset = circumference * (1 - target / 100);
+
+          const interval = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(interval);
+            }
+            number.textContent = Math.floor(current);
+            const currentOffset = circumference * (1 - current / 100);
+            circle.style.strokeDashoffset = Math.max(currentOffset, offset);
+          }, stepTime);
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                animate();
+                entry.target.classList.add('animated');
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+
+        observer.observe(ring);
+      });
+    }
+
+    initProgressRing();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initProgressRing();
+    });
+
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (event) {
+        initProgressRing(event.target);
+      });
+      document.addEventListener('shopify:block:select', function (event) {
+        initProgressRing(event.target);
+      });
+    }
+  })();
+</script>
+
+
+{% schema %}
+{
+  "name": "PDP | Time Indicator",
+  "class": "ed_pdp_timer_indicator_section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "paragraph",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left space",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right space",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Time Indicator settings"
+    },
+    {
+      "type": "range",
+      "id": "card_size",
+      "min": 140,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Card size",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap_cards",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Gap card items",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "ring_width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Ring width",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 30,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Contet width",
+      "default": 70
+    },
+    {
+      "type": "select",
+      "id": "content_direction",
+      "label": "Content direction",
+      "options": [
+        {
+          "value": "row",
+          "label": "Row"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap contents",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "number_size",
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Number size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "unit_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Unit size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "card_size_mobile",
+      "min": 140,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Card size (mobile)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "gap_cards_mobile",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "Gap card items (mobile)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "ring_width_mobile",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Ring width (mobile)",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "content_width_mobile",
+      "min": 30,
+      "max": 90,
+      "step": 1,
+      "unit": "%",
+      "label": "Contet width (mobile)",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "content_gap_mobile",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap contents (mobile)",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "number_size_mobile",
+      "min": 12,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "label": "Number size (mobile)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "unit_size_mobile",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Unit size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size (mobile)",
+      "default": 16
+    },
+    {
+      "type": "paragraph",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left space (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right space (mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time",
+          "default": "25"
+        },
+        {
+          "type": "text",
+          "id": "unit",
+          "label": "Unit",
+          "default": "Min"
+        },
+        {
+          "type": "richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<p>Setup time</p>"
+        },
+        {
+          "type": "header",
+          "content": "Color settings"
+        },
+        {
+          "type": "color",
+          "id": "box_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "box_background",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "box_fill",
+          "label": "Border color",
+          "default": "#E5E4DD"
+        },
+
+        {
+          "type": "color",
+          "id": "ring_color",
+          "label": "Ring color",
+          "default": "#E0E0E0"
+        },
+        {
+          "type": "color",
+          "id": "active_ring_color",
+          "label": "Active Ring color",
+          "default": "#5B55E9"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP | Time Indicator",
+      "settings": {
+        "background": "#F5F5F5"
+      },
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "time": "25",
+            "unit": "Min",
+            "heading": "<p>Setup Time</p>",
+            "box_color": "#5B55E9",
+            "box_background": "#FFFFFF",
+            "ring_color": "#D5D9EE",
+            "active_ring_color": "#5B55E9"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "time": "48",
+            "unit": "Hours",
+            "heading": "<p>Delivery Time</p>",
+            "box_color": "#2E9E7B",
+            "box_background": "#FFFFFF",
+            "ring_color": "#BECAC6",
+            "active_ring_color": "#2E9E7B"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "time": "72",
+            "unit": "Hours",
+            "heading": "<p>Return Time</p>",
+            "box_color": "#F6A429",
+            "box_background": "#FFFFFF",
+            "ring_color": "#EEE1CC",
+            "active_ring_color": "#F6A429"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

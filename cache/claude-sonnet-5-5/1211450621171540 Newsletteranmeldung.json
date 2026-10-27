@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has only a title ('Newsletter signup') with no description, comments, code, or screenshots. There is no spec, UI, or behavior to document, so a reusable CRO element record can't be built without inventing details."}, "in": 67, "out": 85}

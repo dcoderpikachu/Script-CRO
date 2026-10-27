@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "This is a bug/QA thread about a hero banner CTA with no link set in the theme editor. It has no description, no spec and no screenshots, and it was resolved by adding a link. It does not describe a reusable CRO element."}, "in": 407, "out": 87}

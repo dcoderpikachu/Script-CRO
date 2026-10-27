@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "Ticket '1.1' has an empty description and no custom fields. Its only comment ('Farben als Hex Code', i.e. 'colors as hex code') is a one-line note about color format. It describes no identifiable UI, behavior, or reusable CRO element, and no screenshots or code are provided."}, "in": 85, "out": 113}

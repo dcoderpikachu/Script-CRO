@@ -1,0 +1,712 @@
+Guide: CRO | Product Attributes — works on any Shopify theme
+
+Total time: ~5–10 minutes. Follow the steps in order. Copy/paste the code exactly where indicated.
+
+
+Step: 1 — Prerequisites (create Metaobject + Product Metafield)
+Create Metaobjects & Metafields with below details:
+    Metaobjects:
+    Custom data > Metaobject > Add definition 
+    Name: CRO | Product Attributes
+    Type: cro_product_attributes
+
+    Fields:
+    Name: Name
+    Type: Single line text
+    Key: cro_product_attributes.name
+    Description: Enter the product name. This will help you easily identify this metaobject later.
+    Use this field as display name
+    Required field
+
+    Name: Heading
+    Type: Single line text
+    Key: cro_product_attributes.heading
+
+    Name: Title 01
+    Type: Single line text
+    key: cro_product_attributes.title_01
+
+    Name: Progress 01
+    Type: Integer
+    Min: 0
+    Max: 100
+    key: cro_product_attributes.progress_01
+
+    Name: Attributes 01
+    Type: Single line text - List of values
+    key: cro_product_attributes.attributes_01
+
+    Name: Title 02
+    Type: Single line text
+    key: cro_product_attributes.title_02
+
+    Name: Progress 02
+    Type: Integer
+    key: cro_product_attributes.progress_02
+
+    Name: Attributes 02
+    Type: Single line text - List of values
+    key: cro_product_attributes.attributes_02
+
+    Name: Title 03
+    Type: Single line text
+    key: cro_product_attributes.title_03
+
+    Name: Progress 03
+    Type: Integer
+    key: cro_product_attributes.progress_03
+
+    Name: Attributes 03
+    Type: Single line text - List of values
+    key: cro_product_attributes.attributes_03
+
+
+    Metafield:
+    Custom data > products > metafield > add definition:
+    Name: CRO | PDP | Product attributes
+    Namespace and key:  standard.cro_product_attributes
+    Select type: Mixed reference
+    References: CRO | Product Attributes
+
+After creating the Metaobject definition, add at least one entry (Custom data > Metaobjects > CRO | Product Attributes > Add entry) and fill in Heading, Titles, Progress values (0–100), and Attributes. Then on any product page (Products > choose a product), set the Metafield “CRO | PDP | Product attributes” to that entry and Save.
+
+
+Step: 2 — Add the display file (snippet)
+Online Store > Themes > Edit code > Snippets > Add a new snippet
+Name: ed-cro-product-attributes.liquid
+Paste this code:
+
+{% if product.metafields.standard.cro_product_attributes %}
+  {% assign progress_size = 24 %}
+  {% assign progress_size_mobile = 16 %}
+
+  <style>
+    .hr_cro_product_attributes_section > h2 {
+        font-weight: {{ block.settings.heading_weight }};
+        font-style: {{ block.settings.heading_style }};
+        text-transform: {{  block.settings.heading_transform }};
+        letter-spacing: {{ block.settings.letter_spacing -}}px;
+    }
+    ul.cro_product_attributes {
+        list-style: none;
+        margin: 0;
+        padding: 24px 16px;
+        background: {{ block.settings.cro_background }};
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        border-radius: {{ block.settings.cro_corner_radius -}}px;
+    }
+
+    li.cro_product_attributes_item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    li.cro_product_attributes_item > h4 {
+        margin-bottom: 0;
+        font-weight: {{ block.settings.title_weight }};
+        font-style: {{ block.settings.title_style }};
+        text-align: {{ block.settings.title_position }};
+        text-transform: {{ block.settings.title_transform }};
+        letter-spacing: {{ block.settings.title_letter_spacing }}px;
+    }
+
+    .cro_progressbar {
+        position: relative;
+        width: 100%;
+        height: 8px;
+        background: {{ block.settings.progress_bg }};
+        {%- if block.settings.progress_style == 'rounded' -%}
+            border-radius: 360px;
+        {%- else -%}
+            border-radius: 0;
+        {%- endif -%}
+    }
+
+    .cro_progressbar_position {
+        width: {{ progress_size -}}px;
+        height: 8px;
+        background: {{ block.settings.progress_active_bg }};
+        position: absolute;
+        {%- if block.settings.progress_style == 'rounded' -%}
+            border-radius: 360px;
+        {%- else -%}
+            border-radius: 0;
+        {%- endif -%}
+    }
+
+    .cro_status {
+        position: relative;
+        text-align: center;
+        display: block;
+    }
+    .cro_status.size-3 > span:nth-child(1) {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .cro_status.size-3 > span:nth-child(3) {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .cro_status.size-2 > span:nth-child(1) {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .cro_status.size-2 > span:nth-child(2) {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .cro_status span {
+        line-height: 1;
+    }
+
+    @media (min-width: 741px) {
+        .hr_cro_product_attributes_section {
+            margin-top: {{ block.settings.space_top -}}px;
+            margin-bottom: {{ block.settings.space_bottom -}}px;
+        }
+        .hr_cro_product_attributes_section > h2 {
+            font-size: {{ block.settings.heading_size -}}px;
+            margin-bottom: {{ block.settings.heading_margin_bottom -}}px;
+
+        }
+        li.cro_product_attributes_item > h4 {
+            font-size: {{ block.settings.title_size -}}px;
+        }
+        .cro_status span {
+            font-size: {{ block.settings.attributes_size -}}px;
+        }
+    }
+
+    @media (max-width: 740px) {
+        .hr_cro_product_attributes_section {
+            margin-top: {{ block.settings.space_top_mobile -}}px;
+            margin-bottom: {{ block.settings.space_bottom_mobile -}}px;
+        }
+        .hr_cro_product_attributes_section > h2 {
+            font-size: {{ block.settings.heading_size_mobile -}}px;margin-bottom: {{ block.settings.heading_margin_bottom_mobile -}}px;
+        }
+        li.cro_product_attributes_item > h4 {
+            font-size: {{ block.settings.title_size_mobile -}}px;
+        }
+        .cro_status span {
+            font-size: {{ block.settings.attributes_size_mobile -}}px;
+        }
+        .cro_progressbar_position {
+            width: {{ progress_size_mobile -}}px;
+        }
+    }
+  </style>
+
+  {% assign product_attributes = product.metafields.standard.cro_product_attributes.value %}
+
+  <div class="hr_cro_product_attributes_section {% if block.settings.hide_at_desktop %}hidden-lap-and-up{% endif %}">
+    <h2 class="h6">{{ product_attributes.heading }}</h2>
+
+    <ul class="cro_product_attributes">
+      {% for i in (1..3) %}
+        {% assign title_key = 'title_0' | append: i %}
+        {% assign progress_key = 'progress_0' | append: i %}
+        {% assign attributes_key = 'attributes_0' | append: i %}
+
+        {% if product_attributes[title_key] %}
+          <li class="cro_product_attributes_item">
+            <h4 class="h6">{{ product_attributes[title_key] }}</h4>
+            <div class="cro_progressbar">
+              <div class="cro_progressbar_position block-{{ i }}"></div>
+
+              {%- style -%}
+                @media (min-width: 741px) {
+                    #shopify-section-{{ section.id }} .cro_progressbar_position.block-{{ i }} {
+                        {%- if product_attributes[progress_key] != 0 -%}
+                            left:calc({{ product_attributes[progress_key] }}% - {{ progress_size -}}px);
+                        {%- else -%}
+                            left:{{ product_attributes[progress_key] }}%;
+                        {%- endif -%}
+                    }
+                }
+
+                @media (max-width: 740px) {
+                    #shopify-section-{{ section.id }} .cro_progressbar_position.block-{{ i }} {
+                        {%- if product_attributes[progress_key] != 0 -%}
+                            left:calc({{ product_attributes[progress_key] }}% - {{ progress_size_mobile -}}px);
+                        {%- else -%}
+                            left:{{ product_attributes[progress_key] }}%;
+                        {%- endif -%}
+                    }
+                }
+              {%- endstyle -%}
+            </div>
+
+            {% assign attributes_list = product_attributes[attributes_key].value %}
+            {% if attributes_list %}
+              <div class="cro_status size-{{ attributes_list.size }}">
+                {% for attribute in attributes_list %}
+                  <span>{{ attribute }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+
+
+Step: 3 — Add the block to your product section schema
+Where to paste:
+    Online Store > Themes > Edit code
+    Find your product’s main section file:
+        If your theme uses templates/product.json (Online Store 2.0): open it, find the section used for the main product (e.g., type: "main-product" or similar), then open that section under Sections (e.g., sections/main-product.liquid).
+        If your theme uses product.liquid: open it, find the {% section '...' %} that renders the product, then open that section under Sections.
+    Scroll to the bottom of the section file and locate:
+        {% schema %}
+        { ... }
+        {% endschema %}
+    Inside the JSON, find "blocks": [ ... ] and paste the object below as a new entry in that array (keep commas between objects).
+Paste this code:
+{
+    "type": "cro_product_attributes",
+    "name": "CRO | Product Attributes",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Bottom",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Requirements",
+          "info": "CRO | Product Attributes block requires [Metaobjects](/admin/settings/custom_data/metaobjects/create) and [Metafields](/admin/custom_data/product/metafields) setup first. Please follow setup documentations!"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_at_desktop",
+          "label": "Hide at Desktop",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "cro_corner_radius",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 8
+        },
+        {
+          "type": "color",
+          "id": "cro_background",
+          "label": "Background",
+          "default": "#ECEEEC"
+        },
+        {
+          "type": "header",
+          "content": "CRO Heading"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "heading_weight",
+          "label": "Font-weight",
+          "options": [
+            {
+              "value": "100",
+              "label": "100"
+            },
+            {
+              "value": "200",
+              "label": "200"
+            },
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "select",
+          "id": "heading_style",
+          "label": "Font-style",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "italic",
+              "label": "Italic"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "select",
+          "id": "heading_transform",
+          "label": "Text-transform",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_bottom",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin bottom",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "CRO Title"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "Font weight",
+          "options": [
+            {
+              "value": "100",
+              "label": "100"
+            },
+            {
+              "value": "200",
+              "label": "200"
+            },
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "range",
+          "id": "title_letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "title_style",
+          "label": "Font style",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "italic",
+              "label": "Italic"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "select",
+          "id": "title_transform",
+          "label": "Text-transform",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "select",
+          "id": "title_position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "header",
+          "content": "CRO Progress"
+        },
+        {
+          "type": "color",
+          "id": "progress_bg",
+          "label": "Background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "progress_active_bg",
+          "label": "Active BG",
+          "default": "#444E4F"
+        },
+        {
+          "type": "select",
+          "id": "progress_style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "normal",
+              "label": "Normal"
+            }
+          ],
+          "default": "rounded"
+        },
+        {
+          "type": "header",
+          "content": "CRO Attributes"
+        },
+        {
+          "type": "range",
+          "id": "attributes_size",
+          "min": 8,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 14
+        },
+        {
+          "type": "header",
+          "content": "CRO settings (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Top (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Space Bottom (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_bottom_mobile",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading margin bottom",
+          "default": 10
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "min": 8,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Title size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "attributes_size_mobile",
+          "min": 8,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Attributes size",
+          "default": 12
+        }
+    ]
+},
+
+
+Step: 4 — Render the block in the product section’s block loop
+Where to paste:
+    In the same section (or in a snippet it uses, commonly snippets/product-form.liquid), find the loop:
+        {% for block in section.blocks %} ... {% endfor %}
+    Inside the {% case block.type %} switch, add the branch below.
+  Paste this code:
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'cro_product_attributes' -%}
+        {% render 'ed-cro-product-attributes', product: product, block: block %}
+    {%- endcase -%}
+  {%- endfor -%}
+
+
+Step: 5 — Turn it on in Theme Editor and connect data
+    Online Store > Themes > Customize > open a Product page
+    In the left panel, click the main product section > Add block > CRO | Product Attributes
+    Save
+    If it’s empty, open the Product in admin and set the Metafield “CRO | PDP | Product attributes” to your created Metaobject entry, then Save. Refresh the preview.
+
+
+Troubleshooting
+    I don’t see the block in Add block:
+        Ensure you pasted the block object into the section’s "blocks" array inside {% schema %} (Step 3) and saved without JSON errors (commas between blocks).
+    I don’t see any content after adding the block:
+        Ensure the product’s Metafield is set to a Metaobject entry (Step 1) and the render branch was added (Step 4).
+    My theme uses different filenames:
+        Always locate the product’s main section via templates/product.json (type) or product.liquid > {% section '...' %}.
+
+
+Quick checklist
+    Created Metaobject definition + one entry
+    Created Product Metafield referencing the Metaobject
+    Added snippet: snippets/ed-cro-product-attributes.liquid (Step 2)
+    Added block object to section’s {% schema %} > "blocks" (Step 3)
+    Added render branch in the block loop (Step 4)
+    Enabled the block in Theme Editor and linked a Metaobject entry (Step 5)

@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has an empty description and no screenshots or code. The only comment says a template is needed for before-vs-after A/B test results, which is an internal reporting note rather than a storefront CRO element. It describes no UI, behavior, or configuration that could be reused."}, "in": 150, "out": 99}

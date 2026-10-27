@@ -1,0 +1,535 @@
+Step: 1
+Go to section: main-product.liquid
+Add new block for CRO | Review Spotlight
+Paste this code:
+{
+    "type": "cro_review_spotlight",
+    "name": "CRO | Review Spotlight",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "Requirements",
+          "info": "CRO | Review Spotlight block requires [Metaobjects](/admin/settings/custom_data/metaobjects/create) and [Metafields](/admin/custom_data/product/metafields) setup first. Please follow setup documentations!"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Autoplay",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "fade",
+          "label": "Fade",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "pagedots",
+          "label": "Pagedots",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "draggable",
+          "label": "Draggable",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Infinite loop",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Other settings"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top space",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom space",
+          "default": 0
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#F8F8F8"
+        },
+
+        {
+          "type": "range",
+          "id": "rounded",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 0
+        },
+        {
+          "type": "color",
+          "id": "rating_color",
+          "label": "Rating color",
+          "default": "#E07988"
+        },
+        {
+          "type": "color",
+          "id": "emptry_rating_color",
+          "label": "Empty rating color",
+          "default": "#D9D9D9"
+        },
+        {
+          "type": "header",
+          "content": "Pagination"
+        },
+        {
+          "type": "color",
+          "id": "pagination",
+          "label": "Pagination",
+          "default": "#D9D9D9"
+        },
+        {
+          "type": "color",
+          "id": "active_pagination",
+          "label": "Active pagination",
+          "default": "#E07988"
+        },
+        {
+          "type": "header",
+          "content": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "min": 8,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size_mobile",
+          "min": 8,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (mobile)",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "heading_font_weight",
+          "label": "Font-weight",
+          "options": [
+            {
+              "value": "100",
+              "label": "100"
+            },
+            {
+              "value": "200",
+              "label": "200"
+            },
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "default": "600"
+        },
+        {
+          "type": "select",
+          "id": "heading_font_style",
+          "label": "Font-style",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "italic",
+              "label": "Italic"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "range",
+          "id": "content_font_size",
+          "min": 8,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "content_font_size_mobile",
+          "min": 8,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (mobile)",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "content_font_weight",
+          "label": "Font-weight",
+          "options": [
+            {
+              "value": "100",
+              "label": "100"
+            },
+            {
+              "value": "200",
+              "label": "200"
+            },
+            {
+              "value": "300",
+              "label": "300"
+            },
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            },
+            {
+              "value": "800",
+              "label": "800"
+            },
+            {
+              "value": "900",
+              "label": "900"
+            }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "select",
+          "id": "content_font_style",
+          "label": "Font-style",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "italic",
+              "label": "Italic"
+            }
+          ],
+          "default": "normal"
+        }
+    ]
+},
+
+
+
+Step: 2
+Create a new section: cro_review_spotlight.liquid
+Paste this code:
+{%- if product.metafields.standard.cro_pdp_review_spotlight -%}
+  {%- assign cro_review_spotlight = product.metafields.standard.cro_pdp_review_spotlight.value -%}
+    <style>
+        .hr_cro_review_spotlight_section {
+            color: {{ block.settings.text_color }};
+            background-color: {{ block.settings.background }};
+            padding: 16px;
+            border-radius: {{ block.settings.rounded }}px;
+            margin-top: {{ block.settings.space_top -}}px;
+            margin-bottom: {{ block.settings.space_bottom -}}px;
+        }
+        .hr_review_spotlight-list {
+            display: block;
+            min-width: 100%;
+            text-align: left;
+        }
+
+        .hr_review_spotlight-item {
+            width: 100%;
+        }
+        .hr_review_spotlight-item-stars {
+            gap: 2px;
+            display: flex;
+        }
+
+        .hr_review_spotlight-item-stars svg {
+            width: 12px;
+            height: 12px;
+            color: {{ block.settings.rating_color }};
+        }
+        .hr_review_spotlight-item-stars svg.hr_spotlight-rating-empty {
+            opacity: .5;
+        }
+
+        .hr_review_spotlight-item-title * {
+            line-height: 1;
+            font-weight: {{ block.settings.heading_font_weight }};
+            font-size: {{ block.settings.heading_font_size }}px;
+            font-style: {{ block.settings.heading_font_style }};
+        }
+
+        .hr_review_spotlight-item-title {
+            margin: 20px 0 6px;
+        }
+        .hr_review_spotlight-item-content {
+            font-size: {{ block.settings.content_font_size }}px;
+            line-height: 1.5;
+            font-weight: {{ block.settings.content_font_weight }};
+            font-style: {{ block.settings.content_font_style }};
+        }
+
+        ol.flickity-page-dots {
+            display: flex;
+            gap: 2px;
+            padding: 0;
+            margin: 20px 0 0;
+        }
+        ol.flickity-page-dots li.dot {
+            width: 4px;
+            height: 4px;
+            font-size: 0;
+            background: {{ block.settings.pagination }};
+            border-radius: 50px;
+        }
+        .hr_cro_review_spotlight_section ol.flickity-page-dots li.dot {
+            margin: 0 4px !important;
+        }
+
+        ol.flickity-page-dots li.dot.is-selected {
+            background: {{ block.settings.active_pagination }};
+        }
+        @media (max-width: 741px) {
+            .hr_review_spotlight-item-title * {
+                font-size: {{ block.settings.heading_font_size_mobile }}px;
+            }
+            .hr_review_spotlight-item-content {
+                font-size: {{ block.settings.content_font_size_mobile }}px;
+            }
+        }
+    </style>
+
+    {%- capture flickity_config -%}
+        {
+            "adaptiveHeight": true,
+            "draggable": {{ block.settings.draggable }},
+            "initialIndex": ".is-initial-selected",
+            "fade": {{ block.settings.fade }},
+            "autoPlay": {{ block.settings.autoplay }},
+            "pauseAutoPlayOnHover": true,
+            "pageDots": {{ block.settings.pagedots }},
+            "wrapAround": {{ block.settings.loop }},
+            "prevNextButtons": false
+        }
+    {%- endcapture -%}
+
+    <div class="hr_cro_review_spotlight_section">
+        <flickity-carousel
+        flickity-config="{{ flickity_config | escape }}"
+        id="flickity-{{ section.id }}"
+        class="hr_review_spotlight-list"
+        >
+        {%- for i in (1..10) -%}
+            {% assign rating_key = 'rating_' | append: i %}
+            {% assign title_key = 'title_' | append: i %}
+            {% assign content_key = 'content_' | append: i %}
+
+            {% if cro_review_spotlight[title_key] != blank %}
+            <div class="hr_review_spotlight-item">
+                <div class="hr_review_spotlight-item-stars">
+                {% assign ratings = cro_review_spotlight[rating_key] | plus: 0 %}
+                {% assign rating_empty = 5 | minus: ratings %}
+                {%- for i in (1..ratings) -%}
+                    {%- render 'icon' with 'rating-star', class: 'icon' -%}
+                {%- endfor -%}
+
+                {%- if rating_empty > 0 -%}
+                    {%- for i in (1..rating_empty) -%}
+                    {%- render 'icon' with 'rating-star', class: 'icon hr_spotlight-rating-empty' -%}
+                    {%- endfor -%}
+                {%- endif -%}
+                </div>
+                <div class="hr_review_spotlight-item-title">
+                <p>{{ cro_review_spotlight[title_key] }}</p>
+                </div>
+                <div class="hr_review_spotlight-item-content">
+                <p>{{ cro_review_spotlight[content_key] }}</p>
+                </div>
+            </div>
+            {% endif %}
+        {%- endfor -%}
+        </flickity-carousel>
+    </div>
+{%- endif -%}
+
+
+
+
+Step: 3
+Go to snippet: product-form.liquid
+Paste this code:
+{%- when 'cro_review_spotlight' -%}
+   {% render 'cro_review_spotlight', product: product, block: block %}
+
+
+
+
+Step: 4
+Create Metaobjects & Metafields with below details:
+    Metaobjects:
+    Custom data > Metaobject > Add definition 
+    Name: CRO | Review Spotlight
+    Type: cro_review_spotlight
+
+    Fields:
+    Name: Name
+    Key: cro_review_spotlight.name
+    Use this field as display name
+
+    Name: Rating 1
+    Type: integer
+    Min-value: 1
+    Max-value: 5
+    Key: cro_review_spotlight.rating_1
+    Name: Title 1
+    type: Single-line text
+    key: cro_review_spotlight.title_1
+    Name: Content 1
+    type: Multi-line text
+    key: cro_review_spotlight.content_1
+
+    Name: Rating 2
+    Key: cro_review_spotlight.rating_2
+    Name: Title 2
+    key: cro_review_spotlight.title_2
+    Name: Content 2
+    key: cro_review_spotlight.content_2
+
+    Name: Rating 3
+    Key: cro_review_spotlight.rating_3
+    Name: Title 3
+    key: cro_review_spotlight.title_3
+    Name: Content 3
+    key: cro_review_spotlight.content_3
+
+    Name: Rating 4
+    Key: cro_review_spotlight.rating_4
+    Name: Title 4
+    key: cro_review_spotlight.title_4
+    Name: Content 4
+    key: cro_review_spotlight.content_4
+
+    Name: Rating 5
+    Key: cro_review_spotlight.rating_5
+    Name: Title 5
+    key: cro_review_spotlight.title_5
+    Name: Content 5
+    key: cro_review_spotlight.content_5
+
+    Name: Rating 6
+    Key: cro_review_spotlight.rating_6
+    Name: Title 6
+    key: cro_review_spotlight.title_6
+    Name: Content 6
+    key: cro_review_spotlight.content_6
+
+    Name: Rating 7
+    Key: cro_review_spotlight.rating_7
+    Name: Title 7
+    key: cro_review_spotlight.title_7
+    Name: Content 7
+    key: cro_review_spotlight.content_7
+
+    Name: Rating 8
+    Key: cro_review_spotlight.rating_8
+    Name: Title 8
+    key: cro_review_spotlight.title_8
+    Name: Content 8
+    key: cro_review_spotlight.content_8
+
+    Name: Rating 9
+    Key: cro_review_spotlight.rating_9
+    Name: Title 9
+    key: cro_review_spotlight.title_9
+    Name: Content 9
+    key: cro_review_spotlight.content_9
+
+    Name: Rating 10
+    Key: cro_review_spotlight.rating_10
+    Name: Title 10
+    key: cro_review_spotlight.title_10
+    Name: Content 10
+    key: cro_review_spotlight.content_10
+
+
+    Metafield:
+    Custom data > products > metafield > add definition:
+    Name: CRO | PDP | Review Spotlight 
+    Namespace and key:  standard.cro_pdp_review_spotlight
+    Select type: Mixed reference
+    References: CRO | Review Spotlight

@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "This ticket is an internal content-audit question: whether each library article has its 'Section' image. The only comment says the image is missing on most articles and lists the few that have it. It describes no UI, behavior, or reusable CRO element, so it is housekeeping, not an element."}, "in": 236, "out": 100}

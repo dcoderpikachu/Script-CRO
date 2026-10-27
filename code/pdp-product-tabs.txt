@@ -1,0 +1,1175 @@
+Step: 1
+Creat a section: ed-cro-product-tabs.liquid
+Paste this code:
+<style>
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign heading_color = settings.heading_color -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign heading_color = section.settings.text_color -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+      --space-top: {{ section.settings.space_top -}}px;
+      --space-bottom: {{ section.settings.space_bottom -}}px;
+      --space-left: {{ section.settings.space_left -}}px;
+      --space-right: {{ section.settings.space_right -}}px;
+      --space-top-mobile: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom-mobile: {{ section.settings.space_bottom_mobile -}}px;
+      --space-left-mobile: {{ section.settings.space_left_mobile -}}px;
+      --space-right-mobile: {{ section.settings.space_right_mobile -}}px;
+      --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+  }
+
+  #shopify-section-{{ section.id }} {
+      color: rgb(var(--text-color));
+      background: rgb(var(--section-background));
+  }
+    @media screen and (min-width: 1000px) {
+       #shopify-section-{{ section.id }} .cro_product_tabs_wrapper {
+            max-width: var(--section-max-width);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          padding-top: var(--space-top);
+          padding-bottom: var(--space-bottom);
+          padding-left: var(--space-left);
+          padding-right: var(--space-right);
+      }
+  }
+
+  @media (max-width: 999px) {
+      #shopify-section-{{ section.id }} {
+          padding-top: var(--space-top-mobile);
+          padding-bottom: var(--space-bottom-mobile);
+          padding-left: var(--space-left-mobile);
+          padding-right: var(--space-right-mobile);
+      }
+  }
+
+  @media screen and (min-width: 1000px) {
+      .hidden-lap-and-up {
+          display: none !important;
+      }
+  }
+  @media screen and (max-width: 999px) {
+      .hidden-pocket {
+          display: none !important;
+      }
+  }
+
+    .skb-tabs-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .skb-tabs-nav__position {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background-color: currentColor;
+      transition: transform 0.3s ease, width 0.3s ease;
+      transform-origin: left;
+      width: 0;
+      transform: translateX(0) scaleX(1);
+      pointer-events: none;
+    }
+
+    .skb-tabs {
+      display: flex;
+      background: inherit;
+      border-bottom: 1px solid #dfdfdf;
+      gap: 72px;
+    }
+
+    .skb-tab-btn {
+      padding: 0 0 18px;
+      cursor: pointer;
+      text-transform: uppercase;
+      opacity: .7;
+      font-size: 13px;
+      line-height: 1;
+      transition: opacity .25s ease-in-out;
+    }
+
+    .skb-tab-btn.active {
+      opacity: 1;
+    }
+
+    .skb-tab-btn:hover {
+      opacity: 0.85;
+    }
+
+    .skb-tab-btn.active:hover {
+      opacity: 1;
+    }
+
+    .skb-tab-contents {
+      position: relative;
+      overflow: hidden;
+      transition: height 0.4s ease;
+      margin-top: 32px;
+    }
+
+    .skb-tab-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      z-index: 0;
+    }
+
+    .skb-tab-content.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
+    }
+
+    /* Ensures immediate visibility without delay on first load */
+    .skb-tab-content.active.initial-load {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: none !important;
+    }
+
+    .skb-tab-content table {
+      border: 1px solid #ddd;
+      margin-bottom: 1rem;
+      display: table;
+    }
+
+    .skb-tab-content table tr {
+      border-top: 1px solid #ddd;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .skb-tab-content table tr td {
+    }
+
+    .skb-tab-content table td {
+      padding: 1rem;
+      border-width: 0;
+      border-style: solid;
+      border-color: #ddd;
+    }
+
+    td:not(:empty) + td {
+      border-inline-start-width: 1px;
+    }
+
+    #shopify-section-{{ section.id }} ed-collapsible-wrap {
+        --svg-bg: transparent;
+        --border-color: #dfdfdf;
+    }
+    .ed-collapsible-toggle {
+        user-select: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding: 18px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        overflow: visible;
+        background: none;
+        border-radius: 0;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        touch-action: manipulation;
+    }
+    /* Show border-top by default */
+    .ed-collapsible-toggle {
+        border-top: 1px solid var(--border-color);
+        border-bottom: none;
+    }
+
+    /* Hide border-top for last item (if there are multiple) */
+    .ed-collapsible-toggle:last-of-type:not(:only-of-type) {
+        border-top: none;
+    }
+
+
+    .ed-animated-arrow-down {
+        width: 24px;
+        height: 24px;
+        background: var(--svg-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 500px;
+    }
+
+    .ed-collapsible-toggle svg {
+        width: 12px;
+        height: auto;
+        transition: transform 0.2s ease-in-out;
+        transform: rotate(180deg);
+    }
+
+    .ed-collapsible-toggle[aria-expanded="true"] svg {
+        transform: rotate(0deg);
+    }
+
+    .ed-collapsible-content {
+        overflow: hidden;
+        transition: height 0.5s ease, opacity 0.25s ease;
+        opacity: 1;
+    }
+
+    .ed-collapsible-content:not([data-open]) {
+        display: block;
+        height: 0;
+        opacity: 0;
+    }
+
+
+    .skb-tab-content.active ed-collapsible:first-child button {
+        border-top: none;
+        padding-top: 0;
+    }
+
+    .skb-tab-content ed-collapsible-wrap,
+    .ed-collapsible__content ed-collapsible-wrap {
+        padding: 0 var(--container-gutter);
+        display: block;
+    }
+
+    .skb-tab-content .ed-collapsible__content,
+    .ed-collapsible__content ed-collapsible-wrap  .ed-collapsible__content {
+        padding: 18px 0 18px;
+        display: block;
+        border-top: 1px solid var(--border-color);
+    }
+    .ed-collapsible__content ed-collapsible-wrap  button.ed-collapsible-toggle {
+        padding: 18px 0 !important;
+    }
+
+    @media (max-width: 999px) {
+        .ed-cro-product-tabs-section .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .ed-cro-product-tabs-section .container button.ed-collapsible-toggle {
+            padding-left: var(--container-gutter);
+            padding-right: var(--container-gutter);
+        }
+        .ed-collapsible__content {
+            padding: 0 var(--container-gutter) var(--container-gutter);
+        }
+    }
+</style>
+
+{%- capture tabs_faq_items -%}
+    {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' -%}
+            {% assign faq_index = 0 %}
+            {%- for i in (1..12) -%}
+            {% assign faq_index = faq_index | plus: 1 %}
+            {%- assign faq_open_key = 'faq_open_default_' | append: i -%}
+            {%- assign faq_title_key = 'faq_title_' | append: i -%}
+            {%- assign faq_content_key = 'faq_content_' | append: i -%}
+            {%- assign faq_open = block.settings[faq_open_key] -%}
+            {%- assign faq_title = block.settings[faq_title_key] -%}
+            {%- assign faq_content = block.settings[faq_content_key] -%}
+
+            {%- if faq_title != blank or faq_content != blank -%}
+                <ed-collapsible>
+                    <button
+                    class="ed-collapsible-toggle"
+                    aria-controls="faq-{{- block.id -}}-{{- faq_index -}}"
+                    aria-expanded="{{ faq_open }}">
+                        <span class="heading--small">{{ faq_title }}</span>
+                        <span class="ed-animated-arrow-down">
+                            <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5" />
+                            </svg>
+                        </span>
+                    </button>
+
+                    <div id="faq-{{- block.id -}}-{{- faq_index -}}" class="ed-collapsible-content" {% if faq_open %}data-open{% endif %}>
+                        <div class="ed-collapsible__content">
+                            {{ faq_content }}
+                        </div>
+                    </div>
+                </ed-collapsible>
+            {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+<div class="{{ section.settings.section_width }}">
+  <div class="cro_product_tabs_wrapper">
+    {% comment %} Desktop  Tabs {% endcomment %}
+    <div class="ed_product_tabs__desktop hidden-pocket">
+      <div class="skbtab-container">
+        <div class="skb-tabs-wrap">
+          <div class="skb-tabs">
+            {%- for block in section.blocks -%}
+              <div
+                class="skb-tab-btn heading--small {% if forloop.first %}active{% endif %}"
+                {{ block.shopify_attributes }}>
+                {%- if block.type == 'description' and template.name == 'product' -%}
+                    {{- 'product.general.description' | t -}}
+                {%- else -%}
+                    {{ block.settings.title }}
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          <span class="skb-tabs-nav__position"></span>
+        </div>
+
+        <div class="skb-tab-contents">
+          {%- for block in section.blocks -%}
+            <div class="skb-tab-content">
+              {%- if block.settings.page != blank -%}
+                {{ block.settings.page.content }}
+              {%- else -%}
+                {%- if block.type == 'description' and template.name == 'product' -%}
+                    {{- product.description -}}
+                {%- else -%}
+                    {{ block.settings.content }}
+                {%- endif -%}
+              {%- endif -%}
+
+              {%- if block.type == 'liquid' -%}
+                {{- block.settings.liquid -}}
+              {%- endif -%}
+
+              {%- if block.type == 'faq' -%}
+                <ed-collapsible-wrap>
+                    {{ tabs_faq_items }}
+                </ed-collapsible-wrap>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+    {% comment %} END:Desktop Tabs{% endcomment %}
+
+    {% comment %} Mobile Tabs {% endcomment %}
+    <div class="ed_product_tabs__mobile hidden-lap-and-up">
+      <ed-collapsible-wrap>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'description' and template.name == 'product' -%}
+            <ed-collapsible {{ block.shopify_attributes }}>
+              <button
+                class="ed-collapsible-toggle"
+                aria-controls="collapsible-description-{{ section.id }}-{{ block.id }}"
+                aria-expanded="{{ block.settings.area_expanded }}"
+              >
+                <span class="heading--small">
+                    {{- 'product.general.description' | t -}}
+                </span>
+                <span class="ed-animated-arrow-down">
+                  <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5" />
+                  </svg>
+                </span>
+              </button>
+
+              <div
+                id="collapsible-description-{{ section.id }}-{{ block.id }}"
+                class="ed-collapsible-content"
+                {% if block.settings.area_expanded %}
+                  data-open
+                {% endif %}
+              >
+                <div class="ed-collapsible__content">
+                  {{- product.description -}}
+                </div>
+              </div>
+            </ed-collapsible>
+          {%- endif -%}
+
+          {%- if block.type == 'content' or block.type == 'liquid' -%}
+            <ed-collapsible {{ block.shopify_attributes }}>
+              <button
+                class="ed-collapsible-toggle"
+                aria-controls="collapsible-{{ section.id }}-{{ block.id }}"
+                aria-expanded="{{ block.settings.area_expanded }}"
+              >
+                <span class="heading--small">{{ block.settings.title }}</span>
+                <span class="ed-animated-arrow-down">
+                  <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5" />
+                  </svg>
+                </span>
+              </button>
+
+              <div
+                id="collapsible-{{ section.id }}-{{ block.id }}"
+                class="ed-collapsible-content"
+                {% if block.settings.area_expanded %}
+                  data-open
+                {% endif %}
+              >
+                <div class="ed-collapsible__content">
+                  {%- if block.settings.page != blank -%}
+                    {{ block.settings.page.content }}
+                  {%- else -%}
+                    {{ block.settings.content }}
+                  {%- endif -%}
+
+                  {{- block.settings.liquid -}}
+                </div>
+              </div>
+            </ed-collapsible>
+          {%- endif -%}
+
+          {%- if block.type == 'faq' -%}
+            {{ tabs_faq_items }}
+          {%- endif -%}
+        {%- endfor -%}
+      </ed-collapsible-wrap>
+    </div>
+    {% comment %} END:Mobile Tabs {% endcomment %}
+  </div>
+</div>
+
+<script>
+  // SKB Universal Multi-Tabs
+  (function () {
+    function initSKBTabs(scope = document) {
+      const tabContainers = scope.querySelectorAll('.skbtab-container');
+
+      tabContainers.forEach((container) => {
+        if (container.dataset.initialized === 'true') return;
+        container.dataset.initialized = 'true';
+
+        const tabButtons = container.querySelectorAll('.skb-tab-btn');
+        const tabContents = container.querySelectorAll('.skb-tab-content');
+        const contentsWrapper = container.querySelector('.skb-tab-contents');
+        const tabsWrap = container.querySelector('.skb-tabs-wrap');
+        const indicator = tabsWrap?.querySelector('.skb-tabs-nav__position');
+
+        if (!tabButtons.length || !tabContents.length || !tabsWrap || !contentsWrapper) return;
+
+        function updateIndicator(activeBtn) {
+          if (!indicator || !activeBtn) return;
+
+          const btnRect = activeBtn.getBoundingClientRect();
+          const wrapRect = tabsWrap.getBoundingClientRect();
+          const offsetX = btnRect.left - wrapRect.left;
+          const width = btnRect.width;
+
+          indicator.style.width = `${width}px`;
+          indicator.style.transform = `translateX(${offsetX}px)`;
+        }
+
+        function switchTab(index) {
+          const newActiveContent = tabContents[index];
+          const currentActiveContent = container.querySelector('.skb-tab-content.active');
+
+          if (currentActiveContent === newActiveContent) return;
+
+          contentsWrapper.style.height = `${newActiveContent.scrollHeight}px`;
+
+          if (currentActiveContent) {
+            currentActiveContent.classList.remove('active');
+            currentActiveContent.style.opacity = '0';
+            currentActiveContent.style.visibility = 'hidden';
+            currentActiveContent.style.position = 'absolute';
+          }
+
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              newActiveContent.classList.add('active');
+              newActiveContent.style.position = 'relative';
+              newActiveContent.style.visibility = 'visible';
+              newActiveContent.style.opacity = '1';
+
+              setTimeout(() => {
+                contentsWrapper.style.height = 'auto';
+              }, 200);
+            });
+          }, 200);
+        }
+
+        tabButtons.forEach((btn, index) => {
+          btn.addEventListener('click', () => {
+            tabButtons.forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            switchTab(index);
+            updateIndicator(btn);
+          });
+        });
+
+        // Init state
+        tabButtons[0]?.classList.add('active');
+        tabContents[0]?.classList.add('active', 'initial-load');
+        tabContents[0].style.position = 'relative';
+        tabContents[0].style.opacity = '1';
+        tabContents[0].style.visibility = 'visible';
+        contentsWrapper.style.height = `${tabContents[0].scrollHeight}px`;
+
+        updateIndicator(tabButtons[0]);
+
+        setTimeout(() => {
+          tabContents[0]?.classList.remove('initial-load');
+        }, 10);
+      });
+    }
+
+    // Run on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBTabs();
+    });
+
+    // Re-run on Shopify section load (in editor/design mode)
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        const section = e.target;
+        initSKBTabs(section);
+      });
+    }
+  })();
+
+  // SKB Universal Collapsible
+ (function () {
+    function openContent(element) {
+      element.style.overflow = 'hidden';
+      const height = element.scrollHeight;
+
+      const keyframes = {
+        height: ['0px', `${height}px`],
+        visibility: ['hidden', 'visible'],
+        opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+      };
+
+      const animation = element.animate(keyframes, {
+        duration: 500,
+        direction: 'normal',
+        easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+        fill: 'forwards',
+      });
+
+      animation.onfinish = () => {
+        element.style.overflow = 'visible';
+        element.style.height = `${height}px`;
+        element.setAttribute('data-open', '');
+      };
+
+      if (element.hasAttribute('data-animate-items')) {
+        element.animate(
+          {
+            opacity: [0, 1],
+            transform: ['translateY(10px)', 'translateY(0)'],
+          },
+          {
+            duration: 250,
+            delay: 250,
+            easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+            fill: 'forwards',
+          }
+        );
+      }
+    }
+
+    function closeContent(element) {
+      const height = element.scrollHeight;
+      element.style.overflow = 'hidden';
+
+      const animation = element.animate(
+        {
+          height: [`${height}px`, '0px'],
+          visibility: ['visible', 'hidden'],
+          opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+        },
+        {
+          duration: 500,
+          direction: 'normal',
+          easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+          fill: 'forwards',
+        }
+      );
+
+      animation.onfinish = () => {
+        element.style.overflow = 'hidden';
+        element.removeAttribute('data-open');
+      };
+    }
+
+    function initCollapsibleToggle(scope = document) {
+      const wraps = scope.querySelectorAll('ed-collapsible-wrap');
+
+      wraps.forEach((wrap) => {
+        const toggles = wrap.querySelectorAll('.ed-collapsible-toggle');
+
+        toggles.forEach((toggle) => {
+          if (toggle.dataset.initialized === 'true') return;
+
+          toggle.dataset.initialized = 'true';
+
+          const contentId = toggle.getAttribute('aria-controls');
+          const content = wrap.querySelector(`#${contentId}`);
+          if (!content) return;
+
+          // Keep initial state as-is (open or closed)
+          const isInitiallyOpen = content.hasAttribute('data-open');
+          toggle.setAttribute('aria-expanded', String(isInitiallyOpen));
+          toggle.classList.toggle('is-open', isInitiallyOpen);
+
+          toggle.addEventListener('click', () => {
+            const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+            toggle.classList.toggle('is-open', !isOpen);
+
+            if (!isOpen) {
+              openContent(content);
+            } else {
+              closeContent(content);
+            }
+          });
+        });
+      });
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+      initCollapsibleToggle();
+    });
+
+    // Reinitialize for each section dynamically loaded
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (e) {
+        const section = e.target;
+        initCollapsibleToggle(section);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "CRO | Product Tabs",
+  "class": "ed-cro-product-tabs-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Other settings"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 150,
+      "max": 1500,
+      "step": 15,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 930
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right (mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "area_expanded",
+          "label": "Area expanded",
+          "default": true
+        }
+     ]
+    },
+    {
+      "type": "content",
+      "name": "Content",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "area_expanded",
+          "label": "Area expanded",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi massa, semper finibus accumsan at, tincidunt finibus odio. In vel fringilla tellus, nec laoreet lectus. Proin et consequat augue. Maecenas vel sollicitudin purus, sit amet rhoncus ex. Nulla justo elit, gravida eu convallis a, tempus sed nisi. Proin quis dui eros. Mauris finibus diam in leo mattis venenatis. Integer porttitor lacinia urna, vel dictum odio.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Content from page",
+          "info": "If specified, takes precedence over inline content."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "area_expanded",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 01"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_1",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_1",
+            "label": "Title",
+            "default": "Title 1"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_1",
+          "label": "Content",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi massa, semper finibus accumsan at, tincidunt finibus odio. In vel fringilla tellus, nec laoreet lectus. Proin et consequat augue. Maecenas vel sollicitudin purus, sit amet rhoncus ex. Nulla justo elit, gravida eu convallis a, tempus sed nisi. Proin quis dui eros. Mauris finibus diam in leo mattis venenatis. Integer porttitor lacinia urna, vel dictum odio.</p>"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 02"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_2",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_2",
+            "label": "Title",
+            "default": "Title 2"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_2",
+          "label": "Content",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nisi massa, semper finibus accumsan at, tincidunt finibus odio. In vel fringilla tellus, nec laoreet lectus. Proin et consequat augue. Maecenas vel sollicitudin purus, sit amet rhoncus ex. Nulla justo elit, gravida eu convallis a, tempus sed nisi. Proin quis dui eros. Mauris finibus diam in leo mattis venenatis. Integer porttitor lacinia urna, vel dictum odio.</p>"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 03"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_3",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_3",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_3",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 04"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_4",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_4",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_4",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 05"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_5",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_5",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_5",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 06"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_6",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_6",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_6",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 07"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_7",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_7",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_7",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 08"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_8",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_8",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_8",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 09"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_9",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_9",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_9",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 010"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_10",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_10",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_10",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 11"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_11",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_11",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_11",
+          "label": "Content"
+        },
+        {
+            "type": "header",
+            "content": "FAQ item: 12"
+        },
+        {
+          "type": "checkbox",
+          "id": "faq_open_default_12",
+          "label": "Open as default",
+          "default": false
+        },
+        {
+            "type": "text",
+            "id": "faq_title_12",
+            "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "faq_content_12",
+          "label": "Content"
+        },
+      ]
+    },
+    {
+      "name": "Custom Liquid",
+      "type": "liquid",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "area_expanded",
+          "label": "Area expanded",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "Liquid",
+          "info": "Add app snippets or other Liquid code to create advanced customizations."
+        }
+      ]
+    },
+  ],
+  "presets": [
+    {
+      "name": "CRO | Product Tabs",
+      "blocks": [
+        { "type": "description"},
+        {
+          "type": "faq",
+          "settings": {
+                "title": "FAQ's"
+            }
+        },
+        {
+          "type": "content",
+          "settings": {
+            "area_expanded": true,
+            "title": "Title 1"
+          }
+        },
+      ]
+    }
+  ]
+}
+{% endschema %}

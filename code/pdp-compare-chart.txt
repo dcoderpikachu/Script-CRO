@@ -1,0 +1,359 @@
+IMPORTANT: Please complete Step: 0 before editing your theme.
+
+Step: 0
+Safety first: duplicate your theme (works for any Shopify theme)
+- In Shopify admin, go to Online Store > Themes.
+- On your current live theme, click ... (or Actions) > Duplicate.
+- A copy appears under Theme library. Click the name to rename (e.g., "CRO setup - Draft").
+- Work on the duplicate only: click Actions > Edit code.
+- Use Actions > Preview on the duplicate to test changes safely.
+- Publish the duplicate only after you verify everything works.
+
+Theme-agnostic notes for finding files
+- Product section file: commonly sections/main-product.liquid (may be sections/product-main.liquid, sections/product.liquid, or similar).
+- Product form snippet: commonly snippets/product-form.liquid (may be snippets/main-product-form.liquid or similar).
+- If unsure, in Edit code use the search bar to find "product-form", "add to cart", or "Buy buttons".
+
+Step: 1
+Create PDP Metafieds & Metaobjects with below details:
+
+    Metaobject:
+    ==========
+    admin > settings > Metafields & Metaobjects > Add definition
+    name: CRO | PDP | Compare chart
+    Type: cro_pdp_compare_chart
+
+    Fields:
+    ============
+    Name: Name
+    Key: cro_pdp_compare_chart.name
+    Type: Single line text
+    Description: Enter name of the product to identify this entry.
+    Use this field as display name
+    Required field
+
+    Name: Title
+    Key: cro_pdp_compare_chart.title
+    Type: Single line text
+
+    Name: Content
+    Key: cro_pdp_compare_chart.content
+    Type: Multi-line text
+
+    Name: Chart Heading List
+    Key: cro_pdp_compare_chart.chart_heading_list
+    Type: Single line text
+    List of values
+
+    Name: Product: 01 image 
+    Key: cro_pdp_compare_chart.product_01_image
+    Type: File
+
+    Name: Product: 01 Heading
+    Key: cro_pdp_compare_chart.product_01_heading
+    Type: Single line text
+
+    Name: Product: 01 Content List
+    Key: cro_pdp_compare_chart.product_01_content_list
+    Type: Single line text
+    List of values
+
+
+
+    Name: Product: 02 image 
+    Key: cro_pdp_compare_chart.product_02_image
+    Type: File
+
+    Name: Product: 02 Heading
+    Key: cro_pdp_compare_chart.product_02_heading
+    Type: Single line text
+
+    Name: Product: 02 Content List
+    Key: cro_pdp_compare_chart.product_02_content_list
+    Type: Single line text
+    List of values
+
+
+
+    Metafield:
+    ==========
+    admin > settings > Metafields & Metaobjects > Products > Add definition
+    name: CRO | PDP | Compare chart
+    Namespace & Key: standard.cro_pdp_compare_chart
+    Type: Mixed reference
+    References: CRO | PDP | Compare chart
+
+Step: 2
+Go to product section file: sections/main-product.liquid (or your theme's equivalent)
+Add new schema block "CRO | Compare chart"
+Paste this code:
+
+{
+    "type": "cro_compare_chart",
+    "name": "CRO | Compare chart",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "Metaobject & Metafield (Required)",
+          "info": "This section relies on the proper setup of [Metaobjects](/admin/settings/custom_data) and [Metafields](/admin/settings/custom_data/product/metafields) in your store. It will only be visible on the product page once you have added Metaobject and Metafield values for a product."
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom (mobile)",
+          "default": 16
+        }
+    ]
+},
+
+
+
+
+Step: 3
+Create a new snippet (in Snippets folder): ed-cro-pdp-compare-chart.liquid
+Paste this code:
+
+{% if product.metafields.standard.cro_pdp_compare_chart %}
+  {% assign compare_chart = product.metafields.standard.cro_pdp_compare_chart.value %}
+  {% assign heading_list = compare_chart.chart_heading_list.value %}
+
+  <style>
+      @media (min-width:1000px) {
+          .ed_cro_pdp_compare_chart  {
+              margin-top: {{  block.settings.space_top -}}px;
+              margin-bottom: {{ block.settings.space_bottom -}}px;
+          }
+      }
+      @media (max-width:999px) {
+          .ed_cro_pdp_compare_chart  {
+              margin-top: {{  block.settings.space_top_mobile -}}px;
+              margin-bottom: {{ block.settings.space_bottom_mobile -}}px;
+          }
+      }
+      /* Compare Chart CSS */
+      .ed_cro_pdp_compare_chart {
+        max-width: 100%;
+      }
+
+      .ed_cro_pdp_compare_chart_table {
+        display: grid;
+        grid-template-columns: 144px 1fr;
+        align-items: end;
+      }
+      .ed_cro_pdp_compare_chart__header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 32px;
+          gap: 1rem;
+          text-align: center;
+      }
+
+      .ed_cro_pdp_compare_chart__header h5.heading {
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0;
+          line-height: 1;
+      }
+
+      .ed_cro_pdp_compare_chart__header p {
+          margin: 0;
+          font-size: 20px;
+          line-height: 1;
+      }
+
+      .ed_cro_pdp_compare_chart_table__item_heading {
+          text-align: center;
+          font-size: 16px;
+          font-weight: bold;
+      }
+      .ed_cro_pdp_compare_chart_table__heading {
+        display: grid;
+        display: grid;
+        justify-content: start;
+        align-content: end;
+        height: 100%;
+        padding: 12px 0;
+    }
+
+      .ed_cro_pdp_compare_chart_table__contents {
+        display: grid;
+        grid-template-columns: repeat(2, 70%);
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: 8px;
+        scroll-behavior: smooth;
+      }
+      .ed_cro_pdp_compare_chart_table__item_content {
+          padding: 12px;
+      }
+      .ed_cro_pdp_compare_chart_table__item {
+        background: #f4f4f4;
+        border-top: 60px solid #ffffff
+      }
+
+      .ed_cro_pdp_compare_chart_table__item_content p,
+      .ed_cro_pdp_compare_chart_table__heading_item {
+          font-size: 14px;
+          line-height: 1.5;
+          height: 55px;
+          margin: 0;
+          padding: 0;
+      }
+
+
+      .ed_cro_pdp_compare_chart_table__item > img {
+        max-width: 100%;
+        display: block;
+        margin-top: -60px;
+        height: 220px;
+        object-fit: contain;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+      }
+      @media (max-width: 767px) {
+          .ed_cro_pdp_compare_chart_table__contents {
+              grid-template-columns: repeat(2, 85%);
+          }
+
+          .ed_cro_pdp_compare_chart_table {
+              grid-template-columns: 120px 1fr;
+          }
+
+          .ed_cro_pdp_compare_chart_table__item_content p, .ed_cro_pdp_compare_chart_table__heading_item {
+              font-size: 12px;
+              height: 50px;
+              margin-bottom: 8px;
+          }
+          .ed_cro_pdp_compare_chart__header p {
+              font-size: 16px;
+          }
+
+          .ed_cro_pdp_compare_chart__header h5.heading {
+              font-size: 20px;
+          }
+
+      }
+
+      /* END: Compare chart css */
+  </style>
+
+  <div class="ed_cro_pdp_compare_chart">
+    <div class="ed_cro_pdp_compare_chart__header">
+      {% if compare_chart.title != blank %}
+        <h5 class="heading">{{ compare_chart.title }}</h5>
+      {% endif %}
+      {% if compare_chart.content != blank %}
+        <p>{{ compare_chart.content }}</p>
+      {% endif %}
+    </div>
+
+    <div class="ed_cro_pdp_compare_chart_table">
+      <div class="ed_cro_pdp_compare_chart_table__heading">
+        {% for item in heading_list %}
+          <h5 class="ed_cro_pdp_compare_chart_table__heading_item">{{ item }}</h5>
+        {% endfor %}
+      </div>
+
+      <div class="ed_cro_pdp_compare_chart_table__contents">
+        {%- for i in (1..2) -%}
+          {%- assign item_image_key = 'product_0' | append: i | append: '_image' -%}
+          {%- assign item_heading_key = 'product_0' | append: i | append: '_heading' -%}
+          {%- assign item_list_key = 'product_0' | append: i | append: '_content_list' -%}
+          {%- assign item_image = compare_chart[item_image_key] -%}
+          {%- assign item_heading = compare_chart[item_heading_key] -%}
+          {%- assign item_list = compare_chart[item_list_key].value -%}
+
+          <div class="ed_cro_pdp_compare_chart_table__item">
+            {%- if item_image != blank -%}
+              {{-
+                item_image
+                | image_url: width: item_image.width
+                | image_tag: sizes: '100vw', widths: '200, 250, 300, 350, 400, 500,', alt: item_image.alt
+              -}}
+            {%- endif -%}
+
+            <h4 class="ed_cro_pdp_compare_chart_table__item_heading">{{ item_heading }}</h4>
+            <div class="ed_cro_pdp_compare_chart_table__item_content">
+              {% for item in item_list %}
+                <p class="ed_cro_pdp_compare_chart_table__item_text">{{ item }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+Step: 4
+Go to product form snippet: snippets/product-form.liquid (or your theme's equivalent)
+Paste this code:
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'cro_compare_chart' -%}
+          {% render 'ed-cro-pdp-compare-chart', product: product, block: block %}
+    {%- endcase -%}
+  {%- endfor -%}    
+
+
+
+Final steps (Assign and test):
+1. Assign to a product:
+   - Go to Products > open a product.
+   - In the Metafields section, find "CRO | PDP | Compare chart" and select the metaobject entry you created.
+   - Save the product.
+2. Test on the duplicate theme:
+   - In Online Store > Themes, click Actions > Preview on your duplicate.
+   - Open the product you assigned and verify the compare chart appears.
+3. Publish when ready:
+   - When everything looks good, click Actions > Publish on the duplicate theme.
+
+Troubleshooting:
+- Chart not visible: Ensure the product metafield is set and the block was added in the correct product section/snippet as described in the steps above.
+- Empty rows/text: Make sure the Metaobject fields (title, content, headings, lists) are filled.
+- Cannot find files: Use the search bar in Edit code to look for "product-form" or "main-product".
+- "Mixed reference" not available: Use "Reference" > "One CRO | PDP | Compare chart" instead.

@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has only a title ('Define new services') with no description, comments, code, or screenshots. It reads as a planning/to-do task, not a reusable CRO element, and there is no UI or spec to document."}, "in": 70, "out": 81}

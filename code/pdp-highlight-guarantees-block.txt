@@ -1,0 +1,473 @@
+IMPORTANT: Please complete Step: 0 before editing your theme.
+
+Step: 0
+Safety first: duplicate your theme (works for any Shopify theme)
+- In Shopify admin, go to Online Store > Themes.
+- On your current live theme, click ... (or Actions) > Duplicate.
+- A copy appears under Theme library. Click the name to rename (e.g., "CRO setup - Draft").
+- Work on the duplicate only: click Actions > Edit code.
+- Use Actions > Preview on the duplicate to test changes safely.
+- Publish the duplicate only after you verify everything works.
+
+Theme-agnostic notes for finding files
+- Product section file: commonly sections/main-product.liquid (may be sections/product-main.liquid, sections/product.liquid, or similar).
+- Product form snippet: commonly snippets/product-form.liquid (may be snippets/main-product-form.liquid or similar).
+- If unsure, in Edit code use the search bar to find "product-form", "add to cart", or "Buy buttons".
+
+Step: 1
+Go to product section file: sections/main-product.liquid (or your theme's equivalent)
+Add new block for CRO | Highlight GTD
+
+Where to paste (simple, non‑developer steps):
+- In Shopify admin, open Online Store > Themes > Actions > Edit code.
+- Open sections/main-product.liquid (or your product section file).
+- Press Cmd+F (Ctrl+F on Windows) and search for: {% schema %}
+- In the schema area, find the "blocks": [ ... ] list.
+  - If you see other items inside this list, add a comma at the end of the previous item before pasting.
+  - If you do not see a "blocks" list, you can create one under the schema root and paste the code below inside it.
+- Now paste the code below inside the blocks list.
+- Click Save.
+
+Add the block in the Theme Editor:
+- Go to Online Store > Themes > Customize.
+- Open your Product template.
+- In the left sidebar, select your product section and click Add block.
+- Choose "CRO | Highlight GTD" and position it where you want. Click Save.
+
+Paste this code:
+{
+    "name": "CRO | Highlight GTD",
+    "type": "cro_highlight_guarantees",
+    "limit": 1,
+    "settings": [
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "rgba(0,0,0,0)"
+    },
+    {
+        "type": "color",
+        "id": "background",
+        "label": "Background",
+        "default": "#ffffff"
+    },
+    {
+        "type": "range",
+        "id": "corner_radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 6
+    },
+    {
+        "type": "checkbox",
+        "id": "show_shadow",
+        "label": "Show shadow",
+        "default": true
+    },
+    {
+        "type": "range",
+        "id": "space_top",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "label": "Top space",
+        "default": 16
+    },
+    {
+        "type": "range",
+        "id": "space_bottom",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "label": "Bottom space",
+        "default": 16
+    },
+    {
+        "type": "header",
+        "content": "Thumbnail"
+    },
+    {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+    },
+    {
+        "type": "select",
+        "id": "image_size",
+        "label": "Size",
+        "options": [
+        {
+            "value": "default",
+            "label": "Default"
+        },
+        {
+            "value": "small",
+            "label": "Small"
+        },
+        {
+            "value": "medium",
+            "label": "Medium"
+        },
+        {
+            "value": "large",
+            "label": "Large"
+        }
+        ],
+        "default": "default",
+        "info": "Position: Top (Required)"
+    },
+    {
+        "type": "select",
+        "id": "image_position",
+        "label": "Position",
+        "options": [
+        {
+            "value": "top",
+            "label": "Top"
+        },
+        {
+            "value": "left",
+            "label": "Left"
+        },
+        {
+            "value": "right",
+            "label": "Right"
+        }
+        ],
+        "default": "top"
+    },
+    {
+        "type": "range",
+        "id": "thumbnail_radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 6
+    },
+    {
+        "type": "header",
+        "content": "Main"
+    },
+    {
+        "type": "inline_richtext",
+        "id": "heading",
+        "label": "Heading",
+        "default": "365-Tage-Geld-zurück-Garantie!"
+    },
+    {
+        "type": "range",
+        "id": "heading_size",
+        "min": 14,
+        "max": 26,
+        "step": 1,
+        "unit": "px",
+        "label": "Heading size",
+        "default": 20
+    },
+    {
+        "type": "richtext",
+        "id": "content",
+        "label": "Content",
+        "default": "<p>\"Weil wir zu 100 % hinter der Qualität unserer Produkte stehen.\" Gründer Health Routine</p>"
+    },
+    {
+        "type": "range",
+        "id": "content_size",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Content size",
+        "default": 14
+    },
+    {
+        "type": "header",
+        "content": "Footer"
+    },
+    {
+        "type": "range",
+        "id": "footer_text_size",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Text size",
+        "default": 14
+    },
+    {
+        "type": "color",
+        "id": "footer_text_color",
+        "label": "Text color",
+        "default": "#ffffff"
+    },
+    {
+        "type": "color",
+        "id": "footer_background",
+        "label": "Background",
+        "default": "#8782B9"
+    },
+    {
+        "type": "inline_richtext",
+        "id": "footer_text",
+        "label": "Text",
+        "default": "300.000 glückliche Kunden"
+    },
+    {
+        "type": "text",
+        "id": "footer_link_text",
+        "label": "Link text",
+        "default": "Bewertungen ansehen"
+    },
+    {
+        "type": "url",
+        "id": "footer_link_url",
+        "label": "Link URL"
+    },
+    {
+        "type": "checkbox",
+        "id": "open_in_new_tab",
+        "label": "Open in new tab",
+        "default": false
+    }
+    ]
+},
+
+Step: 2
+Create a new snippet (in Snippets folder): cro_highlight_guarantees.liquid
+Paste this code:
+<style>
+    {%- if block.settings.text_color == 'rgba(0,0,0,0)' -%}
+    {%- assign text_color = settings.text_color -%}
+    {%- else -%}
+        {%- assign text_color = block.settings.text_color -%}
+    {%- endif -%}
+    #shopify-section-{{ section.id }} {
+        --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+    }
+
+  .cro_highlight_guarantees {
+    color: rgb(var(--text-color));
+    background: {{ block.settings.background }};
+    margin-top: {{ block.settings.space_top -}}px;
+    margin-bottom: {{ block.settings.space_bottom -}}px;
+    border-radius: {{ block.settings.corner_radius }}px;
+    overflow: hidden;
+    {%- if block.settings.show_shadow %}
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    {% endif -%}
+  }
+  .cro_hl_gtd__thumbnail {
+    border-radius: {{ block.settings.thumbnail_radius -}}px;
+    overflow: hidden;
+    position: relative;
+  }
+  .cro_hl_gtd__thumbnail svg {
+    width: 100%;
+    height: auto;
+    background: #f5f5f5;
+    border-radius: {{ block.settings.thumbnail_radius -}}px;
+  }
+  .cro_hl_gtd__thumbnail.top svg.default {
+    max-height: 170px;
+  }
+  .cro_hl_gtd__thumbnail.top img.small,
+  .cro_hl_gtd__thumbnail.top svg.small {
+      height: 120px;
+      object-fit: cover;
+  }
+
+  .cro_hl_gtd__thumbnail.top img.medium,
+  .cro_hl_gtd__thumbnail.top svg.medium {
+      height: 180px;
+      object-fit: cover;
+  }
+
+  .cro_hl_gtd__thumbnail.top img.large,
+  .cro_hl_gtd__thumbnail.top svg.large {
+      height: 260px;
+      object-fit: cover;
+  }
+
+
+  .cro_hl_gtd__main {
+    padding: 20px 20px;
+    background-color:{{ block.settings.background }};
+    color: rgb(var(--text-color));
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .cro_hl_gtd_heading {
+    margin: 0;
+    font-size: {{ block.settings.heading_size -}}px;
+    line-height: normal;
+  }
+  .cro_highlight_guarantees:not(.hl_gtd_vertical) .cro_hl_gtd_heading {
+    flex: 1 0 40%;
+  }
+
+  .cro_hl_gtd_content {
+    font-size: {{ block.settings.content_size -}}px;
+    line-height: normal;
+  }
+
+  .cro_hl_gtd__footer {
+    background-color: {{ block.settings.footer_background }};
+    color: {{ block.settings.footer_text_color }};
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: {{ block.settings.footer_text_size -}}px;
+  }
+
+  .cro_hl_gtd__footer p {
+    margin: 0;
+    line-height: normal;
+  }
+
+  .cro_hl_gtd__footer a {
+    text-decoration: underline;
+    text-underline-position: from-font;
+    line-height: normal;
+  }
+
+  .cro_highlight_guarantees.hl_gtd_vertical {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3);
+  }
+
+  .cro_highlight_guarantees.hl_gtd_vertical .cro_hl_gtd__thumbnail {
+    flex: 1 0 40%;
+  }
+
+  .cro_highlight_guarantees.hl_gtd_vertical .cro_hl_gtd__thumbnail img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .cro_highlight_guarantees.hl_gtd_vertical .cro_hl_gtd__thumbnail svg {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .hl_gtd_vertical .cro_hl_gtd__main {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .hl_gtd_vertical .cro_hl_gtd__footer {
+    padding: 10px 16px;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .hl_gtd_vertical .cro_hl_gtd__footer a {
+    flex: 1 0 50%;
+  }
+
+  .cro_hl_gtd__thumbnail.left {
+    border-radius: {{ block.settings.corner_radius }}px 0 0 {{ block.settings.corner_radius }}px;
+  }
+
+  .cro_hl_gtd__thumbnail.right {
+    border-radius: 0 {{ block.settings.corner_radius }}px {{ block.settings.corner_radius }}px 0;
+    order: 2;
+  }
+</style>
+
+{% assign vertical_style = false %}
+{% if block.settings.image_position == 'left' or block.settings.image_position == 'right' %}
+  {% assign vertical_style = true %}
+{% endif %}
+
+<div class="cro_highlight_guarantees {% if vertical_style %} hl_gtd_vertical{% endif %}">
+  <div class="cro_hl_gtd__thumbnail {{ block.settings.image_position }}">
+    {%- if block.settings.image != blank -%}
+      {{-
+        block.settings.image
+        | image_url: width: block.settings.image.width
+        | image_tag:
+          sizes: '100vw',
+          widths: '500,650,750,900',
+          alt: block.settings.image.alt,
+          class: block.settings.image_size
+      -}}
+    {%- else -%}
+      {{ 'image' | placeholder_svg_tag: block.settings.image_size }}
+    {%- endif -%}
+  </div>
+  <div class="cro_hl_gtd__into_wrap">
+    <div class="cro_hl_gtd__main">
+      {% if block.settings.heading != blank %}
+        <h3 class="cro_hl_gtd_heading">{{ block.settings.heading }}</h3>
+      {% endif %}
+      <div class="cro_hl_gtd_content">
+        {{ block.settings.content }}
+      </div>
+    </div>
+
+    <div class="cro_hl_gtd__footer">
+      {% if block.settings.footer_text != blank %}
+        <p>{{ block.settings.footer_text }}</p>
+      {% endif %}
+
+      {% if block.settings.footer_link_text %}
+        <a
+          href="{{ block.settings.footer_link_url }}"
+          {% if block.settings.open_in_new_tab %}
+            target="_blank"
+          {% endif %}
+        >
+          {{ block.settings.footer_link_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+
+
+Step: 3
+Go to product form snippet: snippets/product-form.liquid (or your theme's equivalent)
+Paste this code:
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'cro_highlight_guarantees' -%}
+        {% render 'cro_highlight_guarantees', product: product, block: block %}
+      {%- endcase -%}
+  {%- endfor -%}
+
+
+Final steps (Test and publish):
+1. Test on the duplicate theme:
+   - In Online Store > Themes, click Actions > Preview on your duplicate.
+   - Open a product page and verify the highlight block appears and is styled.
+2. Publish when ready:
+   - When everything looks good, click Actions > Publish on the duplicate theme.
+
+Troubleshooting:
+- Block not visible: Ensure the block is added/enabled in the product section and the snippet render has been added to the product form snippet.
+- Can't find where to paste: Search for {% schema %} and locate the "blocks" list; paste the code as a new item inside the list, adding a comma after the previous item if needed. Save and refresh the Theme Editor.
+- JSON error when saving: Check for missing or extra commas and matching braces. Each block item should be separated by a comma, except the last one.
+- Image not showing: Upload/select an image in the block settings or use the placeholder.
+- Styling off: Adjust block settings (sizes, colors, positions) in the Theme Editor.

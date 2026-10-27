@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket 'Artikelpreise' (Item Prices) has an empty description and no code or screenshots. Its only comment is a task note asking a colleague to review product prices in a Google Sheet and give feedback on which prices to adjust. It is a pricing review/scheduling task, not a reusable CRO element."}, "in": 269, "out": 117}

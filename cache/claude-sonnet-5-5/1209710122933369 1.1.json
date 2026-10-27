@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "Ticket '1.1' has no description, no custom fields, no code and no screenshots. Its only comment is a feedback note suggesting a toggle for the auto-caps heading style, and it does not describe a reusable CRO element, so there is no spec to record."}, "in": 177, "out": 98}

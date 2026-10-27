@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "Ticket 'Abrechnung' (German for 'billing/invoicing') has no description, comments, code, or screenshots. It looks like an administrative or billing placeholder rather than a CRO element, so no reusable element spec can be extracted."}, "in": 63, "out": 95}

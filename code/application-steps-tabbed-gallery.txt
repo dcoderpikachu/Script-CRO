@@ -1,0 +1,597 @@
+Step: 1
+Create a section: ed-cro-application-steps.liquid
+Paste this code:
+
+<style>
+    #shopify-section-{{ section.id }} {
+        {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+            {%- assign heading_color = settings.heading_color -%}
+            {%- assign text_color = settings.text_color -%}
+          {%- else -%}
+            {%- assign heading_color = section.settings.text_color -%}
+            {%- assign text_color = section.settings.text_color -%}
+        {%- endif -%}
+
+        {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+            {%- assign section_background = settings.background -%}
+          {%- else -%}
+            {%- assign section_background = section.settings.background -%}
+        {%- endif %}
+        --space-top: {{ section.settings.space_top -}}px;
+        --space-bottom: {{ section.settings.space_bottom -}}px;
+        --space-left: {{ section.settings.space_left -}}px;
+        --space-right: {{ section.settings.space_right -}}px;
+        --space-top-mobile: {{ section.settings.space_top_mobile -}}px;
+        --space-bottom-mobile: {{ section.settings.space_bottom_mobile -}}px;
+        --space-left-mobile: {{ section.settings.space_left_mobile -}}px;
+        --space-right-mobile: {{ section.settings.space_right_mobile -}}px;
+        --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+        --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+        {%- if section.settings.enable_custom_max_width -%}
+          --section-max-width: {{ section.settings.custom_max_width -}}px;  
+        {% endif %}
+
+        /* Application variable */
+        --application-max-width: {{ section.settings.application_max_width }}%;
+        --application-image-ratio: {{ section.settings.application_image_ratio }};
+        {%- if section.settings.default_color != 'rgba(0,0,0,0)' %}
+            --application-default-color: {{ section.settings.default_color }};
+        {%- endif -%}
+        {%- if section.settings.active_color != 'rgba(0,0,0,0)' %}
+            --application-active-color: {{ section.settings.active_color }};
+        {%- endif -%}
+        {%- if section.settings.heading_color != 'rgba(0,0,0,0)' %}
+            --application-heading-color: {{ section.settings.heading_color }};
+        {%- endif -%}
+        {%- if section.settings.text_color != 'rgba(0,0,0,0)' %}
+            --application-content-color: {{ section.settings.text_color }};
+        {%- endif -%}
+        --application-gap: {{ section.settings.application_gap_items }}px;
+        --application-number-size: {{ section.settings.application_number_size }}px;
+        --application-heading-size: {{ section.settings.application_heading_size }}px;
+        {%- if section.settings.application_heading_uppercase == true -%}
+            --application-heading-transform: uppercase;
+        {%- endif -%}
+        --application-content-size: {{ section.settings.application_content_size }}px;
+        --application-content-margin-tb: 26px;
+    }
+
+    {% if section.settings.custom_font_family %}
+        {% assign font_url = section.settings.font_family | font_url %}
+        @font-face {
+            font-family: '{{ section.settings.font_family.family }}';
+            src: url({{ font_url }}) format('woff2');
+            font-weight: {{ section.settings.font_family.weight }};
+            font-style: normal;
+        }
+
+        #shopify-section-{{ section.id }} {
+            --application-font-family: {{ section.settings.font_family.family }};
+            --application-font-weight: {{ section.settings.font_family.weight }};
+        }
+    {% endif %}
+
+    @media (max-width: 767px) {
+        #shopify-section-{{ section.id }} {
+            --application-gap: {{ section.settings.application_gap_items_mobile }}px;
+            --application-number-size: {{ section.settings.application_number_size_mobile }}px;
+            --application-heading-size: {{ section.settings.application_heading_size_mobile }}px;
+            --application-content-size: {{ section.settings.application_content_size_mobile }}px;
+            --application-content-margin-tb: 10px;
+        }    
+    }
+
+    #shopify-section-{{ section.id }} {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        color: rgb(var(--text-color));
+        background: rgb(var(--section-background));
+        max-width: var(--section-max-width);
+    }
+    @media (min-width: 1000px) {
+        #shopify-section-{{ section.id }} {
+            padding-top: var(--space-top);
+            padding-bottom: var(--space-bottom);
+            padding-left: var(--space-left);
+            padding-right: var(--space-right);
+        }
+    }
+
+    @media (max-width: 999px) {
+        #shopify-section-{{ section.id }} {
+            padding-top: var(--space-top-mobile);
+            padding-bottom: var(--space-bottom-mobile);
+            padding-left: var(--space-left-mobile);
+            padding-right: var(--space-right-mobile);
+        }
+    }
+
+    /* ========= Application Steps CSS ========== */
+    @media (min-width: 1199px) {
+        .ed_application_steps_wrapper.ed_application_tabs {
+            max-width: var(--application-max-width);
+            margin: 0 auto;
+        }
+    }
+    .ed_application__tab .ed_application_step_img img {
+        width: 100%;
+        object-fit: cover;
+    }
+    .ed_application__tab {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: var(--application-gap);
+    }
+    .ed_application__tab .ed_application_step_img {
+        display: block;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 24px;
+        width: 100%;
+    }
+    .ed_application__tab .ed_application_step_img img {
+        aspect-ratio: var(--application-image-ratio);
+        display: flex;
+    }
+    .ed_application__tab .ed_application_step_img svg {
+        aspect-ratio: var(--application-image-ratio);
+        background: #F5F5F5;
+    }
+    .ed_application__tab .ed_application_step_img span {
+        position: absolute;
+        bottom: -30px;
+        left: 0;
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding-bottom: 10px;
+        color: var(--application-default-color);
+        font-family: var(--application-font-family);
+        font-weight: var(--application-font-weight);
+        font-size: var(--application-number-size);
+        font-style: normal;
+        line-height: 1;
+        text-transform: var(--application-heading-transform);
+        z-index: 1;
+    }
+    .ed_application__tab .ed_application_step_img img:after {
+        position: absolute;
+    }
+    .ed_application__tab .ed_application_step_img:after {
+        background: linear-gradient(180deg, #fff0 50%, rgb(var(--section-background)));
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        z-index: 0;
+        top: unset;
+    }
+    .ed_application__tab .ed_application_step_img.active span {
+        color: var(--application-active-color);
+    }
+    .ed_application_tab_content {
+        margin: var(--application-content-margin-tb) 0;
+    }
+    .ed_application_tab_content h2 {
+        color: var(--application-heading-color);
+        font-size: var(--application-heading-size);
+        font-style: normal;
+        font-family: var(--application-font-family);
+        font-weight: var(--application-font-weight);
+        line-height: normal;
+        text-transform: var(--application-heading-transform);
+        margin-bottom: 14px;
+    }
+    .ed_application_tab_content .ed_application_step--content * {
+        color: var(--application-content-color);
+        font-size: var(--application-content-size);
+        font-style: normal;
+        font-family: var(--application-font-family);
+        font-weight: normal;
+        line-height: normal;
+    }
+    .ed_application_steps_wrapper.ed_application_tabs progress {
+        display: block;
+        width: 100%;
+        height: 7px;
+        margin-top: 7px;
+    }
+    .ed_application_steps_wrapper.ed_application_tabs progress::-webkit-progress-bar {
+        background-color: var(--application-default-color);
+        border-radius: 50px;
+    }
+    .ed_application_steps_wrapper.ed_application_tabs progress::-webkit-progress-value,
+    .ed_application_steps_wrapper.ed_application_tabs progress {
+        background-color: var(--application-active-color) !important;
+        border-radius: 50px;
+    }
+    .ed_application_steps_wrapper:not(:has(.ed_application_step_img)) {
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        .ed_application__tab .ed_application_step_img {
+            margin-bottom: 10px;
+        }
+        .ed_application__tab .ed_application_step_img span {
+            bottom: -20px;
+        }
+    }
+    
+    /* ========= END:Application Steps CSS ========== */
+</style>
+
+
+<div class="{{ section.settings.section_width }}">
+    <div class="ed_application_steps_wrapper ed_application_tabs">
+        <div class="ed_application__tab">
+            {%- for block in section.blocks -%}
+                <button type="button" class="ed_application_step_img {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }}>
+                    {%- if block.settings.image != blank -%}
+                        {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: '100vw', widths: '250,350,450,750', alt: block.settings.image.alt -}}
+                    {%- else -%}
+                        {{ 'image' | placeholder_svg_tag }}
+                    {%- endif -%}
+                    {%- if section.settings.application_show_number -%}
+                        
+                        <span>{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                    {%- endif -%}
+                </button>
+            {%- endfor -%}
+        </div>
+
+        <progress id="ed_application_progress" value="25" max="100"> 25% </progress>
+        <div class="ed_application_tab_content">
+            {%- for block in section.blocks %}
+                <div class="ed_application_step" style="{% unless forloop.first %} display: none;{% endunless %}" {{ block.shopify_attributes }}>
+                    <h2>{{ block.settings.heading }}</h2>
+                    
+                    <div class="ed_application_step--content">
+                        {{ block.settings.content }}
+                    </div>
+                </div>
+            {% endfor -%}
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function initApplicationTabs(container) {
+        const buttons = container.querySelectorAll(".ed_application_step_img");
+        const steps = container.querySelectorAll(".ed_application_step");
+        const progress = container.querySelector("progress");
+      
+        if (!buttons.length || !steps.length || !progress) return;
+      
+        buttons.forEach((btn, index) => {
+          btn.addEventListener("click", () => {
+            buttons.forEach(b => b.classList.remove("active"));
+            steps.forEach(step => step.style.display = "none");
+      
+            btn.classList.add("active");
+            steps[index].style.display = "block";
+            progress.value = ((index + 1) / buttons.length) * 100;
+          });
+        });
+    }
+      
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".ed_application_steps_wrapper").forEach(initApplicationTabs);
+    });
+    
+    if (Shopify.designMode) {
+        document.addEventListener('shopify:section:load', function (e) {
+            const container = e.target.querySelector('.ed_application_steps_wrapper');
+            if (container) initApplicationTabs(container);
+        });
+    } 
+</script>
+
+
+{% schema %}
+    {
+        "name": "CRO | Application steps",
+        "class": "ed-cro-application-steps",
+        "settings": [
+            {
+                "type": "range",
+                "id": "space_top",
+                "min": 0,
+                "max": 200,
+                "step": 5,
+                "unit": "px",
+                "label": "Top sapce",
+                "default": 100
+            },
+            {
+                "type": "range",
+                "id": "space_bottom",
+                "min": 0,
+                "max": 200,
+                "step": 5,
+                "unit": "px",
+                "label": "Bottom space",
+                "default": 100
+            },
+            {
+                "type": "color",
+                "id": "background",
+                "label": "Background",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "select",
+                "id": "section_width",
+                "label": "Section width",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "Container"
+                    },
+                    {
+                        "value": "full",
+                        "label": "Full"
+                    },
+                ],
+                "default": "container"
+            },
+            {
+                "type": "range",
+                "id": "application_max_width",
+                "min": 25,
+                "max": 100,
+                "step": 5,
+                "unit": "%",
+                "label": "Max-width",
+                "default": 50
+            },
+            {
+                "type": "checkbox",
+                "id": "application_show_number",
+                "label": "Show number",
+                "default": true
+            },
+            {
+                "type": "select",
+                "id": "application_image_ratio",
+                "label": "Image ratio",
+                "options": [
+                    
+                    {
+                        "value": "1 / 1",
+                        "label": " 1 / 1"
+                    },
+                    {
+                        "value": "2 / 3",
+                        "label": " 2 / 3"
+                    },
+                    {
+                        "value": "16 / 9",
+                        "label": " 16 / 9"
+                    },
+                    {
+                        "value": "9 / 16",
+                        "label": " 9 / 16"
+                    }
+                ],
+                "default": "2 / 3"
+            },
+            {
+                "type": "color",
+                "id": "default_color",
+                "label": "Default color",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "color",
+                "id": "active_color",
+                "label": "Active color",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "color",
+                "id": "heading_color",
+                "label": "Heading color",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "color",
+                "id": "text_color",
+                "label": "Content color",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "range",
+                "id": "application_gap_items",
+                "min": 0,
+                "max": 64,
+                "step": 1,
+                "unit": "px",
+                "label": "Gap items",
+                "default": 16
+            },
+            {
+                "type": "checkbox",
+                "id": "custom_font_family",
+                "label": "custom font-family",
+                "default": false
+            },
+            {
+                "type": "font_picker",
+                "id": "font_family",
+                "label": "Font-family",
+                "default": "inter_n4"
+            },
+            {
+                "type": "range",
+                "id": "application_number_size",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "px",
+                "label": "Number size",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "application_heading_size",
+                "min": 0,
+                "max": 36,
+                "step": 1,
+                "unit": "px",
+                "label": "Heading size",
+                "default": 20
+            },
+            {
+                "type": "checkbox",
+                "id": "application_heading_uppercase",
+                "label": "Heading uppercase?",
+                "default": true
+            },
+            {
+                "type": "range",
+                "id": "application_content_size",
+                "min": 0,
+                "max": 30,
+                "step": 1,
+                "unit": "px",
+                "label": "Content size",
+                "default": 20
+            },
+            {
+                "type": "header",
+                "content": "Mobile settings",
+            },
+            {
+                "type": "range",
+                "id": "space_top_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "px",
+                "label": "Top space (mobile)",
+                "default": 50
+            },
+            {
+                "type": "range",
+                "id": "space_bottom_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "px",
+                "label": "Bottom space (mobile)",
+                "default": 50
+            }, 
+            {
+                "type": "range",
+                "id": "application_gap_items_mobile",
+                "min": 0,
+                "max": 32,
+                "step": 1,
+                "unit": "px",
+                "label": "Gap items (mobile)",
+                "default": 8
+            },
+            {
+                "type": "range",
+                "id": "application_number_size_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "unit": "px",
+                "label": "Number size (mobile)",
+                "default": 20
+            },
+            {
+                "type": "range",
+                "id": "application_heading_size_mobile",
+                "min": 0,
+                "max": 36,
+                "step": 1,
+                "unit": "px",
+                "label": "Heading size (mobile)",
+                "default": 13
+            },
+            {
+                "type": "range",
+                "id": "application_content_size_mobile",
+                "min": 0,
+                "max": 30,
+                "step": 1,
+                "unit": "px",
+                "label": "Content size (mobile)",
+                "default": 13
+            },        
+        ],
+        "blocks": [
+            {
+                "type": "item",
+                "name": "Item",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "type": "inline_richtext",
+                        "id": "heading",
+                        "label": "Heading",
+                        "default": "Heading"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "content",
+                        "label": "Content",
+                        "default": "<p>Lorem ipsum dolor sit amet lorem ipsum sit.</p>"
+                    }
+                ]
+            },    
+        ],
+        "presets": [
+            {
+                "name": "CRO | Application steps",
+                "settings": {
+                    "default_color": "#D6CBC2",
+                    "active_color": "#536963",
+                    "heading_color": "#000000",
+                    "text_color": "#828282",
+                    "background": "#F5F5F5",
+                },
+                "blocks": [
+                    {
+                        "type": "item",
+                        "settings": {
+                            "heading": "Title 01"
+                        }
+                    },
+                    {
+                        "type": "item",
+                        "settings": {
+                            "heading": "Title 02"
+                        }
+                    },
+                    {
+                        "type": "item",
+                        "settings": {
+                            "heading": "Title 03"
+                        }
+                    },
+                    {
+                        "type": "item",
+                        "settings": {
+                            "heading": "Title 04"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

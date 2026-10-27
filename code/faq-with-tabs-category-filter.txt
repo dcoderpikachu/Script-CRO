@@ -1,0 +1,1795 @@
+Step: 1
+Create a snippet: ed-cro-faq-section-two.liquid
+Paste this code: 
+
+<style>
+    :root {
+        --space-top: 100px;
+        --space-bottom: 100px;
+        --tab-text-size: 14px;
+        --content-title-size: 14px;
+        --content-text-size: 14px;
+        --items-alignment: center;
+        --thumbnail-width: 40%;
+        --thumbnail-corner-radius: 8px;
+        --content-border-color: #EFECEC;
+        --tab-btn-active: #ffffff;
+        --tab-btn-active-background: #000000;
+        --content-title-size: 14px;
+        --content-text-size: 14px;
+    }
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign heading_color = settings.heading_color -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign heading_color = section.settings.text_color -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      {%- if section.settings.content_background == 'rgba(0,0,0,0)' -%}
+          {%- assign content_background = settings.background -%}
+        {%- else -%}
+          {%- assign content_background = section.settings.content_background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+      --items-alignment: {{ section.settings.items_alignment -}};
+      --thumbnail-width: {{ section.settings.thumbnail_width -}}%;
+      --thumbnail-corner-radius: {{ section.settings.thumbnail_corner_radius -}}px;
+      --content-box-shadow: none;
+      {% if section.settings.content_box_shadow %}
+        --content-box-shadow: 0 73px 29px #00000003, 0 41px 25px #00000005, 0 18px 18px #00000008, 0 5px 10px #0000000a, 0 0 #0000000a;
+      {% endif %}
+      --content-corner-radius: {{ section.settings.content_corner_radius -}}px;
+      --content-padding: 30px 20px 10px;
+      --content-border-color: {{ section.settings.content_border_color }};
+      --tab-btn-active: {{ section.settings.content_active_text }};
+      --tab-btn-active-background: {{ section.settings.content_active_btn }};
+      --tab-text-size: {{ section.settings.tab_text_size_mobile -}}px;
+      --content-title-size: {{ section.settings.content_title_size_mobile -}}px;
+      --content-text-size: {{ section.settings.content_content_size_mobile -}}px;
+
+      --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      --content-background: {{ content_background.red }}, {{ content_background.green }}, {{ content_background.blue }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+
+
+
+  }
+
+  @media (min-width: 1000px) {
+    #shopify-section-{{ section.id }} {
+        --space-top: {{ section.settings.space_top -}}px;
+        --space-bottom: {{ section.settings.space_bottom -}}px;
+        --content-padding: 40px 30px 20px;
+        --tab-text-size: {{ section.settings.tab_text_size -}}px;
+        --content-title-size: {{ section.settings.content_title_size -}}px;
+        --content-text-size: {{ section.settings.content_content_size -}}px;
+    }
+  }
+
+  {%- for block in section.blocks -%}
+    {% case block.type %}
+        {% when 'heading' %}
+            {% if block.settings.custom_font_family %}
+                {%- assign font_url = block.settings.font_family | font_url -%}
+                @font-face {
+                    font-family: '{{ block.settings.font_family.family }}';
+                    src: url({{ font_url }}) format('woff2');
+                    font-weight: {{ block.settings.font_family.weight }};
+                    font-style: normal;
+                }
+            {% endif %}
+
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ section_color }};
+                {% else %}
+                    --heading-color: {{ settings.heading_color }};
+                {% endif %}
+
+                {% if block.settings.enable_custom_max_width %}
+                    --heading-max-width: {{ block.settings.custom_max_width -}}px;
+                    {% assign alignment = block.settings.alignment %}
+                    {%- if alignment == 'left'  -%}
+                        --heading-margin-left: 0;
+                        --heading-margin-right: auto;
+                    {%- elsif alignment == 'right'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: 0;
+                    {%- elsif alignment == 'center'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: auto;
+                    {%- endif -%}
+                {% endif %}
+
+                --heading-weight: bold;
+                {% if block.settings.custom_font_family %}
+                    --heading-family: {{ block.settings.font_family.family }};
+                    --heading-weight: {{ block.settings.font_family.weight }};
+                {% endif %}
+
+                --heading-alignment: {{ block.settings.alignment }};
+                --heading-transform: {{ block.settings.text_transform }};
+                --heading-font-size: {{ block.settings.font_size -}}px;
+                --heading-line-height: {{ block.settings.line_height }};
+                --heading-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --heading-space-top: {{ block.settings.space_top -}}px;
+                --heading-space-bottom: {{ block.settings.space_bottom -}}px;
+                --heading-alignment-mobile: {{ block.settings.alignment_mobile }};
+                --heading-font-size-mobile: {{ block.settings.font_size_mobile -}}px;
+                --heading-line-height-mobile: {{ block.settings.line_height_mobile }};
+                --heading-letter-spacing-mobile: {{ block.settings.letter_spacing_mobile -}}px;
+                --heading-space-top-mobile: {{ block.settings.space_top_mobile -}}px;
+                --heading-space-bottom-mobile: {{ block.settings.space_bottom_mobile -}}px;
+            }
+        {% when 'content' %}
+            {% if block.settings.custom_font_family %}
+                {% assign font_url = block.settings.font_family | font_url %}
+                @font-face {
+                    font-family: '{{ block.settings.font_family.family }}';
+                    src: url({{ font_url }}) format('woff2');
+                    font-weight: {{ block.settings.font_family.weight }};
+                    font-style: normal;
+                }
+            {% endif %}
+
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --content-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --content-color: {{ section_color }};
+                {% else %}
+                    --content-color: {{ settings.heading_color }};
+                {% endif %}
+
+                {% if block.settings.enable_custom_max_width %}
+                    --content-max-width: {{ block.settings.custom_max_width -}}px;
+                    {% assign alignment = block.settings.alignment %}
+                    {%- if alignment == 'left'  -%}
+                        --content-margin-left: 0;
+                        --content-margin-right: auto;
+                    {%- elsif alignment == 'right'  -%}
+                        --content-margin-left: auto;
+                        --content-margin-right: 0;
+                    {%- elsif alignment == 'center'  -%}
+                        --content-margin-left: auto;
+                        --content-margin-right: auto;
+                    {%- endif -%}
+                {% endif %}
+
+                {% if block.settings.custom_font_family %}
+                    --content-family: {{ block.settings.font_family.family }};
+                    --content-weight: {{ block.settings.font_family.weight }};
+                {% endif %}
+                --content-alignment: {{ block.settings.alignment }};
+                --content-font-size: {{ block.settings.font_size -}}px;
+                --content-line-height: {{ block.settings.line_height }};
+                --content-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --content-space-top: {{ block.settings.space_top -}}px;
+                --content-space-bottom: {{ block.settings.space_bottom -}}px;
+                --content-alignment-mobile: {{ block.settings.alignment_mobile }};
+                --content-font-size-mobile: {{ block.settings.font_size_mobile -}}px;
+                --content-line-height-mobile: {{ block.settings.line_height_mobile }};
+                --content-letter-spacing-mobile: {{ block.settings.letter_spacing_mobile -}}px;
+                --content-space-top-mobile: {{ block.settings.space_top_mobile -}}px;
+                --content-space-bottom-mobile: {{ block.settings.space_bottom_mobile -}}px;
+            }
+    {% endcase %}
+  {%- endfor -%}
+</style>
+
+<style>
+  #shopify-section-{{ section.id }} {
+    display: block;
+    color: rgb(var(--text-color));
+    background: rgb(var(--section-background));
+    {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+        margin-top: var(--space-top);
+        margin-bottom: var(--space-bottom);
+    {%- else -%}
+        padding-top: var(--space-top);
+        padding-bottom: var(--space-bottom);
+    {%- endif -%}
+  }
+  #shopify-section-{{ section.id }} .cro_faq_with_tabs_section {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--section-max-width);
+  }
+  /* Header CSS */
+    .cro_richtext--header {
+        color: var(--heading-color);
+        font-family: var(--heading-family);
+        font-weight: var(--heading-weight);
+        text-align: var(--heading-alignment);
+        text-transform: var(--heading-transform);
+        font-size: var(--heading-font-size);
+        line-height: var(--heading-line-height);
+        letter-spacing: var(--heading-letter-spacing);
+        margin-top: var(--heading-space-top);
+        margin-bottom: var(--heading-space-bottom);
+    }
+    .cro_richtext--header-highlighted {
+        display: inline-block;
+        position: relative;
+        padding-bottom: 14px;
+    }
+    .cro_richtext--header-highlighted svg {
+        width: 100%;
+        height: 33%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+    @media (min-width: 768px) {
+        .cro_richtext--header {
+            max-width: var(--heading-max-width);
+            margin-left: var(--heading-margin-left);
+            margin-right: var(--heading-margin-right);
+        }
+    }
+    @media (max-width: 767px) {
+        .cro_richtext--header {
+            text-align: var(--heading-alignment-mobile);
+            font-size: var(--heading-font-size-mobile);
+            line-height: var(--heading-line-height-mobile);
+            letter-spacing: var(--heading-letter-spacing-mobile);
+            margin-top: var(--heading-space-top-mobile);
+            margin-bottom: var(--heading-space-bottom-mobile);
+        }
+    }
+    /* Content CSS */
+    .cro_richtext--content {
+        display: block;
+        text-align: var(--content-alignment);
+        margin-top: var(--content-space-top);
+        margin-bottom: var(--content-space-bottom);
+    }
+    .cro_richtext--content * {
+        color: var(--content-color);
+        font-family: var(--content-family);
+        font-weight: var(--content-weight);
+        font-size: var(--content-font-size);
+        line-height: var(--content-line-height);
+        letter-spacing: var(--content-letter-spacing);
+        margin: 0;
+    }
+    .cro_richtext--content * strong {
+        font-weight: bold;
+        font-size: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+    }
+    .cro_richtext--content * a {
+        color: var(--content-color);
+    }
+
+    @media (min-width: 768px) {
+        .cro_richtext--content {
+            max-width: var(--content-max-width);
+            margin-left: var(--content-margin-left);
+            margin-right: var(--content-margin-right);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .cro_richtext--content {
+            text-align: var(--content-alignment-mobile);
+            margin-top: var(--content-space-top-mobile);
+            margin-bottom: var(--content-space-bottom-mobile);
+        }
+        .cro_richtext--content * {
+            font-size: var(--content-font-size-mobile);
+            line-height: var(--content-line-height-mobile);
+            letter-spacing: var(--content-letter-spacing-mobile);
+        }
+    }
+  /* --------- CRO | FAQ With Tabs ----------- */
+
+  @media (min-width: 1000px) {
+     .cro_faq_with_tabs_section {
+       display: flex;
+       justify-content: center;
+       gap: 0;
+       align-items: var(--items-alignment);
+    }
+
+    .cro_faq_with_tabs__thumbnail {
+        flex: 1 1 var(--thumbnail-width);
+    }
+
+    .cro_faq_with_tabs__contents {
+        flex: 1 1 calc(100% - var(--thumbnail-width));
+    }
+    .cro_faq_with_tabs__thumbnail.pos-right {
+        order: 3;
+    }
+
+    .cro_faq_with_tabs__thumbnail.pos-left {
+        padding-right: 32px;
+        padding-left: 0;
+    }
+
+    .cro_faq_with_tabs__thumbnail.pos-right {
+        padding-left: 32px;
+        padding-right: 0;
+    }
+  }
+  @media (max-width: 999px) {
+     .cro_faq_with_tabs_section {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+  }
+  .cro_faq_with_tabs__thumbnail svg {
+    background: #f5f5f5;
+    border-radius: var(--thumbnail-corner-radius);
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+  }
+  .cro_faq_with_tabs__thumbnail img {
+    border-radius: var(--thumbnail-corner-radius);
+    width: 100%;
+    height: auto;
+  }
+
+  /* --- SKB Universal Multi-Tabs ----- */
+    skb-universal-tabs-wrap {
+        background: rgb(var(--content-background));
+        box-shadow: var(--content-box-shadow);
+        border-radius: var(--content-corner-radius);
+        padding: var(--content-padding);
+        display: block;
+        width: 100%;
+    }
+    .skb_tabs_wrap {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: var(--tab-text-size);
+        padding-bottom: 20px;
+    }
+    .skb_tabs {
+        display: flex;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding-bottom: 6px;
+    }
+    .skb-tabs-title {
+        padding-bottom: 6px;
+    }
+
+    .skb_tab {
+        padding: 1px 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        min-width: 50px;
+        margin-right: 10px;
+        border: 1px solid var(--content-border-color);
+        text-align: center;
+        -webkit-appearance: none;
+        appearance: none;
+        touch-action: manipulation;
+        min-width: fit-content;
+        user-select: none;
+    }
+
+    .skb_tab.skb_active {
+        background: var(--tab-btn-active-background);
+        color: var(--tab-btn-active);;
+        border: 1px solid var(--tab-btn-active-background);
+    }
+
+    .skb_tab_contents {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .skb_tab_content {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+    }
+
+    .skb_tab_content.skb_show {
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        visibility: visible;
+        position: relative;
+        pointer-events: auto;
+    }
+  /* --- END:SKB Universal Multi-Tabs ----- */
+
+
+  /* ------ SKB Universal Collapsible -------  */
+  .skb_tab_contents .ed-collapsible-toggle {
+    user-select: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    overflow: visible;
+    background: none;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+    gap: 8px;
+  }
+  ed-collapsible {
+    border-bottom: 1px solid var(--content-border-color);
+    display: block;
+  }
+
+  ed-collapsible-wrap ed-collapsible:last-child {
+    border-bottom: 0;
+  }
+  .ed-collapsible__content {
+    padding-right: 24px;
+    padding-bottom: 20px;
+  }
+  .ed-collapsible-toggle .heading {
+    margin: 0;
+    font-size: var(--content-title-size);
+  }
+  .ed-collapsible__content * {
+    font-size: var(--content-text-size);
+  }
+
+  .skb_tab_contents .ed-animated-arrow-down {
+    width: auto;
+    height: auto;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 500px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .skb_tab_contents .ed-collapsible-toggle svg {
+    transition: transform 0.2s ease-in-out;
+    transform: rotate(0deg);
+    width: 18px;
+    height: auto;
+  }
+
+  .skb_tab_contents .ed-collapsible-toggle[aria-expanded="true"] svg.plus-icon {
+    transform: rotate(-45deg);
+  }
+  .skb_tab_contents .ed-collapsible-toggle[aria-expanded="true"] svg.arrow-icon {
+    transform: rotate(-180deg);
+  }
+
+  .ed-collapsible-content {
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.25s ease;
+    opacity: 1;
+  }
+
+  .ed-collapsible-content:not([data-open]) {
+    display: block;
+    height: 0;
+    opacity: 0;
+  }
+  .skb_tab_contents  button.ed-collapsible-toggle:hover .ed-animated-arrow-down,
+  .skb_tab_contents button.ed-collapsible-toggle[aria-expanded="true"] .ed-animated-arrow-down {
+    background: transparent;
+  }
+
+  .skb_tab_contents button.ed-collapsible-toggle:hover .ed-animated-arrow-down svg path,
+  .skb_tab_contents button.ed-collapsible-toggle[aria-expanded="true"] .ed-animated-arrow-down svg path {
+    color: rgb(var(--text-color));
+    stroke: rgb(var(--text-color));
+  }
+  /* ------ END:SKB Universal Collapsible ------- */
+</style>
+
+{%- capture richtext_heading -%}
+    {%- for block in section.blocks -%}
+        {%- if block.type == 'heading' -%}
+            <h2 class="cro_richtext--header h2" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+                {%- if block.settings.highlighted_content != blank -%}
+                    <span class="cro_richtext--header-highlighted">
+                        {{ block.settings.highlighted_content }}
+                        {%- if block.settings.highlighted_content_svg != blank -%}
+                            {{ block.settings.highlighted_content_svg }}
+                        {%- endif -%}
+                    </span>
+                {%- endif -%}
+            </h2>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture richtext_content -%}
+    {%- for block in section.blocks -%}
+        {%- if block.type == 'content' -%}
+            <div class="cro_richtext--content" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+            </div>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+<div class="container">
+  {{ richtext_heading }}
+  {{ richtext_content }}
+
+  <div class="cro_faq_with_tabs_section">
+    <div class="cro_faq_with_tabs__thumbnail pos-{{ section.settings.thumbnail_position }}">
+      {%- if section.settings.thumbnail_image != blank -%}
+        {{-
+          section.settings.thumbnail_image
+          | image_url: width: section.settings.thumbnail_image.width
+          | image_tag: sizes: '100vw', widths: '400,500,700,800,1000', alt: section.settings.thumbnail_image.alt
+        -}}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+
+    <div class="cro_faq_with_tabs__contents">
+      {% assign show_questions_by_categories = false %}
+      {% if section.settings.faq_by_category %}
+        {% assign show_questions_by_categories = true %}
+      {% endif %}
+
+      {% comment %} FAQ by Categories {% endcomment %}
+      {% capture questions_by_categories %}
+        {% assign content_index = 0 %}
+        {%- for block in section.blocks -%}
+            {%- if block.type == 'category' -%}
+            {% assign content_index = content_index | plus: 1 %}
+            <div
+                class="skb_tab_content {% if content_index == 1 %} skb_show{% endif %}"
+                data-skb-tab-content="{{ content_index }}"
+            >
+                <ed-collapsible-wrap>
+                {%- for i in (1..6) -%}
+                    {%- assign question_key = 'question_' | append: i -%}
+                    {%- assign answer_key = 'answer_' | append: i -%}
+                    {%- assign question = block.settings[question_key] -%}
+                    {%- assign answer = block.settings[answer_key] -%}
+
+                    {%- if question != blank -%}
+                    <ed-collapsible>
+                        <button
+                        class="ed-collapsible-toggle"
+                        aria-controls="collapsible-{{ content_index }}-id-{{ forloop.index }}"
+                        {% if forloop.first and block.settings.open_first_as_default %}
+                            aria-expanded="true"
+                        {% else %}
+                            aria-expanded="false"
+                        {% endif %}
+                        >
+                        <p class="heading">{{ question }}</p>
+                        <span class="ed-animated-arrow-down">
+                            {%- if section.settings.content_icon_type == 'plus' -%}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="plus-icon"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            {% elsif section.settings.content_icon_type == 'arrow' %}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="arrow-icon"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            {%- endif -%}
+                        </span>
+                        </button>
+
+                        <div
+                        id="collapsible-{{ content_index }}-id-{{ forloop.index }}"
+                        class="ed-collapsible-content"
+                        {% if forloop.first and block.settings.open_first_as_default %}
+                            data-open
+                        {% endif %}
+                        >
+                        <div class="ed-collapsible__content">
+                            {{ answer }}
+                        </div>
+                        </div>
+                    </ed-collapsible>
+                    {%- endif -%}
+                {%- endfor -%}
+                </ed-collapsible-wrap>
+            </div>
+            {%- endif -%}
+        {%- endfor -%}
+      {% endcapture %}
+
+      {% comment %} FAQ's List {% endcomment %}
+      {% capture all_questions_list %}
+        {% assign content_index = 0 %}
+        <ed-collapsible-wrap>
+            {%- for block in section.blocks -%}
+            {%- if block.type == 'category' -%}
+                {% assign content_index = content_index | plus: 1 %}
+                {%- for i in (1..6) -%}
+                {%- assign question_key = 'question_' | append: i -%}
+                {%- assign answer_key = 'answer_' | append: i -%}
+                {%- assign question = block.settings[question_key] -%}
+                {%- assign answer = block.settings[answer_key] -%}
+
+                {%- if question != blank -%}
+                    <ed-collapsible>
+                    <button
+                        class="ed-collapsible-toggle"
+                        aria-controls="collapsible-{{ content_index }}-id-{{ forloop.index }}"
+                        {% if forloop.first and content_index == 1 and block.settings.open_first_as_default %}
+                        aria-expanded="true"
+                        {% else %}
+                        aria-expanded="false"
+                        {% endif %}
+                    >
+                        <p class="heading">{{ question }}</p>
+                        <span class="ed-animated-arrow-down">
+                        {%- if section.settings.content_icon_type == 'plus' -%}
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="plus-icon"
+                            >
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                        {% elsif section.settings.content_icon_type == 'arrow' %}
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="arrow-icon"
+                            >
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        {%- endif -%}
+                        </span>
+                    </button>
+
+                    <div
+                        id="collapsible-{{ content_index }}-id-{{ forloop.index }}"
+                        class="ed-collapsible-content"
+                        {% if forloop.first and content_index == 1 and block.settings.open_first_as_default %}
+                        data-open
+                        {% endif %}
+                    >
+                        <div class="ed-collapsible__content">
+                        {{ answer }}
+                        </div>
+                    </div>
+                    </ed-collapsible>
+                {%- endif -%}
+                {%- endfor -%}
+            {%- endif -%}
+            {%- endfor -%}
+        </ed-collapsible-wrap>
+      {% endcapture %}
+
+      <skb-universal-tabs-wrap
+        {% if show_questions_by_categories %}
+          class="skb_universal_tabs_wrap" data-tabs
+        {% endif %}
+      >
+        {% if show_questions_by_categories %}
+          <div class="skb_tabs_wrap">
+            {%- if section.settings.content_lable != blank -%}
+              <span class="skb-tabs-title hidden-pocket">{{ section.settings.content_lable }}</span>
+            {%- endif -%}
+
+            <div class="skb_tabs">
+              {% assign btn_index = 0 %}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'category' -%}
+                  {% assign btn_index = btn_index | plus: 1 %}
+                  <button
+                    class="skb_tab {% if btn_index == 1 %} skb_active{% endif %}"
+                    data-skb-tab-button="{{ btn_index }}"
+                  >
+                    {{ block.settings.button_text }}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="skb_tab_contents">
+          {% if show_questions_by_categories %}
+            {{ questions_by_categories }}
+
+          {% else %}
+            {{ all_questions_list }}
+          {% endif %}
+        </div>
+      </skb-universal-tabs-wrap>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Universal Multi-Tabs by Rana
+  (function () {
+    function initSKBUniverSalTabs(scope = document) {
+      const containers = scope.querySelectorAll('.skb_universal_tabs_wrap');
+
+      containers.forEach((container) => {
+        const tabs = container.querySelectorAll('[data-skb-tab-button]');
+        const contents = container.querySelectorAll('[data-skb-tab-content]');
+
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-skb-tab-button');
+
+            // Update tab buttons
+            tabs.forEach((t) => t.classList.remove('skb_active'));
+            tab.classList.add('skb_active');
+
+            // Hide all content blocks
+            contents.forEach((content) => {
+              content.classList.remove('skb_show');
+              content.style.position = 'absolute';
+            });
+
+            // Show matched content
+            const next = container.querySelector(`[data-skb-tab-content="${target}"]`);
+            if (next) {
+              next.classList.add('skb_show');
+              next.style.position = 'relative';
+            }
+          });
+        });
+      });
+    }
+
+    // Run on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBUniverSalTabs();
+    });
+
+    // Re-run on Shopify section load (in editor/design mode)
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        initSKBUniverSalTabs(e.target);
+      });
+    }
+  })();
+
+  // Universal Collapsible by Rana
+  (function () {
+    const singleOpen = {{ section.settings.multiple_accordion_open_at_once }};
+    function openContent(element) {
+      element.style.overflow = 'hidden';
+      const height = element.scrollHeight;
+
+      const keyframes = {
+        height: ['0px', `${height}px`],
+        visibility: ['hidden', 'visible'],
+        opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+      };
+
+      const animation = element.animate(keyframes, {
+        duration: 500,
+        direction: 'normal',
+        easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+        fill: 'forwards',
+      });
+
+      animation.onfinish = () => {
+        element.style.overflow = 'visible';
+        element.style.height = `${height}px`;
+        element.setAttribute('data-open', '');
+      };
+
+      if (element.hasAttribute('data-animate-items')) {
+        element.animate(
+          {
+            opacity: [0, 1],
+            transform: ['translateY(10px)', 'translateY(0)'],
+          },
+          {
+            duration: 250,
+            delay: 250,
+            easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+            fill: 'forwards',
+          }
+        );
+      }
+    }
+
+    function closeContent(element) {
+      const height = element.scrollHeight;
+      element.style.overflow = 'hidden';
+
+      const animation = element.animate(
+        {
+          height: [`${height}px`, '0px'],
+          visibility: ['visible', 'hidden'],
+          opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+        },
+        {
+          duration: 500,
+          direction: 'normal',
+          easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+          fill: 'forwards',
+        }
+      );
+
+      animation.onfinish = () => {
+        element.style.overflow = 'hidden';
+        element.removeAttribute('data-open');
+      };
+    }
+
+    function initCollapsibleToggle(scope = document) {
+      const wraps = scope.querySelectorAll('ed-collapsible-wrap');
+
+      wraps.forEach((wrap) => {
+        const toggles = wrap.querySelectorAll('.ed-collapsible-toggle');
+
+        toggles.forEach((toggle) => {
+          if (toggle.dataset.initialized === 'true') return;
+
+          toggle.dataset.initialized = 'true';
+
+          const contentId = toggle.getAttribute('aria-controls');
+          const content = wrap.querySelector(`#${contentId}`);
+          if (!content) return;
+
+          // Keep initial state as-is (open or closed)
+          const isInitiallyOpen = content.hasAttribute('data-open');
+          toggle.setAttribute('aria-expanded', String(isInitiallyOpen));
+          toggle.classList.toggle('is-open', isInitiallyOpen);
+
+          toggle.addEventListener('click', () => {
+            const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+            // If singleOpen is true, close all other open accordions in the same wrap
+            if (singleOpen && !isOpen) {
+              const openToggles = wrap.querySelectorAll('.ed-collapsible-toggle[aria-expanded="true"]');
+              openToggles.forEach((otherToggle) => {
+                if (otherToggle !== toggle) {
+                  const otherContentId = otherToggle.getAttribute('aria-controls');
+                  const otherContent = wrap.querySelector(`#${otherContentId}`);
+                  if (otherContent && otherContent.hasAttribute('data-open')) {
+                    otherToggle.setAttribute('aria-expanded', 'false');
+                    otherToggle.classList.remove('is-open');
+                    closeContent(otherContent);
+                  }
+                }
+              });
+            }
+
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+            toggle.classList.toggle('is-open', !isOpen);
+
+            if (!isOpen) {
+              openContent(content);
+            } else {
+              closeContent(content);
+            }
+          });
+        });
+      });
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+      initCollapsibleToggle();
+    });
+
+    // Reinitialize for each section dynamically loaded
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (e) {
+        const section = e.target;
+        initCollapsibleToggle(section);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "CRO | FAQ with Tabs",
+  "class": "ed-cro-faq-with-tabs",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1200
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "select",
+      "id": "items_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Thumbnail settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "thumbnail_image",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "thumbnail_width",
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "unit": "%",
+      "label": "Thumbnail width",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "thumbnail_corner_radius",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Content settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "faq_by_category",
+      "label": "Group FAQ's by category",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "multiple_accordion_open_at_once",
+      "label": "Multiple accordions open at once",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "content_lable",
+      "label": "Label",
+      "default": "Filtern"
+    },
+    {
+      "type": "color",
+      "id": "content_background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "content_box_shadow",
+      "label": "Shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "content_corner_radius",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "content_active_text",
+      "label": "Active Tab",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "content_active_btn",
+      "label": "Active Tab BG",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "content_border_color",
+      "label": "Border color",
+      "default": "#EFECEC"
+    },
+    {
+      "type": "select",
+      "id": "content_icon_type",
+      "label": "Icon type",
+      "options": [
+        {
+          "value": "plus",
+          "label": "Plus"
+        },
+        {
+          "value": "arrow",
+          "label": "Arrow"
+        }
+      ],
+      "default": "plus"
+    },
+    {
+      "type": "range",
+      "id": "tab_text_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Tab Button size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "content_title_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "content_content_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "tab_text_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Tab size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "content_title_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "content_content_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "Talk about your"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "highlighted_content",
+          "label": "Highlighted content",
+          "default": "brand"
+        },
+        {
+          "type": "html",
+          "id": "highlighted_content_svg",
+          "label": "Highlighted SVG",
+          "info": "Add svg HTML code",
+          "default": "<svg stroke=\"#FFDDBF\" viewbox=\"-400 -55 730 60\" fill=\"none\" role=\"presentation\" xmlns=\"http://www.w3.org/2000/svg\">\n <path stroke-linecap=\"round\" stroke-width=\"30\" pathlength=\"1\" d=\"m -383.25 -6 c 55.25 -22 130.75 -33.5 293.25 -38 c 54.5 -0.5 195 -2.5 401 15\"></path>\n</svg>"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 25,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 800
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 16,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 45
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_font_family",
+          "label": "custom font-family",
+          "default": false
+        },
+        {
+          "type": "font_picker",
+          "id": "font_family",
+          "label": "Font-family",
+          "default": "inter_n7"
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 20
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "select",
+          "id": "alignment_mobile",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "header",
+          "content": "Margin (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom (Mobile)",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "limit": 1,
+      "name": "Content",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Porro ipsum beatae eius inventore alias expedita ducimus quia esse labore ipsum cupiditate.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 20,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 740
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.7
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_font_family",
+          "label": "custom font-family",
+          "default": false
+        },
+        {
+          "type": "font_picker",
+          "id": "font_family",
+          "label": "Font-family",
+          "default": "inter_n4"
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 60
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "select",
+          "id": "alignment_mobile",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.5
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom (Mobile)",
+          "default": 60
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Button"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_first_as_default",
+          "label": "Open first item as default",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 01"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_1",
+          "label": "Question",
+          "default": "Lorem ipsum dolor"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_1",
+          "label": "Answer",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium eaque facere ipsa culpa ducimus exercitationem reprehenderit, libero maiores atque similique!</p>"
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 02"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_2",
+          "label": "Question",
+          "default": "Lorem ipsum dolor"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_2",
+          "label": "Answer",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium eaque facere ipsa culpa ducimus exercitationem reprehenderit, libero maiores atque similique!</p>"
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 03"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_3",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_3",
+          "label": "Answer"
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 04"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_4",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_4",
+          "label": "Answer"
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 05"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_5",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_5",
+          "label": "Answer"
+        },
+        {
+          "type": "header",
+          "content": "FAQ: 06"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "question_6",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_6",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | FAQ with Tabs",
+      "settings": {
+        "background": "#EFEFEF"
+      },
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "content"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

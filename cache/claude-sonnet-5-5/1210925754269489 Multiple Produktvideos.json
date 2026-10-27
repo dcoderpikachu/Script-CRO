@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has only a title ('Multiple Produktvideos') and no description, comments, code, screenshots or custom fields. There is not enough source material to define a reusable CRO element (what, why, how, settings, UI), and writing a spec would mean inventing it."}, "in": 67, "out": 100}

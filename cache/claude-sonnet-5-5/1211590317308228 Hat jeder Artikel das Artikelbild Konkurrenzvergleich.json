@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is a yes/no QA question about whether every product has the 'Konkurrenzvergleich' (competitor comparison) image. The only comment confirms that it does. There is no description, no code, no screenshots, and no spec for building or configuring a reusable element."}, "in": 147, "out": 101}

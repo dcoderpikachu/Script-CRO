@@ -1,0 +1,1247 @@
+Step: 1
+Create a section: ed-cro-exciting-content-elements.liquid
+Paste this code:
+
+<style>
+    #shopify-section-{{ section.id }} {
+        {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+            {%- assign heading_color = settings.heading_color -%}
+            {%- assign text_color = settings.text_color -%}
+            {%- else -%}
+            {%- assign heading_color = section.settings.text_color -%}
+            {%- assign text_color = section.settings.text_color -%}
+        {%- endif -%}
+
+        {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+            {%- assign section_background = settings.background -%}
+            {%- else -%}
+            {%- assign section_background = section.settings.background -%}
+        {%- endif %}
+
+        --space-top: {{ section.settings.space_top_mobile -}}px;
+        --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+        --items-per-row: 1fr;
+        --item-border-color: {{ section.settings.item_border_color }};
+        --item-number-size: {{ section.settings.item_number_font_size_mobile -}}px;
+        --item-heading-size: {{ section.settings.item_heading_font_size_mobile -}}px;
+        --item-content-size: {{ section.settings.item_content_font_size_mobile -}}px;
+        {% if section.settings.heading_uppercase == true %}
+        --item-heading-transform: uppercase;
+        {% else %}
+            --item-heading-transform: initial;
+       {% endif %}
+
+        --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+        --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+    }
+
+    @media (min-width: 1000px) {
+        #shopify-section-{{ section.id }} {
+            --space-top: {{ section.settings.space_top -}}px;
+            --space-bottom: {{ section.settings.space_bottom -}}px;
+            --items-per-row: {{ section.settings.items_per_row }};
+            --item-number-size: {{ section.settings.item_number_font_size -}}px;
+            --item-heading-size: {{ section.settings.item_heading_font_size -}}px;
+            --item-content-size: {{ section.settings.item_content_font_size -}}px;
+
+        }
+    }
+    {%- for block in section.blocks -%}
+      {% case block.type %}
+          {% when 'section_Heading_title' %}
+              {% if block.settings.custom_font_family %}
+                  {%- assign font_url = block.settings.font_family | font_url -%}
+                  @font-face {
+                      font-family: '{{ block.settings.font_family.family }}';
+                      src: url({{ font_url }}) format('woff2');
+                      font-weight: {{ block.settings.font_family.weight }};
+                      font-style: normal;
+                  }
+              {% endif %}
+
+              #shopify-section-{{ section.id }} {
+                  {% assign block_color = block.settings.text_color %}
+                  {% assign section_color = section.settings.text_color %}
+
+                  {% if block_color != 'rgba(0,0,0,0)' %}
+                      --heading-color: {{ block_color }};
+                  {% elsif section_color != 'rgba(0,0,0,0)' %}
+                      --heading-color: {{ section_color }};
+                  {% else %}
+                      --heading-color: {{ settings.heading_color }};
+                  {% endif %}
+
+                  {% if block.settings.enable_custom_max_width %}
+                      --heading-max-width: {{ block.settings.custom_max_width -}}px;
+                      {% assign alignment = block.settings.alignment %}
+                      {%- if alignment == 'left'  -%}
+                          --heading-margin-left: 0;
+                          --heading-margin-right: auto;
+                      {%- elsif alignment == 'right'  -%}
+                          --heading-margin-left: auto;
+                          --heading-margin-right: 0;
+                      {%- elsif alignment == 'center'  -%}
+                          --heading-margin-left: auto;
+                          --heading-margin-right: auto;
+                      {%- endif -%}
+                    {%- else -%}
+                      --heading-max-width: 100%;
+                  {% endif %}
+
+                  --heading-weight: bold;
+                  {% if block.settings.custom_font_family %}
+                      --heading-family: {{ block.settings.font_family.family }};
+                      --heading-weight: {{ block.settings.font_family.weight }};
+                  {% endif %}
+
+                  --heading-alignment: {{ block.settings.alignment }};
+                  --heading-transform: {{ block.settings.text_transform }};
+                  --heading-font-size: {{ block.settings.font_size | default: 30 -}}px;
+                  --heading-line-height: {{ block.settings.line_height }};
+                  --heading-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                  --heading-space-top: {{ block.settings.space_top -}}px;
+                  --heading-space-bottom: {{ block.settings.space_bottom -}}px;
+                  --heading-alignment-mobile: {{ block.settings.alignment_mobile }};
+                  --heading-font-size-mobile: {{ block.settings.font_size_mobile -}}px;
+                  --heading-line-height-mobile: {{ block.settings.line_height_mobile }};
+                  --heading-letter-spacing-mobile: {{ block.settings.letter_spacing_mobile -}}px;
+                  --heading-space-top-mobile: {{ block.settings.space_top_mobile -}}px;
+                  --heading-space-bottom-mobile: {{ block.settings.space_bottom_mobile -}}px;
+              }
+          {% when 'section_Heading_content' %}
+              {% if block.settings.custom_font_family %}
+                  {% assign font_url = block.settings.font_family | font_url %}
+                  @font-face {
+                      font-family: '{{ block.settings.font_family.family }}';
+                      src: url({{ font_url }}) format('woff2');
+                      font-weight: {{ block.settings.font_family.weight }};
+                      font-style: normal;
+                  }
+              {% endif %}
+
+              #shopify-section-{{ section.id }} {
+                  {% assign block_color = block.settings.text_color %}
+                  {% assign section_color = section.settings.text_color %}
+
+                  {% if block_color != 'rgba(0,0,0,0)' %}
+                      --content-color: {{ block_color }};
+                  {% elsif section_color != 'rgba(0,0,0,0)' %}
+                      --content-color: {{ section_color }};
+                  {% else %}
+                      --content-color: {{ settings.heading_color }};
+                  {% endif %}
+
+                  {% if block.settings.enable_custom_max_width %}
+                      --content-max-width: {{ block.settings.custom_max_width -}}px;
+                      {% assign alignment = block.settings.alignment %}
+                      {%- if alignment == 'left'  -%}
+                          --content-margin-left: 0;
+                          --content-margin-right: auto;
+                      {%- elsif alignment == 'right'  -%}
+                          --content-margin-left: auto;
+                          --content-margin-right: 0;
+                      {%- elsif alignment == 'center'  -%}
+                          --content-margin-left: auto;
+                          --content-margin-right: auto;
+                      {%- endif -%}
+                  {%- else -%}
+                    --content-max-width: 100%;
+                  {% endif %}
+
+                  {% if block.settings.custom_font_family %}
+                      --content-family: {{ block.settings.font_family.family }};
+                      --content-weight: {{ block.settings.font_family.weight }};
+                  {% endif %}
+                  --content-alignment: {{ block.settings.alignment }};
+                  --content-font-size: {{ block.settings.font_size -}}px;
+                  --content-line-height: {{ block.settings.line_height }};
+                  --content-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                  --content-space-top: {{ block.settings.space_top -}}px;
+                  --content-space-bottom: {{ block.settings.space_bottom -}}px;
+                  --content-alignment-mobile: {{ block.settings.alignment_mobile }};
+                  --content-font-size-mobile: {{ block.settings.font_size_mobile -}}px;
+                  --content-line-height-mobile: {{ block.settings.line_height_mobile }};
+                  --content-letter-spacing-mobile: {{ block.settings.letter_spacing_mobile -}}px;
+                  --content-space-top-mobile: {{ block.settings.space_top_mobile -}}px;
+                  --content-space-bottom-mobile: {{ block.settings.space_bottom_mobile -}}px;
+              }
+      {% endcase %}
+  {%- endfor -%}
+</style>
+
+<style>
+   #shopify-section-{{ section.id }} {
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+     color: rgb(var(--text-color));
+     background: rgb(var(--section-background));
+     {% if section.settings.background == 'rgba(0,0,0,0)' %}
+       margin-top: var(--space-top);
+       margin-bottom: var(--space-bottom);
+     {% else %}
+       padding-top: var(--space-top);
+       padding-bottom: var(--space-bottom);
+     {% endif %}
+   }
+   /* Section Heading Title CSS */
+  .cro_richtext--header {
+      color: var(--heading-color);
+      font-family: var(--heading-family);
+      font-weight: var(--heading-weight);
+      text-align: var(--heading-alignment);
+      text-transform: var(--heading-transform);
+      font-size: var(--heading-font-size);
+      line-height: var(--heading-line-height);
+      letter-spacing: var(--heading-letter-spacing);
+      margin-top: var(--heading-space-top);
+      margin-bottom: var(--heading-space-bottom);
+  }
+  .cro_richtext--header-highlighted {
+      display: inline-block;
+      position: relative;
+      padding-bottom: 14px;
+      oveflow: hidden;
+  }
+  .cro_richtext--header-highlighted svg {
+      width: 100%;
+      max-width: 100%;
+      height: 33%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+  }
+  @media (min-width: 768px) {
+      .cro_richtext--header {
+          max-width: var(--heading-max-width);
+          margin-left: var(--heading-margin-left);
+          margin-right: var(--heading-margin-right);
+      }
+  }
+  @media (max-width: 767px) {
+      .cro_richtext--header {
+          text-align: var(--heading-alignment-mobile);
+          font-size: var(--heading-font-size-mobile);
+          line-height: var(--heading-line-height-mobile);
+          letter-spacing: var(--heading-letter-spacing-mobile);
+          margin-top: var(--heading-space-top-mobile);
+          margin-bottom: var(--heading-space-bottom-mobile);
+      }
+  }
+
+  /* Section heading content CSS */
+  .cro_richtext--content {
+      display: block;
+      text-align: var(--content-alignment);
+      margin-top: var(--content-space-top);
+      margin-bottom: var(--content-space-bottom);
+  }
+  .cro_richtext--content * {
+      color: var(--content-color);
+      font-family: var(--content-family);
+      font-weight: var(--content-weight);
+      font-size: var(--content-font-size);
+      line-height: var(--content-line-height);
+      letter-spacing: var(--content-letter-spacing);
+      margin: 0;
+  }
+  .cro_richtext--content * strong {
+      font-weight: bold;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+  }
+  .cro_richtext--content * a {
+      color: var(--content-color);
+  }
+
+  @media (min-width: 768px) {
+      .cro_richtext--content {
+          max-width: var(--content-max-width);
+          margin-left: var(--content-margin-left);
+          margin-right: var(--content-margin-right);
+      }
+  }
+
+  @media (max-width: 767px) {
+      .cro_richtext--content {
+          text-align: var(--content-alignment-mobile);
+          margin-top: var(--content-space-top-mobile);
+          margin-bottom: var(--content-space-bottom-mobile);
+      }
+      .cro_richtext--content * {
+          font-size: var(--content-font-size-mobile);
+          line-height: var(--content-line-height-mobile);
+          letter-spacing: var(--content-letter-spacing-mobile);
+      }
+  }
+
+   /* ------ Exciting Content Elements CSS ----- */
+   .ed_cro_exciting_content_elements {
+       grid-template-columns: var(--items-per-row);
+       display: grid;
+       position: relative;
+   }
+
+   .ed_cro_exciting_content_elements__item {
+       padding: 24px;
+       text-align: center;
+   }
+
+   {% if section.settings.item_show_border %}
+       .ed_cro_exciting_content_elements__item:not(:last-child) {
+            border-bottom: 1px solid var(--item-border-color);
+        }
+   {% endif %}
+
+   .ed_cro_exciting_content_elements__item_counter {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: var(--item-number-size);
+       line-height: 1;
+       font-weight: 500;
+   }
+
+   h6.ed_cro_exciting_content_elements__item_heading {
+       font-size: var(--item-heading-size);
+       line-height: 1;
+       margin-bottom: 10px;
+       margin-top: 24px;
+       text-transform: var(--item-heading-transform);
+   }
+
+   .ed_cro_exciting_content_elements__item_contents * {
+       line-height: normal;
+       font-size: var(--item-content-size);
+   }
+    @media (min-width: 1000px) {
+       .ed_cro_exciting_content_elements {
+            grid-template-columns: repeat(var(--items-per-row, 3), minmax(0, 1fr));
+       }
+        .ed_cro_exciting_content_elements__item {
+            padding: 20px;
+        }
+        {% if section.settings.item_show_border %}
+            .ed_cro_exciting_content_elements__item:not(:last-child) {
+                border-right: 1px solid var(--item-border-color);
+                border-bottom: none;
+            }
+        {% endif %}
+   }
+  /* ------ END: Exciting Content Elements CSS ----- */
+</style>
+
+<div class="container">
+  {% comment %} Heading started {% endcomment %}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'section_Heading_title' -%}
+      <h2 class="cro_richtext--header h2" {{ block.shopify_attributes }}>
+        {{ block.settings.content }}
+        {%- if block.settings.highlighted_content != blank -%}
+          <span class="cro_richtext--header-highlighted">
+            {{ block.settings.highlighted_content }}
+            {%- if block.settings.highlighted_content_svg != blank -%}
+              {{ block.settings.highlighted_content_svg }}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- if block.type == 'section_Heading_content' -%}
+      <div class="cro_richtext--content" {{ block.shopify_attributes }}>
+        {{ block.settings.content }}
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+  {% comment %} END: Heading {% endcomment %}
+
+  {% comment %} Content elements started {% endcomment %}
+  <div class="ed_cro_exciting_content_elements_wrap">
+    {% if section.settings.show_draw_icon %}
+      <div class="ed_cro_exciting_content_elements_draw_icon yv-draw-icon" data-icon="sparkle">
+        <style>
+          /* svg animations start */
+          .ed_cro_exciting_content_elements_wrap {
+            position: relative;
+          }
+
+          .ed_cro_exciting_content_elements_draw_icon {
+            position: absolute;
+            top: {{ section.settings.draw_icon_from_top }}%;
+            left: {{ section.settings.draw_icon_from_left }}%;
+            z-index: 1;
+          }
+          @media (max-width: 999px) {
+            .ed_cro_exciting_content_elements_draw_icon {
+              display: none;
+            }
+          }
+
+          .ed_cro_exciting_content_elements_draw_icon svg {
+            width: {{ section.settings.draw_icon_size }}px;
+            height: auto;
+          }
+
+          path.animated-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            stroke: #012921;
+            stroke-width: 8;
+          }
+
+          /* Change these lines */
+          .ed_cro_exciting_content_elements_draw_icon .animated-path.delay-2.animate {
+            animation: dash 2.5s linear forwards;
+          }
+
+          .ed_cro_exciting_content_elements_draw_icon .animated-path.delay-6.animate {
+            animation: dash 6s linear forwards;
+          }
+
+          @keyframes dash {
+            to {
+              stroke-dashoffset: 0;
+            }
+          }
+          /* svg animations end */
+        </style>
+
+        <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+          <path class="draw-path sparkle-path animated-path delay-2" d="M121.726 69.7203C113.469 30.9903 97.9282 56.0212 91.1898 73.3778C48.0813 67.4318 63.3446 90.3723 76.3648 102.586L62.8604 123.761C55.1357 143.425 91.7181 132.342 110.975 124.342C159.669 151.342 145.626 117.71 132.518 97.519C173.566 66.1502 142.427 65.9162 121.726 69.7203Z" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M139.641 48.0508L160.402 25.0823" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M161.623 103.346L186.396 121.917" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M108.291 144.51L114.707 174.799" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M50.0156 106.539L21.9889 119.695" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M74.9336 50.6504L54.7469 27.1753" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path class="draw-path sparkle-path animated-path delay-6" d="M161.623 103.346L186.396 121.917" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+
+        <script>
+          (function () {
+            const svgIcons = document.querySelectorAll('.ed_cro_exciting_content_elements_draw_icon');
+
+            if (!('IntersectionObserver' in window)) return;
+
+            const svgObserver = new IntersectionObserver(
+              (entries, obs) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    const icon = entry.target;
+
+                    // Step 1: Animate the delay-2 path first
+                    const delay2Paths = icon.querySelectorAll('.animated-path.delay-2');
+                    delay2Paths.forEach((path) => {
+                      path.classList.add('animate');
+                    });
+
+                    // Step 2: After 2.5s, animate the delay-6 paths
+                    setTimeout(() => {
+                      const delay6Paths = icon.querySelectorAll('.animated-path.delay-6');
+                      delay6Paths.forEach((path) => {
+                        path.classList.add('animate');
+                      });
+                    }, 1000); // 2.5 seconds = duration of .delay-2 animation
+
+                    obs.unobserve(icon); // Only animate once
+                  }
+                });
+              },
+              {
+                threshold: 0.5,
+              }
+            );
+
+            svgIcons.forEach((icon) => {
+              svgObserver.observe(icon);
+            });
+          })();
+        </script>
+      </div>
+    {% endif %}
+
+    <div class="ed_cro_exciting_content_elements">
+      {% for block in section.blocks %}
+        {% if block.type == 'content_element' %}
+          <div class="ed_cro_exciting_content_elements__item" {{ block.shopify_attributes }}>
+            <div class="ed_cro_exciting_content_elements__item_counter">
+              <skb-counter-text data-counter="{{ block.settings.element_number }}">
+                {{- block.settings.element_number -}}
+              </skb-counter-text>
+              {% if block.settings.element_number_plus %}
+                <sup>+</sup>
+              {% endif %}
+            </div>
+            <h6 class="ed_cro_exciting_content_elements__item_heading">{{ block.settings.element_title }}</h6>
+            <div class="ed_cro_exciting_content_elements__item_contents">
+              {{ block.settings.element_description }}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% comment %} END:Content elements {% endcomment %}
+</div>
+
+<script>
+  // IIFE Function to create custom counter elements
+  (function () {
+    // Create a unique scope to avoid conflicts
+    const counters = document.querySelectorAll('skb-counter-text');
+
+    if (!('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const counterElement = entry.target;
+            const targetValue = parseInt(counterElement.getAttribute('data-counter'), 10);
+            const duration = 3000; // 2 seconds total animation time
+            const stepTime = Math.max(Math.floor(duration / targetValue), 20);
+            let current = 0;
+
+            const interval = setInterval(() => {
+              current++;
+              counterElement.textContent = current;
+              if (current >= targetValue) {
+                clearInterval(interval);
+              }
+            }, stepTime);
+
+            obs.unobserve(counterElement);
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    counters.forEach((counter) => {
+      observer.observe(counter);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Exciting Content Elements",
+  "settings": [
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Content Elements Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_draw_icon",
+      "label": "Show Draw-icon",
+      "default": true,
+      "info": "This icon will be animated when the section is in view & it's hidden in mobile view."
+    },
+    {
+      "type": "range",
+      "id": "draw_icon_size",
+      "min": 60,
+      "max": 160,
+      "step": 10,
+      "unit": "px",
+      "label": "Draw-icon size",
+      "default": 130
+    },
+    {
+      "type": "range",
+      "id": "draw_icon_from_left",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Draw-icon Left",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "draw_icon_from_top",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "%",
+      "label": "Draw-icon Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "label": "Items per row",
+      "default": 3,
+      "min": 2,
+      "max": 4,
+      "step": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "item_show_border",
+      "label": "Show border",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "item_border_color",
+      "label": "Border color",
+      "default": "#E5E5E5"
+    },
+
+    {
+      "type": "range",
+      "id": "item_number_font_size",
+      "label": "Counter size",
+      "default": 80,
+      "min": 24,
+      "max": 200,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "item_heading_font_size",
+      "label": "Heading size",
+      "default": 18,
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_uppercase",
+      "label": "Heading uppercase",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "item_content_font_size",
+      "label": "Content size",
+      "default": 14,
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "header",
+      "content": "Content Elements Settings"
+    },
+    {
+      "type": "range",
+      "id": "item_number_font_size_mobile",
+      "label": "Counter size (mobile)",
+      "default": 60,
+      "min": 24,
+      "max": 100,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "item_heading_font_size_mobile",
+      "label": "Heading size (mobile)",
+      "default": 16,
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "item_content_font_size_mobile",
+      "label": "Content size (mobile)",
+      "default": 14,
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "section_Heading_title",
+      "name": "Heading Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "Big Savings on Big"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "highlighted_content",
+          "label": "Highlighted content",
+          "default": "Sound"
+        },
+        {
+          "type": "html",
+          "id": "highlighted_content_svg",
+          "label": "Highlighted SVG",
+          "info": "Add svg HTML code",
+          "default": "<svg stroke=\"#282828\" viewbox=\"-400 -55 730 60\" fill=\"none\" role=\"presentation\" xmlns=\"http://www.w3.org/2000/svg\">\n <path stroke-linecap=\"round\" stroke-width=\"30\" pathlength=\"1\" d=\"m -383.25 -6 c 55.25 -22 130.75 -33.5 293.25 -38 c 54.5 -0.5 195 -2.5 401 15\"></path>\n</svg>"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 25,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 800
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 16,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 45
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_font_family",
+          "label": "custom font-family",
+          "default": false
+        },
+        {
+          "type": "font_picker",
+          "id": "font_family",
+          "label": "Font-family",
+          "default": "inter_n7"
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 12
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "select",
+          "id": "alignment_mobile",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "header",
+          "content": "Margin (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom (Mobile)",
+          "default": 12
+        }
+      ]
+    },
+    {
+      "type": "section_Heading_content",
+      "name": "Heading Content",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>This section showcases exciting content elements that can be customized.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 20,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 640
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.7
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_font_family",
+          "label": "custom font-family",
+          "default": false
+        },
+        {
+          "type": "font_picker",
+          "id": "font_family",
+          "label": "Font-family",
+          "default": "inter_n4"
+        },
+        {
+          "type": "header",
+          "content": "Margin"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 50
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "select",
+          "id": "alignment_mobile",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.5
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Margin (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom (Mobile)",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "content_element",
+      "name": "Content Element",
+      "settings": [
+        {
+          "type": "text",
+          "id": "element_number",
+          "label": "Element Number",
+          "default": "22"
+        },
+        {
+          "type": "checkbox",
+          "id": "element_number_plus",
+          "label": "Show '+' sign",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "element_title",
+          "label": "Element Title",
+          "default": "Element Title"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "element_description",
+          "label": "Element Description",
+          "default": "This is a description of the content element."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Exciting Content Elements",
+      "blocks": [
+        {
+          "type": "section_Heading_title",
+          "name": "Heading Title",
+          "settings": {
+            "content": "Big Savings on Big",
+            "highlighted_content": "Sound"
+          }
+        },
+        {
+          "type": "section_Heading_content",
+          "name": "Heading Content",
+          "settings": {
+            "content": "<p>Dive into incredible audio without breaking the bank with our <strong>Big Savings</strong> on <strong>Big Sound</strong> offer!</p>"
+          }
+        },
+        {
+          "type": "content_element",
+          "name": "Content Element",
+          "settings": {
+            "element_number": "22",
+            "element_title": "Headphone",
+            "element_description": "Whether you're upgrading your current setup, treating yourself to a premium pair of headphones for the perfect gift."
+          }
+        },
+        {
+          "type": "content_element",
+          "name": "Content Element",
+          "settings": {
+            "element_number": "99",
+            "element_number_plus": true,
+            "element_title": "Bluetooth",
+            "element_description": "Experience wireless freedom like never before with our exclusive Bluetooth-related offers! while saving you money."
+          }
+        },
+        {
+          "type": "content_element",
+          "name": "Content Element",
+          "settings": {
+            "element_number": "88",
+            "element_title": "Speakers",
+            "element_description": "With our range of speakers-related offers, you can enjoy immersive sound and powerful bass in the comfort of your own home."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

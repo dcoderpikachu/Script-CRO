@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has only a title ('Darstellung der Varianten', i.e. 'Display of variants') and a client name (Sectionfy). It has no description, comments, code or screenshots, so there is no spec for a reusable CRO element and nothing to document without guessing."}, "in": 75, "out": 102}

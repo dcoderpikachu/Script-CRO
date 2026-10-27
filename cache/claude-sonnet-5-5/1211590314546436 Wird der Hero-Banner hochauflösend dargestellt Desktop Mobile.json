@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "QA/bug-feedback ticket asking whether the hero banner image renders in high resolution on desktop and mobile. The comments report a blurry, pixelated hero image and say the team is still working on it. It has no description and defines no reusable CRO element, only an image-quality issue on an existing hero."}, "in": 2014, "out": 111}

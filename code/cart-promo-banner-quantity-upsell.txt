@@ -1,0 +1,130 @@
+CRO | Cart | Promo-Banner 
+=========================
+
+Step-1: Create a new snippet cart-promo-banner.liquid with below code:
+<div class="cart-promo-banner" data-qty="{{ settings.cart_promo_quantity }}" data-line="{{ line_item.id }}">
+  {{ settings.cart_promo_icon }}
+  {{ settings.cart_promo_text }}
+</div>
+
+<style>
+  .cart-promo-banner{
+    width: 100%;
+    display:flex;
+    align-items: center;
+    color: {{ settings.cart_promo_color }};
+    background-color: {{settings.cart_promo_bg}};
+    font-size: 13px;
+    line-height: 25px;
+    gap: 5px;
+    padding: 5px;
+    {% if settings.cart_promo_border_radius == "rounded" %}
+      border-radius: 4px;
+    {% endif %}
+    {% if settings.cart_promo_text_align == "center" %}
+      text-align: center;
+      justify-content: center;
+    {% endif %}
+    margin-top: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .cart-promo-banner *{
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  .cart-promo-banner:hover{
+    background-color: {{settings.cart_promo_bg_hover}};
+  }
+  .cart-promo-banner svg{
+    max-width: 19px;
+    max-height: 19px;
+  }
+</style>
+
+
+
+
+
+Step-2: Go to mini-cart.liquid section and add below code where you want to show the promo banner:
+{% if line_item.quantity < settings.cart_promo_quantity %}
+    {% render 'cart-promo-banner', line_item: line_item %}
+{% endif %}
+
+
+
+Step-3: Go to settings_schema.json and add below settings for promo banner:
+{
+    "name": "Cart Promo Banner",
+    "settings": [
+      {
+        "type": "number",
+        "id": "cart_promo_quantity",
+        "label": "Quantity",
+        "default": 2
+      },
+      {
+        "type": "richtext",
+        "id": "cart_promo_text",
+        "label": "Text",
+        "default": "<p>Bestelle 2 und erhalte 10% Rabatt extra!</p>"
+      },
+      {
+        "type": "html",
+        "label": "Icon",
+        "id": "cart_promo_icon"
+      },
+      {
+        "type": "color",
+        "id": "cart_promo_color",
+        "label": "Text color",
+        "default": "#041E17"
+      },
+      {
+        "type": "color",
+        "id": "cart_promo_bg",
+        "label": "Background color",
+        "default": "#EBEAE3"
+      },
+      {
+        "type": "color",
+        "id": "cart_promo_bg_hover",
+        "label": "Background color on hover",
+        "default": "#405de6"
+      },
+      {
+        "type": "select",
+        "id": "cart_promo_border_radius",
+        "label": "Border style",
+        "options": [
+          {
+            "value": "rounded",
+            "label": "Rounded"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "rounded"
+      },
+      {
+        "type": "select",
+        "id": "cart_promo_text_align",
+        "label": "Text align",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ],
+        "default": "center"
+      }
+    ]
+},

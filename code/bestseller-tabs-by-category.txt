@@ -1,0 +1,1126 @@
+Step: 1
+Create a section: ed-cro-featured-collections.liquid
+Paste this code:
+
+<style>
+  :root {
+    --space-top: 100px;
+    --space-bottom: 100px;
+    --space-left: 0px;
+    --space-right: 0px;
+    --text-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+    --section-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+  }
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+      --space-left: {{ section.settings.space_left_mobile -}}px;
+      --space-right: {{ section.settings.space_right_mobile -}}px;
+
+      --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+  }
+    #shopify-section-{{ section.id }} {
+    {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+      {%- assign section_background = settings.background -%}
+    {%- else -%}
+      {%- assign section_background = section.settings.background -%}
+    {%- endif -%}
+
+    {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+      {%- assign heading_color = settings.heading_color -%}
+      {%- assign text_color = settings.text_color -%}
+    {%- else -%}
+      {%- assign heading_color = section.settings.text_color -%}
+      {%- assign text_color = section.settings.text_color -%}
+    {%- endif -%}
+
+    {%- if section.settings.button_background == 'rgba(0,0,0,0)' -%}
+      {%- assign button_background = settings.primary_button_background -%}
+    {%- else -%}
+      {%- assign button_background = section.settings.button_background -%}
+    {%- endif -%}
+
+    {%- if section.settings.button_text_color == 'rgba(0,0,0,0)' -%}
+      {%- assign button_text_color = settings.primary_button_text_color -%}
+    {%- else -%}
+      {%- assign button_text_color = section.settings.button_text_color -%}
+    {%- endif -%}
+
+    --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+    --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+    --primary-button-background: {{ button_background.red }}, {{ button_background.green }}, {{ button_background.blue }};
+    --primary-button-text-color: {{ button_text_color.red }}, {{ button_text_color.green }}, {{ button_text_color.blue }};
+
+    --prev-next-button-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+    --prev-next-button-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+
+    --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+    --section-products-per-row: 2;
+  }
+
+  @media screen and (min-width: 741px) {
+    #shopify-section-{{ section.id }} {
+      --section-products-per-row: {{ section.settings.products_per_row | at_most: 3 }};
+    }
+  }
+
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          --space-top: {{ section.settings.space_top -}}px;
+          --space-bottom: {{ section.settings.space_bottom -}}px;
+          --space-left: {{ section.settings.space_left -}}px;
+          --space-right: {{ section.settings.space_right -}}px;
+      }
+        #shopify-section-{{ section.id }} {
+        --section-products-per-row: {{ section.settings.products_per_row | at_most: 4 }};
+        }
+  }
+    @media screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }} {
+      --section-products-per-row: {{ section.settings.products_per_row }};
+    }
+  }
+
+    .edcro_featured_collections {
+        display: block;
+        color: rgb(var(--text-color));
+        background: rgb(var(--section-background));
+        {% if section.settings.background == 'rgba(0,0,0,0)' %}
+            margin-top: var(--space-top);
+            margin-bottom: var(--space-bottom);
+            padding-left: var(--space-left);
+            padding-right: var(--space-right);
+        {% else %}
+            padding-top: var(--space-top);
+            padding-bottom: var(--space-bottom);
+            padding-left: var(--space-left);
+            padding-right: var(--space-right);
+        {% endif %}
+        }
+        {% if section.settings.enable_custom_max_width %}
+        .edcro_featured_collections > .container {
+            max-width: var(--section-max-width);
+            margin-left: auto;
+            margin-right: auto;
+        }
+    {% endif %}
+
+
+    /* --- SKB Universal Multi-Tabs ----- */
+    #shopify-section-{{section.id }} skb-universal-tabs-wrap {
+        background: transparent;
+        box-shadow: unset;
+        border-radius: 0;
+        padding: 0;
+        display: block;
+        width: 100%;
+    }
+    #shopify-section-{{section.id }} .skb_tabs__wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+    .skb_tabs__wrap h2.heading.heading--small {
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .skb_tabs__wrap h3.heading.h2 {
+        font-size: 48px;
+        line-height: 1;
+        margin: 1rem 0 2rem;
+    }
+    #shopify-section-{{section.id }} .skb_tabs {
+        display: flex;
+        position: relative;
+        padding-bottom: 6px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        gap: 40px;
+        border-bottom: 1px solid #DFDFDF;
+        max-width: 100%;
+    }
+    #shopify-section-{{section.id }} .skb_tab_nav__position {
+        position: absolute;
+        bottom: 0;
+        height: 1px;
+        background-color: #000;
+        border-radius: 50px;
+        transition: transform 0.3s ease, width 0.3s ease;
+    }
+    #shopify-section-{{section.id }} .skb_tab {
+        padding: 0 0 6px;
+        border-radius: 0;
+        cursor: pointer;
+        min-width: 50px;
+        margin-right: 0;
+        border: none;
+        text-align: center;
+        -webkit-appearance: none;
+        appearance: none;
+        min-width: fit-content;
+        touch-action: manipulation;
+        transition: all 0.3s ease;
+        text-transform: unset;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: 0.5px;
+    }
+
+
+
+    #shopify-section-{{section.id }} .skb_tab_contents {
+        position: relative;
+        overflow: hidden;
+    }
+
+    #shopify-section-{{section.id }} .skb_tab_content {
+        opacity: 0;
+        visibility: hidden;
+        padding: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+    }
+
+    #shopify-section-{{section.id }} .skb_tab_content.skb_show {
+        opacity: 1;
+        transition: opacity 0s ease;
+        visibility: visible;
+        position: relative;
+        pointer-events: auto;
+    }
+
+    @media (max-width: 767px) {
+        .skb_tabs__wrap h2.heading.heading--small {
+            font-size: 12px;
+        }
+
+        .skb_tabs__wrap h3.heading.h2 {
+            font-size: 30px;
+            margin: 16px 0 24px;
+        }
+        #shopify-section-{{section.id }} .skb_tabs {
+            gap: 20px;
+        }
+        #shopify-section-{{section.id }} .skb_tab {
+            font-size: 12px;
+            line-height: 1;
+            letter-spacing: 0.5px;
+        }
+    }
+    /* --- END:SKB Universal Multi-Tabs ----- */
+
+    /**
+    * -------------------------------------------------------------
+    * PRODUCT LIST
+    * -------------------------------------------------------------
+    */
+
+    .product-list {
+        --product-list-column-gap: var(--grid-gap);
+    }
+
+    .product-list:not([hidden]) {
+        position: relative;
+        display: block;
+    }
+
+    .product-list__inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, calc(100% / var(--section-products-per-row) - var(--product-list-column-gap) * (var(--section-products-per-row) - 1) / var(--section-products-per-row)));
+        grid-gap: var(--product-list-block-spacing) var(--product-list-column-gap);
+        gap: var(--product-list-block-spacing) var(--product-list-column-gap);
+        overflow: hidden;
+    }
+
+    .product-list__inner--scroller {
+        overflow-x: auto;
+    }
+
+    .product-list--center .product-list__inner {
+        justify-content: safe center; /* For some reason it does not work in RTL on Chrome */
+    }
+
+    @media screen and (max-width: 740px) {
+        /* On mobile when the products are shown in grid we reduce spacing */
+        .product-list {
+            --product-list-column-gap: 12px;
+        }
+
+        .product-list__inner:not(.product-list__inner--scroller) {
+            margin-left: calc(-1 * var(--container-gutter) / 2);
+            margin-right: calc(-1 * var(--container-gutter) / 2);
+        }
+    }
+
+    @media screen and (max-width: 999px) {
+        .product-list__inner--scroller {
+            padding-left: var(--container-gutter);
+            padding-right: var(--container-gutter);
+            grid-auto-flow: column;
+            grid-auto-columns: 52vw;
+            grid-template-columns: none;
+            min-width: min-content;
+        }
+    }
+
+    @media screen and (min-width: 741px) and (max-width: 999px) {
+        .product-list__inner--scroller {
+            grid-auto-columns: 35vw;
+        }
+    }
+
+      @media screen and (min-width: 1000px) {
+        .product-list {
+          /* We calculate the width of one product item cell thanks to power of CSS variables */
+          --item-width: calc((var(--container-max-width-minus-gutters) - 56px) / var(--section-products-per-row) - (var(--grid-gap) / var(--section-products-per-row) * (var(--section-products-per-row) - 1)));
+        }
+
+        @supports (width: max(1px, 2px)) {
+          .product-list {
+            --item-width: calc((min(100vw - var(--container-gutter) * 2, var(--container-max-width-minus-gutters)) - 56px) / var(--section-products-per-row) - (var(--grid-gap) / var(--section-products-per-row) * (var(--section-products-per-row) - 1)));
+          }
+        }
+
+        .product-list__prev-next {
+          position: absolute;
+          pointer-events: none;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          top: calc(var(--item-width) / var(--smallest-image-aspect-ratio) / 2 - 28px); /* 28px is half the height of the button */
+        }
+
+        .product-list__arrow {
+          z-index: 1;
+          opacity: 0;
+          visibility: hidden;
+          transform: scale(0.5);
+          transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out, transform 0.15s ease-in-out;
+        }
+
+        .product-list:hover .product-list__arrow:not([disabled]) {
+          opacity: 1;
+          visibility: visible;
+          transform: scale(1);
+        }
+
+        .product-list__inner--scroller {
+          grid-template-columns: none;
+          grid-auto-flow: column;
+          grid-auto-columns: calc(100% / var(--section-products-per-row, 4) - (var(--grid-gap) / var(--section-products-per-row, 4) * (var(--section-products-per-row, 4) - 1)));
+          margin-left: 28px;
+          margin-right: 28px; /* We add a bit of space for the arrow */
+          overflow: hidden;
+        }
+
+        .product-list__inner--desktop-no-scroller {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+
+      @media not screen and (pointer: fine) {
+        .product-list__arrow:not([disabled]) {
+          opacity: 1;
+          visibility: visible;
+          transform: scale(1);
+        }
+      }
+
+    /**
+     * -------------------------------------------------------------
+     * PRODUCT ITEM
+     *
+     * extra info only available on collection and featured collection pages
+     * -------------------------------------------------------------
+     */
+
+    .product-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-item__image-wrapper {
+      position: relative;
+      display: block;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .product-item__image-wrapper--placeholder {
+      fill: currentColor;
+    }
+
+    [dir="ltr"] .product-item__label-list {
+      left: 10px;
+    }
+
+    [dir="rtl"] .product-item__label-list {
+      right: 10px;
+    }
+
+    .product-item__label-list {
+      position: absolute;
+      z-index: 1;
+      top: 10px;
+    }
+
+    .product-item__image-wrapper--multiple .product-item__primary-image,
+    .product-item__image-wrapper--multiple .product-item__secondary-image {
+      transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+    .product-item__aspect-ratio {
+      isolation: isolate;
+    }
+
+    .product-item__primary-image,
+    .product-item__secondary-image {
+      border-radius: var(--block-border-radius-reduced);
+    }
+
+    .product-item__secondary-image {
+      position: absolute;
+      display: none; /* Allows to make sure it does not trigger lazyload */
+      visibility: hidden;
+      opacity: 0;
+      top: 50% !important;
+      left: 50% !important; /* We must use this instead of logical property here */
+      transform: translate(-50%, -50%) !important;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .product-item__info {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .product-item__info--with-button {
+      justify-content: space-between;
+    }
+
+    .product-item__cta {
+      margin-top: 16px;
+    }
+
+    [dir="ltr"] .product-item__quick-form {
+      left: 0;
+    }
+
+    [dir="rtl"] .product-item__quick-form {
+      right: 0;
+    }
+
+    .product-item__quick-form {
+      position: absolute;
+      padding: 10px;
+      bottom: 0;
+      width: 100%;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    }
+
+    /* This button is only appearing on touch device */
+    [dir="ltr"] .product-item__quick-buy-button {
+      right: 12px;
+    }
+    [dir="rtl"] .product-item__quick-buy-button {
+      left: 12px;
+    }
+    .product-item__quick-buy-button {
+      position: absolute;
+      bottom: 12px;
+      padding: 5px;
+      background: rgb(var(--root-background));
+      color: rgb(var(--root-text-color));
+      border: 1px solid rgb(var(--root-border-color));
+    }
+
+    .product-item__link {
+      display: inline-block;
+      margin: 6px auto 0;
+    }
+
+    @media screen and (pointer: fine) {
+      .product-item__secondary-image {
+        display: block;
+      }
+
+      .product-item__image-wrapper--multiple:hover .product-item__primary-image {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .product-item__image-wrapper--multiple:hover .product-item__secondary-image {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .product-item__image-wrapper:hover .product-item__quick-form {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    @media screen and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .product-item__quick-form {
+        transform: translateY(16px);
+        transition: visibility 0.2s ease-in-out, opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      }
+
+      .product-item__image-wrapper:hover .product-item__quick-form {
+        transform: translateY(0);
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    @media not screen and (pointer: fine) {
+      .product-item__quick-form {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      .product-item__image-wrapper {
+        margin-bottom: 24px;
+      }
+    }
+
+  .placeholder-image {
+    position: relative;
+    padding-bottom: 75%;
+    background-color: rgb(var(--secondary-background));
+  }
+
+  .placeholder-background {
+    background-color: rgb(var(--secondary-background));
+  }
+
+  [dir="ltr"] .placeholder-image svg {
+    left: 0;
+  }
+
+  [dir="rtl"] .placeholder-image svg {
+    right: 0;
+  }
+
+  .placeholder-image svg {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .placeholder-image {
+      padding-bottom: 45%;
+    }
+  }
+</style>
+
+<div class="edcro_featured_collections">
+  <div class="container">
+    <skb-universal-tabs-wrap class="skb_universal_tabs_wrap" data-tabs>
+      <div class="skb_tabs__wrap">
+        <h2 class="heading heading--small">Your title</h2>
+        <h3 class="heading h2">Collection</h3>
+
+        <div class="skb_tabs">
+          {% for block in section.blocks %}
+            {%- capture on_boarding_title -%}{{ 'general.onboarding.collection_title' | t }} {{ forloop.index }}{%- endcapture -%}
+            <button
+              class="skb_tab {% if forloop.first %}skb_active {% endif %}"
+              data-skb-tab-button="{{ forloop.index }}"
+            >
+              {{- block.settings.label | default: block.settings.collection.title | default: on_boarding_title -}}
+            </button>
+          {% endfor %}
+          <span class="skb_tab_nav__position"></span>
+        </div>
+      </div>
+
+      <div class="skb_tab_contents">
+        {% for block in section.blocks %}
+          {%- assign collection = block.settings.collection -%}
+          {%- assign smallest_image_aspect_ratio = 0 -%}
+          <div
+            class="skb_tab_content{% if forloop.first %} skb_show{% endif %}"
+            data-skb-tab-content="{{ forloop.index }}"
+          >
+            <product-list
+              {% if settings.stagger_products_apparition %}
+                stagger-apparition
+              {% endif %}
+              id="block-{{ section.id }}-{{ block.id }}"
+              class="product-list product-list--center became-visible"
+            >
+              <div>
+                <div class="product-list__inner {% unless section.settings.stack_products %}product-list__inner--scroller hide-scrollbar{% endunless %}">
+                  {%- assign number_of_products_minus_one = section.settings.products_per_row | minus: 1 -%}
+                  {%- assign gap_width = 24.0
+                    | divided_by: section.settings.products_per_row
+                    | times: number_of_products_minus_one
+                  -%}
+                  {%- capture sizes_attribute -%}(max-width: 740px) 52vw, calc(min(100vw - 80px, 1520px) / {{ section.settings.products_per_row }} - {{ gap_width | ceil }}px){%- endcapture -%}
+
+                  {%- for product in collection.products limit: section.settings.products_count -%}
+                    {%- if product.featured_media -%}
+                      {%- assign smallest_image_aspect_ratio = smallest_image_aspect_ratio
+                        | at_least: product.featured_media.aspect_ratio
+                      -%}
+                    {%- endif -%}
+
+                    {%- render 'product-item',
+                      product: product,
+                      collection: collection,
+                      show_cta: section.settings.show_cta,
+                      block: block,
+                      sizes_attribute: sizes_attribute,
+                      reveal: settings.stagger_products_apparition
+                    -%}
+                  {%- else -%}
+                    {%- assign smallest_image_aspect_ratio = 1 -%}
+
+                    {%- for i in (1..section.settings.products_count) -%}
+                      {%- capture product_image -%}product-{% cycle '1', '2', '3', '4', '5' %}{% endcapture %}
+                      {%- render 'product-item-placeholder',
+                        product_image: product_image,
+                        show_cta: section.settings.show_cta,
+                        reveal: settings.stagger_products_apparition
+                      -%}
+                    {%- endfor -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+
+              {%- if block.settings.button_text != blank -%}
+                <div class="section__footer">
+                  <a class="button button--primary" href="{{ block.settings.button_url | default: collection.url }}">
+                    {{- block.settings.button_text -}}
+                  </a>
+                </div>
+              {%- endif -%}
+            </product-list>
+          </div>
+        {% endfor %}
+      </div>
+    </skb-universal-tabs-wrap>
+  </div>
+</div>
+
+{% comment %}
+  <script>
+    // Universal Multi-Tabs by Rana
+    (function () {
+      function initSKBUniversalMultiTabs(scope = document) {
+        const containers = scope.querySelectorAll('.skb_universal_tabs_wrap');
+
+        containers.forEach((container) => {
+          const tabs = container.querySelectorAll('[data-skb-tab-button]');
+          const contents = container.querySelectorAll('[data-skb-tab-content]');
+          const indicator = container.querySelector('.skb_tab_nav__position'); // Optional
+
+          // Move indicator under active tab
+          function moveIndicator(tab) {
+            if (!indicator) return; // Skip if indicator is not found
+            const tabRect = tab.getBoundingClientRect();
+            const parentRect = tab.parentElement.getBoundingClientRect();
+            const leftOffset = tabRect.left - parentRect.left;
+            indicator.style.width = `${tabRect.width}px`;
+            indicator.style.transform = `translateX(${leftOffset}px)`;
+          }
+
+          // Set initial state
+          const firstActiveTab = container.querySelector('.skb_tab.skb_active') || tabs[0];
+          if (firstActiveTab) {
+            firstActiveTab.classList.add('skb_active');
+            moveIndicator(firstActiveTab);
+            const firstTarget = firstActiveTab.getAttribute('data-skb-tab-button');
+            const firstContent = container.querySelector(`[data-skb-tab-content="${firstTarget}"]`);
+            if (firstContent) {
+              firstContent.classList.add('skb_show');
+              firstContent.style.position = 'relative';
+            }
+          }
+
+          // Add click events
+          tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+              const target = tab.getAttribute('data-skb-tab-button');
+
+              tabs.forEach((t) => t.classList.remove('skb_active'));
+              tab.classList.add('skb_active');
+
+              moveIndicator(tab);
+
+              contents.forEach((content) => {
+                content.classList.remove('skb_show');
+                content.style.position = 'absolute';
+              });
+
+              const next = container.querySelector(`[data-skb-tab-content="${target}"]`);
+              if (next) {
+                next.classList.add('skb_show');
+                next.style.position = 'relative';
+              }
+            });
+          });
+
+          // Recalculate on window resize
+          if (indicator) {
+            window.addEventListener('resize', () => {
+              const activeTab = container.querySelector('.skb_tab.skb_active');
+              if (activeTab) moveIndicator(activeTab);
+            });
+          }
+        });
+      }
+
+      // DOM ready
+      document.addEventListener('DOMContentLoaded', () => {
+        initSKBUniversalMultiTabs();
+      });
+
+      // Shopify section reload support
+      if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+        document.addEventListener('shopify:section:load', (e) => {
+          initSKBUniversalMultiTabs(e.target);
+        });
+      }
+    })();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabsContainer = document.querySelector('.skb_tabs');
+      const tabButtons = tabsContainer.querySelectorAll('.skb_tab');
+
+      // Observe click events on each tab
+      tabButtons.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          setTimeout(() => {
+            scrollActiveTabIntoView();
+          }, 50); // Give some time for .skb_active to apply
+        });
+      });
+
+      function scrollActiveTabIntoView() {
+        const activeTab = tabsContainer.querySelector('.skb_tab.skb_active');
+        if (!activeTab) return;
+
+        const containerRect = tabsContainer.getBoundingClientRect();
+        const tabRect = activeTab.getBoundingClientRect();
+
+        const containerLeft = tabsContainer.scrollLeft;
+        const offsetLeft = activeTab.offsetLeft;
+        const offsetRight = offsetLeft + activeTab.offsetWidth;
+
+        const visibleLeft = containerLeft;
+        const visibleRight = containerLeft + tabsContainer.clientWidth;
+
+        // Scroll left if tab is out of view to the left
+        if (offsetLeft < visibleLeft) {
+          tabsContainer.scrollTo({
+            left: offsetLeft - 40, // Add some margin
+            behavior: 'smooth',
+          });
+        }
+        // Scroll right if tab is out of view to the right
+        else if (offsetRight > visibleRight) {
+          tabsContainer.scrollTo({
+            left: offsetRight - tabsContainer.clientWidth + 40, // Add some margin
+            behavior: 'smooth',
+          });
+        }
+      }
+    });
+  </script>
+{% endcomment %}
+
+<script>
+  // Universal Multi-Tabs by Rana
+  (function () {
+    function initSKBUniversalMultiTabs(scope = document) {
+      const containers = scope.querySelectorAll('.skb_universal_tabs_wrap');
+
+      containers.forEach((container) => {
+        const tabs = container.querySelectorAll('[data-skb-tab-button]');
+        const contents = container.querySelectorAll('[data-skb-tab-content]');
+        const indicator = container.querySelector('.skb_tab_nav__position'); // Optional
+
+        const tabsWrapper = container.querySelector('.skb_tabs');
+
+        // Move indicator under active tab
+        function moveIndicator(tab) {
+          if (!indicator || !tab || !tabsWrapper) return;
+
+          const tabOffsetLeft = tab.offsetLeft;
+          const tabWidth = tab.offsetWidth;
+
+          indicator.style.width = `${tabWidth}px`;
+          indicator.style.transform = `translateX(${tabOffsetLeft}px)`;
+        }
+
+        // Set initial state
+        const firstActiveTab = container.querySelector('.skb_tab.skb_active') || tabs[0];
+        if (firstActiveTab) {
+          firstActiveTab.classList.add('skb_active');
+          moveIndicator(firstActiveTab);
+          const firstTarget = firstActiveTab.getAttribute('data-skb-tab-button');
+          const firstContent = container.querySelector(`[data-skb-tab-content="${firstTarget}"]`);
+          if (firstContent) {
+            firstContent.classList.add('skb_show');
+            firstContent.style.position = 'relative';
+          }
+        }
+
+        // Add click events
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-skb-tab-button');
+
+            tabs.forEach((t) => t.classList.remove('skb_active'));
+            tab.classList.add('skb_active');
+
+            moveIndicator(tab);
+            scrollActiveTabIntoView(tab);
+
+            contents.forEach((content) => {
+              content.classList.remove('skb_show');
+              content.style.position = 'absolute';
+            });
+
+            const next = container.querySelector(`[data-skb-tab-content="${target}"]`);
+            if (next) {
+              next.classList.add('skb_show');
+              next.style.position = 'relative';
+            }
+          });
+        });
+
+        // Recalculate on window resize or scroll
+        if (indicator) {
+          window.addEventListener('resize', () => {
+            const activeTab = container.querySelector('.skb_tab.skb_active');
+            if (activeTab) moveIndicator(activeTab);
+          });
+
+          // Sync position while scrolling horizontally
+          if (tabsWrapper) {
+            tabsWrapper.addEventListener('scroll', () => {
+              const activeTab = container.querySelector('.skb_tab.skb_active');
+              if (activeTab) moveIndicator(activeTab);
+            });
+          }
+        }
+
+        // Scroll tab into view if needed
+        function scrollActiveTabIntoView(tab) {
+          if (!tabsWrapper || !tab) return;
+
+          const containerLeft = tabsWrapper.scrollLeft;
+          const offsetLeft = tab.offsetLeft;
+          const offsetRight = offsetLeft + tab.offsetWidth;
+
+          const visibleLeft = containerLeft;
+          const visibleRight = containerLeft + tabsWrapper.clientWidth;
+
+          if (offsetLeft < visibleLeft) {
+            tabsWrapper.scrollTo({
+              left: offsetLeft - 40,
+              behavior: 'smooth',
+            });
+          } else if (offsetRight > visibleRight) {
+            tabsWrapper.scrollTo({
+              left: offsetRight - tabsWrapper.clientWidth + 40,
+              behavior: 'smooth',
+            });
+          }
+        }
+      });
+    }
+
+    // DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBUniversalMultiTabs();
+    });
+
+    // Shopify section reload support
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        initSKBUniversalMultiTabs(e.target);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Bestseller with Category",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Your title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collection"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "Products to show",
+      "min": 4,
+      "max": 50,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "stack_products",
+      "label": "Stack products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show add to cart below info",
+      "info": "If enabled, we recommend using 4 products per row at maximum.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right (mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Shown when more than 1 collection is featured. Collection title is used if none is set."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button link",
+          "info": "If empty, the collection URL is used."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Bestseller with Category",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

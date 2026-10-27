@@ -1,0 +1,923 @@
+Step 1: In settings_schema.json add this code
+
+{
+    "name": "Cart Upsell",
+    "settings": [
+        {
+        "type": "checkbox",
+        "id": "cart_upsell_show",
+        "label": "Display Section",
+        "info": "Uncheck to hide this section. To show it during an A/B test, use the following CSS code: .cart-upsell{ display: block !important; }",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "cart_upsell_display",
+        "label": "Display Settings",
+        "options": [
+          {
+            "value": "horizontally",
+            "label": "Horizontally (Slider)"
+          },
+          {
+            "value": "vertically",
+            "label": "Vertically"
+          }
+        ],
+        "default": "horizontally"
+      },
+      {
+        "type": "text",
+        "id": "cart_upsell_headline",
+        "label": "Cart upsell headline",
+        "default": "Passt perfekt dazu"
+      },
+      {
+        "type": "text",
+        "id": "cart_upsell_subheadline",
+        "label": "Cart upsell sub-headline",
+        "default": "8 von 10 Kunden kaufen zusätzlich"
+      },
+      {
+        "type": "product_list",
+        "id": "cart_upsell_products",
+        "label": "Cart upsell products",
+        "limit": 5
+      },
+      {
+        "type": "color",
+        "id": "cart_upsell_color",
+        "label": "Cart upsell text color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "cart_upsell_bg_color",
+        "label": "Cart upsell background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_upsell_teaser",
+        "label": "Show cart upsell teaser",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_upsell_price",
+        "label": "Show cart upsell price",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_upsell_rating",
+        "label": "Show cart upsell Reviews",
+        "default": false
+      }
+    ]
+  },
+
+Step 2: Create snippet cart-upsell.liquid
+<div class="cart-upsell-products-wrapper">
+  {% if settings.cart_upsell_headline != blank %}
+    <div class="upsell_headline">{{ settings.cart_upsell_headline }}</div>
+  {% endif %}
+  {% if settings.cart_upsell_subheadline != blank %}
+    <div class="upsell_subheadline">{{ settings.cart_upsell_subheadline }}</div>
+  {% endif %}
+  <div class="cart-upsell-products">
+    {% assign product_handles = '' %}
+    {% assign cart_products = cart.items | map: 'product' %}
+    {% for item in cart.items %}
+      {% for product in item.product.metafields.custom.cart_upsell.value %}
+        {% assign product_handles = product_handles | append: product.handle %}
+        {% assign product_handles = product_handles | append: ',' %}
+      {% endfor %}
+    {% endfor %}
+
+    {% assign product_handles = product_handles | split: ',' %}
+    {% assign product_handles = product_handles | uniq %}
+    {% if product_handles.size > 0 %}
+      {% for handle in product_handles %}
+        {% assign product = all_products[handle] %}
+        {% unless cart_products contains product %}
+          {% render 'upsell-product-temp', product: product %}
+        {% endunless %}
+      {% endfor %}
+    {% else %}
+      {% for product in settings.cart_upsell_products %}
+        {% unless cart_products contains product %}
+          {% render 'upsell-product-temp', product: product %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+<!-- cart upsell variant popup -->
+<div class="upsell-product-popup_wrapper">
+  {% if product_handles.size > 0 %}
+    {% for handle in product_handles %}
+      {% assign product = all_products[handle] %}
+      {% unless cart_products contains product %}
+        {% render 'upsell-popup-temp', product: product %}
+      {% endunless %}
+    {% endfor %}
+  {% else %}
+    {% for product in settings.cart_upsell_products %}
+      {% unless cart_products contains product %}
+        {% render 'upsell-popup-temp', product: product %}
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+</div>
+<!-- cart upsell variant popup -->
+
+<style>
+     .cart-upsell-products-wrapper{
+       background-color: {{settings.cart_upsell_bg_color}};
+       z-index: 10;
+     }
+   .cart-upsell-products-wrapper .upsell_subheadline, .cart-upsell-products-wrapper .upsell-product-title,.cart-upsell-products-wrapper .original_price,.cart-upsell-products-wrapper .compare_price,.cart-upsell-products-wrapper .upsell_headline ,.cart-upsell-products-wrapper .saved_price {
+       color: {{settings.cart_upsell_color}};
+     }
+
+  .cart-upsell-products-wrapper .upsell_headline {
+    display: none;
+    padding: 2px 0;
+    border-radius: 3px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+    z-index: 2;
+  }
+  .cart-upsell-products-wrapper .upsell_subheadline{
+    display: none;
+    padding: 2px 0;
+    border-radius: 3px;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .cart-upsell-products-wrapper:has(.upsell-product) .upsell_headline {
+    display: block;
+  }
+  .cart-upsell-products-wrapper:has(.upsell-product) .upsell_subheadline{
+      display: block;
+  }
+  .cart-upsell-products-wrapper .upsell-product-title {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    text-transform: uppercase;
+  }
+  .cart-upsell-products-wrapper .compare_price {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    text-decoration: line-through;
+  }
+  .cart-upsell-products-wrapper .original_price {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .cart-upsell-products-wrapper .sale_price {
+    margin: 0 5px;
+  }
+  .cart-upsell-products-wrapper .saved_price {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .cart-upsell-products-wrapper .saved_price span {
+    color: #31ae2f !important;
+  }
+  .cart-upsell-products-wrapper .upsell-add-to-cart {
+    display: inline-block;
+    padding: 5px 12px;
+    background-color: #000000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+    margin-top: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .cart-upsell-products-wrapper .upsell-product {
+    display: flex !important;
+    align-items: center;
+    padding: 12px 0;
+    border-radius: 3px;
+  }
+  .cart-upsell-products-wrapper .upsell-product-info {
+    padding: 0 11px;
+    flex: 1;
+  }
+  .cart-upsell-products-wrapper {
+    padding: 12px 20px;
+    position: relative;
+  }
+
+  .cart-upsell-products-wrapper .slick-dots {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none !important;
+  }
+  .cart-upsell-products-wrapper .slick-dots button {
+    display: none;
+  }
+  .cart-upsell-products-wrapper .slick-dots li {
+    width: 6px;
+    height: 6px;
+    background-color: #d9d9d9;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .cart-upsell-products-wrapper .slick-dots li:not(last-child) {
+    margin-right: 6px;
+  }
+  .cart-upsell-products-wrapper .slick-dots li.slick-active {
+    background-color: #000;
+  }
+  .cart-upsell-products-wrapper .slick-arrow {
+    position: absolute;
+    top: 18px;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(26, 26, 26, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cart-upsell-products-wrapper .slick-arrow.slick-prev {
+    right: calc(var(--container-gutter) + 32px);
+  }
+  .cart-upsell-products-wrapper .slick-arrow.slick-prev svg {
+    transform: rotate(180deg);
+  }
+  .cart-upsell-products-wrapper .slick-arrow.slick-next {
+    right: var(--container-gutter);
+  }
+  .cart-upsell-products-wrapper .slick-slider{
+    position: static;
+  }
+  .cart-upsell-products-wrapper .slick-arrow[aria-disabled="true"] {
+    opacity: 0.5;
+  }
+  .cart-upsell-products-wrapper .upsell-product-price {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .cart-drawer--inner {
+    max-width: 420px;
+  }
+  .upsell-product .upsell-product-img {
+    width: 67px;
+  }
+  .upsell-product .upsell-product-img img {
+    width: 100%;
+    max-width: 100%;
+  }
+  .upsell-product-popup_wrapper,
+  .upsell-product-popup {
+    display: none;
+  }
+  .upsell-product-popup_wrapper {
+    position: fixed;
+    z-index: 12;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .upsell-product-popup {
+    position: fixed;
+    z-index: 12;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    background: #f6f6f6;
+    width: 100%;
+    padding: 18px 16px;
+  }
+  .upsell-product-popup .upsell_popup_product_info {
+    display: flex;
+  }
+  .upsell-product-popup .upsell_popup_product_info .product_title {
+    color: #010101;
+    font-family: Work Sans !important;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  .upsell-product-popup .upsell_popup_product_info .upsell_popup-price {
+    color: #010101;
+    font-family: Open Sans !important;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .upsell-product-popup .product_info_wrapper {
+    padding-left: 13px;
+  }
+
+  .upsell-product-popup {
+    display: none;
+  }
+  .upsell-product-popup_wrapper {
+    position: fixed;
+    z-index: 99999;
+    right: 0;
+    bottom: 0;
+    width: 500px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .upsell-product-popup {
+    position: fixed;
+    z-index: 99999;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px 16px 0 0;
+    background: #f6f6f6;
+    width: 500px;
+    padding: 18px 16px;
+  }
+  .upsell-product-popup .upsell_popup_product_info {
+    display: flex;
+  }
+  .upsell-product-popup .upsell_popup_product_info .product_title {
+    color: #010101;
+    font-family: Work Sans !important;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  .upsell-product-popup .upsell_popup_product_info .upsell_popup-price {
+    color: #010101;
+    font-family: Open Sans !important;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .upsell-product-popup .product_info_wrapper {
+    padding-left: 13px;
+  }
+  .upsell-product-popup .swatch-container .variant-label {
+    display: block;
+    color: #010101;
+    font-family: Work Sans !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-top: 12px;
+    margin-bottom: 3px;
+  }
+  .upsell-product-popup .swatch-container.varaint_block .swatch-list,
+  .upsell-product-popup .color_swatch.swatch-container .swatch-list {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .upsell-product-popup .swatch-container.varaint_block .swatch {
+    display: inline-block;
+    color: #010101;
+    font-family: Lato !important;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    padding: 6px 15px;
+    border-radius: 3px;
+    border: 1px solid #e9e9e9;
+    background: #fff;
+    margin-right: 6px;
+    cursor: pointer;
+  }
+
+  .upsell-product-popup .color_swatch.swatch-container .swatch {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #e9e9e9;
+    cursor: pointer;
+    margin-right: 9px;
+  }
+  .upsell-product-popup .product-popup-atc {
+    display: block;
+    border-radius: 3px;
+    background: #000;
+    width: 100%;
+    color: #fff;
+    font-family: Inter !important;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 41px;
+    text-transform: uppercase;
+    margin-top: 18px;
+    text-align: center;
+  }
+  .upsell-product-popup .swatch-container .swatch.active {
+    border: 1px solid #000 !important;
+  }
+  .upsell-product-popup .swatch-container .swatch.soldout_variant {
+    opacity: 0.6;
+  }
+  .upsell-product .rating__caption{
+    display: none;
+  }
+  .upsell-product a{
+    line-height: 1;
+  }
+  .upsell-product-rating{
+    line-height: 1.4;
+  }
+  @media (max-width: 500px) {
+    .upsell-product-popup_wrapper,
+    .upsell-product-popup {
+      width: 100%;
+    }
+  }
+
+
+   {% unless settings.cart_upsell_show %}
+    .cart-upsell {
+      display: none;
+    }
+    {% endunless %}
+</style>
+
+Step 3: Create snippet upsell-popup-temp.liquid
+<div data-product-id="{{ product.id }}" class="upsell-product-popup">
+  <div class="popup_container">
+    <div class="upsell_popup_product_info">
+      <div class="upsell_popup_img">
+        {% if product.featured_image %}
+          {{ product.featured_image | image_url: width: 90 | image_tag }}
+        {% endif %}
+      </div>
+      <div class="product_info_wrapper">
+        <div class="product_title">
+          {{ product.title }}
+        </div>
+        <div class="upsell_popup-price">
+          {{ product.selected_or_first_available_variant.price | money }}
+        </div>
+      </div>
+    </div>
+    {% if product.variants.size > 1 %}
+      <div
+        class="product-container"
+        id="product-{{ product.id }}"
+        data-variant-selected="{{ product.selected_or_first_available_variant.id }}"
+        data-variants='{{ product.variants | json }}'
+      >
+        {% assign options = product.options_with_values %}
+        {% assign variant = product.selected_or_first_available_variant %}
+
+        {% for option in options %}
+          {% if option.name == 'Farbe' or option.name == 'Color' or option.name == 'farbe' or option.name == 'color' %}
+            <div class="color_swatch swatch-container index{{ forloop.index }}">
+              <label for="{{ option.name | handle }}" class="variant-label">{{ option.name }}:</label>
+              <div class="swatch-list">
+                {% for value in option.values %}
+                  {%- assign color_swatch_config = settings.color_swatch_config | newline_to_br | split: '<br />' -%}
+                  {%- assign color_value_downcase = value | downcase -%}
+
+                  {% for variant in product.variants %}
+                    {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                      {% assign variant = variant %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+
+                  <div
+                    class="swatch  {% if forloop.index == 1 %} active {% endif %} {% unless variant.available %} soldout_variant {% endunless %}"
+                    data-value="{{ value }}"
+                    style="{% render "color-swatch-style", color_swatch_config: color_swatch_config, value: color_value_downcase  %}"
+                  ></div>
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            <div class="swatch-container varaint_block index{{ forloop.index }}">
+              <label for="{{ option.name | handle }}" class="variant-label">{{ option.name }}</label>
+              <div class="swatch-list">
+                {% for value in option.values %}
+                  {% for variant in product.variants %}
+                    {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                      {% assign variant = variant %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                  <div
+                    class="swatch {% if forloop.index == 1 %} active {% endif %}  {% unless variant.available %} soldout_variant {% endunless %}"
+                    data-value="{{ value }}"
+                  >
+                    {{ value }}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <a href="" class="product-popup-atc" data-vid="{{ product.selected_or_first_available_variant.id }}"
+      >In den Warenkorb</a
+    >
+  </div>
+</div>
+
+Step 4: Create snippet upsell-product-temp.liquid
+<div class="upsell-product">
+  <div class="upsell-product-img">
+    {% if product.images.first %}
+      {{ product.images.first | image_url: width: 300 | image_tag }}
+    {% endif %}
+  </div>
+  <div class="upsell-product-info">
+    <a href="{{ product.url }}">
+      <div class="upsell-product-title">{{ product.title }}</div>
+    </a>
+
+    {% if settings.show_cart_upsell_teaser %}
+      <!-- Teaser-Texte -->
+      {% render 'teaser-text', product: product, product_page: false, always_show: true %}
+      <!-- Teaser-Texte -->
+    {% endif %}
+    {% if settings.show_cart_upsell_rating %}
+      <div class="upsell-product-rating">
+        {%- render 'product-rating', product: product -%}
+      </div>
+    {% endif %}
+    {% if settings.show_cart_upsell_price %}
+    <div class="upsell-product-price">
+      {% if product.first_available_variant.compare_at_price > product.first_available_variant.price %}
+        <span class="compare_price">{{ product.first_available_variant.compare_at_price | money }}</span>
+      {% endif %}
+      <span class="original_price {% if product.first_available_variant.compare_at_price > product.first_available_variant.price %} sale_price {% endif %}">
+        {{ product.first_available_variant.price | money }}
+      </span>
+      {% if settings.show_cart_upsell_price %}
+        {% if product.first_available_variant.compare_at_price > product.first_available_variant.price %}
+          <span class="saved_price">
+            (Du sparst
+            <span>
+              {{-
+                product.first_available_variant.compare_at_price
+                | minus: product.first_available_variant.price
+                | money
+              -}}
+            </span>
+            )
+          </span>
+        {% endif %}
+      {% endif %}
+    </div>
+      {% endif %}
+    <div
+      class="upsell-add-to-cart"
+      data-open-popup="{% if product.variants.size > 1 %}yes{% else %} no {% endif %}"
+
+      data-vid="{{ product.first_available_variant.id }}"
+      data-product-id="{{ product.id }}"
+    >
+      hinzufügen
+    </div>
+  </div>
+</div>
+
+Step 5: In min-cart.liquid file before footer add this 
+    <div class="cart-upsell">
+      {% render 'cart-upsell' %}
+    </div>
+
+Step 6: In theme.js
+Before CartDrawer class: 
+
+function initializeUpsellSlider() {
+    $(".cart-upsell-products").slick({
+      adaptiveHeight: false,
+      infinite: false,
+      dots: true,
+      arrows: true,
+      nextArrow:
+        '<button class="slick-next"><svg role="presentation" focusable="false" width="5" height="8" class="icon icon-chevron-right-small reverse-icon" viewBox="0 0 5 8"> <path d="m.75 7 3-3-3-3" fill="none" stroke="currentColor" stroke-width="1.5"></path> </svg></button>',
+      prevArrow:
+        '<button class="slick-prev"><svg role="presentation" focusable="false" width="5" height="8" class="icon icon-chevron-right-small reverse-icon" viewBox="0 0 5 8"> <path d="m.75 7 3-3-3-3" fill="none" stroke="currentColor" stroke-width="1.5"></path> </svg></button>',
+    });
+  }
+
+  if (cart_upsell_display == "horizontally") {
+    initializeUpsellSlider();
+  }
+
+
+
+Step 7: In theme.js inside CartDrawer class: 
+Inside connectedCallback() method: 
+this.delegate.on("click", ".upsell-add-to-cart", async function (e) {
+        e.preventDefault();
+        var productId = $(this).data("product-id");
+
+        if ($(this).data("open-popup") == "yes") {
+          $(".upsell-product-popup").hide();
+          $(`.upsell-product-popup[data-product-id="${productId}"]`).fadeIn();
+          $(".upsell-product-popup_wrapper").fadeIn();
+        } else {
+          let v_id = this.getAttribute("data-vid");
+
+          let formData = {
+            items: [
+              {
+                id: v_id,
+                quantity: 1,
+              },
+            ],
+          };
+          const res = await fetch(window.Shopify.routes.root + "cart/add.js", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }).then(async (response) => {
+            fetch(`${window.themeVariables.routes.cartUrl}.js`).then(
+              async (response2) => {
+                const cartContent = await response2.json();
+                document.documentElement.dispatchEvent(
+                  new CustomEvent("cart:updated", {
+                    bubbles: true,
+                    detail: {
+                      cart: cartContent,
+                    },
+                  })
+                );
+
+                document.documentElement.dispatchEvent(
+                  new CustomEvent("cart:refresh", {
+                    bubbles: true,
+                    detail: {
+                      cart: cartContent,
+                      openMiniCart:
+                        window.themeVariables.settings.cartType === "drawer" &&
+                        this.closest(".drawer") === null,
+                    },
+                  })
+                );
+              }
+            );
+          });
+        }
+      });
+
+      this.delegate.on("click", ".product-popup-atc", async function (e) {
+        e.preventDefault();
+        $("#mini-cart").attr("open", "true");
+        let v_id = this.getAttribute("data-vid");
+
+        let formData = {
+          items: [
+            {
+              id: v_id,
+              quantity: 1,
+            },
+          ],
+        };
+        const res = await fetch(window.Shopify.routes.root + "cart/add.js", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }).then((response) => {
+          fetch(`${window.themeVariables.routes.cartUrl}.js`).then(
+            async (response2) => {
+              const cartContent = await response2.json();
+              document.documentElement.dispatchEvent(
+                new CustomEvent("cart:updated", {
+                  bubbles: true,
+                  detail: {
+                    cart: cartContent,
+                  },
+                })
+              );
+
+              document.documentElement.dispatchEvent(
+                new CustomEvent("cart:refresh", {
+                  bubbles: true,
+                  detail: {
+                    cart: cartContent,
+                    openMiniCart:
+                      window.themeVariables.settings.cartType === "drawer" &&
+                      this.closest(".drawer") === null,
+                  },
+                })
+              );
+            }
+          );
+        });
+        $(".upsell-product-popup_wrapper").hide();
+      });
+
+      this.delegate.on("click", ".upsell-product-popup_wrapper", function (e) {
+        if (e.target == this) {
+          $(".upsell-product-popup_wrapper").hide();
+        }
+      });
+
+      function getSiblingWithClass(element, className) {
+        if (element.classList.contains(className)) {
+          return element;
+        }
+        let sibling = element.nextElementSibling;
+
+        while (sibling) {
+          if (sibling.classList.contains(className)) {
+            return sibling;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+
+        sibling = element.previousElementSibling;
+
+        while (sibling) {
+          if (sibling.classList.contains(className)) {
+            return sibling;
+          }
+          sibling = sibling.previousElementSibling;
+        }
+        return null;
+      }
+
+      var selectedOptions = [];
+      this.delegate.on("click", ".swatch", function () {
+        const container = this.closest(".product-container");
+        const variants = JSON.parse(container.getAttribute("data-variants"));
+
+        const siblings = Array.from(this.parentNode.children).filter(
+          (child) => child !== this
+        );
+        siblings.forEach((sibling) => sibling.classList.remove("active"));
+        this.classList.add("active");
+
+        var option1_type = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index1"
+        )
+          ? getSiblingWithClass(
+              this.closest(".swatch-container"),
+              "index1"
+            ).querySelector(".variant-label").textContent
+          : null;
+        var option1_value = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index1"
+        )
+          ? getSiblingWithClass(this.closest(".swatch-container"), "index1")
+              .querySelector(".swatch.active")
+              .getAttribute("data-value")
+          : null;
+
+        var option2_type = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index2"
+        )
+          ? getSiblingWithClass(
+              this.closest(".swatch-container"),
+              "index2"
+            ).querySelector(".variant-label").textContent
+          : null;
+        var option2_value = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index2"
+        )
+          ? getSiblingWithClass(this.closest(".swatch-container"), "index2")
+              .querySelector(".swatch.active")
+              .getAttribute("data-value")
+          : null;
+
+        var option3_type = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index3"
+        )
+          ? getSiblingWithClass(
+              this.closest(".swatch-container"),
+              "index3"
+            ).querySelector(".variant-label").textContent
+          : null;
+        var option3_value = getSiblingWithClass(
+          this.closest(".swatch-container"),
+          "index3"
+        )
+          ? getSiblingWithClass(this.closest(".swatch-container"), "index3")
+              .querySelector(".swatch.active")
+              .getAttribute("data-value")
+          : null;
+
+        if (option1_value) {
+          selectedOptions.push(option1_value);
+        }
+        if (option2_value) {
+          selectedOptions.push(option2_value);
+        }
+        if (option3_value) {
+          selectedOptions.push(option3_value);
+        }
+
+        var selectedVariant = findVariant(variants, selectedOptions);
+
+        if (selectedVariant) {
+          container.setAttribute("data-variant-selected", selectedVariant.id);
+
+          updateSoldOutStates(container, variants, selectedOptions);
+
+          console.log("Selected Variant:", selectedVariant);
+          getSiblingWithClass(container, "product-popup-atc").setAttribute(
+            "data-vid",
+            selectedVariant.id
+          );
+        }
+
+        selectedOptions = [];
+      });
+
+      function findVariant(variants, selectedOptions) {
+        return variants.find(
+          (variant) =>
+            variant.option1 == selectedOptions[0] &&
+            variant.option2 == selectedOptions[1] &&
+            variant.option3 == selectedOptions[2]
+        );
+      }
+
+      function updateSoldOutStates(container, variants, selectedOptions) {
+        const optionContainers =
+          container.querySelectorAll(".swatch-container");
+
+        optionContainers.forEach(function (optionContainer, index) {
+          const swatches = optionContainer.querySelectorAll(".swatch");
+
+          swatches.forEach(function (swatch) {
+            const value = swatch.getAttribute("data-value");
+            const currentSelectedOptions = [...selectedOptions];
+            currentSelectedOptions[index] = value;
+
+            const matchingVariant = findVariant(
+              variants,
+              currentSelectedOptions
+            );
+            if (matchingVariant && !matchingVariant.available) {
+              swatch.classList.add("soldout_variant");
+            } else {
+              swatch.classList.remove("soldout_variant");
+            }
+          });
+        });
+      }
+
+Step 8: In theme.js after this.innerHTML = fakeDiv.querySelector("cart-drawer").innerHTML;
+setTimeout(function () {
+          try {
+            /* Cart upsell */
+            if (cart_upsell_display == "horizontally") {
+              initializeUpsellSlider();
+            }
+            /* Cart upsell end*/
+          } catch (e) {}
+        }, 800);
+
+
+Step 9: Include jquery and slick slider
+
+Step 10: Add this code inside head of theme.liquid 
+<script>
+ var cart_upsell_display = {{ settings.cart_upsell_display | json }};
+</script>

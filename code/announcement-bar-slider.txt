@@ -1,0 +1,378 @@
+Step: 1
+Update section: announcement-bar.liquid
+With this code:
+
+{% if section.blocks.size > 0 %}
+  <style>
+    :root {
+      --enable-sticky-announcement-bar: {% if section.settings.announcement_bar_position == 'non_sticky' or section.settings.announcement_bar_position == 'sticky_desktop' %}0{% else %}1{% endif %};
+    }
+    {%- if section.settings.announcement_bar_position == 'sticky' or section.settings.announcement_bar_position == 'sticky_mobile' -%}
+        :root {
+          --announcement-bar-height: 33px;
+        }
+      {%- endif -%}
+
+    #shopify-section-{{ section.id }} {
+      {%- if section.settings.announcement_bar_position == 'sticky' or section.settings.announcement_bar_position == 'sticky_mobile' -%}
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 5; /* Make sure it goes over header */
+      {%- else -%}
+        position: relative;
+      {%- endif -%}
+    }
+
+    @media screen and (min-width: 741px) {
+      :root {
+        --enable-sticky-announcement-bar: {% if section.settings.announcement_bar_position == 'non_sticky' or section.settings.announcement_bar_position == 'sticky_mobile' %}0{% else %}1{% endif %};
+      }
+      {%- if section.settings.announcement_bar_position == 'sticky' or section.settings.announcement_bar_position == 'sticky_desktop' -%}
+        :root {
+          --announcement-bar-height: 41px;
+        }
+      {%- endif -%}
+
+      #shopify-section-{{ section.id }} {
+        {%- if section.settings.announcement_bar_position == 'sticky' or section.settings.announcement_bar_position == 'sticky_desktop' -%}
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          z-index: 5;
+        {%- else -%}
+          position: relative;
+          z-index: unset;
+        {%- endif -%}
+      }
+    }
+
+    ed-announcement-bar.ed_announcement_bar {
+        --text-color: {{ section.settings.text_color.red }}, {{ section.settings.text_color.green }}, {{ section.settings.text_color.blue }};
+        --section-background: {{ section.settings.background.red }}, {{ section.settings.background.green }}, {{ section.settings.background.blue }};
+    }
+    ed-announcement-bar.ed_announcement_bar {
+      display: block;
+      width: 100%;
+      padding: 7px 0;
+      display: block;
+      background-color: rgb(var(--section-background));
+      color: rgb(var(--text-color));
+    }
+    .swiper-button-prev.ed_announcement_bar_swiper-prev,
+    .swiper-button-next.ed_announcement_bar_swiper-next {
+      color: #fff;
+      --swiper-navigation-size: 20px;
+    }
+
+    .swiper-button-prev.ed_announcement_bar_swiper-prev.swiper-button-disabled,
+    .swiper-button-next.ed_announcement_bar_swiper-next.swiper-button-disabled {
+      pointer-events: unset;
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .swiper-button-next.ed_announcement_bar_swiper-next {
+      right: 0;
+    }
+
+    .swiper-button-prev.ed_announcement_bar_swiper-prev {
+      left: 0;
+    }
+
+    ul.ed-announcement-bar--item__list {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      list-style: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+    ul.ed-announcement-bar--item__list li.icon-right,
+    ul.ed-announce-right-list li.icon-right {
+      order: 2;
+    }
+    span.ed-icon-wrap {
+      display: flex;
+    }
+
+    ul.ed-announcement-bar--item__list li strong {
+      font-weight: 600;
+    }
+
+    ul.ed-announcement-bar--item__list li.ed-stars {
+      display: flex;
+      align-items: center;
+    }
+    @media (min-width: 768px) {
+      .ed_announcement_arrows_hide_desktop {
+        display: none;
+      }
+    }
+    @media (max-width: 740px) {
+      .swiper-button-prev.ed_announcement_bar_swiper-prev,
+      .swiper-button-next.ed_announcement_bar_swiper-next {
+        color: #fff;
+        --swiper-navigation-size: 16px;
+      }
+      ul.ed-announcement-bar--item__list {
+        font-size: 14px;
+        line-height: 1;
+        gap: 4px;
+      }
+      ed-announcement-bar.ed_announcement_bar .container {
+        padding: 0 12px;
+      }
+    }
+    @media (max-width: 380px) {
+      ul.ed-announcement-bar--item__list li.content {
+        max-width: 180px;
+      }
+
+      ul.ed-announcement-bar--item__list {
+        font-size: 12px;
+        line-height: 1;
+        gap: 4px;
+      }
+    }
+  </style>
+
+  <ed-announcement-bar class="ed_announcement_bar">
+    <div class="container">
+      <div class="swiper edAnnouncementBar">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div class="swiper-slide">
+              <div class="ed-announcement-bar--item">
+                <ul class="ed-announcement-bar--item__list">
+                  <li class="flex icon-{{ block.settings.left_icon_position }}">
+                    {%- if block.settings.left_icon_as_image != blank -%}
+                      <span class="ed-icon-wrap" style="max-width: {{- block.settings.left_icon_as_size -}}px">
+                        {{-
+                          block.settings.left_icon_as_image
+                          | image_url: width: block.settings.left_icon_as_image.width
+                          | image_tag:
+                            sizes: '100vw',
+                            widths: '25,50,75,100',
+                            alt: block.settings.left_icon_as_image.alt,
+                            class: 'ed_icon-img'
+                        -}}
+                      </span>
+                    {%- elsif block.settings.left_icon_as_svg != blank -%}
+                      <span class="ed-icon-wrap" style="max-width: {{- block.settings.left_icon_as_size -}}px">
+                        {{ block.settings.left_icon_as_svg }}
+                      </span>
+                    {%- endif -%}
+                  </li>
+                  <li>
+                    {{ block.settings.left_title }}
+                  </li>
+                  {%- if block.settings.left_rating_stars -%}
+                    <li class="ed-stars">
+                      {%- for i in (1..5) -%}
+                        {%- render 'icon' with 'rating-star', class: 'rating__star--full' -%}
+                      {%- endfor -%}
+                    </li>
+                  {%- endif -%}
+                  <li>
+                    {{ block.settings.left_content }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="{% if section.blocks.size >= section.settings.slides_per_view_desktop %}ed_announcement_arrows_hide_desktop{% endif %}">
+          <div class="swiper-button-next ed_announcement_bar_swiper-next"></div>
+          <div class="swiper-button-prev ed_announcement_bar_swiper-prev"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function loadResource(type, url) {
+        return new Promise((resolve) => {
+          if (document.querySelector(`${type === 'css' ? 'link' : 'script'}[href="${url}"], [src="${url}"]`)) {
+            return resolve(); // If already loaded, resolve immediately
+          }
+
+          const element = document.createElement(type === 'css' ? 'link' : 'script');
+
+          if (type === 'css') {
+            element.rel = 'stylesheet';
+            element.href = url;
+          } else {
+            element.src = url;
+            element.onload = resolve; // Resolve when script is loaded
+          }
+
+          document.head.appendChild(element);
+          if (type === 'css') resolve(); // Resolve immediately for CSS
+        });
+      }
+
+      async function initAnnouncementSwiper() {
+        await loadResource('css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
+        await loadResource('js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js');
+
+        // Initialize Swiper after script is loaded
+        new Swiper('.edAnnouncementBar', {
+          slidesPerView: 1,
+          spaceBetween: 10,
+          loop: {{ section.settings.autoplay }},
+          navigation: {
+            nextEl: '.ed_announcement_bar_swiper-next',
+            prevEl: '.ed_announcement_bar_swiper-prev',
+          },
+          breakpoints: {
+            768: {
+              slidesPerView: {{ section.settings.slides_per_view_desktop }},
+              spaceBetween: 10,
+            },
+          },
+        });
+      }
+      initAnnouncementSwiper();
+      if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+        document.addEventListener('shopify:section:load', function () {
+          initAnnouncementSwiper();
+        });
+      }
+    </script>
+  </ed-announcement-bar>
+{% endif %}
+
+<script>
+    document.documentElement.style.setProperty('--announcement-bar-height', document.getElementById('shopify-section-{{ section.id }}').clientHeight + 'px');
+</script>
+
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "shopify-section--announcement-bar",
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "left_title",
+          "label": "Text",
+          "default": "<strong>Hervorragend</strong>"
+        },
+        {
+          "type": "checkbox",
+          "id": "left_rating_stars",
+          "label": "Rating stars",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "left_content",
+          "label": "Content",
+          "default": "4,77 bei 4.315 Bewertungen"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_icon_as_image",
+          "label": "Icon as image"
+        },
+        {
+          "type": "html",
+          "id": "left_icon_as_svg",
+          "label": "Icon as SVG"
+        },
+        {
+          "type": "range",
+          "id": "left_icon_as_size",
+          "min": 5,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon width",
+          "default": 20
+        },
+        {
+          "type": "select",
+          "id": "left_icon_position",
+          "label": "Icon Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "right"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "announcement_bar_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "non_sticky",
+          "label": "Non sticky"
+        },
+        {
+          "value": "sticky_desktop",
+          "label": "Sticky (Desktop only)"
+        },
+        {
+          "value": "sticky_mobile",
+          "label": "Sticky (Mobile only)"
+        },
+        {
+          "value": "sticky",
+          "label": "Sticky everywhere"
+        }
+      ],
+      "default": "non_sticky"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto rotate between slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Slides per view (desktop)",
+      "default": 2
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#FF6A00"
+    }
+  ]
+}
+{% endschema %}

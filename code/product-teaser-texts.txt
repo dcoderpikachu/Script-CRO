@@ -1,0 +1,105 @@
+Step 1: Create a snippet called teaser-text. 
+Paste this code: 
+{% assign show_teaser = false %}
+{% if template.name == 'index' and settings.show_teaser_on_home == true %}
+  {% assign show_teaser = true %}
+{% endif %}
+{% if template.name == 'product' and settings.show_teaser_on_pdp == true %}
+  {% assign show_teaser = true %}
+{% endif %}
+{% if template.name == 'collection' and settings.show_teaser_on_collection == true %}
+  {% assign show_teaser = true %}
+{% endif %}
+
+{% if template.name == 'product' and product_page == false and settings.show_teaser_on_collection == true %}
+  {% assign show_teaser = true %}
+{% endif %}
+
+{% if show_teaser == true %}
+  {% if product.metafields.standard['teaser-texte'] != blank %}
+    {% if product_page == true %}
+      <div class="product-teasure-text">
+        {{ product.metafields.standard['teaser-texte'] | metafield_tag }}
+      </div>
+    {% else %}
+      <a class="product-teasure-text" href="{{ product.url }}">
+        {{ product.metafields.standard['teaser-texte'] | metafield_tag }}
+      </a>
+    {% endif %}
+  {% endif %}
+
+  <style>
+    .product-teasure-text{
+      text-decoration: none;
+      color: {{ settings.teaser_color }};
+      font-size: {{settings.teaser_font_size_mobile}}px;
+      line-height: 1.2;
+    }
+    @media (min-width: 1000px){
+    .product-teasure-text{
+      font-size: {{settings.teaser_font_size}}px;
+    }
+    }
+  </style>
+{% endif %}
+
+
+Step 2: Add this in config/settings_schema.json file
+
+  {
+    "name" : "Teaser texte",
+    "settings" : [
+      {
+        "type": "range",
+        "id": "teaser_font_size",
+        "label": "Font size",
+        "min": 8,
+        "max": 50,
+        "unit": "px",
+        "default": 14
+      },
+       {
+        "type": "range",
+        "id": "teaser_font_size_mobile",
+        "label": "Font size for mobile",
+        "min": 8,
+        "max": 50,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type" : "color",
+        "id" : "teaser_color",
+        "label" : "Teaser color",
+        "default" : "#000000"
+      },
+      {
+        "type" : "checkbox",
+        "id" : "show_teaser_on_home",
+        "label" : "Show teaser on home page",
+        "default" : true
+      },
+      {
+        "type" : "checkbox",
+        "id" : "show_teaser_on_collection",
+        "label" : "Show teaser on collection page",
+        "default" : true
+      },
+        {
+        "type" : "checkbox",
+        "id" : "show_teaser_on_pdp",
+        "label" : "Show teaser on product page",
+        "default" : true
+      }
+    ]
+  }
+
+Step 3: Paste this code under product title of product-item.liquid file
+  <!-- Teaser-Texte -->
+      {% render "teaser-text", product: product, product_page: false %}
+  <!-- Teaser-Texte -->
+
+Paste this code under product title of product-info.liquid file  
+      <!-- Teaser-Texte -->
+      {% render "teaser-text", product: product, product_page: true %}
+       <!-- Teaser-Texte -->

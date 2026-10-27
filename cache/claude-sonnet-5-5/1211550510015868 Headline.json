@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is a Feedbucket test submission whose only text is 'Test Headline'. It has no spec, no comments and no described element. The screenshot happens to show a countdown announcement bar on the Sectionfy site, but the ticket never refers to it, so there is no durable element spec to record."}, "in": 1296, "out": 452}

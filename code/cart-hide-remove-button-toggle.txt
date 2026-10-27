@@ -1,0 +1,30 @@
+
+Step: 1
+Go to settings_schema.json 
+search "name": "Cart" and add below settings
+{
+    "type": "checkbox",
+    "id": "cart_hide_remove_button",
+    "label": "Hide remove button",
+    "default": false
+},
+
+
+
+Step: 2 
+Go to mini-cart.liquid. 
+Search "line-item__remove-button"  and replace with below code
+
+{% unless  settings.cart_hide_remove_button %}
+    <a href="{{ line_item.url_to_remove }}" class="line-item__remove-button link text--subdued text--xxsmall" data-no-instant>{{ 'cart.general.remove' | t }}</a>
+{% endunless %}
+
+
+
+Step: 3 Go to main-cart.liquid. 
+Search "line-item__remove-button"  and replace with below code
+{% unless settings.cart_hide_remove_button %}
+    <a href="{{ line_item.url_to_remove }}" class="line-item__remove-button link text--subdued text--xxsmall hidden-tablet-and-up" data-no-instant>{{ 'cart.general.remove' | t }}</a>
+    <a href="{{ line_item.url_to_remove }}" class="line-item__remove-button link text--subdued text--xsmall hidden-phone" data-no-instant>{{ 'cart.general.remove' | t }}</a>
+{% endunless %}
+

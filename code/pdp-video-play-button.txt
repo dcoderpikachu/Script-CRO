@@ -1,0 +1,322 @@
+Step: 1
+Create a snippet: video-play-button.liquid
+Paste this code: 
+
+{% for video in product.metafields.standard.featured_video.value.sources %}
+  {% assign video_url = video.url %}
+{% endfor %}
+<video-play-button
+  class="video-play-button"
+  video-src="{{ video_url }}"
+  autoplay="true"
+  controls="true"
+>
+  <div class="thumbnail-container btn-open">
+    {% if product.metafields.standard.featured_video_thumbnail != blank %}
+      {{ product.metafields.standard.featured_video_thumbnail.value | image_url: width: 100 | image_tag }}
+    {% else %}
+      {{ product.metafields.standard.featured_video.value.preview_image | image_url: width: 100 | image_tag }}
+    {% endif %}
+    <div class="overlay"></div>
+    <div class="play-btn">
+      <span class="arrow-right"></span>
+    </div>
+  </div>
+</video-play-button>
+
+
+Step: 2
+Create a snippet: video-play-button-popup.liquid
+Paste this code: 
+
+<div class="video-popup-container">
+  <div class="video-container"></div>
+  <button class="btn-close">✕</button>
+</div>
+
+<script>
+  class VideoPlayButton extends HTMLElement {
+    constructor() {
+      super();
+      this.popUp = document.querySelector(".video-popup-container");
+      this.popUpVideo = this.popUp?.querySelector(".video-container");
+      this.openButton = this.querySelector(".btn-open");
+      this.closeButton = this.popUp?.querySelector(".btn-close");
+
+      if (this.popUp && this.popUpVideo && this.openButton && this.closeButton) {
+        this._attachListeners();
+      }
+    }
+
+    get videoSrc() {
+      return this.getAttribute("video-src");
+    }
+
+    get autoPlay() {
+      return this.getAttribute("autoplay") === "true";
+    }
+
+    get controls() {
+      return this.getAttribute("controls") === "true";
+    }
+
+    _attachListeners() {
+      document.addEventListener("keydown", (e) => this._closeOnEsc(e));
+      this.openButton.addEventListener("click", (e) => this._openPopup(e));
+      this.popUp.addEventListener("click", (e) => this._closePopup(e));
+      this.closeButton.addEventListener("click", (e) => this._closePopup(e));
+    }
+
+    _openPopup(e) {
+      e.stopPropagation();
+      if (!this.videoSrc) {
+        console.warn("Video source not provided.");
+        return;
+      }
+
+      this._createVideo();
+      this.popUp.classList.add("open");
+      document.documentElement.classList.add("video-popup-open");
+    }
+
+    _closePopup(e) {
+      if (e.target !== this.popUp && e.target !== this.closeButton) return;
+
+      this._removeVideo();
+      this.popUp.classList.remove("open");
+      document.documentElement.classList.remove("video-popup-open");
+    }
+
+    _closeOnEsc(e) {
+      if (e.key === "Escape") {
+        this._removeVideo();
+        this.popUp.classList.remove("open");
+        document.documentElement.classList.remove("video-popup-open");
+      }
+    }
+
+    _createVideo() {
+      this._removeVideo();
+      const video = document.createElement("video");
+      video.src = this.videoSrc;
+      video.autoplay = this.autoPlay;
+      video.controls = this.controls;
+      this.popUpVideo.appendChild(video);
+    }
+
+    _removeVideo() {
+      this.popUpVideo.innerHTML = "";
+    }
+  }
+
+  customElements.define("video-play-button", VideoPlayButton);
+</script>
+
+<style>
+  .video-popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .video-popup-container.open {
+    display: flex;
+  }
+
+  .video-popup-container .video-container video {
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+  }
+
+  .video-popup-container .btn-close {
+    position: fixed;
+    top: 5px;
+    right: 15px;
+    color: #fff;
+    font-size: 35px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  video-play-button {
+    display: flex;
+    position: absolute;
+    {% case section.settings.video_play_button_position %}
+    {% when "top_left" %}
+    top: 15px;
+    left: 15px;
+    {% when "top_right" %}
+    top: 15px;
+    right: 15px;
+    {% when "bottom_left" %}
+    bottom: 15px;
+    left: 15px;
+    {% when "bottom_right" %}
+    bottom: 15px;
+    right: 15px;
+    {% endcase %}
+    width: 54px;
+    height: 54px;
+    z-index: 100;
+  }
+
+
+  video-play-button .thumbnail-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    {% if section.settings.video_play_button_format == "circle" %}
+    border-radius: 50%;
+      {% endif %}
+    cursor: pointer;
+  }
+
+  video-play-button .thumbnail-container img {
+    width: 100%;
+    height: 100%;
+     {% if section.settings.video_play_button_format == "circle" %}
+    border-radius: 50%;
+       {% endif %}
+    object-fit: cover;
+  }
+
+  video-play-button .play-btn {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+
+  video-play-button .play-btn .arrow-right {
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 12px solid white;
+    transform: rotate(180deg);
+    cursor: pointer;
+  }
+  @media (min-width: 1024px) {
+    video-play-button {
+    {% case section.settings.video_play_button_position %}
+    {% when "top_left" %}
+    top: 25px;
+    left: 25px;
+    {% when "top_right" %}
+    top: 25px;
+    right: 25px;
+    {% when "bottom_left" %}
+    bottom: 25px;
+    left: 25px;
+    {% when "bottom_right" %}
+    bottom: 25px;
+    right: 25px;
+    {% endcase %}
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>
+
+
+Step: 3
+Add this schema in main-product.liquid file: 
+
+    {
+      "type" : "header",
+      "content" : "Video Play Button"
+    },
+    {
+      "type": "select",
+      "id": "video_play_button_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "top_left",
+          "label": "Top left"
+        },
+        {
+          "value": "top_right",
+          "label": "Top right"
+        },
+         {
+          "value": "bottom_left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom_right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "top_right"
+    },
+    {
+      "type": "select",
+      "id": "video_play_button_fixing",
+      "label": "Fixing the video",
+      "options": [
+        {
+          "value": "first",
+          "label": "Display the video only on first image"
+        },
+        {
+          "value": "all",
+          "label": "Display the video on all images"
+        }
+      ],
+      "default": "all"
+    },
+   {
+      "type": "select",
+      "id": "video_play_button_format",
+      "label": "Format the video",
+      "options": [
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "circle"
+    }
+  ]
+
+Step: 4
+Add this code inside .product__media-image-wrapper element
+                   <!-- Video play button -->
+                  {% if product.metafields.standard.featured_video != blank %}
+                    {% if section.settings.video_play_button_fixing == 'first' %}
+                      {% if forloop.index == 1 %}
+                        {% render 'video-play-button' %}
+                      {% endif %}
+                    {% else %}
+                      {% render 'video-play-button' %}
+                    {% endif %}
+                  {% endif %}
+                  <!-- Video play button end -->
+
+Step: 5
+Add this code inside main-product.liquid file:
+   <!-- Video play button -->
+{% if product.metafields.standard.featured_video != blank %}
+{% render "video-play-button-popup" %}
+  {% endif %}
+    <!-- Video play button end -->

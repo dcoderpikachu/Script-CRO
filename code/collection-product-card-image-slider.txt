@@ -1,0 +1,278 @@
+Step 1: Add this in config/settings_schema.json file
+
+{
+    "name": "CP product slider",
+    "settings": [
+      {
+        "type": "range",
+        "id": "cps_image_count",
+        "label": "Number of product images",
+        "min": 1,
+        "max": 5,
+        "default": 5
+      },
+      {
+        "type" : "header",
+        "content" : "Mobile"
+      },
+      {
+        "type" : "checkbox",
+        "id" : "cps_show_mobile",
+        "label" : "Show",
+        "default" : true
+      },
+      {
+        "type" : "checkbox",
+        "id" : "cps_show_dots_mobile",
+        "label" : "Show dots",
+        "default" : true
+      },
+      {
+        "type": "select",
+        "id": "cps_dots_position_mobile",
+        "label": "Dots position",
+        "options": [
+          {
+            "value": "bottom_left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom_right",
+            "label": "Bottom Right"
+          }
+        ],
+        "default": "bottom_left"
+      },
+       {
+        "type" : "checkbox",
+        "id" : "cps_show_arrows_mobile",
+        "label" : "Show arrows",
+        "default" : true
+      },
+      {
+        "type" : "color",
+        "id" : "cps_arrows_color_mobile",
+        "label" : "Show arrows",
+        "default" : "#000000"
+      },
+      {
+        "type" : "header",
+        "content" : "Desktop"
+      },
+        {
+        "type" : "checkbox",
+        "id" : "cps_show",
+        "label" : "Show",
+        "default" : true
+      },
+      {
+        "type" : "checkbox",
+        "id" : "cps_show_dots",
+        "label" : "Show dots",
+        "default" : true
+      },
+      {
+        "type": "select",
+        "id": "cps_dots_position",
+        "label": "Dots position",
+        "options": [
+          {
+            "value": "bottom_left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom_right",
+            "label": "Bottom Right"
+          }
+        ],
+        "default": "bottom_left"
+      },
+       {
+        "type" : "checkbox",
+        "id" : "cps_show_arrows",
+        "label" : "Show arrows",
+        "default" : true
+      },
+      {
+        "type" : "color",
+        "id" : "cps_arrows_color",
+        "label" : "Show arrows",
+        "default" : "#000000"
+      }
+      
+    ]
+  },
+
+
+Step 2: create a snippet cp-product-slider.liquid and paste this code: 
+<div class="cp-product-slider" data-slider>
+  <div
+    class="cp-product-slider-inner"
+    data-config='
+      {
+        "adaptiveHeight": true,
+        "dragThreshold": 10,
+        "initialIndex": 0,
+        "contain": true,
+        "pageDots": true,
+        "prevNextButtons": true
+      }
+    '
+  >
+    {% for image in product.images limit: settings.cps_image_count %}
+      <div class="cp-product-slider-slide">
+        {{
+          image
+          | image_url: width: image.width
+          | image_tag:
+            loading: 'lazy',
+            sizes: sizes_attribute,
+            widths: '200,300,400,500,600,700,800,900,1000,1100,1200',
+            data-media-id: image.id
+        }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .cp-product-slider .flickity-button.flickity-prev-next-button {
+    width: 20px;
+    height: 20px;
+  }
+
+  .cp-product-slider .flickity-page-dots {
+    bottom: 10px;
+    text-align: left;
+    padding: 0 10px;
+  }
+
+  .cp-product-slider-inner .cp-product-slider-slide img {
+    object-fit: cover;
+    aspect-ratio: 0.8;
+  }
+
+  .cp-product-slider-inner .flickity-page-dots .dot {
+    width: 7px;
+    height: 7px;
+    border: 1px solid #000000;
+    background-color: transparent;
+    margin: 0;
+  }
+
+  .cp-product-slider-inner .flickity-page-dots .dot:not(:last-child) {
+    margin-right: 4px;
+  }
+
+  .cp-product-slider-inner .flickity-page-dots .dot.is-selected {
+    background-color: #000000;
+  }
+
+  @media (max-width: 999px) {
+    {% if settings.cps_show_mobile %}
+    .product-item__image-wrapper .product-item__aspect-ratio {
+      display: none !important;
+    }
+
+    .product-item__image-wrapper .cp-product-slider {
+      display: block;
+    }
+    {% else %}
+    .product-item__image-wrapper .cp-product-slider {
+      display: none !important;
+    }
+    {% endif %}
+
+    {% unless settings.cps_show_dots_mobile %}
+    .cp-product-slider .flickity-page-dots {
+      display: none !important;
+    }
+    {% endunless %}
+
+    {% if settings.cps_dots_position_mobile == "bottom_left" %}
+    .cp-product-slider .flickity-page-dots {
+      text-align: left;
+    }
+    {% else %}
+    .cp-product-slider .flickity-page-dots {
+      text-align: right;
+    }
+    {% endif %}
+
+    {% unless settings.cps_show_arrows_mobile %}
+    .cp-product-slider .flickity-button.flickity-prev-next-button {
+      display: none !important;
+    }
+    {% endunless %}
+
+    .cp-product-slider .flickity-button-icon {
+      fill: {{settings.cps_arrows_color_mobile}};
+    }
+  }
+
+  @media (min-width: 1000px) {
+    {% if settings.cps_show %}
+    .product-item__image-wrapper .product-item__aspect-ratio {
+      display: none !important;
+    }
+
+    .product-item__image-wrapper .cp-product-slider {
+      display: block;
+    }
+    {% else %}
+    .product-item__image-wrapper .cp-product-slider {
+      display: none !important;
+    }
+    {% endif %}
+
+    {% unless settings.cps_show_dots %}
+    .cp-product-slider .flickity-page-dots {
+      display: none !important;
+    }
+    {% endunless %}
+
+    {% if settings.cps_dots_position == "bottom_left" %}
+    .cp-product-slider .flickity-page-dots {
+      text-align: left;
+    }
+    {% else %}
+    .cp-product-slider .flickity-page-dots {
+      text-align: right;
+    }
+    {% endif %}
+
+    {% unless settings.cps_show_arrows %}
+    .cp-product-slider .flickity-button.flickity-prev-next-button {
+      display: none !important;
+    }
+    {% endunless %}
+
+    .cp-product-slider .flickity-button-icon {
+      fill: {{settings.cps_arrows_color}};
+    }
+  }
+</style>
+
+
+Step 3: Add this code in  assets/custom.js
+
+function cpProductSlider(){
+    const sliders = document.querySelectorAll("[data-slider]");
+  sliders.forEach((slider) => {
+    const sliderInner = slider.querySelector(".cp-product-slider-inner");
+    if (sliderInner && sliderInner.children.length > 1) {
+      const config = JSON.parse(sliderInner.getAttribute("data-config"));
+      new Flickity(sliderInner, config);
+    }
+  });
+}
+cpProductSlider();
+
+
+Step 4: Add this code in .product-item__image-wrapper element in product-item.liquid file
+
+ {% render "cp-product-slider", product: product %}
+
+And add this CDN inside head of theme.liquid
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>

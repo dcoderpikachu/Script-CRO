@@ -1,0 +1,241 @@
+Step: 1
+Go to section: main-product.liquid 
+- Search quantity_selector and remove this block. We don’t need it anymore.
+- Search buy_buttons and replace schema with below schema code
+
+{
+    "type": "buy_buttons",
+    "name": "Buy buttons",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "Quantity selector settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_quantity_selector",
+          "label": "Hide Button",
+          "default": false,
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_quantity_selector_at_mobile_only",
+          "label": "Hide Button (mobile only)",
+          "default": false,
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_quantity_label",
+          "label": "Hide Label",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "qtty_color",
+          "label": "Text",
+          "default": "#282828"
+        },
+        {
+          "type": "color",
+          "id": "qtty_background",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "select",
+          "id": "qtty_button_position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "checkbox",
+          "id": "quantity_full_width_at_mobile",
+          "label": "Full-width at mobile",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "quantity_full_width_default_at_mobile",
+          "label": "Default style at mobile",
+          "default": false,
+          "info": "Works only when Full-width at mobile: enabled"
+        },
+        {
+          "type": "header",
+          "content": "Buy button settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_button",
+          "label": "Show dynamic checkout button",
+          "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_gift_card_recipient",
+          "label": "Show recipient information form for gift card products",
+          "info": "Gift card products can optionally be sent directly to a recipient along with a personal message. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "atc_button_background",
+          "label": "Add to cart background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "atc_button_text_color",
+          "label": "Add to cart color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "buy_now_button_background",
+          "label": "Buy now background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "buy_now_button_text_color",
+          "label": "Buy now color",
+          "default": "rgba(0,0,0,0)"
+        }
+    ]
+},
+
+
+
+Step: 2
+Go to product-form.liquid
+ - Search quantity_selector and remove it’s block code
+ - Search product-payment-container tag and replace with below code: 
+ 
+<product-payment-container form-id="{{ product_form_id }}" {% if update_url %}id="MainPaymentContainer"{% endif %} class="product-form__payment-container" {{ block.shopify_attributes }}>
+    <div class="ed_quantity_and_atc_wrap qtty-pos-{{ block.settings.qtty_button_position }}">
+        <style>
+        .ed_quantity_and_atc_wrap {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .ed_quantity_and_atc_wrap .quantity-selector__button {
+            height: var(--button-height);
+        }
+        
+        .ed_quantity_and_atc_wrap quantity-selector.quantity-selector {
+            border-radius: 50px;
+            color: {{ block.settings.qtty_color }};
+            background-color: {{ block.settings.qtty_background }};
+        }
+        
+        product-payment-container button.button {
+            border-radius: 50px;
+            line-height: 1.5;
+            height: var(--button-height);
+            padding:  0 8px;
+        }
+        .ed_quantity_and_atc_wrap.qtty-pos-right button#AddToCart {
+            order: -1;
+        }
+        button#AddToCart {
+            padding: 0 8px;
+        }
+        product-payment-container .shopify-payment-button * {
+            border-radius: 50px !important;
+            line-height: 1.5;
+            height: var(--button-height);
+            display: block;
+        }
+
+        {%- if block.settings.quantity_full_width_at_mobile -%}
+            @media (max-width: 767px) {
+            .ed_quantity_and_atc_wrap {
+                flex-direction: column;
+            }
+            .ed_quantity_and_atc_wrap  quantity-selector.quantity-selector {
+                width: 100%;
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+            }
+            .ed_quantity_and_atc_wrap.qtty-pos-right button#AddToCart {
+                order: initial !important;
+            }
+            {%- if block.settings.quantity_full_width_default_at_mobile -%}
+                .ed_quantity_and_atc_wrap  quantity-selector.quantity-selector {
+                width: fit-content !important;
+                }
+            {%- endif -%}
+
+            {%- if block.settings.hide_quantity_selector_at_mobile_only -%}
+                .ed_quantity_and_atc_wrap {gap: 0;}
+                .ed_quantity_and_atc_wrap  quantity-selector.quantity-selector {
+                display: none !important;
+                visibility: hidden !important;
+                }
+            {%- endif -%}
+            }
+        {%- endif -%}
+        </style>
+
+        {%- unless block.settings.hide_quantity_selector -%}
+        <div class="product-form__quantity" {{ block.shopify_attributes }}>
+            {%- unless block.settings.hide_quantity_label -%}
+            <span class="product-form__quantity-label">{{ 'product.form.quantity' | t }}:</span>
+            {%- endunless -%}
+            
+            <quantity-selector class="quantity-selector">
+            <button type="button" class="quantity-selector__button">
+                <span class="visually-hidden">{{ 'cart.general.decrease_quantity' | t }}</span>
+                {%- render 'icon' with 'minus-big' -%}
+            </button>
+
+            <input type="text" form="{{ product_form_id }}" is="input-number" class="quantity-selector__input" inputmode="numeric" name="quantity" autocomplete="off" min="1" value="1" size="2" aria-label="{{ 'product.form.quantity' | t | escape }}">
+
+            <button type="button" class="quantity-selector__button">
+                <span class="visually-hidden">{{ 'cart.general.increase_quantity' | t }}</span>
+                {%- render 'icon' with 'plus-big' -%}
+            </button>
+            </quantity-selector>
+        </div>
+        {%- endunless -%}
+
+        <button id="AddToCart" type="submit" is="loader-button" {% unless block.settings.show_payment_button and template.suffix != 'quick-buy-popover' %}data-use-primary{% endunless %} data-product-add-to-cart-button data-button-content="{% if product.template_suffix == 'pre-order' %}{{ 'product.form.pre_order' | t | escape }}{% else %}{{ 'product.form.add_to_cart' | t | escape }}{% endif %}" class="product-form__add-button button {% unless product.selected_or_first_available_variant.available %}button--ternary{% else %}{% if block.settings.show_payment_button and template.suffix != 'quick-buy-popover' %}button--secondary{% else %}button--primary{% endif %}{% endunless %} button--full" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+        {%- if product.selected_or_first_available_variant.available -%}
+            {%- if product.template_suffix == 'pre-order' -%}
+            {{- 'product.form.pre_order' | t -}}
+            {%- else -%}
+            {{- 'product.form.add_to_cart' | t -}}
+            {%- endif -%}
+        {%- else -%}
+            {{- 'product.form.sold_out' | t -}}
+        {%- endif -%}
+        </button>
+    </div>
+
+    {%- if block.settings.show_payment_button and template.suffix != 'quick-buy-popover' -%}
+        {{ form | payment_button }}
+
+        {%- unless product.selected_or_first_available_variant.available -%}
+        <style>
+            #shopify-section-{{ section.id }} .shopify-payment-button {
+            display: none;
+            }
+        </style>
+        {%- endunless -%}
+    {%- endif -%}
+</product-payment-container>

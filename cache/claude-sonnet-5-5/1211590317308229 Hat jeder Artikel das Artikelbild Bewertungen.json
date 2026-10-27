@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is just a yes/no question about whether every product has the 'Bewertungen' (reviews) image, and the only comment answers 'yes'. It has no description, code, screenshots, or element spec, so there is no reusable CRO element to document."}, "in": 137, "out": 95}

@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket contains only a title ('Loox', the name of a reviews app) with no description, comments, code, settings or screenshots. There is no spec for a reusable CRO element, so it cannot be documented without inventing details."}, "in": 65, "out": 86}

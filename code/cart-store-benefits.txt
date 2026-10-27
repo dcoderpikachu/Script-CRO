@@ -1,0 +1,780 @@
+Step 1: create a snippet store-benefits and paste the below code. 
+<style>
+   #shopify-section-mini-cart .{{css_class}}{
+     margin-top: 10px; 
+   }
+   .original-benefits .{{css_class}} .store-benefit-item{
+     display: flex;
+     gap: {{benefit_gap}}px;
+     align-items: center;
+     padding: {{benefits_padding}}px;
+   }
+  .original-benefits .{{css_class}}.store-benefits{
+     display:grid;
+     grid-template-columns: repeat({{ benefits_in_row }}, 1fr);
+     gap: {{benefits_gap}}px;
+   }
+   .{{css_class}} .store-benefit-icon{
+     line-height: 1;
+   }
+
+   @media screen and (max-width: 999px) {
+       .{{css_class}} .block_font_size {
+       font-size: {{font_size_mobile}}px!important;
+       }
+       .{{css_class}} .icon_size img, .{{css_class}} .icon_size svg{
+           width: {{icon_size_mobile}}px!important;
+           height: auto;
+       }
+     .original-benefits .{{css_class}}.store-benefits{
+       grid-template-columns: repeat({{ benefits_in_row_mobile }}, 1fr);
+     }
+
+   }
+
+   @media screen and (min-width: 1000px) {
+       .{{css_class}} .block_font_size {
+       font-size: {{font_size_desktop}}px!important;
+       }
+       .{{css_class}} .icon_size img, .{{css_class}} .icon_size svg{
+           width: {{icon_size_desktop}}px!important;
+           height: auto;
+
+       }
+   }
+
+   .{{css_class}} .block_font_size {
+       color: {{ benefits_text_color }};
+       {% if benefits_text_font_weight %}
+       font-weight: 600;
+       {% endif %}
+   }
+
+  .original-benefits .{{css_class}} .store-benefit-item  {
+       background: {{ benefits_background_each }};
+       border-radius: {{ benefits_border_radius }}px;
+   }
+
+  .original-benefits .{{css_class}}.store-benefits {
+       background: {{ benefits_background }};
+       border-radius: {{ benefits_border_radius }}px;
+   }
+</style>
+{% if store_benefits_style == 'normal' %}
+  <div class="benefit-wrapper original-benefits">
+    <div class="store-benefits {{css_class}}">
+      {%- comment -%}First Store benefit{%- endcomment -%}
+      {% if benefit_svg_1 != blank or benefit_png_1 != blank or benefit_texte_1 != blank %}
+        <div class="store-benefit-item  first-store-benefit">
+          {%- comment -%} Store benefit ICON{%- endcomment -%}
+          <div class="store-benefit-icon icon_size">
+            {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- if benefit_svg_1 != blank -%}
+              {{ benefit_svg_1 }}
+            {% elsif benefit_png_1 != blank %}
+              {%- assign image_widths = '[20,30,40]' -%}
+              {%- assign image_url_pattern = benefit_png_1 | img_url: '1x1' | replace: '_1x1.', '_30x.' -%}
+              <img
+                class="lazyload"
+                src="{{ benefit_png_1 | img_url }}"
+                data-widths="{{ image_widths }}"
+                data-aspectratio="{{ image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ benefit_png_1.alt | escape }}"
+              >
+              <noscript>
+                <img src="{{ image | img_url: '30x' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+              {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- endif -%}
+          </div>
+
+          <div class="store-benefit-texte block_font_size">
+            {{ benefit_texte_1 }}
+          </div>
+        </div>
+      {% endif %}
+      {% if benefit_svg_2 != blank or benefit_png_2 != blank or benefit_texte_2 != blank %}
+        {%- comment -%}Second Store benefit{%- endcomment -%}
+        <div class="store-benefit-item  second-store-benefit">
+          {%- comment -%} Store benefit ICON{%- endcomment -%}
+          <div class="store-benefit-icon icon_size">
+            {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- if benefit_svg_2 != blank -%}
+              {{ benefit_svg_2 }}
+            {% elsif benefit_png_2 != blank %}
+              {%- assign image_widths = '[20,30,40]' -%}
+              {%- assign image_url_pattern = benefit_png_2 | img_url: '1x1' | replace: '_1x1.', '_30x.' -%}
+              <img
+                class="lazyload"
+                src="{{ benefit_png_2 | img_url }}"
+                data-widths="{{ image_widths }}"
+                data-aspectratio="{{ image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ benefit_png_2.alt | escape }}"
+              >
+              <noscript>
+                <img src="{{ image | img_url: '30x' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+              {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- endif -%}
+          </div>
+          {%- comment -%} Store benefit TEXTE{%- endcomment -%}
+          <div class="store-benefit-texte block_font_size">
+            {{ benefit_texte_2 }}
+          </div>
+        </div>
+      {% endif %}
+      {% if benefit_svg_3 != blank or benefit_png_3 != blank or benefit_texte_3 != blank %}
+        <div class="store-benefit-item  third-store-benefit">
+          {%- comment -%} Store benefit ICON{%- endcomment -%}
+          <div class="store-benefit-icon icon_size">
+            {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- if benefit_svg_3 != blank -%}
+              {{ benefit_svg_3 }}
+            {% elsif benefit_png_3 != blank %}
+              {%- assign image_widths = '[20,30,40]' -%}
+              {%- assign image_url_pattern = benefit_png_3 | img_url: '1x1' | replace: '_1x1.', '_30x.' -%}
+              <img
+                class="lazyload"
+                src="{{ benefit_png_3 | img_url }}"
+                data-widths="{{ image_widths }}"
+                data-aspectratio="{{ image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ benefit_png_3.alt | escape }}"
+              >
+              <noscript>
+                <img src="{{ image | img_url: '30x' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+              {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- endif -%}
+          </div>
+          {%- comment -%} Store benefit TEXTE{%- endcomment -%}
+          <div class="store-benefit-texte block_font_size">
+            {{ benefit_texte_3 }}
+          </div>
+        </div>
+      {% endif %}
+      {% if benefit_svg_4 != blank or benefit_png_4 != blank or benefit_texte_4 != blank %}
+        <div class="store-benefit-item  fouth-store-benefit">
+          {%- comment -%} Store benefit ICON{%- endcomment -%}
+          <div class="store-benefit-icon icon_size">
+            {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- if benefit_svg_4 != blank -%}
+              {{ benefit_svg_4 }}
+            {% elsif benefit_png_4 != blank %}
+              {%- assign image_widths = '[20,30,40]' -%}
+              {%- assign image_url_pattern = benefit_png_4 | img_url: '1x1' | replace: '_1x1.', '_30x.' -%}
+              <img
+                class="lazyload"
+                src="{{ benefit_png_4 | img_url }}"
+                data-widths="{{ image_widths }}"
+                data-aspectratio="{{ image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ benefit_png_4.alt | escape }}"
+              >
+              <noscript>
+                <img src="{{ image | img_url: '30x' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+              {%- comment -%}Insert Image Or SVG{%- endcomment -%}
+            {%- endif -%}
+          </div>
+          {%- comment -%} Store benefit TEXTE{%- endcomment -%}
+          <div class="store-benefit-texte block_font_size">
+            {{ benefit_texte_4 }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <div class="benefit-wrapper benefits-slider">
+    <div class="store-benefits {{css_class}}">
+      <div class="benefits-slider-header">
+        <!-- Item 1 -->
+        {% if benefit_svg_1 != blank or benefit_png_1 != blank %}
+          <div class="store-benefit-item store-benefit-1 active">
+            <div class="store-benefit-icon icon_size">
+              {% if benefit_svg_1 != blank %}
+                {{ benefit_svg_1 }}
+                {% if benefit_svg_1_active != blank %}
+                  {{ benefit_svg_1_active }}
+                {% endif %}
+              {% elsif benefit_png_1 != blank %}
+                {% assign image_widths = '[20,30,40]' %}
+                <img
+                  class="lazyload"
+                  src="{{ benefit_png_1 | img_url }}"
+                  data-widths="{{ image_widths }}"
+                  data-aspectratio="{{ image.aspect_ratio }}"
+                  data-sizes="auto"
+                  alt="{{ benefit_png_1.alt | escape }}"
+                >
+
+                {% if benefit_png_1_active != blank %}
+                  <img
+                    class="lazyload"
+                    src="{{ benefit_png_1_active | img_url }}"
+                    data-widths="{{ image_widths }}"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ benefit_png_1_active.alt | escape }}"
+                  >
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Item 2 -->
+        {% if benefit_svg_2 != blank or benefit_png_2 != blank %}
+          <div class="store-benefit-item store-benefit-2">
+            <div class="store-benefit-icon icon_size">
+              {% if benefit_svg_2 != blank %}
+                {{ benefit_svg_2 }}
+                {% if benefit_svg_2_active != blank %}
+                  {{ benefit_svg_2_active }}
+                {% endif %}
+              {% elsif benefit_png_2 != blank %}
+                {% assign image_widths = '[20,30,40]' %}
+                <img
+                  class="lazyload"
+                  src="{{ benefit_png_2 | img_url }}"
+                  data-widths="{{ image_widths }}"
+                  data-aspectratio="{{ image.aspect_ratio }}"
+                  data-sizes="auto"
+                  alt="{{ benefit_png_2.alt | escape }}"
+                >
+                {% if benefit_png_2_active != blank %}
+                  <img
+                    class="lazyload"
+                    src="{{ benefit_png_2_active | img_url }}"
+                    data-widths="{{ image_widths }}"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ benefit_png_2_active.alt | escape }}"
+                  >
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        {% if benefit_svg_3 != blank or benefit_png_3 != blank %}
+          <!-- Item 3 -->
+          <div class="store-benefit-item store-benefit-3">
+            <div class="store-benefit-icon icon_size">
+              {% if benefit_svg_3 != blank %}
+                {{ benefit_svg_3 }}
+                {% if benefit_svg_3_active != blank %}
+                  {{ benefit_svg_3_active }}
+                {% endif %}
+              {% elsif benefit_png_3 != blank %}
+                {% assign image_widths = '[20,30,40]' %}
+                <img
+                  class="lazyload"
+                  src="{{ benefit_png_3 | img_url }}"
+                  data-widths="{{ image_widths }}"
+                  data-aspectratio="{{ image.aspect_ratio }}"
+                  data-sizes="auto"
+                  alt="{{ benefit_png_3.alt | escape }}"
+                >
+                {% if benefit_png_3_active != blank %}
+                  <img
+                    class="lazyload"
+                    src="{{ benefit_png_3_active | img_url }}"
+                    data-widths="{{ image_widths }}"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ benefit_png_3_active.alt | escape }}"
+                  >
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        {% if benefit_svg_4 != blank or benefit_png_4 != blank %}
+          <!-- Item 4 -->
+          <div class="store-benefit-item store-benefit-4">
+            <div class="store-benefit-icon icon_size">
+              {% if benefit_svg_4 != blank %}
+                {{ benefit_svg_4 }}
+                {% if benefit_svg_4_active != blank %}
+                  {{ benefit_svg_4_active }}
+                {% endif %}
+              {% elsif benefit_png_4 != blank %}
+                {% assign image_widths = '[20,30,40]' %}
+                <img
+                  class="lazyload"
+                  src="{{ benefit_png_4 | img_url }}"
+                  data-widths="{{ image_widths }}"
+                  data-aspectratio="{{ image.aspect_ratio }}"
+                  data-sizes="auto"
+                  alt="{{ benefit_png_4.alt | escape }}"
+                >
+                {% if benefit_png_4_active != blank %}
+                  <img
+                    class="lazyload"
+                    src="{{ benefit_png_4_active | img_url }}"
+                    data-widths="{{ image_widths }}"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ benefit_png_4_active.alt | escape }}"
+                  >
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="benefits-slider-content">
+        <!-- Item 1 -->
+        <div class="store-benefit-item store-benefit-1 active">
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_1 }}</div>
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_1_1 }}</div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="store-benefit-item store-benefit-2">
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_2 }}</div>
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_2_2 }}</div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="store-benefit-item store-benefit-3">
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_3 }}</div>
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_3_3 }}</div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="store-benefit-item store-benefit-4">
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_4 }}</div>
+          <div class="store-benefit-texte block_font_size">{{ benefit_texte_4_4 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+        .benefits-slider .{{css_class}} .benefits-slider-header{
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+          gap: 0;
+        }
+        .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item{
+          text-align: center;
+          padding-top: 10px;
+          padding-bottom: 5px;
+          border-bottom: 4px solid #FBF6EF;
+        }
+        .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item.active{
+          border-bottom-color: #000000;
+        }
+        .benefits-slider .{{css_class}} .benefits-slider-content .store-benefit-item .store-benefit-texte+.store-benefit-texte{
+          font-weight: 400 !important;
+          line-height: 1.2;
+
+        }
+        .benefits-slider .{{css_class}} .benefits-slider-content .store-benefit-item{
+          display: none;
+          padding-top: 5px;
+        }
+         .benefits-slider .{{css_class}} .benefits-slider-content .store-benefit-item.active{
+          display: block;
+        }
+
+    .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item .store-benefit-icon svg:nth-child(2) {
+      display: none;
+    }
+
+    .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item.active .store-benefit-icon svg:nth-child(2) {
+      display: inline-block;
+    }
+    .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item.active .store-benefit-icon svg:nth-child(1) {
+      display: none;
+    }
+
+    .benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item.active .store-benefit-icon svg:only-child {
+      display: inline-block !important;
+    }
+  </style>
+
+  <script>
+    const headerItems = document.querySelectorAll('.benefits-slider .{{css_class}} .benefits-slider-header .store-benefit-item');
+    const contentItems = document.querySelectorAll('.benefits-slider .{{css_class}} .benefits-slider-content .store-benefit-item');
+    headerItems.forEach((headerItem, index) => {
+      headerItem.addEventListener('click', function () {
+
+        headerItems.forEach(item => item.classList.remove('active'));
+        contentItems.forEach(item => item.classList.remove('active'));
+
+        headerItem.classList.add('active');
+
+        const contentItem = contentItems[index];
+        if (contentItem) {
+          contentItem.classList.add('active');
+        }
+      });
+    });
+  </script>
+{% endif %}
+
+
+Step 2: Add this code were you want to show the block
+
+<!-- Store benefits -->
+      {% if settings.enable_store_benefits %}
+        {% assign unique_class = 'store_benefits-' | append: section.id %}
+        {%- render 'store-benefits',
+          store_benefits_style: settings.store_benefits_style,
+          benefit_svg_1: settings.benefit_svg_1,
+          benefit_png_1: settings.benefit_png_1,
+          benefit_texte_1: settings.benefit_texte_1,
+          benefit_svg_2: settings.benefit_svg_2,
+          benefit_png_2: settings.benefit_png_2,
+          benefit_texte_2: settings.benefit_texte_2,
+          benefit_svg_3: settings.benefit_svg_3,
+          benefit_png_3: settings.benefit_png_3,
+          benefit_texte_3: settings.benefit_texte_3,
+          benefit_svg_4: settings.benefit_svg_4,
+          benefit_png_4: settings.benefit_png_4,
+          benefit_texte_4: settings.benefit_texte_4,
+          css_class: unique_class,
+          font_size_desktop: settings.font_size_desktop,
+          icon_size_desktop: settings.icon_size_desktop,
+          font_size_mobile: settings.font_size_mobile,
+          icon_size_mobile: settings.icon_size_mobile,
+          benefits_background: settings.benefits_background,
+          benefits_background_each: settings.benefits_background_each,
+          benefits_text_color: settings.benefits_text_color,
+          benefits_text_font_weight: settings.benefits_text_font_weight,
+          benefits_gap: settings.benefits_gap,
+          benefit_gap: settings.benefit_gap,
+          benefits_in_row: settings.benefits_in_row,
+          benefits_in_row_mobile: settings.benefits_in_row_mobile,
+          benefits_padding: settings.benefits_padding,
+          benefits_border_radius: settings.benefits_border_radius,
+          benefit_texte_1_1: settings.benefit_texte_1_1,
+          benefit_texte_2_2: settings.benefit_texte_2_2,
+          benefit_texte_3_3: settings.benefit_texte_3_3,
+          benefit_texte_4_4: settings.benefit_texte_4_4,
+          benefit_svg_1_active: settings.benefit_svg_1_active,
+          benefit_png_1_active: settings.benefit_png_1_active,
+          benefit_svg_2_active: settings.benefit_svg_2_active,
+          benefit_png_2_active: settings.benefit_png_2_active,
+          benefit_svg_3_active: settings.benefit_svg_3_active,
+          benefit_png_3_active: settings.benefit_png_3_active,
+          benefit_svg_4_active: settings.benefit_svg_4_active,
+          benefit_png_4_active: settings.benefit_png_4_active
+        -%}
+      {% endif %}
+      <!-- Store benefits -->
+
+
+
+Step 3: Add this schema in config/settings_schema.json
+
+{
+        "type": "header",
+        "content": "Store Benefits",
+        "info": "Add your shop benefits by specifying the icon and the text"
+      },
+        {
+        "type": "checkbox",
+        "id": "enable_store_benefits",
+        "default": true,
+        "label": "Enable store benefits?"
+      },
+       {
+  "type": "select",
+  "id": "store_benefits_style",
+  "label": "Store benefits style",
+  "options": [
+    {
+      "value": "normal",
+      "label": "Normal"
+    },
+    {
+      "value": "slider",
+      "label": "Slider"
+    }
+  ],
+  "default": "normal"
+   },
+      {
+        "type": "color",
+        "id": "benefits_background",
+        "label": "Background of the block",
+        "default": "rgba(0,0,0,0)"
+      },
+     {
+        "type": "color",
+        "id": "benefits_background_each",
+        "label": "Background of the benefits",
+        "default": "rgba(0,0,0,0)"
+      },
+      {
+        "type": "color",
+        "id": "benefits_text_color",
+        "label": "Text",
+        "default": "#000000"
+      },
+      {
+        "type": "range",
+        "id": "benefits_padding",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Benefits padding",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "benefits_border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Benefits border radius",
+        "default": 10
+      },
+       {
+        "type": "range",
+        "id": "benefits_gap",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Gap between benefits",
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "benefit_gap",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Gap between icon and text",
+        "default": 5
+      },
+     {
+        "type": "range",
+        "id": "benefits_in_row",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "label": "Number of benefits in row",
+        "default": 2
+      },
+    {
+        "type": "range",
+        "id": "benefits_in_row_mobile",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "label": "Number of benefits in row for mobile",
+        "default": 2
+      },
+      {
+        "type": "checkbox",
+        "id": "benefits_text_font_weight",
+        "label": "Enable bold text",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_1",
+        "label": "Icon image"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_1",
+        "label": "SVG",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_1_active",
+        "label": "Icon image active"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_1_active",
+        "label": "SVG active",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_1",
+        "label": "Store benefit texte"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_1_1",
+        "label": "Store benefit description",
+        "info" : "Only show if use slider"
+      },
+      {
+        "type": "header",
+        "content": "Second store benefit"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_2",
+        "label": "Icon image"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_2",
+        "label": "SVG",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_2_active",
+        "label": "Icon image active"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_2_active",
+        "label": "SVG active",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_2",
+        "label": "Second store benefit texte"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_2_2",
+        "label": "Store benefit description",
+        "info" : "Only show if use slider"
+      },
+      {
+        "type": "header",
+        "content": "Third store benefit"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_3",
+        "label": "Icon image"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_3",
+        "label": "SVG",
+        "info": "If svg set it will override the image"
+      },
+    {
+        "type": "image_picker",
+        "id": "benefit_png_3_active",
+        "label": "Icon image active"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_3_active",
+        "label": "SVG active",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_3",
+        "label": "Store benefit texte"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_3_3",
+        "label": "Store benefit description",
+        "info" : "Only show if use slider"
+      },
+      {
+        "type": "header",
+        "content": "Fouth store benefit"
+      },
+      {
+        "type": "image_picker",
+        "id": "benefit_png_4",
+        "label": "Icon image"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_4",
+        "label": "SVG",
+        "info": "If svg set it will override the image"
+      },
+     {
+        "type": "image_picker",
+        "id": "benefit_png_4_active",
+        "label": "Icon image active"
+      },
+      {
+        "type": "html",
+        "id": "benefit_svg_4_active",
+        "label": "SVG active",
+        "info": "If svg set it will override the image"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_4",
+        "label": "Store benefit texte"
+      },
+      {
+        "type": "text",
+        "id": "benefit_texte_4_4",
+        "label": "Store benefit description",
+        "info" : "Only show if use slider"
+      },
+      {
+        "type": "header",
+        "content": "Desktop version"
+      },
+      {
+        "type": "range",
+        "id": "font_size_desktop",
+        "min": 8,
+        "max": 46,
+        "step": 1,
+        "unit": "px",
+        "label": "Benefit font size (desktop)",
+        "info": "Only impact large devices (999px and up)",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "icon_size_desktop",
+        "min": 8,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Icon or Svg size (desktop)",
+        "info": "Only impact Large devices (1000px and up)",
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Mobile version"
+      },
+      {
+        "type": "range",
+        "id": "font_size_mobile",
+        "min": 8,
+        "max": 46,
+        "step": 1,
+        "unit": "px",
+        "label": "Benefit font size (mobile)",
+        "info": "Only impact Medium and small devices (375px to 999px)",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "icon_size_mobile",
+        "min": 8,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Icon or Svg size (mobile)",
+        "info": "Only impact the content text Medium and small devices (375px to 768px)",
+        "default": 30
+      }

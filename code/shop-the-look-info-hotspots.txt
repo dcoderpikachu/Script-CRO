@@ -1,0 +1,1002 @@
+Step: 1
+Create a section: ed-cro-shop-the-look-info.liquid
+Paste this code:
+
+<style>
+  :root {
+    --space-top: 100px;
+    --space-bottom: 100px;
+    --space-left: 0px;
+    --space-right: 0px;
+    --text-color: #ffffff;
+    --section-background: #828964;
+    --section-background-gradient: linear-gradient(90deg, rgba(77, 82, 60, 1), rgba(133, 141, 103, 1) 100%);
+    --heading-font-size: 48px;
+    --content-font-size: 16px;
+    --button-font-size: 18px;
+    --heading-max-width: unset;
+    --cursor-close-svg-url: url({{ 'cursor-close.svg' | asset_url }});
+  }
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+      --space-left: {{ section.settings.space_left_mobile -}}px;
+      --space-right: {{ section.settings.space_right_mobile -}}px;
+      --heading-font-size: {{ section.settings.heading_font_size_mobile -}}px;
+      --content-font-size: {{ section.settings.content_font_size_mobile -}}px;
+      --button-font-size: {{ section.settings.button_font_size_mobile -}}px;
+      --heading-max-width: {{ section.settings.section_heading_max_width -}}px;
+      --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      --section-background-gradient: {{ section.settings.background_gradient }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+  }
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          --space-top: {{ section.settings.space_top -}}px;
+          --space-bottom: {{ section.settings.space_bottom -}}px;
+          --space-left: {{ section.settings.space_left -}}px;
+          --space-right: {{ section.settings.space_right -}}px;
+          --heading-font-size: {{ section.settings.heading_font_size -}}px;
+          --content-font-size: {{ section.settings.content_font_size -}}px;
+          --button-font-size: {{ section.settings.button_font_size -}}px;
+      }
+  }
+
+  .cro_shop_the_look_info_section {
+    display: block;
+    color: rgb(var(--text-color));
+    background-color: rgb(var(--section-background));
+    background-image: var(--section-background-gradient);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding-top: var(--space-top);
+    padding-bottom: var(--space-bottom);
+    padding-left: var(--space-left);
+    padding-right: var(--space-right);
+  }
+  .cro_shop_the_look_info_section_inner {
+    max-width: var(--section-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cro_shop_the_look_info_section_inner {
+    position: relative;
+  }
+
+  picture.cro_shopTheLook_info__media {
+    display: flex;
+  }
+  picture.cro_shopTheLook_info__media svg {
+    max-height: 440px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #dddddd;
+    border-radius: 16px;
+  }
+  picture.cro_shopTheLook_info__media img {
+    max-height: 568px;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .cro_shop_the_look_info_section_details {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cro_shop_the_look_info_section_details > .container {
+    position: relative;
+    height: 100%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .cro_shopTheLook_info__contents {
+      position: absolute;
+      left: var(--container-gutter);
+      top: 0;
+    }
+
+    .cro_shopTheLook_info__contents_inner {
+      max-width: var(--heading-max-width);
+    }
+    picture.cro_shopTheLook_info__media img {
+      min-height: 300px;
+    }
+  }
+
+  .cro_shopTheLook_info__contents_inner h2 {
+    font-size: var(--heading-font-size);
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -3px;
+    margin: 0;
+  }
+
+  .cro_shopTheLook_info__contents_inner p {
+    margin: 20px 0;
+    font-size: var(--content-font-size);
+    line-height: 1.5;
+  }
+
+  .cro_shopTheLook_info__contents_inner .button {
+    background: #ffffff;
+    border-radius: 50px;
+    color: #4d523c;
+    text-transform: initial;
+    font-weight: bold;
+    letter-spacing: 0;
+    font-size: var(--button-font-size);
+  }
+  .cro_shopTheLook_info__hotspot_item {
+    position: absolute;
+    left: var(--hotspot-left);
+    top: var(--hotspot-top);
+    z-index: auto;
+  }
+
+  /* ------ SKB Universal Modal CSS ------- */
+  .lock-all {
+    overflow: hidden;
+    touch-action: none;
+  }
+  .skb_popup_button {
+    padding: 8px 32px;
+    overflow: visible;
+    color: #fff;
+    background: #405de6;
+    border: none;
+    display: inline-flex;
+    border-radius: 50px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  .skb_popup_modal {
+    position: fixed;
+    font-size: 1rem;
+    z-index: 10;
+    left: 0;
+    visibility: hidden;
+    transition: visibility 0.25s ease-in-out;
+  }
+
+  @media screen and (min-width: 741px) {
+    .skb_popup_modal {
+      display: flex;
+      top: 0;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  @media screen and (max-width: 740px) {
+    .skb_popup_modal {
+      bottom: 0;
+      width: 100vw;
+      transform: translateY(100%);
+      transition: transform 0.7s cubic-bezier(0.75, 0, 0.175, 1), visibility 0.7s cubic-bezier(0.75, 0, 0.175, 1);
+      touch-action: manipulation;
+    }
+  }
+
+  .skb_popup_modal[open] {
+    visibility: visible;
+  }
+
+  @media screen and (max-width: 740px) {
+    .skb_popup_modal[open] {
+      transform: translateY(0);
+    }
+  }
+
+  .skb_popup_modal__overlay {
+    position: absolute;
+    content: '';
+    height: 100vh;
+    width: 100vw;
+    left: 0;
+    bottom: calc(100% - 10px);
+    background: #000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  }
+
+  @media screen and (min-width: 741px) {
+    .skb_popup_modal__overlay {
+      position: fixed;
+      top: 0;
+      bottom: auto;
+    }
+  }
+  @media (max-width: 999px) {
+    .skb_popup_modal__overlay {
+      cursor: var(--cursor-close-svg-url) 28 28, auto;
+    }
+  }
+
+  .skb_popup_modal[open] > .skb_popup_modal__overlay {
+    visibility: visible;
+    opacity: 0.3;
+  }
+
+  .skb_popup_modal__content {
+    position: relative;
+    display: flow-root;
+    background: #ffffff;
+    color: #282828;
+    border-radius: 0;
+  }
+
+  @media screen and (max-width: 740px) {
+    .skb_popup_modal__content {
+      max-height: 81vh;
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+    }
+  }
+
+  @media screen and (min-width: 741px) {
+    .skb_popup_modal[open] .skb_popup_modal__content {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .skb_popup_modal__content {
+      margin: 80px;
+      max-height: calc(100vh - 160px);
+      overflow: auto;
+      transform: scale(0.8);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.75, 0, 0.175, 1), opacity 0.3s cubic-bezier(0.75, 0, 0.175, 1);
+      will-change: transform;
+    }
+  }
+
+  .skb_popup_modal__close-button {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .skb_popup_details_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .skb_popup_details_wrap {
+      flex-direction: row;
+    }
+    .cro_shopTheLook_info__desktop {
+      display: block;
+    }
+    .cro_shopTheLook_info__mobile {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 999px) {
+    .cro_shopTheLook_info__desktop {
+      display: none;
+    }
+    .cro_shopTheLook_info__mobile {
+      display: block;
+    }
+  }
+
+  .skb_popup_details_wrap__content {
+    padding: 32px 24px 40px;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 741px) {
+    .skb_popup_details_wrap__content {
+      padding: 60px;
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .skb_popup_details_wrap__image,
+    .skb_popup_details_wrap__content {
+      flex: 1 0 0;
+      max-width: 500px;
+      min-width: 500px;
+      padding: 80px;
+    }
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_details_wrap__image,
+  .cro_shopTheLook_info__hotspot_item .skb_popup_details_wrap__content {
+    padding: 33px;
+  }
+
+  .cro_shopTheLook_info__hotspot_item .skb_popup_modal__content {
+    border-radius: 12px;
+  }
+
+  .cro_shopTheLook_info__hotspot_item .skb_popup_modal__content h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .cro_shopTheLook_info__hotspot_item .skb_popup_modal__content p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: var(--base-font-size);
+  }
+
+  /* ------ END:SKB Universal Modal CSS ------- */
+  @keyframes ping {
+    from {
+      transform: scale(1);
+    }
+
+    to {
+      transform: scale(0.8);
+    }
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_button {
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    border-radius: 9999px;
+    background: #fff;
+    color: #000;
+    place-items: center;
+    transition: transform 0.2s ease-in-out;
+    display: grid;
+    position: relative;
+    padding: 0;
+    margin: 0;
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_button svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #000;
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_button:before {
+    content: '';
+    inset: 2px;
+    position: absolute;
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_button:after {
+    content: '';
+    top: -1rem;
+    left: -1rem;
+    width: calc(100% + 2rem);
+    height: calc(100% + 2rem);
+    background: radial-gradient(50% 50% at 50% 50%, #ffffff00, #ffffff4d);
+    border-radius: inherit;
+    animation: 2s ease-in-out infinite alternate ping;
+    position: absolute;
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_modal__close-button {
+    display: none;
+  }
+  .cro_shopTheLook_info__hotspot_item .skb_popup_button[aria-expanded='true'] {
+    transform: rotate(45deg);
+  }
+  /* customized Modal CSS */
+  @media (min-width: 1000px) {
+    .cro_shopTheLook_info__hotspot_item {
+      display: flex;
+      align-items: center;
+    }
+    .cro_shopTheLook_info__hotspot_item .skb_popup_modal {
+      position: relative;
+      margin-left: 16px;
+      transition: none;
+    }
+
+    .cro_shopTheLook_info__hotspot_item .skb_popup_modal__overlay,
+    .cro_shopTheLook_info__hotspot_item .skb_popup_modal[open] > .skb_popup_modal__overlay {
+      background: transparent;
+      display: none;
+    }
+
+    .cro_shopTheLook_info__hotspot_item .skb_popup_modal__content,
+    .cro_shopTheLook_info__hotspot_item .skb_popup_modal[open] .skb_popup_modal__content {
+      margin: 0;
+      transform: scale(1);
+      transition: none;
+    }
+
+    .cro_shopTheLook_info__hotspot_item .skb_popup_details_wrap__image,
+    .cro_shopTheLook_info__hotspot_item .skb_popup_details_wrap__content {
+      min-width: 380px;
+      max-width: 380px;
+    }
+  }
+  @media (max-width: 999px) {
+    .cro_shopTheLook_info__hotspot_item .skb_popup_button {
+      width: 2rem;
+      height: 2rem;
+      min-width: 2rem;
+    }
+
+    .cro_shopTheLook_info__hotspot_item .skb_popup_button:after {
+      top: -0.75rem;
+      left: -0.75rem;
+      width: calc(100% + 1.5rem);
+      height: calc(100% + 1.5rem);
+    }
+
+    .cro_shopTheLook_info__hotspot_item .skb_popup_button svg {
+      width: 1rem;
+      height: 1rem;
+    }
+    .cro_shopTheLook_info__contents_inner h2 {
+      font-size: 32px;
+    }
+
+    .cro_shopTheLook_info__contents_inner .button {
+      font-size: 14px;
+    }
+  }
+  /* END:customized Modal CSS */
+</style>
+
+{% capture section_header %}
+    <div class="cro_shopTheLook_info__contents">
+        <div class="cro_shopTheLook_info__contents_inner">
+          <h2>{{ section.settings.section_heading_title }}</h2>
+          <p>{{ section.settings.section_heading_text }}</p>
+          {% if section.settings.section_heading_button_text != blank %}
+            <a href="{{ section.settings.section_heading_button_link }}" class="button button--primary">{{ section.settings.section_heading_button_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+{% endcapture %}
+
+<div class="cro_shop_the_look_info_section">
+  <div class="cro_shopTheLook_info__mobile">
+    <div class="{{ section.settings.section_width }}">
+      {{ section_header }}
+    </div>
+  </div>
+
+  <div class="cro_shop_the_look_info_section_inner">
+    <picture class="cro_shopTheLook_info__media">
+      {%- if section.settings.thumbnail_image_mobile != blank -%}
+        <source
+          media="(max-width: 699px)"
+          srcset="{{ section.settings.thumbnail_image_mobile | image_url: width: section.settings.thumbnail_image_mobile.width }}"
+        >
+      {%- endif -%}
+
+      {%- if section.settings.thumbnail_image != blank -%}
+        {{-
+          section.settings.thumbnail_image
+          | image_url: width: section.settings.thumbnail_image.width
+          | image_tag: sizes: '100vw', widths: '700,800,1000', alt: section.settings.thumbnail_image.alt
+        -}}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag }}
+      {%- endif -%}
+    </picture>
+    <div class="cro_shop_the_look_info_section_details">
+      <div class="{{ section.settings.section_width }}">
+        <div class="cro_shopTheLook_info__desktop">
+          {{ section_header }}
+        </div>
+
+        {% for block in section.blocks %}
+          {% if block.type == 'item' %}
+            <div
+              class="cro_shopTheLook_info__hotspot_item"
+              style="--hotspot-left: {{ block.settings.position_left }}%; --hotspot-top: {{ block.settings.position_top }}%;"
+              {{ block.shopify_attributes }}
+            >
+              <button
+                is="skb-popup-toggle-button"
+                class="skb_popup_button"
+                aria-controls="skb-popup-{{ block.id }}"
+                aria-expanded="false"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+              </button>
+              <skb-modal-content id="skb-popup-{{ block.id }}" class="skb_popup_modal">
+                <div class="skb_popup_modal__overlay"></div>
+                <div class="skb_popup_modal__content">
+                  <button
+                    type="button"
+                    class="skb_popup_modal__close-button tap-area"
+                    data-action="close"
+                    title="Close"
+                  >
+                    <svg focusable="false" width="14" height="14" class="icon icon--close" viewBox="0 0 14 14">
+                      <path d="M13 13L1 1M13 1L1 13" stroke="currentColor" stroke-width="2" fill="none"></path>
+                    </svg>
+                  </button>
+
+                  <div class="skb_popup_details_wrap">
+                    <div class="skb_popup_details_wrap__content">
+                      <h2 class="h5">{{ block.settings.heading }}</h2>
+                      <p>
+                        {{ block.settings.text }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </skb-modal-content>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* SKB Universal Modal JS */
+  (function () {
+    window.initSKBModal = function (scope = document) {
+      const toggleButtons = scope.querySelectorAll('[is="skb-popup-toggle-button"]');
+
+      toggleButtons.forEach((button) => {
+        const targetId = button.getAttribute('aria-controls');
+        const modal = scope.querySelector(`#${targetId}`);
+        if (!modal || !modal.tagName.toLowerCase().includes('skb-modal-content')) return;
+
+        const overlay = modal.querySelector('.skb_popup_modal__overlay');
+        const closeBtn = modal.querySelector('[data-action="close"]');
+        const modalContent = modal.querySelector('.skb_popup_modal__content');
+
+        function openModal() {
+          modal.setAttribute('open', '');
+          button.setAttribute('aria-expanded', 'true');
+          if (window.innerWidth <= 999) {
+            document.documentElement.classList.add('lock-all');
+          }
+        }
+
+        function closeModal() {
+          modal.removeAttribute('open');
+          button.setAttribute('aria-expanded', 'false');
+          if (window.innerWidth <= 999) {
+            document.documentElement.classList.remove('lock-all');
+          }
+        }
+
+        // Only toggle the modal open/close for screen sizes <= 1000px
+        if (window.innerWidth >= 1000) {
+          button.addEventListener('click', function () {
+            // Toggle the modal's open/close state when the button is clicked
+            if (modal.hasAttribute('open')) {
+              closeModal();
+            } else {
+              openModal();
+            }
+          });
+        } else {
+          // For larger screens, just open the modal when the button is clicked
+          button.addEventListener('click', openModal);
+        }
+
+        closeBtn?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && modal.hasAttribute('open')) {
+            closeModal();
+          }
+        });
+
+        // Add the logic for closing the modal on click outside for screens larger than 1000px
+        if (window.innerWidth > 1000) {
+          // Exclude the click on the open modal button
+          document.addEventListener('click', function (e) {
+            // If the click is not inside the modal content or the modal itself, and the modal is open, close it
+            if (
+              modal.hasAttribute('open') &&
+              !modalContent.contains(e.target) &&
+              !modal.contains(e.target) &&
+              !button.contains(e.target)
+            ) {
+              closeModal();
+            }
+          });
+        }
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBModal();
+    });
+
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        initSKBModal(e.target);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "CRO | Shop the Look Info",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading_title",
+      "label": "Heading title",
+      "default": "Title"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Size",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size_mobile",
+      "min": 10,
+      "max": 45,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (mobile)",
+      "default": 32
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_heading_text",
+      "label": "Heading text",
+      "default": "Content"
+    },
+    {
+      "type": "range",
+      "id": "content_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "content_font_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (mobile)",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "section_heading_button_text",
+      "label": "Button text",
+      "default": "Learn more"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "button_font_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (mobile)",
+      "default": 14
+    },
+    {
+      "type": "url",
+      "id": "section_heading_button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "section_heading_max_width",
+      "min": 200,
+      "max": 540,
+      "step": 10,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Thumbnail settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "thumbnail_image",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "image_picker",
+      "id": "thumbnail_image_mobile",
+      "label": "Thumbnail (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "Basic settings"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_left_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Left (mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "space_right_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Right (mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "range",
+          "id": "position_left",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position left (%)",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "position_top",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "Position top (%)",
+          "default": 50
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Shop the Look Info",
+      "settings": {
+        "section_heading_title": "MW08 Sport: inspire movement",
+        "section_heading_text": "Designed with shatter-resistant sapphire glass and a custom Kevlar® fiber charging case.",
+        "section_heading_button_text": "Learn more",
+        "section_heading_button_link": "#",
+        "text_color": "#ffffff",
+        "background": "#828964",
+        "background_gradient": "linear-gradient(90deg, rgba(77, 82, 60, 1), rgba(133, 141, 103, 1) 100%)"
+      },
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "position_left": 45,
+            "position_top": 15,
+            "heading": "External Aluminum Antennas",
+            "text": "Coupled with Bluetooth 5.2 connectivity, aluminum antennas provide a secure wireless connection and prevent drops for a seamless wireless experience."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "position_left": 48,
+            "position_top": 40,
+            "heading": "Shatter-Resistant Sapphire Glass",
+            "text": "Built to stand up to any workout with a luxe metallic finish."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "position_left": 46,
+            "position_top": 71,
+            "heading": "Inductive Wireless Charging",
+            "text": "MW08 Sport is compatible with the sleek cast aluminum and coated canvas MC100 Wireless Charge Pad and most other wireless chargers."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
+
+
+Step: 2
+Add attached svg into your theme assets folder.

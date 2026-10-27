@@ -1,0 +1,202 @@
+Step: 1
+Create a new snippet: ed-cart-good-choice.liquid
+Paste this code:
+
+<style>
+    #shopify-section-{{ section.id }} {
+      --section-text: {{ block.settings.text_color }};
+      --section-bg: {{ block.settings.background }};
+      --icon-size: {{ block.settings.icon_size -}}px;
+      --content-size: {{ block.settings.content_size -}}px;
+      --content-size-mobile: {{ block.settings.content_size_mobile -}}px;
+    }
+
+    .ed-cart-good-choice {
+        display: flex;
+        align-items: center;
+        color: var(--section-text);
+        background: var(--section-bg);
+        gap: 20px;
+        justify-content: flex-start;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: var(--container-gutter);
+        padding-right: var(--container-gutter);
+    }
+
+    .ed-good-choise-icon {
+        display: flex;
+        justify-content: center;
+        margin-left: 16px;
+        width: var(--icon-size);
+    }
+
+    .ed-good-choise-content {
+        text-align: center;
+        max-width: 335px;
+        margin-right: auto;
+        margin-left: 0;
+    }
+    .ed-good-choise-content * {
+        font-size: var(--content-size);
+        line-height: 1.2;
+        color: var(--section-text);
+    }
+
+    .ed-good-choise-content strong {
+        font-weight: 600;
+    }
+    .ed-good-choise-icon svg, 
+    .ed-good-choise-icon img {
+        width: 100%;
+        height: auto;
+    }
+    .ed-good-choise-icon svg {
+        color: currentColor;
+    }
+
+    .ed-good-choise-icon svg path {
+        stroke: currentColor;
+    }
+
+    @media (max-width: 999px) {
+        .ed-good-choise-icon {
+            margin: 0;
+            width: 16%;
+        }
+
+        .ed-cart-good-choice {
+            gap: 0;
+        }
+
+        .ed-good-choise-content {
+            width: 74%;
+        }
+
+        .ed-good-choise-content * {
+            font-size: var(--content-size-mobile);
+            line-height: 1.2;
+        }
+    }
+
+    .ed-cart-good-choice.no-icon .ed-good-choise-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+</style>
+
+
+<div class="ed-cart-good-choice {%if block.settings.icon_as_svg == blank and block.settings.icon_as_image == blank  %}no-icon {% endif %}">
+    {%- if block.settings.icon_as_svg != blank -%}
+        <div class="ed-good-choise-icon">
+            {{ block.settings.icon_as_svg }}
+        </div>
+    {%- elsif  block.settings.icon_as_image != blank  -%}
+        {{- block.settings.icon_as_image | image_url: width: block.settings.icon_as_image.width | image_tag: sizes: '100vw', widths: '25,50', alt: block.settings.icon_as_image.alt -}}
+    {%- endif -%}
+
+    <div class="ed-good-choise-content">
+        {{ block.settings.content }}
+    </div>
+</div>
+
+
+
+
+Step: 2
+Go to mini-cart.liquid
+Add a new schema block for "Good choice"
+Paste this code:
+  "blocks": [
+    {
+      "type": "good_choice",
+      "limit": 1,
+      "name": "Good choice",
+      "settings": [
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "rgba(234,246,234,1)"
+        },
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_as_image",
+          "label": "Icon as Image",
+          "info": "20 x 20 .svg recommended"
+        },
+        {
+            "type": "html",
+            "id": "icon_as_svg",
+            "label": "Icon as SVG",
+            "info": "SVG will replace icon as Image"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon size",
+          "default": 20
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p><strong>Gute Wahl!</strong> Deine Bestellung ist in 1-2 Werktagen in Deinen Händen.</p>",
+        },
+        {
+          "type": "range",
+          "id": "content_size",
+          "min": 8,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "content_size_mobile",
+          "min": 8,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (mobile)",
+          "default": 13
+        }
+      ]
+    }
+  ]
+
+
+
+
+ 
+Step: 3
+Go to mini-cart.liquid
+Search drawer__header and add below code under this section
+  {% for block in section.blocks %}
+    {% if block.type == 'good_choice' %}
+      {% render 'ed-cart-good-choice', section: section, block: block %}
+    {%  endif %}
+  {% endfor %}
+

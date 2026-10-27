@@ -1,0 +1,652 @@
+[Non-technical guide] Please read before making any changes
+1) Duplicate your theme first (this keeps your live store safe):
+    In Shopify admin go to Online Store > Themes.
+    Find your current live theme, click … (Actions) > Duplicate.
+    Shopify will create “Copy of <theme name>”. You can rename it (e.g., “Sandbox - Multiple Product Videos”).
+    Do not publish yet; you will edit this duplicate.
+2) Open the duplicated theme’s code editor:
+    Next to the duplicated theme click … (Actions) > Edit code.
+3) Add the section and paste the code from this file:
+    In the left sidebar go to Sections > Add a new section.
+    Name it: ed-multiple-product-videos.liquid
+    Open that new section file, paste the code below, then Save.
+4) Add the section to your Product template:
+    Click Customize on the duplicated theme.
+    Open a Product page in the preview.
+    Click “Add section” and pick the section you created.
+    Drag it where you want and Save.
+5) Test safely:
+    Click the buttons and confirm the video opens/plays.
+    Check desktop and mobile.
+6) Publish when you’re happy:
+    Back in Themes, click … (Actions) on the duplicated theme > Publish.
+Tips:
+    If anything looks wrong, switch back to your previous live theme.
+    You can always duplicate again and retry.
+
+Step: 1
+Create a new section: ed-multiple-product-videos.liquid
+Paste this code:
+{% assign product_metaobjects = product.metafields.standard.cro_pdp_multiple_product_videos.value %}
+
+{% if product_metaobjects %}
+  <style>
+    #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section {
+        background: {{  block.settings.background }};
+    }
+    #shopify-section-{{ section.id  }} .multiple_product_videos_via_metafield_section h4.heading {
+        color: {{ block.settings.section_heading_color }};
+    }
+    #shopify-section-{{ section.id }} .mpv_btn-thumbnail.border {
+        border-color: {{ block.settings.modal_button_border_color }};
+    }
+    #shopify-section-{{ section.id }} .mpv_btn-thumbnail {
+        background: {{ block.settings.modal_button_circle_color }};
+    }
+    #shopify-section-{{ section.id }} .mpv_btn-thumbanil-play svg path {
+        fill: {{ block.settings.modal_button_play_color }};
+    }
+    #shopify-section-{{ section.id }} h4.hr_mpv_via_meta_modal-header-title {
+        color: {{ block.settings.modal_popup_heading_color }};
+        {% if block.settings.modal_popup_heading_upper %}
+            text-transform: uppercase;
+        {% endif %}
+    }
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal-header button.modal__close-button.tap-area svg.icon {
+        width: {{ block.settings.modal_popup_close_size }}px;
+        height: {{ block.settings.modal_popup_close_size }}px;
+        color: {{ block.settings.modal_popup_close_color }};
+    }
+    #shopify-section-{{ section.id }} video.hr_mpv_via_meta_modal_content-video {
+        border-radius: {{ block.settings.popup_video_rounded }}px;
+    }
+    #shopify-section-{{ section.id }} ul.hr_mpv_via_meta_modal_content_details_list {
+        gap: {{ block.settings.modal_content_gap }}px;
+    }
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header {
+        gap: {{ block.settings.modal_content_icon_gap }}px;
+    }
+
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header span {
+        background: {{ block.settings.modal_content_icon_bg }};
+        color: {{ block.settings.modal_content_icon_color }};
+        border-radius: {{ block.settings.modal_content_icon_rounded }}px;
+    }
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header p {
+        color: {{ block.settings.modal_content_title_color }};
+    }
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(1) {
+        border-radius: {{ block.settings.modal_content_thumbnail_rounded }}px;
+    }
+    #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(2) p {
+        color: {{ block.settings.modal_content_paragraph_color }};
+    }
+
+    @media (min-width: 741px) {
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section h4.heading {
+            text-align: {{ block.settings.section_alignment }};
+        }
+
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section ul.hr_mpv_list_buttons {
+            justify-content: {{ block.settings.section_alignment }};
+        }
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section {
+            padding-top: {{ block.settings.section_margin_top }}px;
+            padding-bottom: {{ block.settings.section_margin_bottom }}px;
+        }
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section h4.heading {
+            font-size: {{ block.settings.section_heading_size -}}px;
+        }
+        #shopify-section-{{ section.id }} .mpv_btn-details p {
+            font-size: {{ block.settings.modal_button_font_size }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_inner {
+            grid-template-columns: {{ block.settings.popup_video_width }}px 1fr;
+            gap: {{ block.settings.modal_popup_gap }}px;
+        }
+        #shopify-section-{{ section.id }} ul.hr_mpv_list_buttons  {
+            gap: {{ block.settings.modal_button_gap }}px;
+            margin: {{ block.settings.modal_button_space_top }}px 0 0;
+        }
+        #shopify-section-{{ section.id }} h4.hr_mpv_via_meta_modal-header-title {
+            font-size: {{ block.settings.modal_popup_heading_size }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header span {
+            width: {{ block.settings.modal_content_icon_size }}px;
+            height: {{ block.settings.modal_content_icon_size }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header p {
+            font-size: {{ block.settings.modal_content_title_size }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(1) {
+            width: {{ block.settings.modal_content_thumbnail_size }}px;
+            height: {{ block.settings.modal_content_thumbnail_size }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(2) p {
+            font-size: {{ block.settings.modal_content_paragraph_size }}px;
+        }
+    }
+
+    @media (max-width: 740px) {
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section h4.heading {
+            text-align: {{ block.settings.section_alignment_mobile }};
+        }
+
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section ul.hr_mpv_list_buttons {
+            justify-content: {{ block.settings.section_alignment_mobile }};
+        }
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section {
+            padding-top: {{ block.settings.section_margin_top_mobile }}px;
+            padding-bottom: {{ block.settings.section_margin_bottom_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .multiple_product_videos_via_metafield_section h4.heading {
+            font-size: {{ block.settings.section_heading_size_mobile -}}px;
+        }
+        #shopify-section-{{ section.id }} .mpv_btn-details p {
+            font-size: {{ block.settings.modal_button_font_size_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_inner {
+            grid-template-columns: 1fr;
+            gap: {{ block.settings.modal_popup_gap_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} ul.hr_mpv_list_buttons  {
+            gap: {{ block.settings.modal_button_gap_mobile }}px;
+            margin: {{ block.settings.modal_button_space_top_mobile }}px 0 0;
+        }
+        #shopify-section-{{ section.id }} h4.hr_mpv_via_meta_modal-header-title {
+            font-size: {{ block.settings.modal_popup_heading_size_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header span {
+            width: {{ block.settings.modal_content_icon_size_mobile }}px;
+            height: {{ block.settings.modal_content_icon_size_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li header p {
+            font-size: {{ block.settings.modal_content_title_size_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(1) {
+            width: {{ block.settings.modal_content_thumbnail_size_mobile }}px;
+            height: {{ block.settings.modal_content_thumbnail_size_mobile }}px;
+        }
+        #shopify-section-{{ section.id }} .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(2) p {
+            font-size: {{ block.settings.modal_content_paragraph_size_mobile }}px;
+        }
+    }
+  
+    .multiple_product_videos_via_metafield_section {
+      overflow: hidden;
+    }
+
+    .multiple_product_videos_via_metafield_section h4.heading {
+      margin: 0;
+      font-weight: 100;
+      text-transform: uppercase;
+    }
+    ul.hr_mpv_list_buttons {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      overflow-x: scroll;
+      scrollbar-width: none;
+    }
+
+    li.hr_mpv_list_buttons-item {
+      flex: 1 1 100%;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      max-width: fit-content;
+    }
+
+    .hr_mpv_via_meta_modal-header {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    h4.hr_mpv_via_meta_modal-header-title {
+      margin: 0;
+      font-weight: 100;
+      line-height: 1;
+    }
+
+    .hr_mpv_via_meta_modal-header button.modal__close-button.tap-area {
+      position: relative;
+      right: unset;
+      top: unset;
+    }
+
+    .mpv_btn-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mpv_btn-details p {
+      text-align: center;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .mpv_btn-thumbnail {
+      width: 80px;
+      height: 80px;
+      display: block;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mpv_btn-thumbnail.border {
+      border-width: 1px;
+      border-style: solid;
+      width: 86px;
+      height: 86px;
+    }
+
+    .mpv_btn-thumbnail-inner {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      overflow: hidden;
+      display: block;
+    }
+
+    .mpv_btn-thumbnail.circle,
+    .mpv_btn-thumbnail.circle .mpv_btn-thumbnail-inner {
+      border-radius: 360px;
+    }
+
+    .mpv_btn-thumbnail-inner > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mpv_btn-thumbnail.square,
+    .mpv_btn-thumbnail.square .mpv_btn-thumbnail-inner {
+      border-radius: 8px;
+    }
+
+    .mpv_btn-thumbanil-play {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(87, 87, 87, 0.5);
+    }
+    .mpv_btn-thumbnail.play-icon .mpv_btn-thumbanil-play {
+      display: flex;
+    }
+
+    .mpv_btn-thumbanil-play svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    ul.hr_mpv_list_modal_contents {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .hr_mpv_via_meta_modal_content_inner {
+      display: grid;
+    }
+
+    .hr_mpv_via_meta_modal_content_inner-video {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    @media (min-width: 999px) {
+      .hr_mpv_via_meta_modal_content_inner-video {
+        max-width: 500px;
+      }
+    }
+
+    video.hr_mpv_via_meta_modal_content-video {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      object-fit: cover;
+    }
+
+    .mpv_btn-thumbnail-inner svg,
+    .hr_mpv_via_meta_modal_content_details_list li main > div svg {
+      background: #f3f2ec;
+    }
+
+    ul.hr_mpv_via_meta_modal_content_details_list {
+      margin: 0 !important;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li {
+      padding: 0 !important;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hr_mpv_via_meta_modal_content_details_list li.invisible {
+      opacity: 0;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li header span {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hr_mpv_via_meta_modal_content_details_list li header p {
+      margin: 0;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(1) {
+      overflow: hidden;
+      flex: 1 0 auto;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(1) img {
+      margin: 0 !important;
+      height: 100%;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(2) {
+      text-align: left;
+    }
+
+    .hr_mpv_via_meta_modal_content_details_list li main > div:nth-child(2) p {
+      line-height: 1.5;
+    }
+    .hr_mpv_via_meta_modal .modal__content {
+      border-radius: 16px;
+    }
+
+    @media screen and (min-width: 1000px) {
+      .newsletter-modal__content.hr_mpv_via_meta_modal_content {
+        max-width: 940px;
+        padding: 0 32px 32px;
+      }
+      .hr_mpv_via_meta_modal-header {
+        padding: 32px 32px 24px;
+      }
+    }
+    @media screen and (max-width: 999px) {
+      .newsletter-modal__content.hr_mpv_via_meta_modal_content {
+        max-width: 100%;
+        padding: 0 16px 16px;
+      }
+      .hr_mpv_via_meta_modal-header {
+        padding: 32px 32px 24px;
+      }
+      .hr_mpv_via_meta_modal_content_inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hr_mpv_via_meta_modal_content_inner-video {
+        aspect-ratio: 9 / 16;
+        margin: 0 auto;
+      }
+    }
+
+    @media screen and (max-width: 740px) {
+      .hr_mpv_via_meta_modal_content_inner_content {
+        padding-bottom: 6rem;
+      }
+      body {
+        overflow-x: hidden;
+      }
+    }
+  </style>
+
+  <div class="multiple_product_videos_via_metafield_section">
+    {% if block.settings.section_heading != blank %}
+      <h4 class="heading">{{ block.settings.section_heading }}</h4>
+    {% endif %}
+
+    <!-- Modal buttons -->
+    <ul class="hr_mpv_list_buttons">
+      {% for metaobject in product_metaobjects %}
+        {% if metaobject %}
+          <li class="hr_mpv_list_buttons-item">
+            <button
+              is="toggle-button"
+              class="hr_mpv_via_meta_button"
+              aria-controls="mpv_modal_popup_{{- forloop.index -}}"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">{{ metaobject.button_text }}</span>
+              <div class="mpv_btn-details">
+                <div class="mpv_btn-thumbnail {% if block.settings.modal_button_border %}border{% endif %} {% if block.settings.modal_button_play_icon %}play-icon{% endif %} {{ block.settings.modal_button_style }}">
+                  <div class="mpv_btn-thumbnail-inner">
+                    {%- if metaobject.button_bg != blank -%}
+                      {{-
+                        metaobject.button_bg
+                        | image_url: width: metaobject.button_bg.width
+                        | image_tag: sizes: '100vw', widths: '100', alt: metaobject.button_bg.alt
+                      -}}
+                    {%- else -%}
+                      {{ 'image' | placeholder_svg_tag }}
+                    {%- endif -%}
+
+                    <div class="mpv_btn-thumbanil-play">
+                      <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23 12C23.0006 12.2546 22.9353 12.5051 22.8105 12.727C22.6856 12.949 22.5055 13.1348 22.2875 13.2665L8.78 21.5297C8.55227 21.6691 8.29144 21.7452 8.02445 21.7502C7.75746 21.7551 7.49399 21.6887 7.26125 21.5578C7.03073 21.4289 6.8387 21.2409 6.7049 21.0132C6.57111 20.7855 6.50039 20.5263 6.5 20.2622V3.73779C6.50039 3.47368 6.57111 3.21445 6.7049 2.98673C6.8387 2.75902 7.03073 2.57106 7.26125 2.44217C7.49399 2.31124 7.75746 2.24482 8.02445 2.24977C8.29144 2.25471 8.55227 2.33084 8.78 2.47029L22.2875 10.7334C22.5055 10.8651 22.6856 11.051 22.8105 11.2729C22.9353 11.4949 23.0006 11.7453 23 12Z" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                {%- if metaobject.button_text != blank -%}
+                  <p>{{ metaobject.button_text }}</p>
+                {%- endif -%}
+              </div>
+            </button>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <!-- END:Modal buttons -->
+
+    <!-- Modal contents -->
+    <ul class="hr_mpv_list_modal_contents">
+      {% for metaobject in product_metaobjects %}
+        {% if metaobject %}
+          <li class="hr_mpv_list_modal_contents-item">
+            <modal-content
+              apparition-delay="off"
+              id="mpv_modal_popup_{{- forloop.index -}}"
+              class="modal hr_mpv_via_meta_modal"
+            >
+              <div class="modal__overlay"></div>
+              <div class="modal__content">
+                <div class="hr_mpv_via_meta_modal-header">
+                  {%- if metaobject.heading != blank -%}
+                    <h4 class="hr_mpv_via_meta_modal-header-title">{{ metaobject.heading }}</h4>
+                  {%- endif -%}
+
+                  <button
+                    type="button"
+                    class="modal__close-button tap-area"
+                    data-action="close"
+                    title="{{ 'general.accessibility.close' | t | escape }}"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="icon"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="newsletter-modal">
+                  <div class="newsletter-modal__content hr_mpv_via_meta_modal_content text-container text--center">
+                    <div class="hr_mpv_via_meta_modal_content_inner">
+                      <div class="hr_mpv_via_meta_modal_content_inner-video">
+                        {%- if metaobject.video != blank -%}
+                          <video
+                            playsinline="playsinline"
+                            {% if block.settings.video_controls %}
+                              controls="controls"
+                            {% endif %}
+                            {% if block.settings.muted_video %}
+                              muted="muted"
+                            {% endif %}
+                            {% if block.settings.loop_video %}
+                              loop="loop"
+                            {% endif %}
+                            class="hr_mpv_via_meta_modal_content-video"
+                            preload="metadata"
+                          >
+                            <source src="{{ metaobject.video | file_url }}" type="video/mp4">
+                          </video>
+                        {%- endif -%}
+                      </div>
+
+                      <div class="hr_mpv_via_meta_modal_content_inner_content">
+                        <ul class="hr_mpv_via_meta_modal_content_details_list">
+                          {%- for i in (1..3) -%}
+                            {%- assign item_title_key = 'title_0' | append: i -%}
+                            {%- assign item_image_key = 'thumbnail_0' | append: i -%}
+                            {%- assign item_content_key = 'content_0' | append: i -%}
+                            {%- assign item_title = metaobject[item_title_key] -%}
+                            {%- assign item_image = metaobject[item_image_key] -%}
+                            {%- assign item_content = metaobject[item_content_key] -%}
+                            {%- assign assign_empty_item = false -%}
+                            {% if item_title == blank and item_image == blank and item_content == blank %}
+                              {%- assign assign_empty_item = true -%}
+                            {% endif %}
+
+                            <li
+                              {% if assign_empty_item %}
+                                class="invisible"
+                              {% endif %}
+                            >
+                              <header>
+                                {% unless assign_empty_item %}
+                                  <span>{{ forloop.index }}</span>
+                                {% endunless %}
+
+                                <p>{{ item_title }}</p>
+                              </header>
+
+                              <main>
+                                <div>
+                                  {%- if item_image != blank -%}
+                                    {{-
+                                      item_image
+                                      | image_url: width: item_image.width
+                                      | image_tag: sizes: '100vw', widths: '320', alt: item_image.alt
+                                    -}}
+                                  {%- else -%}
+                                    {{ 'image' | placeholder_svg_tag }}
+                                  {%- endif -%}
+                                </div>
+                                <div>
+                                  <p>{{ item_content }}</p>
+                                </div>
+                              </main>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </modal-content>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <!-- END:Modal contents -->
+  </div>
+
+  <script>
+    function initMPVviaMetafieldsMOdals() {
+        setTimeout(() => {
+            const section = document.querySelector(".multiple_product_videos_via_metafield_section");
+
+            if (section) {
+                section.querySelectorAll(".hr_mpv_via_meta_modal").forEach(modal => {
+                    modal.removeAttribute("open");
+                });
+
+                section.querySelectorAll(".hr_mpv_via_meta_button").forEach(button => {
+                    button.setAttribute("aria-expanded", "false");
+                });
+            }
+        }, 000000001);
+    }
+    function initAutoplayModalVideoviaMetafields() {
+        document.querySelectorAll("modal-content.hr_mpv_via_meta_modal").forEach(modal => {
+            const video = modal.querySelector(".hr_mpv_via_meta_modal_content-video");
+
+            if (!video) return; // Skip if there's no video inside
+
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.attributeName === "open") {
+                        if (modal.hasAttribute("open")) {
+                            video.play();
+                        } else {
+                            video.pause();
+                            video.currentTime = 0; // Reset video to the start
+                        }
+                    }
+                });
+            });
+
+            observer.observe(modal, { attributes: true });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initMPVviaMetafieldsMOdals();
+        {%- if block.settings.autoplay_video -%}
+            initAutoplayModalVideoviaMetafields();
+        {%- endif -%}
+    });
+
+    if (typeof Shopify !== "undefined" && Shopify.designMode) {
+        document.addEventListener("shopify:section:load", function () {
+            initMPVviaMetafieldsMOdals();
+            {%- if block.settings.autoplay_video -%}
+                initAutoplayModalVideoviaMetafields();
+            {%- endif -%}
+        });
+    }
+  </script>
+{% endif %}

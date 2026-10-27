@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "Bug ticket ('Schema-Fehler') with an empty description. The only content is a screenshot of a Shopify theme editor error saying color schemes must be defined in settings_data and settings_schema to show a preview. It describes no reusable CRO element."}, "in": 236, "out": 98}

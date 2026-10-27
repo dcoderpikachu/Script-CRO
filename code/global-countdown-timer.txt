@@ -1,0 +1,1064 @@
+Step: 1
+Create a section: ed-countdown-timer.liquid
+Paste this code: 
+
+<style>
+    .hr_countdown_timer_wrap {
+        position: relative;
+    }
+    .hr_countdown_timer_wrap.has_shadow_bg {
+        position: relative;
+    }
+    
+    .hr_countdown_timer_wrap.has_shadow_bg:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+         z-index: 2;
+    }
+    
+    .hr_countdown_timer_cover__photo {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .hr_countdown_timer_cover__photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .hr_countdown_timer_cover__video {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    
+    .hr_countdown_timer_cover__video video.video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    
+    .hr_countdown_timer_inner {
+        position: relative;
+        z-index: 3;
+    }
+    .hr_countdown__datetime {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .hr_timer {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* min-width: 160px; */
+    } 
+    .hr_timer_digit {
+        line-height: 1;
+    }
+    
+    .hr_timer_unit {
+        text-transform: uppercase;
+        word-break: break-word;
+    }
+
+    countdown-header.hr_coutndown_header {
+        text-align: center;
+    }
+    .hr_countdown_timer_subheading {
+        margin: 0;
+        line-height: 1;
+    }
+    .hr_countdown_timer_heading * {
+        line-height: 1;
+        margin: 0;
+    }
+
+    .button.button--outline {
+        background: transparent;
+        color: rgb(var(--heading-color));
+        border-color: rgb(var(--heading-color));
+        position: relative;
+        transition: all .3s cubic-bezier(.215,.61,.355,1);
+        overflow: hidden;
+    }
+    .button.button--outline:before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        position: absolute;
+        left: 0;
+        top: auto;
+        z-index: -1;
+        bottom: -100%;
+        transition: all .3s cubic-bezier(.215,.61,.355,1);
+    }
+    .button.button--outline:hover {
+        color: {{ settings.heading_color }};
+    }
+    .button.button--outline:hover:before {
+        bottom: 0;
+        background: rgb(var(--heading-color));
+    }
+
+    .countdown_timer_layout__vertical .hr_countdown_timer_inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .countdown_timer_layout__vertical .hr_countdown__datetime {
+        justify-content: center;
+    }
+
+    .countdown_timer_layout__minimalist .hr_countdown_timer_inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .countdown_timer_layout__minimalist button.button.button--outline {
+        line-height: 40px;
+        padding: 0 22px;
+    }
+
+
+    @media (min-width: 741px) {
+        .countdown_timer_layout__vertical .hr_timer_unit {
+            letter-spacing: 3px;
+        }
+        
+        .countdown_timer_layout__minimalist countdown-header.hr_coutndown_header {
+            text-align: left;
+        }
+        .countdown_timer_layout__minimalist .hr_timer_digit {
+            font-size: 45px;
+            font-weight: 100;
+        }
+        .countdown_timer_layout__vertical .hr_countdown_timer_inner {
+            gap: 32px;
+        }
+        .countdown_timer_layout__minimalist .hr_countdown_timer_subheading {
+            margin-bottom: 16px;
+        }
+        
+        .countdown_timer_layout__vertical .hr_countdown_timer_subheading {
+            margin-bottom: 16px;
+        }
+        
+        .countdown_timer_layout__minimalist  a.button.button--outline {
+            margin-top: 20px;
+        }
+        .countdown_timer_layout__vertical  a.button.button--outline {
+            margin-top: 32px;
+        }
+    }
+    
+    @media (max-width: 740px) {     
+        .hr_timer_unit {
+            letter-spacing: 1.5px;
+        }
+        h2.heading.hr_countdown_timer_subheading {
+            margin-bottom: 8px;
+        }
+        .button.button--outline {
+            margin-top: 16px;
+            line-height: 30px;
+        }
+        .countdown_timer_layout__minimalist .hr_countdown_timer_inner {
+            flex-direction: column;
+        }
+        .countdown_timer_layout__minimalist countdown-header.hr_coutndown_header {
+            align-items: center;
+            text-align: center;
+        }
+        h2.heading.hr_countdown_timer_subheading {
+            font-size: 16px;
+            font-weight: 100;
+            text-transform: unset;
+        }
+        
+        .heading.hr_countdown_timer_heading * {
+            font-size: 26px;
+            text-transform: unset;
+        }
+        
+        .hr_countdown_timer_inner {
+            gap: 30px;
+        }
+        
+        time.hr_countdown__datetime {
+            gap: 30px;
+        }
+    }    
+</style>
+
+{%- style -%}
+    #shopify-section-{{ section.id }} {
+        --heading-color: {{ section.settings.text_color.red }}, {{ section.settings.text_color.green }}, {{ section.settings.text_color.blue }};
+        --section-background: {{ section.settings.bg_color.red }}, {{ section.settings.bg_color.green }}, {{ section.settings.bg_color.blue }};
+        --section-shadow: {{ section.settings.opacity_color.red }}, {{ section.settings.opacity_color.green }}, {{ section.settings.opacity_color.blue }};
+        color: rgb(var(--heading-color));
+        background: rgb(var(--section-background));
+    }
+    #shopify-section-{{ section.id }} .hr_countdown_timer_wrap.has_shadow_bg:before  {
+        background: rgb(var(--section-shadow), {{ section.settings.opacity | divided_by: 100.0 }});
+    }
+    #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading,
+    #shopify-section-{{ section.id }} .heading.hr_countdown_timer_heading {
+        color: rgb(var(--heading-color));
+    }
+
+    #shopify-section-{{ section.id }} .hr_countdown__datetime {
+        background: {{ section.settings.countdown_color }};
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    @media (min-width: 741px) {
+        #shopify-section-{{ section.id }} .hr_countdown_timer_wrap {
+            padding-top: {{ section.settings.section_space_top -}}px;
+            padding-bottom: {{ section.settings.section_space_bottom -}}px;
+        }
+    }
+    @media (max-width: 740px) {
+        #shopify-section-{{ section.id }} .hr_countdown_timer_wrap {
+            padding-top: {{ section.settings.section_space_top_mobile -}}px;
+            padding-bottom: {{ section.settings.section_space_bottom_mobile -}}px;
+        }
+    }
+    {%- for block in section.blocks -%}
+        {% case block.type %}
+            {% when 'countdown_header' %}
+                #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading {
+                    text-transform: {{  block.settings.subheading_text_style }};
+                }
+                #shopify-section-{{ section.id }} .hr_countdown_timer_heading * {
+                    text-transform: {{  block.settings.heading_text_style }};
+                }
+
+                {%- if block.settings.customize_settings -%}
+                    @media (min-width: 741px) {
+                        #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading {
+                            font-size: {{ block.settings.subheading_size -}}px;
+                            font-weight: {{ block.settings.subheading_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .hr_countdown_timer_heading * {
+                            font-size: {{ block.settings.heading_size -}}px;
+                            font-weight: {{ block.settings.heading_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .button.button--outline {
+                            line-height: {{ block.settings.button_size -}}px;
+                        }
+                    }
+                    @media (max-width: 740px) {
+                        #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading {
+                            font-size: {{ block.settings.subheading_size_mobile -}}px;
+                            font-weight: {{ block.settings.subheading_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .hr_countdown_timer_heading * {
+                            font-size: {{ block.settings.heading_size_mobile -}}px;
+                            font-weight: {{ block.settings.heading_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .button.button--outline {
+                            line-height: {{ block.settings.button_size_mobile -}}px;
+                        }
+                    }
+                {%- else -%}
+                    {% if section.settings.layout_style == 'minimalist' %}
+                        @media (min-width: 741px) {
+                            #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading {
+                                font-size: 14px;
+                                font-weight: 100;
+                            }
+                            #shopify-section-{{ section.id }} .hr_countdown_timer_heading * {
+                                font-size: 36px;
+                                font-weight: 400;
+                            }
+                            #shopify-section-{{ section.id }} .button.button--outline {
+                                line-height: 30px;
+                            }
+                        }
+                    {% elsif section.settings.layout_style == 'vertical' %}
+                        @media (min-width: 741px) {
+                            #shopify-section-{{ section.id }} .heading.hr_countdown_timer_subheading {
+                                font-size: 24px;
+                                font-weight: 100;
+                            }
+                            #shopify-section-{{ section.id }} .hr_countdown_timer_heading * {
+                                font-size: 48px;
+                                font-weight: 400;
+                            }
+                            #shopify-section-{{ section.id }} .button.button--outline {
+                                line-height: 50px;
+                            }
+                        }
+                    {% endif %}
+                {%- endif -%}
+                
+            {% when 'countdown_timer' %}
+                {%- if block.settings.customize_settings -%}
+                    @media (min-width: 741px) {
+                        #shopify-section-{{ section.id }} .hr_countdown_timer_inner {
+                            gap: {{ block.settings.countdown_space_top -}}px;
+                        }
+                        #shopify-section-{{ section.id }} .hr_countdown__datetime {
+                            gap: {{ block.settings.countdown_gap -}}px;
+                        }
+                        #shopify-section-{{ section.id }} .hr_timer_digit {
+                            font-size: {{ block.settings.countdown_digit -}}px;
+                            font-weight: {{ block.settings.countdown_digit_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .hr_timer_unit {
+                            font-size: {{ block.settings.countdown_unit -}}px;
+                            font-weight: {{ block.settings.countdown_unit_weight }};
+                        } 
+                    }
+                    @media (max-width: 740px) {
+                        #shopify-section-{{ section.id }} .hr_countdown_timer_inner {
+                            gap: {{ block.settings.countdown_margin_top_mobile -}}px;
+                        }
+                        #shopify-section-{{ section.id }} .hr_countdown__datetime {
+                            gap: {{ block.settings.countdown_gap_mobile -}}px;
+                        } 
+                        #shopify-section-{{ section.id }} .hr_timer_digit {
+                            font-size: {{ block.settings.countdown_digit_mobile -}}px;
+                            font-weight: {{ block.settings.countdown_digit_weight }};
+                        }
+                        #shopify-section-{{ section.id }} .hr_timer_unit {
+                            font-size: {{ block.settings.countdown_unit_mobile -}}px;
+                            font-weight: {{ block.settings.countdown_unit_weight }};
+                        }
+                    }
+                {%- else -%}
+                    {% if section.settings.layout_style == 'minimalist' %}
+                        @media (min-width: 741px) {
+                            #shopify-section-{{ section.id }} .hr_countdown_timer_inner {
+                                gap: 0px;
+                            }
+                            #shopify-section-{{ section.id }} .hr_countdown__datetime {
+                                gap: 60px;
+                            }
+                            #shopify-section-{{ section.id }} .hr_timer_digit {
+                                font-size: 45px;
+                                font-weight: 400;
+                            }
+                            #shopify-section-{{ section.id }} .hr_timer_unit {
+                                font-size: 12px;
+                                font-weight: 100;
+                                letter-spacing: 1.5px;
+                            }
+                        }
+                    {% elsif section.settings.layout_style == 'vertical' %}
+                        @media (min-width: 741px) {
+                            #shopify-section-{{ section.id }} .hr_countdown_timer_inner {
+                                gap: 60px;
+                            }
+                            #shopify-section-{{ section.id }} .hr_countdown__datetime {
+                                gap: 60px;
+                            }
+                            #shopify-section-{{ section.id }} .hr_timer_digit {
+                                font-size: 120px;
+                                font-weight: 400;
+                            }
+                            #shopify-section-{{ section.id }} .hr_timer_unit {
+                                font-size: 16px;
+                                font-weight: 100;
+                                letter-spacing: 3px;
+                            }
+                        }
+                    {% endif %}
+                {%- endif -%}
+        {% endcase %}
+    {%- endfor -%}
+{%- endstyle -%}
+
+<div class="hr_countdown_timer_wrap has_shadow_bg countdown_timer_layout__{{ section.settings.layout_style }}">
+    <div class="container">
+        <div class="hr_countdown_timer_inner">
+            {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                    {%- when 'countdown_header' -%}
+                        <countdown-header class="hr_coutndown_header" {{ block.shopify_attributes }}>
+                            {%- if block.settings.sub_heading != blank -%}
+                                <h2 class="heading hr_countdown_timer_subheading">{{ block.settings.sub_heading }}</h2>
+                            {%- endif -%}
+
+                            {%- if block.settings.heading != blank -%}
+                                <div class="heading hr_countdown_timer_heading">
+                                    {{ block.settings.heading }}
+                                </div>
+                            {%- endif -%}
+
+                            {%- if block.settings.button_text != blank -%}
+                                <a href="{{ block.settings.button_url }}"  class="button button--outline" {% if block.settings.open_at_new_tab %}target="_blank"{% endif %}>{{ block.settings.button_text }}</a>
+                            {%- endif -%}
+                        </countdown-header>
+
+                    {%- when 'countdown_timer' -%}
+                        <countdown-timer class="hr_countdown__timer" {{ block.shopify_attributes }}>
+                            <time class="hr_countdown__datetime" datetime="{{- block.settings.datetime -}}T11:59:00.000-1200">
+                                <div class="hr_timer">
+                                    <strong class="hr_timer_digit" data-days="">14</strong>
+                                    <small class="hr_timer_unit">{{ block.settings.days }}</small>
+                                </div>
+                                <div class="hr_timer">
+                                    <strong class="hr_timer_digit" data-hours="">15</strong>
+                                    <small class="hr_timer_unit">{{ block.settings.hours }}</small>
+                                </div>
+                                <div class="hr_timer">
+                                    <strong class="hr_timer_digit" data-minutes="">34</strong>
+                                    <small class="hr_timer_unit">{{ block.settings.minutes }}</small>
+                                </div>
+                                <div class="hr_timer">
+                                    <strong class="hr_timer_digit" data-seconds="">51</strong>
+                                    <small class="hr_timer_unit">{{ block.settings.seconds }}</small>
+                                </div>
+                            </time>
+                        </countdown-timer>
+                {%- endcase -%}
+            {%- endfor -%}
+            
+            <script>
+                function loadResource(type, url) {
+                    return new Promise((resolve) => {
+                      if (document.querySelector(`${type === "css" ? "link" : "script"}[href="${url}"], [src="${url}"]`)) {
+                        return resolve(); // If already loaded, resolve immediately
+                      }
+                  
+                      const element = document.createElement(type === "css" ? "link" : "script");
+                  
+                      if (type === "css") {
+                        element.rel = "stylesheet";
+                        element.href = url;
+                      } else {
+                        element.src = url;
+                        element.onload = resolve; // Resolve when script is loaded
+                      }
+                  
+                      document.head.appendChild(element);
+                      if (type === "css") resolve(); // Resolve immediately for CSS
+                    });
+                }
+            
+                async function initCountdownTimer() {
+                    await loadResource("js", "https://cdn.jsdelivr.net/gh/shopifykingbd/skb-countdown-timer/skb-countdown-timer.js");
+                }
+            
+                // Run the function to load resources
+                initCountdownTimer();
+            </script>
+        </div>
+    </div>
+
+    {%- if section.settings.bg_image != blank and section.settings.bg_video == blank -%}
+        <div class="hr_countdown_timer_cover__photo">
+            {{- section.settings.bg_image | image_url: width: section.settings.bg_image.width | image_tag: sizes: '100vw', widths: '800,1000,1200,1400,1600,1800', alt: section.settings.bg_image.alt -}}
+        </div>
+    {%- endif -%}
+
+    {%- if section.settings.bg_video != blank -%}
+        <div class="hr_countdown_timer_cover__video">
+            {{ section.settings.bg_video | video_tag: class: 'video', preload: 'auto', autoplay: '', playsinline: '', muted: '', loop: '', controlslist: 'nodownload' }}
+        </div>
+{%- endif -%}
+</div>
+
+
+{% schema %}
+    {
+        "name": "CRO| Countdown timer",
+        "class": "ed-countdown-timer",
+        "settings": [
+            {
+                "type": "select",
+                "id": "layout_style",
+                "label": "Layout style",
+                "options": [
+                    {
+                        "value": "minimalist",
+                        "label": "Minimalist"
+                    },
+                    {
+                        "value": "vertical",
+                        "label": "Vertical"
+                    }
+                ],
+                "default": "vertical"
+            },
+            {
+                "type": "color",
+                "id": "text_color",
+                "label": "Text",
+                "default": "#000000"
+            },
+            {
+                "type": "color_background",
+                "id": "countdown_color",
+                "label": "Countdown",
+                "default": "linear-gradient(250deg, rgba(216, 10, 10, 1), rgba(255, 143, 0, 1) 100%)"
+            },
+            {
+                "type": "color",
+                "id": "bg_color",
+                "label": "BG color",
+                "default": "#FFFFFF"
+            },
+            {
+                "type": "color",
+                "id": "opacity_color",
+                "label": "Opacity color",
+                "default": "#000000"
+            },
+            {
+                "type": "range",
+                "id": "opacity",
+                "min": 0,
+                "max": 100,
+                "step": 5,
+                "label": "Opacity",
+                "default": 35
+            },
+            {
+                "type": "image_picker",
+                "id": "bg_image",
+                "label": "BG Image"
+            },
+            {
+                "type": "video",
+                "id": "bg_video",
+                "label": "BG Video",
+                "info": "Video will replace BG image"
+            },
+            {
+                "type": "header",
+                "content": "Section spaces"
+            },
+            {
+                "type": "range",
+                "id": "section_space_top",
+                "min": 0,
+                "max": 200,
+                "step": 2,
+                "unit": "px",
+                "label": "Top space",
+                "default": 90
+            },
+            {
+                "type": "range",
+                "id": "section_space_bottom",
+                "min": 0,
+                "max": 200,
+                "step": 2,
+                "unit": "px",
+                "label": "Bottom space",
+                "default": 90
+            },
+            {
+                "type": "paragraph",
+                "content": "Mobile space settings"
+            },
+            {
+                "type": "range",
+                "id": "section_space_top_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Top space (mobile)",
+                "default": 48
+            },
+            {
+                "type": "range",
+                "id": "section_space_bottom_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Bottom space (mobile)",
+                "default": 48
+            },
+        ],
+        "blocks": [
+            {
+                "type": "countdown_header",
+                "name": "Header",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "inline_richtext",
+                        "id": "sub_heading",
+                        "label": "Sub-heading",
+                        "default": "Last chance"
+                    },
+                    {
+                        "type": "select",
+                        "id": "subheading_text_style",
+                        "label": "Text style",
+                        "options": [
+                            {
+                                "value": "uppercase",
+                                "label": "Uppercase"
+                            },
+                            {
+                                "value": "initial",
+                                "label": "Normal"
+                            }
+                        ],
+                        "default": "initial"
+                    },
+                    {
+                        "type": "richtext",
+                        "id": "heading",
+                        "label": "Heading",
+                        "default": "<p>Limited time offer! <br> Up to 50% off from selected products.</p>"
+                    },
+                    {
+                        "type": "select",
+                        "id": "heading_text_style",
+                        "label": "Text style",
+                        "options": [
+                            {
+                                "value": "uppercase",
+                                "label": "Uppercase"
+                            },
+                            {
+                                "value": "initial",
+                                "label": "Normal"
+                            }
+                        ],
+                        "default": "uppercase"
+                    },
+                    {
+                        "type": "text",
+                        "id": "button_text",
+                        "label": "Button text",
+                        "default": "shop 20% off now"
+                    },
+                    {
+                        "type": "url",
+                        "id": "button_url",
+                        "label": "Button URL"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "open_at_new_tab",
+                        "label": "Open at new tab",
+                        "default": false
+                    },
+                    {
+                        "type": "header",
+                        "content": "Custom settings"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "customize_settings",
+                        "label": "Enable custom settings",
+                        "default": false,
+                        "info": "Below settings will work once you enable it."
+                    },
+                    {
+                        "type": "range",
+                        "id": "subheading_size",
+                        "min": 8,
+                        "max": 36,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Subheading size",
+                        "default": 24
+                    },
+                    {
+                        "type": "select",
+                        "id": "subheading_weight",
+                        "label": "Subheading weight",
+                        "options": [
+                            {
+                                "value": "100",
+                                "label": "100"
+                            },
+                            {
+                                "value": "200",
+                                "label": "200"
+                            },
+                            {
+                                "value": "300",
+                                "label": "300"
+                            },
+                            {
+                                "value": "400",
+                                "label": "400"
+                            },
+                            {
+                                "value": "500",
+                                "label": "500"
+                            },
+                            {
+                                "value": "600",
+                                "label": "600"
+                            },
+                            {
+                                "value": "700",
+                                "label": "700"
+                            },
+                            {
+                                "value": "800",
+                                "label": "800"
+                            },
+                            {
+                                "value": "900",
+                                "label": "900"
+                            }
+                        ],
+                        "default": "100"
+                    },
+                    {
+                        "type": "range",
+                        "id": "heading_size",
+                        "min": 16,
+                        "max": 60,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Heading size",
+                        "default": 48
+                    },
+                    {
+                        "type": "select",
+                        "id": "heading_weight",
+                        "label": "Heading weight",
+                        "options": [
+                            {
+                                "value": "100",
+                                "label": "100"
+                            },
+                            {
+                                "value": "200",
+                                "label": "200"
+                            },
+                            {
+                                "value": "300",
+                                "label": "300"
+                            },
+                            {
+                                "value": "400",
+                                "label": "400"
+                            },
+                            {
+                                "value": "500",
+                                "label": "500"
+                            },
+                            {
+                                "value": "600",
+                                "label": "600"
+                            },
+                            {
+                                "value": "700",
+                                "label": "700"
+                            },
+                            {
+                                "value": "800",
+                                "label": "800"
+                            },
+                            {
+                                "value": "900",
+                                "label": "900"
+                            }
+                        ],
+                        "default": "400"
+                    },
+                    {
+                        "type": "range",
+                        "id": "button_size",
+                        "min": 30,
+                        "max": 60,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Button size",
+                        "default": 50
+                    },
+                    {
+                        "type": "header",
+                        "content": "Mobile settings"
+                    },
+                    {
+                        "type": "range",
+                        "id": "subheading_size_mobile",
+                        "min": 10,
+                        "max": 24,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Subheading size (mobile)",
+                        "default": 16
+                    },
+                    {
+                        "type": "range",
+                        "id": "heading_size_mobile",
+                        "min": 16,
+                        "max": 36,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Heading size (mobile)",
+                        "default": 26
+                    },
+                    {
+                        "type": "range",
+                        "id": "button_size_mobile",
+                        "min": 30,
+                        "max": 40,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Button size (mobile)",
+                        "default": 30
+                    }
+                ]
+            },
+            {
+                "type": "countdown_timer",
+                "name": "Countdown",
+                "limit": 1,
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "datetime",
+                        "label": "Datetime",
+                        "default": "2026-03-31",
+                        "info": "year-month-day format required."
+                    },
+                    {
+                        "type": "text",
+                        "id": "days",
+                        "label": "Days",
+                        "default": "Days"
+                    },
+                    {
+                        "type": "text",
+                        "id": "hours",
+                        "label": "Hours",
+                        "default": "Hours"
+                    },
+                    {
+                        "type": "text",
+                        "id": "minutes",
+                        "label": "Minutes",
+                        "default": "Minutes"
+                    },
+                    {
+                        "type": "text",
+                        "id": "seconds",
+                        "label": "Seconds",
+                        "default": "Seconds"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Custom settings"
+                    },
+                    {
+                        "type": "checkbox",
+                        "id": "customize_settings",
+                        "label": "Enable custom settings",
+                        "default": false,
+                        "info": "Below settings will work once you enable it."
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_space_top",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Space top",
+                        "default": 32
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_gap",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Gap items",
+                        "default": 30
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_digit",
+                        "min": 16,
+                        "max": 200,
+                        "step": 2,
+                        "unit": "px",
+                        "label": "Digit size",
+                        "default": 120
+                    },
+                    {
+                        "type": "select",
+                        "id": "countdown_digit_weight",
+                        "label": "Digit weight",
+                        "options": [
+                            {
+                                "value": "100",
+                                "label": "100"
+                            },
+                            {
+                                "value": "200",
+                                "label": "200"
+                            },
+                            {
+                                "value": "300",
+                                "label": "300"
+                            },
+                            {
+                                "value": "400",
+                                "label": "400"
+                            },
+                            {
+                                "value": "500",
+                                "label": "500"
+                            },
+                            {
+                                "value": "600",
+                                "label": "600"
+                            },
+                            {
+                                "value": "700",
+                                "label": "700"
+                            },
+                            {
+                                "value": "800",
+                                "label": "800"
+                            },
+                            {
+                                "value": "900",
+                                "label": "900"
+                            }
+                        ],
+                        "default": "400"
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_unit",
+                        "min": 8,
+                        "max": 36,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Unit size",
+                        "default": 14
+                    },
+                    {
+                        "type": "select",
+                        "id": "countdown_unit_weight",
+                        "label": "Unit weight",
+                        "options": [
+                            {
+                                "value": "100",
+                                "label": "100"
+                            },
+                            {
+                                "value": "200",
+                                "label": "200"
+                            },
+                            {
+                                "value": "300",
+                                "label": "300"
+                            },
+                            {
+                                "value": "400",
+                                "label": "400"
+                            },
+                            {
+                                "value": "500",
+                                "label": "500"
+                            },
+                            {
+                                "value": "600",
+                                "label": "600"
+                            },
+                            {
+                                "value": "700",
+                                "label": "700"
+                            },
+                            {
+                                "value": "800",
+                                "label": "800"
+                            },
+                            {
+                                "value": "900",
+                                "label": "900"
+                            }
+                        ],
+                        "default": "100"
+                    },
+                    {
+                        "type": "header",
+                        "content": "Mobile settings"
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_margin_top_mobile",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Margin top (mobile)",
+                        "default": 32
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_gap_mobile",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Gap (mobile)",
+                        "default": 30
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_digit_mobile",
+                        "min": 16,
+                        "max": 60,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Digit size (mobile)",
+                        "default": 32
+                    },
+                    {
+                        "type": "range",
+                        "id": "countdown_unit_mobile",
+                        "min": 8,
+                        "max": 24,
+                        "step": 1,
+                        "unit": "px",
+                        "label": "Unit size (mobile)",
+                        "default": 12
+                    }
+                ]
+            },
+        ],
+        "presets": [
+            {
+                "name": "CRO| Countdown timer",
+                "blocks": [
+                    {
+                        "type": "countdown_header"
+                    },
+                    {
+                        "type": "countdown_timer"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

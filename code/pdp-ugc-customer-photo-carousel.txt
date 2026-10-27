@@ -1,0 +1,830 @@
+Step: 0
+Make a safe copy of your theme (Recommended)
+1) In Shopify admin go to Online Store > Themes.
+2) Click the three dots (⋯) next to your live theme > Duplicate. Work on the copy.
+3) When you’re done, preview the copy to test. Publish only after verifying.
+
+Step: 1
+Find your product section file (any theme) and add the block type
+Do this:
+1) Open templates/product.json. Note the main section type (for example: "main-product", "product-template", or "product").
+2) In sections/, open the file whose name matches that type (e.g., sections/main-product.liquid).
+If templates/product.json does not exist, open sections/main-product.liquid or sections/product-template.liquid or sections/product.liquid — pick whichever exists.
+
+Add the block type inside {% schema %}:
+- In that file, find {% schema %} and {% endschema %}.
+- Inside the JSON there, find "blocks": [ ... ]. If there is no blocks array, add "blocks": [] inside the top-level JSON object.
+- Paste the following block object INSIDE the square brackets [ ... ] as one item. If you paste it after another item, put a comma above it.
+
+Paste this (one item) inside blocks[]:
+{
+    "name": "CRO | UGC Section",
+    "type": "cro_ugc_section",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "range",
+          "id": "ugc_section_space_top",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top space",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "ugc_section_space_bottom",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom space",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "section_layout",
+          "label": "Layout",
+          "options": [
+                {
+                    "value": "collapsible",
+                    "label": "Collapsible"
+                },
+                {
+                    "value": "normal",
+                    "label": "Normal"
+                }
+                
+            ],
+            "default": "normal"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_button_as_default",
+          "label": "Open button as default",
+          "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "collapsible_show_border",
+            "label": "Show border bottom",
+            "default": true
+        },
+        {
+          "type": "range",
+          "id": "collapsible_button_size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Button size",
+          "default": 16
+        },
+        {
+            "type": "color",
+            "id": "button_border_color",
+            "label": "Border color",
+            "default": "#E4E4E4"
+        },
+        {
+            "type": "color",
+            "id": "button_arrow_color",
+            "label": "Arrow color",
+            "default": "#1a1a1a"
+        },
+        {
+            "type": "color",
+            "id": "button_arrow_background",
+            "label": "Arrow BG",
+            "default": "#E8E8E8"
+        },
+        {
+            "type": "header",
+            "content": "Feedback settings"
+        },
+        {
+          "type": "range",
+          "id": "feedback_heading_size",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "feedback_heading_size_mobile",
+          "min": 10,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading (mobile)",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "feedback_heading_alignment",
+          "label": "Alignment",
+          "options": [
+            {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+            }
+                
+          ],
+          "default": "center"
+        },
+        {
+          "type": "paragraph",
+          "content": "Other settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "autoplay",
+          "label": "Autoplay",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "draggable",
+          "label": "Draggable",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "loop",
+          "label": "Infinite loop",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "cell_align",
+          "label": "Cell-align",
+          "options": [
+            {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              }
+                
+          ],
+          "default": "left"
+        },
+        {
+          "type": "checkbox",
+          "id": "pagedots",
+          "label": "Page dots",
+          "default": true
+        },
+        {
+            "type": "color",
+            "id": "pagedots_color",
+            "label": "Dots color",
+            "default": "#282828"
+        },
+        {
+            "type": "range",
+            "id": "feedback_item_visible",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Default visible items",
+            "default": 70
+        },
+        {
+            "type": "range",
+            "id": "feedback_item_gaps",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "label": "Gap between",
+            "default": 16
+        },
+        {
+            "type": "range",
+            "id": "feedback_item_border_radius",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "label": "Border radius",
+            "default": 18
+        },
+        {
+            "type": "select",
+            "id": "feedback_item_ratio",
+            "label": "Aspect ratio",
+            "options": [
+                {
+                    "value": "square",
+                    "label": "Square"
+                },
+                {
+                    "value": "classic",
+                    "label": "Classic"
+                },
+                {
+                    "value": "widescreen",
+                    "label": "Widescreen"
+                },
+                
+            ],
+            "default": "square"
+        },
+        {
+            "type": "range",
+            "id": "feedback_avatar",
+            "min": 35,
+            "max": 65,
+            "step": 1,
+            "unit": "px",
+            "label": "Avatar size",
+            "default": 48
+        },
+        {
+            "type": "color",
+            "id": "feedback_rating_color",
+            "label": "Rating",
+            "default": "#FBCE0E"
+        },
+        {
+            "type": "color",
+            "id": "feedback_text_color",
+            "label": "Rating",
+            "default": "#ffffff"
+        },
+        {
+            "type": "range",
+            "id": "feedback_name_size",
+            "min": 12,
+            "max": 18,
+            "step": 1,
+            "unit": "px",
+            "label": "Name size",
+            "default": 14
+        },            
+        {
+            "type": "range",
+            "id": "feedback_lable_size",
+            "min": 8,
+            "max": 16,
+            "step": 1,
+            "unit": "px",
+            "label": "Label size",
+            "default": 10
+        },
+        {
+            "type": "color_background",
+            "id": "feedback_shadow",
+            "label": "Shadow",
+            "default": "linear-gradient(180deg, rgba(0, 0, 0, 0) 71.76%, rgba(0, 0, 0, 0.7) 100%)"
+        },
+    ]
+},
+
+Example (where to paste inside blocks[]):
+{
+  "name": "Product",
+  "settings": [ ... ],
+  "blocks": [
+    { /* existing block */ },
+    {  /* paste the CRO | UGC Section block object here */ }
+  ]
+}
+
+
+
+
+Step: 2
+Createa a new snippet: cro_ugc_section.liquid
+Paste this code:
+{%- if product.metafields.standard.cro_pdp_ugc_section -%}
+  {% assign cro_ugc_section = product.metafields.standard.cro_pdp_ugc_section.value %}
+    <style>
+        .hr_ugc_section {
+        margin-top: {{ block.settings.ugc_section_space_top -}}px;
+        margin-bottom: {{ block.settings.ugc_section_space_bottom -}}px;
+        overflow: hidden;
+        }
+        .hr_feedback-list {
+            display: block;
+            min-width: 100%;
+            text-align: left;
+        }
+
+        .hr_feedback-list-item {
+        width: {{ block.settings.feedback_item_visible -}}%;
+        padding-right: {{ block.settings.feedback_item_gaps -}}px;
+        }
+
+        .hr_ugc_section_button {
+            user-select: none;
+            {%- if block.settings.collapsible_show_border -%}
+                border-bottom: 1px solid {{ block.settings.button_border_color }};
+            {%- endif -%}
+        }
+
+        .hr_ugc_section_button-title {
+            margin: 0;
+            font-size: {{ block.settings.collapsible_button_size -}}px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .hr_ugc_section .collapsible-toggle svg path {
+        stroke: {{ block.settings.button_arrow_color }};
+        }
+
+        .animated-arrow-down {
+            width: 24px;
+            height: 24px;
+            background: {{ block.settings.button_arrow_background }};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 500px;
+        }
+        .hr_ugc_collipsible .collapsible__content {
+            padding-top: 20px;
+        }
+
+        .hr_ugc__contents {
+        margin-bottom: 20px;
+        }
+        .hr_ugc__contents-thumbnail img {
+            margin: 0 !important;
+        }
+        .hr_ugc__contents-feedbacks {
+        margin-top: {{ block.settings.feedback_margin_top -}}px;
+        margin-bottom: {{ block.settings.feedback_margin_bottom -}}px;
+        overflow: hidden;
+        }
+        .hr_ugc__contents-feedbacks-heading {
+        text-align: {{ block.settings.feedback_heading_alignment }};
+        }
+
+        .text-with-icons__list.hr_ugc__contents-feedback__list .text-with-icons__item {
+        padding: 0;
+        }
+        .hr_ugc__contents-feedbacks-item {
+        position: relative;
+        border-radius: {{ block.settings.feedback_item_border_radius -}}px;
+        overflow: hidden;
+        }
+        .hr_ugc__contents-feedbacks-item:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: {{ block.settings.feedback_shadow }};
+            background-blend-mode: darken, normal;
+        }
+        .hr_ugc__contents-feedbacks-item-thumb {
+        {%- if block.settings.feedback_item_ratio == 'square' -%}
+            aspect-ratio: 1 / 1;
+        {%- elsif block.settings.feedback_item_ratio == 'classic' -%}
+            aspect-ratio: 3 / 2;
+        {%- elsif block.settings.feedback_item_ratio == 'widescreen' -%}
+            aspect-ratio: 16 / 9;
+        {%- endif -%}
+        }
+        .hr_ugc__contents-feedbacks-item-thumb img {
+            width: 100%;
+            min-width: 100%;
+            height: 100%;
+            min-height: 100%;
+            margin: 0 !important;
+        }
+
+        .hr_ugc__contents-feedbacks-item-info {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            z-index: 1;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .hr_ugc__contents-feedbacks-item-info .author {
+            width: {{ block.settings.feedback_avatar -}}px;
+            height: {{ block.settings.feedback_avatar -}}px;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .hr_ugc__contents-feedbacks-item-info .author img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin: 0;
+        }
+
+        .hr_ugc__contents-author-info {
+            color:{{ block.settings.feedback_text_color }};
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        :root {
+        --product-star-rating: {{ settings.feedback_empty_rating_color.red }}, {{ settings.feedback_empty_rating_color.green }}, {{ settings.feedback_empty_rating_color.blue }};
+        }
+
+        .hr_ugc__contents-ratings {
+            display: flex;
+            gap: 2px;
+            color: {{ block.settings.feedback_rating_color }};
+        }
+
+
+        .hr_ugc__contents-author-info h6 {
+            font-size: {{ block.settings.feedback_name_size -}}px;
+            color: {{ block.settings.feedback_text_color }};
+            font-weight: 600;
+            margin: 5px 0 4px;
+            line-height: 1;
+        }
+
+        .hr_ugc__contents-author-info p {
+            margin: 0;
+            color: {{ block.settings.feedback_text_color }};
+            font-size: {{ block.settings.feedback_lable_size -}}px;
+            line-height: 1;
+        }
+
+        .hr_feedback-list ol.flickity-page-dots {
+        margin: 12px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        }
+
+        .hr_feedback-list ol.flickity-page-dots li.dot {
+        border-radius: 50px;
+        width: 4px;
+        height: 4px;
+        margin: 0 4px;
+        background: {{ block.settings.pagedots_color }};
+        opacity: .3;
+        transition: opacity .2s ease-in-out;
+        }
+
+        .hr_feedback-list ol.flickity-page-dots li.dot.is-selected {
+        opacity: 1;
+        }
+
+        .rating-star-empty{
+        opacity: 0.5;
+        }
+
+        @media (min-width: 741px) {
+        .hr_ugc__contents-feedbacks-heading {
+            font-size: {{ block.settings.feedback_heading_size -}}px;
+            line-height: 1;
+        }
+        }
+
+        @media (max-width: 740px) {
+        .hr_ugc__contents-feedbacks-heading {
+            font-size: {{ block.settings.feedback_heading_size_mobile -}}px;
+            line-height: 1;
+        }
+        }
+    </style>
+
+    {%- capture flickity_config -%}
+        {
+            "adaptiveHeight": true,
+            "draggable": {{ block.settings.draggable }},
+            "initialIndex": ".is-initial-selected",
+            "fade":false,
+            "autoPlay": {{ block.settings.autoplay }},
+            "pauseAutoPlayOnHover": true,
+            "pageDots": {{ block.settings.pagedots }},
+            "wrapAround": {{ block.settings.loop }},
+            "cellAlign": "{{ block.settings.cell_align }}",
+            "prevNextButtons": false
+        }
+    {%- endcapture -%}
+
+    {%- capture ugc_section_content -%}
+        <div class="hr_ugc__contents">
+        {% assign show_feedback = false %}
+        {%- if cro_ugc_section.feedback_title != blank or
+            cro_ugc_section.feedback_thumbnail_01 != blank or
+            cro_ugc_section.feedback_thumbnail_02 != blank or
+            cro_ugc_section.feedback_thumbnail_03 != blank or
+            cro_ugc_section.feedback_thumbnail_04 != blank or
+            cro_ugc_section.feedback_thumbnail_05 != blank
+        -%}
+        {% assign show_feedback = true %}
+        {%- endif -%}
+
+        {%- if show_feedback -%}
+            <div class="hr_ugc__contents-feedbacks" {{ block.shopify_attributes }}>
+            {%- if cro_ugc_section.feedback_title != blank -%}
+                <h5 class="heading {{ block.settings.feedback_heading_size }} hr_ugc__contents-feedbacks-heading">{{ cro_ugc_section.feedback_title }}</h5>
+            {%- endif -%}
+
+            <flickity-carousel class="main-carousel" flickity-config="{{ flickity_config | escape }}" id="flickity-{{ section.id }}"  class="hr_feedback-list">
+                {% for i in (1..5) %}
+                {% assign f_thumbnail = 'feedback_thumbnail_0' | append: i %}
+                {% assign f_avatar = 'feedback_avatar_0' | append: i %}
+                {% assign rating_key = 'feedback_ratings_0' | append: i %}
+                {% assign f_name = 'feedback_name_0' | append: i %}
+                {% assign f_label = 'feedback_label_0' | append: i %}
+    
+                {%- if cro_ugc_section[f_thumbnail] != blank -%}  
+                    {% assign ugc_thumbnail = cro_ugc_section[f_thumbnail] %}   
+                    {% assign ugc_avatar = cro_ugc_section[f_avatar] %}   
+                    {% assign ugc_ratings = cro_ugc_section[rating_key] | plus: 0 %}   
+                    {% assign ugc_name = cro_ugc_section[f_name] %}   
+                    {% assign ugc_label = cro_ugc_section[f_label] %}   
+    
+                    <div class="hr_feedback-list-item">
+                    <div class="hr_ugc__contents-feedbacks-item">
+                        <div class="hr_ugc__contents-feedbacks-item-thumb">
+                        {{- ugc_thumbnail | image_url: width: ugc_thumbnail.width | image_tag: sizes: '100vw', widths: '500, 600, 800', alt: ugc_thumbnail.alt -}}
+                        </div>
+    
+                        <div class="hr_ugc__contents-feedbacks-item-info">
+                        <div class="author">
+                            {%- if ugc_avatar != blank -%}
+                            {{- ugc_avatar | image_url: width: ugc_avatar.width | image_tag: sizes: '100vw', widths: '80, 100 ', alt: ugc_avatar.alt -}}
+                            {%- else -%}
+                                {{ 'image' | placeholder_svg_tag }}
+                            {%- endif -%}
+                        </div>
+    
+                        <div class="hr_ugc__contents-author-info">
+                            <div class="hr_ugc__contents-ratings">
+                            {% assign ratings = ugc_ratings | floor %} 
+                            {% assign has_half_star = ugc_ratings | modulo: 1 %}
+                            {% assign empty_stars = 5 | minus: ratings %}
+                            {%- for i in (1..ratings) -%}
+                                {% render 'icon' with 'rating-star', class: 'icon' %}
+                            {%- endfor -%}
+    
+                            {%- if has_half_star > 0 -%}
+                                <svg class="visually-hidden">
+                                <linearGradient id="hr-rating-star-gradient-half">
+                                    <stop offset="50%" stop-color="{{ block.settings.feedback_rating_color }}" />
+                                    <stop offset="50%" stop-color="rgb(var(--product-star-rating))" stop-opacity="0.4" />
+                                </linearGradient>
+                                </svg>
+        
+                                <svg fill="none" focusable="false" width="14" height="14" class="rating-star-half" viewBox="0 0 14 13">
+                                <path d="M7 0L8.6458 4.73475L13.6574 4.83688L9.66296 7.86525L11.1145 12.6631L7 9.8L2.8855 12.6631L4.33704 7.86525L0.342604 4.83688L5.3542 4.73475L7 0Z" fill="url(#hr-rating-star-gradient-half)"></path>
+                                </svg>
+                            {%- endif -%}
+    
+                            {%- for i in (1..empty_stars) -%}
+                                {% render 'icon' with 'rating-star', class: 'icon rating-star-empty' %}
+                            {%- endfor -%}
+                            </div>
+                            <h6 class="heading">{{ ugc_name}}</h6>
+                            <p>{{ ugc_label }}</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                {%- endif -%}
+                {% endfor %}
+            </flickity-carousel>
+            </div>
+        {%- endif -%}
+        </div>
+    {%- endcapture -%}
+
+    <div class="hr_ugc_section" {{ block.shopify_attributes }}>
+        {% if block.settings.section_layout == 'collapsible' %}
+        <button
+            is="toggle-button"
+            class="collapsible-toggle hr_ugc_section_button"
+            aria-controls="block-{{ section.id }}-{{ block.id }}"
+            aria-expanded="{{ block.settings.open_button_as_default }}"
+        >
+            <p class="heading hr_ugc_section_button-title">{{ cro_ugc_section.button_title }}</p>
+            <span class="animated-arrow-down">
+            <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5"/>
+            </svg>
+            </span>
+        </button>
+
+        <div class="hr_collapsible-border"></div>
+
+        <collapsible-content
+            id="block-{{ section.id }}-{{ block.id }}"
+            class="collapsible anchor hr_ugc_collipsible"
+            {% if block.settings.open_button_as_default == true %}
+            open
+            {% endif %}
+        >
+            <div class="collapsible__content text-container">
+            {{ ugc_section_content }}
+            </div>
+        </collapsible-content>
+        {% else %}
+        {{ ugc_section_content }}
+        {% endif %}
+    </div>
+
+    <script>
+    // for an individual element
+    var flkty = new Flickity('.main-carousel', {
+            "adaptiveHeight": true,
+            "draggable": {{ block.settings.draggable }},
+            "initialIndex": ".is-initial-selected",
+            "fade":false,
+            "autoPlay": {{ block.settings.autoplay }},
+            "pauseAutoPlayOnHover": true,
+            "pageDots": {{ block.settings.pagedots }},
+            "wrapAround": {{ block.settings.loop }},
+            "cellAlign": "{{ block.settings.cell_align }}",
+            "prevNextButtons": false
+    });
+    </script>
+{%- endif -%}
+
+
+
+
+
+Step: 3
+Render the block (works for all themes)
+In the same product section file from Step 1 (or the snippet that renders blocks), find the loop that renders blocks:
+- Search for: {% for block in section.blocks %}
+
+Then insert ONE of the following INSIDE that loop, depending on what your theme uses:
+
+If it uses a switch/case pattern:
+{% case block.type %}
+  ...
+  {% when 'cro_ugc_section' %}
+    {% render 'cro_ugc_section', product: product, block: block %}
+  ...
+{% endcase %}
+
+If it uses if/elsif conditions:
+{% if block.type == 'cro_ugc_section' %}
+  {% render 'cro_ugc_section', product: product, block: block %}
+{% endif %}
+
+Note: Some themes render blocks inside a snippet (common names: snippets/product-form.liquid, snippets/main-product-blocks.liquid). If you see the loop there, insert the same lines inside that snippet.
+
+Step: 4
+Add the block to your Product template (no code)
+1) Online Store > Themes > Customize.
+2) Open your Product template.
+3) In the left sidebar, click your main Product section.
+4) Click Add block and select "CRO | UGC Section". Drag to the position you want. Save.
+
+
+
+
+
+Step: 5
+Go to icon.liquid
+Add below code if your theme already has icon.liquid snippet or create a new icon.liquid snippet  and add below codes:
+{%- capture icon_class -%}icon icon--{{ icon }} {% if inline %}icon--inline{% endif %} {% if direction_aware %}icon--direction-aware{% endif %} {{ class }}{%- endcapture -%}
+
+{%- case icon -%}
+  {%- when 'rating-star' -%}
+    <svg
+      fill="none"
+      focusable="false"
+      width="{{ width | default: 14 }}"
+      height="{{ height | default: 14 }}"
+      class="{{ icon_class }}"
+      viewBox="0 0 14 13"
+    >
+      <path d="M7 0L8.6458 4.73475L13.6574 4.83688L9.66296 7.86525L11.1145 12.6631L7 9.8L2.8855 12.6631L4.33704 7.86525L0.342604 4.83688L5.3542 4.73475L7 0Z" fill="currentColor"></path>
+    </svg>
+
+  {%- when 'rating-star-half' -%}
+    <svg
+      fill="none"
+      focusable="false"
+      width="{{ width | default: 14 }}"
+      height="{{ height | default: 14 }}"
+      class="{{ icon_class }}"
+      viewBox="0 0 14 13"
+    >
+      <path d="M7 0L8.6458 4.73475L13.6574 4.83688L9.66296 7.86525L11.1145 12.6631L7 9.8L2.8855 12.6631L4.33704 7.86525L0.342604 4.83688L5.3542 4.73475L7 0Z" fill="url(#rating-star-gradient-half)"></path>
+    </svg>
+{%- endcase -%}
+
+
+
+
+Step: 6
+Create Metaobjects & Metafields with below details:
+    Metaobjects:
+    Custom data > Metaobject > Add definition 
+    Name: CRO | UGC Section
+    Type: cro_ugc_section
+
+    Fields:
+    ========
+    Name: Name
+    Key: cro_ugc_section.name
+    Description: Enter the product name. This will help you easily identify this metaobject later.
+    Use this field as display name
+    Required field
+
+    Name: Button title
+    Key: cro_ugc_section.button_title
+    Single line text
+
+    Name: Feedback title
+    key: cro_ugc_section.feedback_title
+    Single line text
+
+
+    Name: Feedback thumbnail 01
+    key: cro_ugc_section.feedback_thumbnail_01
+    File > Images
+    Name: Feedback avatar 01
+    key: cro_ugc_section.feedback_avatar_01
+    File > Images
+    Name: Feedback ratings 01
+    key: cro_ugc_section.feedback_ratings_01
+    Decimal > 1.0 - 5.0
+    Name: Feedback name 01
+    key: cro_ugc_section.feedback_name_01
+    Single line text
+    Name: Feedback label 01
+    key: cro_ugc_section.feedback_label_01
+    Single line text
+
+
+    Name: Feedback thumbnail 02
+    key: cro_ugc_section.feedback_thumbnail_02
+    Name: Feedback avatar 02
+    key: cro_ugc_section.feedback_avatar_02
+    Name: Feedback ratings 02
+    key: cro_ugc_section.feedback_ratings_02
+    Name: Feedback name 02
+    key: cro_ugc_section.feedback_name_02
+    Name: Feedback label 02
+    key: cro_ugc_section.feedback_label_02
+
+    Name: Feedback thumbnail 03
+    key: cro_ugc_section.feedback_thumbnail_03
+    Name: Feedback avatar 03
+    key: cro_ugc_section.feedback_avatar_03
+    Name: Feedback ratings 03
+    key: cro_ugc_section.feedback_ratings_03
+    Name: Feedback name 03
+    key: cro_ugc_section.feedback_name_03
+    Name: Feedback label 03
+    key: cro_ugc_section.feedback_label_03
+
+    Name: Feedback thumbnail 04
+    key: cro_ugc_section.feedback_thumbnail_04
+    Name: Feedback avatar 04
+    key: cro_ugc_section.feedback_avatar_04
+    Name: Feedback ratings 04
+    key: cro_ugc_section.feedback_ratings_04
+    Name: Feedback name 04
+    key: cro_ugc_section.feedback_name_04
+    Name: Feedback label 04
+    key: cro_ugc_section.feedback_label_04
+
+    Name: Feedback thumbnail 05
+    key: cro_ugc_section.feedback_thumbnail_05
+    Name: Feedback avatar 05
+    key: cro_ugc_section.feedback_avatar_05
+    Name: Feedback ratings 05
+    key: cro_ugc_section.feedback_ratings_05
+    Name: Feedback name 05
+    key: cro_ugc_section.feedback_name_05
+    Name: Feedback label 05
+    key: cro_ugc_section.feedback_label_05
+
+
+    Metafield:
+    Custom data > products > metafield > add definition:
+    Name: CRO | PDP | UGC Section 
+    Namespace and key:  standard.cro_pdp_ugc_section
+    Select type: Mixed reference
+    References: CRO | UGC Section

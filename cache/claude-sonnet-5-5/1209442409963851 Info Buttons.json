@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is empty: it has a title ('Info Buttons') but no description, comments, code, or screenshots. There is not enough information to define a reusable CRO element, so any spec would be invented."}, "in": 63, "out": 78}

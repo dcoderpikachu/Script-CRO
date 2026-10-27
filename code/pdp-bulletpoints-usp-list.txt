@@ -1,0 +1,338 @@
+Step: 1
+Go to section: main-product.liquid
+Add new schema block for CRO | Bulletpoints
+Paste this code:
+{
+    "type": "cro_bulletpoints",
+    "name": "CRO | Bulletpoints",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "paragraph",
+          "content": "This section requires a custom.bulletpoints metafield, the 'Single line text' field with a List of values."
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "gap_items",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap items",
+          "default": 3
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show border",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#EEEAE9"
+        },
+        {
+          "type": "range",
+          "id": "border_radius",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 6
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "list_style",
+          "label": "List style",
+          "options": [
+            {
+              "value": "disc",
+              "label": "Disc"
+            },
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "decimal",
+              "label": "Decimal"
+            },
+            {
+              "value": "svg",
+              "label": "SVG"
+            }
+          ],
+          "default": "svg"
+        },
+        {
+          "type": "header",
+          "content": "SVG Icon Settings",
+          "info": "List style = SVG (required)"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_as_image",
+          "label": "Icon as image"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg",
+          "label": "Icon as SVG",
+          "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"size-6\">\n  <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m4.5 12.75 6 6 9-13.5\"></path>\n</svg>"
+        },
+        {
+          "type": "range",
+          "id": "icon_as_size",
+          "min": 5,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 5,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon width",
+          "default": 18
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "color",
+          "id": "icon_background",
+          "label": "Icon BG",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "range",
+          "id": "icon_margin_rigght",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin right",
+          "default": 8,
+          "info": "List style = SVG (required)"
+        },
+        {
+          "type": "header",
+          "content": "List Items Settings"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (Mobile)",
+          "default": 16
+        }
+    ]
+},
+
+
+
+Step: 2
+Create a snippet: ed-cro-bulletpoints.liquid
+Paste this code:
+
+{% if product.metafields.standard.cro_pdp_bulletpoints %}
+  {% assign metafield_values = product.metafields.standard.cro_pdp_bulletpoints.value %}
+
+  <style>
+    #shopify-section-{{ section.id }} {
+        {%- if block.settings.background == 'rgba(0,0,0,0)' -%}
+            {%- assign section_background = settings.background -%}
+        {%- else -%}
+            {%- assign section_background = block.settings.background -%}
+        {%- endif -%}
+        {%- if block.settings.text_color == 'rgba(0,0,0,0)' -%}
+            {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+            {%- assign text_color = block.settings.text_color -%}
+        {%- endif -%}
+        --bulletpoints-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --bulletpoints-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+    }
+    ul.ed_cro_bulletpoints {
+        margin-top: {{ block.settings.space_top -}}px;
+        margin-bottom: {{ block.settings.space_bottom -}}px;
+        margin-left: 0;
+        margin-right: 0;
+        flex-direction: column;
+        display: flex;
+        gap: {{ block.settings.gap_items -}}px;
+        padding: 0;
+    }
+    {%- if block.settings.show_border == true or block.settings.background != 'rgba(0,0,0,0)' -%}
+        ul.ed_cro_bulletpoints  {
+            padding: 16px;
+            color: rgb(var(--bulletpoints-color));
+            background-color: rgb(var(--bulletpoints-background));
+            {% if block.settings.show_border %}
+            border: 1px solid {{ block.settings.border_color }};
+            {% endif %}
+            border-radius: {{ block.settings.border_radius -}}px;
+        }
+    {%- endif -%}
+
+
+    li.ed_cro_bulletpoints__item {
+        display: flex;
+        align-items: center;
+        gap: {{  block.settings.icon_margin_rigght -}}px;
+    }
+
+    span.ed_cro_bulletpoints_icon {
+        width: {{ block.settings.icon_width -}}px;
+        height: {{ block.settings.icon_width -}}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50px;
+        {% if block.settings.icon_color == "rgba(0,0,0,0)" %}
+        {% else %}
+            color: {{ block.settings.icon_color }};
+        {% endif %}
+        {% if block.settings.icon_background == "rgba(0,0,0,0)" %}
+        {% else %}
+            background: {{ block.settings.icon_background }};
+        {% endif %}
+    }
+
+    span.ed_cro_bulletpoints_icon svg,
+    span.ed_cro_bulletpoints_icon img {
+        height: auto;
+        width: {{  block.settings.icon_as_size }}px;
+        display: flex;
+    }
+
+    li.ed_cro_bulletpoints__item p {
+        margin: 0;
+        font-size: {{ block.settings.font_size -}}px;
+    }
+    @media (max-with: 767px) {
+        li.ed_cro_bulletpoints__item p {
+            font-size: {{ block.settings.font_size_mobile -}}px;
+        }
+    }
+
+    ul.ed_cro_bulletpoints.ed_cro_bulletpoints--default {
+        list-style: {{ block.settings.list_style }};
+        {% if block.settings.background == 'rgba(0,0,0,0)' %}
+            padding-left: 16px;
+        {% else %}
+            padding-left: 32px;
+        {% endif %}
+    }
+
+    .ed_cro_bulletpoints--default li.ed_cro_bulletpoints__item {
+        display: list-item;
+    }
+
+    .ed_cro_bulletpoints--default span.ed_cro_bulletpoints_icon {
+        display: none;
+    }
+  </style>
+
+  <ul class="ed_cro_bulletpoints {% if block.settings.list_style != 'svg' %}ed_cro_bulletpoints--default{% endif %}">
+    {%- for value in metafield_values -%}
+      <li class="ed_cro_bulletpoints__item">
+        {%- if block.settings.icon_as_image != blank -%}
+          <span class="ed_cro_bulletpoints_icon">
+            {{-
+              block.settings.icon_as_image
+              | image_url: width: block.settings.icon_as_image.width
+              | image_tag: sizes: '100vw', widths: '25,50,75,100', alt: block.settings.icon_as_image.alt
+            -}}
+          </span>
+        {%- elsif block.settings.icon_as_svg != blank -%}
+          <span class="ed_cro_bulletpoints_icon">
+            {{ block.settings.icon_as_svg }}
+          </span>
+        {%- endif -%}
+        <p>{{ value }}</p>
+      </li>
+    {%- endfor -%}
+  </ul>
+{% endif %}
+
+
+
+
+
+Step: 3
+Go to snippet: product-form.liquid
+Paste this code:
+
+{%- when 'cro_bulletpoints' -%}
+    {% render 'ed-cro-bulletpoints', product: product, block: block %}
+
+
+
+
+
+Step: 4
+Create Metaobjects & Metafields with below details:
+    Metafield:
+    ===========
+    Custom data > products > metafield > add definition:
+    Name CRO | PDP | Bulletpoints 
+    Namespace and key standard.cro_pdp_bulletpoints
+    Single line text
+    List of values

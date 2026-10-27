@@ -1,0 +1,322 @@
+Step 1: Add this schema in the main-product.liquid section, inside blocks
+
+{
+      "type" : "highlight_discount",
+      "name" : "Highlight discount code",
+      "settings" : [
+        {
+          "type": "select",
+          "id": "device_display",
+          "label": "Device-Type Specific Display",
+          "options": [
+             {
+             "value": "desktop",
+              "label": "Desktop only"
+             },
+             {
+              "value": "mobile",
+              "label": "Mobile only"
+              },
+              {
+               "value": "both",
+               "label": "Both"
+               }
+            ],
+           "default": "both"
+         },
+        {
+          "type" : "number",
+          "id" : "discount_percentage",
+          "label" : "Discount percentage",
+          "default" : 30
+        },
+        {
+          "type" : "richtext",
+          "label" : "Title",
+          "id" : "title",
+          "default" : "<p><strong>-30%</strong> mit dem Code</p>"
+        },
+          {
+          "type" : "text",
+          "label" : "Discount code",
+          "id" : "discount_code",
+          "info" : "If the discount code field is left blank, the block won't be displayed. You can link this field to a product metafield—if the product has a value for it, the block will show only for that product, making it product-specific."
+        },
+        {
+          "type" : "text",
+          "label" : "Copy button tooltip text",
+          "id" : "copy_button_tooltip_text",
+          "default" : "Code kopiert!"
+        },
+        {
+          "type" : "richtext",
+          "label" : "Text",
+          "id" : "text"
+        },
+        {
+          "type" : "text",
+          "label" : "Learn more button text",
+          "id" : "learn_more_button_text",
+          "default" : "Mehr erfahren",
+          "info" : "If you leave the text blank, the link will not be displayed."
+        },
+        {
+          "type" : "url",
+          "label" : "Learn more button link",
+          "id" : "learn_more_button_link"
+        },
+        {
+          "type" : "checkbox",
+          "label" : "Show copy button",
+          "id" : "show_copy_button",
+          "default" : true
+        },
+        {
+          "type" : "checkbox",
+          "label" : "Show the old price as strikethrough",
+          "id" : "show_old_price",
+          "default" : true
+        },
+        {
+          "type" : "color",
+          "id" : "text_color",
+          "label" : "Text color",
+          "default" : "#000"
+        },
+        {
+          "type" : "color",
+          "id" : "background_color",
+          "label" : "Background color",
+          "default" : "#fff"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 5,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 16
+       },
+        {
+          "type" : "color",
+          "id" : "discounted_price_color",
+          "label" : "Discounted price color",
+          "default" : "#b70832"
+        },
+        {
+          "type": "range",
+          "id": "discount_price_font_size",
+          "min": 5,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Discounted price font size",
+          "default": 28
+       }
+      ]
+    },
+
+
+Step 2: Create snippet highlight-discount.liquid
+{% assign device_class = '' %}
+{% if block.settings.device_display == 'desktop' %}
+  {% assign device_class = 'only-desktop' %}
+{% elsif block.settings.device_display == 'mobile' %}
+  {% assign device_class = 'only-mobile' %}
+{% endif %}
+{% if block.settings.discount_code != blank %}
+  <div class="highlight-discount-block {{ device_class }}">
+    <div class="highlight-discount">
+      <div class="highlight-discount-header">
+        <div class="highlight-discount-header-title">
+          {{ block.settings.title }}
+        </div>
+        {% if block.settings.show_copy_button %}
+          <button class="highlight-discount-button" type="button" data-code="{{ block.settings.discount_code }}">
+            <svg class="icon icon__copy" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.212 7.05H6.474c-.428 0-.774.362-.774.81v11.333c0 .447.346.81.774.81h7.738c.427 0 .774-.363.774-.81V7.858c0-.447-.347-.81-.774-.81M6.474 5.43c-1.282 0-2.322 1.088-2.322 2.43v11.333c0 1.34 1.04 2.428 2.322 2.428h7.738c1.282 0 2.321-1.087 2.321-2.428V7.858c0-1.341-1.04-2.428-2.321-2.428H6.474" fill-rule="evenodd" clip-rule="evenodd"></path><path d="M7.01 3.355c0-.432.346-.782.774-.782h9.285c.466 0 1.061.202 1.535.72.485.529.787 1.321.787 2.406v11.33a.778.778 0 0 1-.774.782.778.778 0 0 1-.774-.781V5.699c0-.79-.214-1.17-.374-1.345-.17-.186-.35-.218-.4-.218H7.784a.778.778 0 0 1-.774-.781" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+            <span class="highlight-discount-button-text"> {{ block.settings.discount_code }}</span
+            ><span class="highlight-discount-button-tooltip">{{ block.settings.copy_button_tooltip_text }}</span>
+          </button>
+        {% endif %}
+      </div>
+      <div class="highlight-discount-body">
+        <div class="highlight-discount-body-text">
+          {{ block.settings.text }}
+        </div>
+        <div class="highlight-discount-body-bottom">
+          <div class="highlight-discount-body-price">
+            {% assign price = product.selected_or_first_available_variant.price %}
+            {% assign discount_percentage = block.settings.discount_percentage %}
+            {% assign discount_amount = price | times: discount_percentage | divided_by: 100 %}
+            {% assign discounted_price = price | minus: discount_amount %}
+
+            <div class="discounted-price">{{ discounted_price | money }}</div>
+            {% if block.settings.show_old_price %}
+              <div class="orginal-price">{{ price | money }}</div>
+            {% endif %}
+          </div>
+          {% if block.settings.learn_more_button_text != blank %}
+            <a href="{{ block.settings.learn_more_button_link }}">{{ block.settings.learn_more_button_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .highlight-discount-block.only-desktop {
+       display: block;
+     }
+     @media (max-width: 767px) {
+       .highlight-discount-block.only-desktop {
+        display: none !important;
+        }
+     }
+     .highlight-discount-block.only-mobile {
+       display: none;
+     }
+    @media (max-width: 767px) {
+     .highlight-discount-block.only-mobile {
+       display: block !important;
+     }
+    }
+    .highlight-discount{
+      padding: 24px;
+      background-color: {{block.settings.background_color}};
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
+      color: {{block.settings.text_color}};
+      font-size: {{block.settings.font_size}}px;
+      line-height: 137.5%;
+    }
+    .highlight-discount-header{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .highlight-discount-header-title, .highlight-discount-header-title *{
+      font-weight: 400;
+    }
+    .highlight-discount-header-title strong{
+      font-weight: 700;
+    }
+    .highlight-discount-header-title *{
+      margin: 0;
+      padding: 0;
+    }
+     .highlight-discount-button{
+       align-items: center;
+      background-color: #dedede;
+      border-radius: 2px;
+      display: flex;
+      gap: 4px;
+      padding: 6px 8px;
+      position: relative;
+     }
+    .highlight-discount-button .icon__copy{
+      width: 24px;
+      height: 24px;
+    }
+    .highlight-discount-button .highlight-discount-button-text{
+      font-style: normal;
+      font-weight: 700;
+    }
+    .highlight-discount-button .highlight-discount-button-tooltip{
+      left: 50%;
+      position: absolute;
+      translate: -50%;
+      background-color: rgb(0, 0, 0);
+      border-radius: 2px;
+      color: rgb(255, 255, 255);
+      max-width: 160px;
+      opacity: 0;
+      padding: 8px;
+      text-align: center;
+      top: 54px;
+      transition: opacity .3s;
+      visibility: hidden;
+      width: -moz-max-content;
+      width: max-content;
+      z-index: 1;
+      font-size: 12px;
+    }
+    .highlight-discount-button .highlight-discount-button-tooltip.active{
+      opacity: 1;
+      visibility: visible;
+    }
+    .highlight-discount-button .highlight-discount-button-tooltip:after{
+      border-color: transparent transparent #000;
+      border-style: solid;
+      border-width: 10px;
+      border-width: 10px;
+      bottom: 100%;
+      content: '';
+      left: 50%;
+      position: absolute;
+      translate: -50%;
+    }
+    .highlight-discount-body-text,.highlight-discount-body-text *{
+
+    }
+    .highlight-discount-body-text p{
+      margin-bottom: 8px !important;
+      margin-top: 0 !important;
+    }
+    .highlight-discount-body-price{
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .highlight-discount-body-price .discounted-price{
+      font-size: {{block.settings.discount_price_font_size}}px;
+      color: {{block.settings.discounted_price_color}};
+      font-weight: 700;
+      line-height: 1;
+    }
+    .highlight-discount-body-price .orginal-price{
+      font-weight: 400;
+      line-height: 1;
+      text-decoration: line-through;
+    }
+    .highlight-discount-body-bottom{
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .highlight-discount-body-bottom a{
+      display: inline-block;
+      line-height: 1;
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    document.querySelectorAll('.highlight-discount-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const discountCode = button.getAttribute('data-code');
+        navigator.clipboard.writeText(discountCode).then(() => {
+          const tooltip = button.querySelector('.highlight-discount-button-tooltip');
+          if (tooltip) {
+            tooltip.classList.add('active');
+            setTimeout(() => {
+              tooltip.classList.remove('active');
+            }, 3000);
+          }
+        }).catch(err => {
+          console.error('Failed to copy discount code: ', err);
+        });
+      });
+    });
+  </script>
+{% endif %}
+
+
+Step 3: Add this code in the product-form.liquid inside {%- case block.type -%}
+
+{% when 'highlight_discount' %}
+ {% render 'highlight-discount', block: block, product: product, section: section %}

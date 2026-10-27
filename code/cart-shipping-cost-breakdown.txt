@@ -1,0 +1,408 @@
+Step 1: Add this schema in settings_schema.json
+{
+        "type": "checkbox",
+        "id": "calculation_of_free_shipping",
+        "label": "Calculate shipping fees in cart?",
+        "info": "Make sure that you have properly configured your delivery fees in the field 'Delivery fee' at the bottom.",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free shipping minimum amount",
+        "info": "Enter amount using number only. If using multiple currencies, separate each currency code with its amount (eg.: USD:50,EUR:60,JPY:9000)",
+        "default": "50"
+      },
+      {
+        "type": "text",
+        "id": "shipping_price",
+        "label": "Delivery fee"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_live_shipping_calculation",
+        "label": "Enable live shipping calculation",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Cart footer labels"
+      },
+      {
+        "type": "text",
+        "id": "subtotal",
+        "label": "Subtotal",
+        "default": "Zwischensumme"
+      },
+      {
+        "type": "text",
+        "id": "delivery",
+        "label": "Delivery",
+        "default": "Versand"
+      },
+      {
+        "type": "text",
+        "id": "total",
+        "label": "Total",
+        "default": "Endsumme"
+      },
+      {
+        "type": "text",
+        "id": "free_text",
+        "label": "Free shipping text",
+        "default": "Kostenlos"
+      },
+      {
+        "type": "color",
+        "id": "free_shipping_text_color",
+        "label": "Free shipping text color",
+        "default": "#007600"
+      }
+
+Step 2: create snippet totals-cart.liquid
+{% comment %} CHECK FREE SHIPPING AMOUNT {% endcomment %}
+{% if settings.cart_free_shipping_threshold != blank %}
+  {% assign cart_free_shipping_threshold = settings.cart_free_shipping_threshold | plus: 0 %}
+{% else %}
+  {% assign cart_free_shipping_threshold = false %}
+{% endif %}
+{% comment %} END {% endcomment %}
+
+{% assign cart_total_price = cart.total_price | divided_by: 100 %}
+
+{% comment %} CHECK SHIPPING PRICE {% endcomment %}
+{% if settings.shipping_price != blank %}
+  {% assign shipping_price = settings.shipping_price | times: 100.0 %}
+{% else %}
+  {% assign shipping_price = 0 %}
+{% endif %}
+{% comment %} END {% endcomment %}
+
+{% comment %} CHECK IF CALCULATION IS ENABLED {% endcomment %}
+{% if settings.calculation_of_free_shipping == false %}
+  {% assign shipping_price = 0 %}
+{% endif %}
+{% comment %} END {% endcomment %}
+
+{% comment %} IF FREE SHIPPING AMOUNT IS REACHED {% endcomment %}
+{% if cart_total_price >= cart_free_shipping_threshold and settings.cart_free_shipping_threshold != blank %}
+  {% assign shipping_price = 0 %}
+{% endif %}
+{% comment %} END {% endcomment %}
+
+{% comment %} CALCULATE ALWAYS TOTAL CART PRICE {% endcomment %}
+{% assign final_cart_total_price = cart.total_price | plus: shipping_price %}
+{% comment %} END {% endcomment %}
+
+<div class="totals">
+  {% comment %} IF CALCULATION OF DELIVERY FEES IS DEACTIVATED {% endcomment %}
+  {% if settings.calculation_of_free_shipping != false %}
+    {% if settings.shipping_price != blank %}
+      <div class="totals-row">
+        <h3 class="totals__subtotal">{{ settings.subtotal }}</h3>
+        <span class="totals__subtotal-value" data-original-total="{{ cart.total_price | money_without_currency }}">
+          {{- cart.total_price | money -}}
+        </span>
+      </div>
+    {% endif %}
+
+    {% if settings.enable_live_shipping_calculation %}
+      <mini-shipping-estimator class="mini-shipping-estimator">
+        <div class="totals-row">
+          <div class="totals__subtotal">
+            {{ settings.delivery }}:
+            <div class="select-wrapper country-select-wrapper">
+              <select
+                class="select country-select"
+                data-cart-total="{{ cart.total_price }}"
+                {% if customer and customer.default_address %}
+                  data-default="{{ customer.default_address.country }}"
+                {% endif %}
+              >
+                {% assign country_options = country_option_tags
+                  | split: '<option value="---" data-provinces="[]">---</option>'
+                %}
+                {{ country_options[1] }}
+              </select>
+              {%- render 'icon' with 'chevron' -%}
+            </div>
+          </div>
+          <span class="totals__subtotal-value country__shipping-value">
+            <span class="free-shipping-label">{{ settings.free_text }}</span>
+          </span>
+        </div>
+
+        <div class="shipping-estimate-error" style="display: none;"></div>
+
+        {% render 'country-with-province-zip' %}
+      </mini-shipping-estimator>
+    {% else %}
+      {% if settings.shipping_price != blank %}
+        <div class="totals-row">
+          <h3 class="totals__subtotal">{{ settings.delivery }}</h3>
+          <span class="totals__subtotal-value totals__subtotal-value-price">
+            {% if shipping_price == 0 %}
+              <span class="free-shipping-label">{{ settings.free_text }}</span>
+            {% else %}
+              {{ shipping_price | money }}
+            {% endif %}
+          </span>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  <div class="totals-row">
+    <h3 class="total__value totals__subtotal">{{ settings.total }}</h3>
+    <span class="totals__subtotal-value total-value-price">{{ final_cart_total_price | money }}</span>
+  </div>
+</div>
+
+<style>
+      .totals {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .totals .totals-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 13px;
+    }
+    .totals .totals-row .totals__subtotal {
+      margin-bottom: 0;
+      font-weight: normal;
+      font-size: 13px;
+    }
+    .totals .totals-row .totals__subtotal-value {
+      margin-top: 0;
+    }
+    .totals .totals-row .totals__subtotal-value .free-shipping-label {
+      color: {{settings.free_shipping_text_color}};
+      font-weight: bold;
+    }
+    .mini-shipping-estimator .totals-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mini-shipping-estimator .totals__subtotal{
+    display: flex;
+    align-items: center;
+  }
+  .mini-shipping-estimator .select.country-select{
+    height: auto;
+    padding: 2px 21px 2px 6px;
+    font-size: 14px;
+    margin-left: 5px;
+  }
+  .mini-shipping-estimator .select~svg{
+     right: 6px;
+  }
+  .mini-shipping-estimator .totals__subtotal,.mini-shipping-estimator  .country__shipping-value{
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .mini-shipping-estimator{
+    width: 100%;
+  }
+</style>
+
+
+Step 3: In mini-cart.liquid file before this statement  {%- if section.settings.show_checkout_button -%} add this code
+{% render 'totals-cart', cart: cart %}
+
+Step 4: Create snippet country-with-province-zip.liquid
+  {%- assign country_with_province_zip = 'Albania=1001,Argentina+Buenos Aires=B1406,Armenia=0002,Australia+Australian Capital Territory=2609,Belgium=1000,Brazil+Rio de Janeiro=20000-000,Bulgaria=1000,China+Beijing=065001,Denmark=2300,Germany=10115,Estonia=10001,Finland=00100,France=70123,Georgia=0200,Greece=104 31,India+Delhi=110003,Indonesia+Jakarta=10110,Ireland+Dublin=D01,Italy+Roma=00153,Jordan=11191,Canada+Ontario=L7K 0C2,Croatia=10000,Kuwait+Al Ahmadi=60000,Latvia=1000,Lebanon=46052,Liechtenstein=9490,Lithuania=00116,Luxembourg=1508,Malta=ATD,Mexico+México=31846,Monaco=98000,Netherlands=1105 AW,Norway=1621,Austria=1010,Poland=33-300,Portugal+Lisboa=1750-194,Romania+București=010011,Saudi Arabia=46477,Sweden=100 44,Switzerland=3001,Serbia=11000,Singapore=269437,Slovakia=010 01,Slovenia=1504,Spain+Madrid=28054,Czech Republic=110 0,Turkey=37600,Hungary=1051,United Arab Emirates+Abu Dhabi=00000,United States+District of Columbia=20005,United Kingdom+England=PO16 7GZ,Cyprus=2480' | split: ',' -%}
+
+<script id="country-with-province-zip">
+  [{%- for country in country_with_province_zip -%}
+    {%- if country contains '+' -%}
+      {%- assign name = country | split: '+' | first -%}
+      {%- assign province = country | split: '+' | last | split: '=' | first -%}
+      {%- assign zip_code = country | split: '=' | last -%}
+    {%- else -%}
+      {%- assign name = country | split: '=' | first -%}
+      {%- assign province = blank -%}
+      {%- assign zip_code = country | split: '=' | last -%}
+    {%- endif %}
+    {
+      "country": "{{ name }}",
+      "province": "{{ province }}",
+      "zip": "{{ zip_code }}"
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor %}
+  ]
+</script>
+
+
+Step 5: Add this code in theme.js
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  class MiniShippingEstimator extends HTMLElement {
+    connectedCallback() {
+      this.select = this.querySelector(".country-select");
+      this.zipInput = this.querySelector(".zip-code-input");
+      this.zipSubmitBtn = this.querySelector(".zip-submit-btn");
+      this.shippingError = this.querySelector(".shipping-estimate-error");
+      this.shippingValue = this.querySelector(".country__shipping-value");
+
+      this.customerLoggedIn =
+        this.getAttribute("data-customer-logged-in") === "true";
+      this.customerZip = this.getAttribute("data-customer-zip");
+      this.customerCountry = this.getAttribute("data-customer-country");
+      this.defaultCountry = "Germany";
+
+      this.storedZip = this.getCookie("UserZip");
+      this.storedCountry = this.getCookie("UserCountry") || this.defaultCountry;
+
+      if (this.customerLoggedIn) {
+        this.select.value =
+          this.storedCountry || this.customerCountry || this.defaultCountry;
+        this.zipInput.value = this.storedZip || this.customerZip || "";
+      } else {
+        this.select.value = this.storedCountry;
+        this.zipInput.value = this.storedZip || "";
+      }
+
+      this.setCookie("UserCountry", this.select.value, 30);
+
+      this.select.addEventListener("change", () => this.handleCountryChange());
+      this.zipSubmitBtn.addEventListener("click", () =>
+        this.saveZipAndEstimate()
+      );
+
+      this._estimateShipping();
+    }
+
+    handleCountryChange() {
+      const selectedCountry = this.select.value;
+      this.setCookie("UserCountry", selectedCountry, 30);
+
+      this.zipInput.style.display = "block";
+      this.zipSubmitBtn.style.display = "block";
+
+      this.setCookie("UserZip", "", -1);
+      this.zipInput.value = "";
+
+      this.shippingValue.innerHTML = "";
+    }
+
+    saveZipAndEstimate() {
+      const zip = this.zipInput.value.trim();
+      if (!zip) return;
+
+      this.setCookie("UserZip", zip, 30);
+      this._estimateShipping();
+    }
+
+    async _estimateShipping() {
+      const zip = this.zipInput.value.trim();
+      const country = this.select.value;
+
+      if (!zip) {
+        this.shippingError.textContent =
+          "Bitte geben Sie eine Postleitzahl ein.";
+        this.shippingError.style.display = "block";
+        return;
+      }
+
+      this.shippingError.style.display = "none";
+      this.shippingValue.innerHTML = `<div class="spinner"><svg focusable="false" width="24" height="24" class="icon icon--spinner" viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle></svg></div>`;
+
+      try {
+        const response = await fetch(
+          `${window.themeVariables.routes.cartUrl}/prepare_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}`,
+          { method: "POST" }
+        );
+
+        if (response.ok) {
+          const shippingRates = await this._getAsyncShippingRates(zip, country);
+          this._formatShippingRates(shippingRates);
+        } else {
+          const jsonError = await response.json();
+          this._formatError(jsonError);
+          this.zipInput.value = "";
+        }
+      } catch (error) {
+        this._formatError({
+          error: "Fehler bei der Berechnung der Versandkosten.",
+        });
+        this.zipInput.value = "";
+      }
+    }
+
+    async _getAsyncShippingRates(zip, country) {
+      const response = await fetch(
+        `${window.themeVariables.routes.cartUrl}/async_shipping_rates.json?shipping_address[zip]=${zip}&shipping_address[country]=${country}`
+      );
+      const responseText = await response.text();
+      return responseText === "null"
+        ? this._getAsyncShippingRates(zip, country)
+        : JSON.parse(responseText).shipping_rates;
+    }
+
+    _formatShippingRates(shippingRates) {
+      if (shippingRates.length === 0) {
+        this.shippingValue.innerHTML = "Keine Versandoptionen verfügbar.";
+        return;
+      }
+
+      const shippingPrice = parseFloat(shippingRates[0].price * 100);
+      this.shippingValue.innerHTML =
+        shippingPrice === 0
+          ? `<span class="free-shipping-label">Kostenlos</span>`
+          : `${formatMoney(shippingPrice)}`;
+    }
+
+    _formatError(errors) {
+      this.shippingError.textContent =
+        errors.error || "Fehler bei der Berechnung der Versandkosten.";
+      this.shippingError.style.display = "block";
+    }
+
+    setCookie(name, value, days) {
+      const d = new Date();
+      d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+    }
+
+    getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (const cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) return value;
+      }
+      return "";
+    }
+  }
+
+  window.customElements.define(
+    "mini-shipping-estimator",
+    MiniShippingEstimator
+  );

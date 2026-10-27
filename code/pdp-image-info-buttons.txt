@@ -1,0 +1,205 @@
+Step 1: Create a snippet info-buttons.liquid and paste this code: 
+{% assign index = index | minus: 1 %}
+{% if product.metafields.standard.info_buttons.value[index].title != blank %}
+  <div class="product-info-button-container">
+    <div class="inner">
+      <div class="info-title">{{ product.metafields.standard.info_buttons.value[index].title }}</div>
+    </div>
+    {% if product.metafields.standard.info_buttons.value[index].text != blank %}
+      <div class="info-icon">
+        <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="Group">
+          <g id="Group_2">
+          <path id="Path" fill-rule="evenodd" clip-rule="evenodd" d="M17.5 30.625V30.625C10.2506 30.625 4.375 24.7494 4.375 17.5V17.5C4.375 10.2506 10.2506 4.375 17.5 4.375V4.375C24.7494 4.375 30.625 10.2506 30.625 17.5V17.5C30.625 24.7494 24.7494 30.625 17.5 30.625Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path id="Path_2" d="M17.5 24.7917V17.5H16.0416" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path id="Path_3" d="M17.134 11.6666C16.9327 11.6666 16.7694 11.8299 16.7708 12.0312C16.7708 12.2324 16.9342 12.3958 17.1354 12.3958C17.3367 12.3958 17.5 12.2324 17.5 12.0312C17.5 11.8299 17.3367 11.6666 17.134 11.6666" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          </g>
+        </svg>
+      </div>
+      <div class="info-content-container">
+        <div class="inner">
+          <span>{{ product.metafields.standard.info_buttons.value[index].text }}</span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+<style>
+     .product-info-button-container {
+     position: absolute;
+     bottom: 7px;
+     left: 50%;
+     width: 80%;
+     border-radius: 8px;
+     transform: translateX(-50%);
+     z-index: 99;
+   }
+
+   .product-info-button-container .inner {
+     display: flex;
+     justify-content: center;
+     padding: 10px 32px 10px 15px;
+   }
+   .product-info-button-container .inner .info-title {
+     color: white;
+     font-weight: bold;
+     font-size: 16px;
+     line-height: normal;
+   }
+   @media (max-width: 640px) {
+     .product-info-button-container .inner .info-title {
+       font-size: 14px;
+     }
+   }
+   .product-info-button-container .info-icon {
+     display: flex;
+     position: absolute;
+     top: 50%;
+     right: 6px;
+     justify-content: center;
+     align-items: center;
+     transform: translateY(-50%);
+     cursor: pointer;
+   }
+   .product-info-button-container .info-icon i {
+     color: white;
+     font-size: 18px;
+   }
+   .product-info-button-container .info-icon:hover + .info-content-container {
+     opacity: 1;
+   }
+   .product-info-button-container .info-content-container {
+     position: absolute;
+     bottom: 100%;
+     right: 8px;
+     max-width: 100%;
+     background: white;
+     margin-bottom: 5px;
+     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.05);
+     border-bottom-right-radius: 5px;
+     opacity: 0;
+     -webkit-transition: 0.3s ease;
+     -o-transition: 0.3s ease;
+     transition: 0.3s ease;
+   }
+   .product-info-button-container .info-content-container:after {
+     content: "";
+     position: absolute;
+     top: 100%;
+     right: 0;
+     width: 0;
+     height: 0;
+     border-left: 10px solid transparent;
+     border-right: 10px solid transparent;
+     border-top: 10px solid white;
+     margin-right: 3px;
+     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.05);
+   }
+   .product-info-button-container .info-content-container .inner {
+     padding: 10px;
+   }
+   .product-info-button-container .info-content-container .inner span {
+     font-size: 15px;
+   }
+
+   .product-info-button-container,.product-info-button-container .info-content-container{
+     background: {{section.settings.info_bar_bg}};
+   }
+   .product-info-button-container .inner .info-title,.product-info-button-container .info-content-container{
+     color: {{section.settings.info_bar_color}};
+   }
+  .product-info-button-container .info-icon svg #Path,.product-info-button-container .info-icon svg #Path_2,.product-info-button-container .info-icon svg #Path_3{
+     stroke: {{section.settings.info_bar_button_color}};
+   }
+  .product-info-button-container .info-icon svg{
+     fill: {{section.settings.info_bar_button_bg}};
+   }
+   .product-info-button-container{
+     width: {{section.settings.info_bar_width}}%;
+   }
+   .product-info-button-container .info-content-container:after{
+     border-top-color: {{section.settings.info_bar_bg}};
+   }
+  {% if section.settings.info_bar_position == "under" %}
+    .product-info-button-container{
+      bottom: 0;
+    }
+  .product .product__media-item{
+     padding-bottom: 50px !important;
+   }
+    {% endif %}
+</style>
+
+
+
+
+
+
+
+Step 2:  Paste this schema in main-product.liquid file
+   {
+      "type" : "header",
+      "content" : "Info buttons"
+    },
+    {
+      "type" : "color",
+      "label" : "Info bar background color",
+      "id" : "info_bar_bg",
+      "default" : "#ffffff"
+    },
+     {
+      "type" : "color",
+      "label" : "Info bar text color",
+      "id" : "info_bar_color",
+      "default" : "#000000"
+    },
+     {
+      "type" : "color",
+      "label" : "Info button color",
+      "id" : "info_bar_button_color",
+      "default" : "#000000"
+    },
+     {
+      "type" : "color",
+      "label" : "Info bar text color",
+      "id" : "info_bar_button_bg"
+    },
+   {
+  "type": "range",
+  "id": "info_bar_width",
+  "min": 20,
+  "max": 100,
+  "step": 1,
+  "unit": "%",
+  "label": "Info bar width",
+  "default": 80
+   },
+    {
+  "type": "select",
+  "id": "info_bar_position",
+  "label": "Info bar position",
+  "options": [
+    {
+      "value": "inside",
+      "label": "Inside image"
+    },
+    {
+      "value": "under",
+      "label": "Under image"
+    }
+  ],
+  "default": "inside"
+   }
+
+
+
+
+
+
+Step 3: Add this code inside .product__media-item element of product-media.liquid snippet. 
+
+  <!-- Info buttons  -->
+     {% render "info-buttons", index: forloop.index %}
+   <!-- Info buttons end -->

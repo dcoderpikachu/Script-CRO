@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is only a QA-style question ('Are the bullet points in the buy box displayed correctly for every product?'). It has no description, comments, custom fields, code or screenshots, so there is no reusable CRO element spec to document."}, "in": 95, "out": 90}

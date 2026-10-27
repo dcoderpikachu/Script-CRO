@@ -1,0 +1,907 @@
+Step: 1
+Create a section: ed-cro-content-section.liquid
+Paste this code:
+
+<style>
+  /* ------- CRO | Content Section ---------- */
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign heading_color = settings.heading_color -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign heading_color = section.settings.text_color -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif %}
+
+      --space-top: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+
+      --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+      --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+      --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+      {%- if section.settings.enable_custom_max_width -%}
+        --section-max-width: {{ section.settings.custom_max_width -}}px;
+      {% endif %}
+
+      --content-alignment: {{ section.settings.content_alignment }};
+      --content-max-width: auto;
+      {%- if section.settings.enable_content_max_width -%}
+          --content-max-width: {{ section.settings.content_max_width -}}px;
+      {%- endif -%}
+      --thumbnail-radius: {{ section.settings.thumbnail_corner_radius -}}px;
+    {%- if section.settings.italic_text_color != 'rgba(0,0,0,0)' -%}
+      --italic-text-color: {{ section.settings.italic_text_color }};
+    {%- endif -%}
+  }
+
+  @media (min-width: 1000px) {
+      #shopify-section-{{ section.id }} {
+          --space-top: {{ section.settings.space_top -}}px;
+          --space-bottom: {{ section.settings.space_bottom -}}px;
+      }
+  }
+  #shopify-section-{{ section.id }} {
+      --custom-font-family: initial;
+      --custom-font-weight: initial;
+  }
+  {% if section.settings.custom_font_family %}
+      {% assign font_url = section.settings.font_family | font_url %}
+      @font-face {
+          font-family: '{{ section.settings.font_family.family }}';
+          src: url({{ font_url }}) format('woff2');
+          font-weight: {{ section.settings.font_family.weight }};
+          font-style: normal;
+      }
+      #shopify-section-{{ section.id }} {
+          --custom-font-family: {{ section.settings.font_family.family }};
+          --custom-font-weight: {{ section.settings.font_family.weight }};
+      }
+  {% endif %}
+
+
+  {%- for block in section.blocks %}
+      {%- if block.type == 'item' %}
+          #shopify-section-{{ section.id }} .block-{{ block.id }} {
+              --subheading-style: {{ block.settings.subheading_text_uppercase }};
+              --subheading-size: {{ block.settings.subheading_font_size -}}px;
+              --heading-size: {{ block.settings.heading_font_size -}}px;
+              --heading-line-height: {{ block.settings.heading_line_height }};
+              --heading-letter-spacing: {{ block.settings.heading_letter_spacing -}}px;
+              --heading-style: {{ block.settings.heading_text_uppercase }};
+              --heading-margin-top: {{ block.settings.heading_margin_top -}}px;
+              --heading-margin-bottom: {{ block.settings.heading_margin_bottom -}}px;
+              --footer-size: {{ block.settings.footer_font_size -}}px;
+              --footer-style: {{ block.settings.footer_text_uppercase }};
+          }
+
+          @media (max-width: 999px) {
+              #shopify-section-{{ section.id }} .block-{{ block.id }} {
+                  --subheading-size: {{ block.settings.subheading_font_size_mobile -}}px;
+                  --heading-size: {{ block.settings.heading_font_size_mobile -}}px;
+                  --heading-line-height: {{ block.settings.heading_line_height_mobile }};
+                  --heading-letter-spacing: {{ block.settings.heading_letter_spacing_mobile }};
+                  --heading-margin-top: {{ block.settings.heading_margin_top_mobile -}}px;
+                  --heading-margin-bottom: {{ block.settings.heading_margin_bottom_mobile -}}px;
+                  --footer-size: {{ block.settings.footer_font_size_mobile -}}px;
+              }
+          }
+      {% endif -%}
+  {% endfor -%}
+
+  #shopify-section-{{ section.id }} {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      color: rgb(var(--text-color));
+      background: rgb(var(--section-background));
+      max-width: var(--section-max-width);
+      {% if section.settings.backgound == 'rgba(0,0,0,0)' %}
+          margin-top: var(--space-top);
+          margin-bottom: var(--space-bottom);
+      {% else %}
+          padding-top: var(--space-top);
+          padding-bottom: var(--space-bottom);
+      {% endif %}
+
+  }
+
+  @media (min-width: 1000px) {
+      .ed_cro_content_secction {
+          display: flex;
+          gap: 6%;
+      }
+      .ed_cro_contents {
+          width: 47%;
+          font-family: var(--custom-font-family);
+          font-weight: var(--custom-font-weight);
+      }
+      .ed_cro_thumbnails {
+          width: 47%;
+      }
+      .ed_cro_content_inner,
+      .leftSwiper_controls {
+          max-width: var(--content-max-width);
+          margin: 0 auto;
+      }
+      .leftSwiper_pagination {
+          display: none;
+      }
+      .leftSwiper_controls{
+          padding-top: 2rem;
+      }
+      .ed_cro_content_inner {
+          padding: 1rem 3rem;
+      }
+  }
+
+  .leftSwiper .swiper-slide-active {
+      visibility: visible !important;
+      opacity: 1 !important;
+  }
+
+  .leftSwiper  .swiper-slide {
+      visibility: hidden;
+  }
+  .ed_cro_contents {
+      display: flex;
+      align-items: center;
+  }
+
+  .leftSwiper_controls {
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+  }
+
+
+  .ed_cro_content_inner {
+      padding: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: var(--content-alignment);
+      gap: 0px;
+  }
+
+  .ed_cro_content_sub_heading {
+      margin: 0;
+      font-size: var(--subheading-size);
+      line-height: normal;
+      text-transform: var(--subheading-style);
+      font-weight: normal;
+  }
+
+  .ed_cro_content_heading {
+      margin-top: var(--heading-margin-top);
+      margin-bottom: var(--heading-margin-bottom);
+      text-align: var(--content-alignment);
+      font-size: var(--heading-size);
+      line-height: var(--heading-line-height);
+      letter-spacing: var(--heading-letter-spacing);
+      text-transform: var(--heading-style);
+  }
+  h2.ed_cro_content_heading,
+  .ed_cro_content_heading strong {
+      font-weight: var(--custom-font-weight);
+  }
+  .ed_cro_content_heading  em {
+    color: var(--italic-text-color);
+    font-style: normal;
+  }
+  .ed_cro_content__footer * {
+      margin: 0;
+      font-size: var(--footer-size);
+      text-transform: var(--footer-style);
+      font-weight: var(--custom-font-weight);
+  }
+  .ed_cro_content__footer a {
+      text-decoration: none !important;
+      line-height: 1;
+  }
+
+
+  .leftSwiper_next_prev_wrap {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+  }
+  .leftSwiper_next, .leftSwiper_prev {
+      cursor: pointer;
+      user-select: none;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      line-height: normal;
+      border-radius: 3px;
+  }
+  .leftSwiper_next svg,
+  .leftSwiper_prev svg {
+      width: 24px;
+      height: auto;
+      opacity: 0.45;
+  }
+  .leftSwiper_pagination .swiper-pagination-bullet-active {
+      background: rgb(var(--text-color));
+  }
+  .ed_cro_content_thumbnail {
+      border-radius: var(--thumbnail-radius);
+      overflow: hidden;
+  }
+  .ed_cro_content_thumbnail svg {
+      background: #F5F5F5;
+      border-radius: var(--thumbnail-radius);
+      overflow: hidden;
+      width: 100%;
+      height: auto;
+  }
+  .ed_cro_content_thumbnail img {
+      max-width: 100%;
+      height: auto;
+      display: flex;
+  }
+   #shopify-section-{{ section.id }}  .ed_cro_content_secction.media-left .ed_cro_thumbnails {
+    order: -1;
+  }
+
+  @media (min-width: 1000px) {
+          {% if section.settings.media_control == 'arrows' %}
+        .leftSwiper_pagination {
+            display: none;
+        }
+    {% elsif section.settings.media_control == 'pagination' %}
+        .leftSwiper_next_prev_wrap {
+            display: none;
+        }
+
+        .leftSwiper_pagination {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    {% else %}
+        .leftSwiper_controls,
+        .leftSwiper_next_prev_wrap,
+        .leftSwiper_pagination  {
+            display: none;
+        }
+    {% endif %}
+   }
+  @media (max-width: 999px) {
+    #shopify-section-{{ section.id }} .ed_cro_content_secction.media-mobile-top .ed_cro_thumbnails {
+        order: -1;
+    }
+
+    .ed_cro_content_secction {
+      display: flex;
+      flex-direction: column;
+    }
+    {% if section.settings.media_control_mobile == 'arrows' %}
+        .leftSwiper_next_prev_wrap {
+            {% comment %} display: none; {% endcomment %}
+        }
+
+        .leftSwiper_pagination {
+            display: none;
+        }
+    {% elsif section.settings.media_control_mobile == 'pagination' %}
+        .leftSwiper_next_prev_wrap {
+            display: none;
+        }
+
+        .leftSwiper_pagination {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    {% else %}
+        .leftSwiper_controls,
+        .leftSwiper_next_prev_wrap,
+        .leftSwiper_pagination  {
+            display: none;
+        }
+    {% endif %}
+
+
+    .leftSwiper_controls {
+        padding: 1.5rem 0;
+    }
+  }
+</style>
+
+<div class="container">
+  <div class="ed_cro_content_secction media-{{ section.settings.media_position }} media-mobile-{{ section.settings.media_position_mobile }}">
+    <div class="ed_cro_contents">
+      <div class="swiper leftSwiper">
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'item' -%}
+              <div class="swiper-slide">
+                <div class="ed_cro_content_inner block-{{ block.id }}" {{ block.shopify_attributes }}>
+                  {%- if block.settings.subheading != blank -%}
+                    <p class="ed_cro_content_sub_heading">{{ block.settings.subheading }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.heading != blank -%}
+                    <h2 class="ed_cro_content_heading heading">{{ block.settings.heading }}</h2>
+                  {%- endif -%}
+
+                  {%- if block.settings.footer_text != blank -%}
+                    <p class="ed_cro_content__footer">{{ block.settings.footer_text }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="leftSwiper_controls">
+          <div class="leftSwiper_pagination"></div>
+          <div class="leftSwiper_next_prev_wrap">
+            <div class="leftSwiper_next">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </div>
+            <div class="leftSwiper_prev">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ed_cro_thumbnails">
+      <div class="swiper rightSwiper">
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'item' -%}
+              <div class="swiper-slide">
+                <div class="ed_cro_content_thumbnail" {{ block.shopify_attributes }}>
+                  {%- if block.settings.image != blank -%}
+                    {{-
+                      block.settings.image
+                      | image_url: width: block.settings.image.width
+                      | image_tag: sizes: '100vw', widths: '500,700, 850, 1000, 1200', alt: block.settings.image.alt
+                    -}}
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag }}
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+   function initSwiperFiles() {
+    // Initialize Swiper after script is loaded
+    const leftSwiper = new Swiper('.leftSwiper', {
+      loop: true,
+      effect: 'fade',
+      spaceBetween: 1,
+      allowTouchMove: false,
+      navigation: {
+        nextEl: '.leftSwiper_next',
+        prevEl: '.leftSwiper_prev',
+      },
+      pagination: {
+        el: '.leftSwiper_pagination',
+        clickable: true,
+      },
+    });
+
+    const rightSwiper = new Swiper('.rightSwiper', {
+      loop: true,
+      spaceBetween: 1,
+      navigation: false,
+    });
+
+    // Sync the two swipers
+    leftSwiper.controller.control = rightSwiper;
+    rightSwiper.controller.control = leftSwiper;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initSwiperFiles();
+  });
+
+  if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+    document.addEventListener('shopify:section:load', function () {
+      initSwiperFiles();
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "CRO | Content Section",
+  "class": "ed-cro-content-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_content_max_width",
+      "label": "Content max-width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 350,
+      "max": 650,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 500
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Media position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "media_control",
+      "label": "Media control",
+      "options": [
+        {
+          "value": "arrows",
+          "label": "Arrows"
+        },
+        {
+          "value": "pagination",
+          "label": "Pagination"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrows"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_font_family",
+      "label": "custom font-family",
+      "default": false
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font-family",
+      "default": "inter_n4"
+    },
+    {
+      "type": "range",
+      "id": "thumbnail_corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Thumbnail corner radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "italic_text_color",
+      "label": "Italic text color",
+      "default": "#7AB526"
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "select",
+      "id": "media_position_mobile",
+      "label": "Media position (mobile)",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "select",
+      "id": "media_control_mobile",
+      "label": "Media control (mobile)",
+      "options": [
+        {
+          "value": "arrows",
+          "label": "Arrows"
+        },
+        {
+          "value": "pagination",
+          "label": "Pagination"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "arrows"
+    },
+    {
+      "type": "header",
+      "content": "Section spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom (mobile)",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Subheading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "Content",
+          "default": "Subheading text"
+        },
+        {
+          "type": "select",
+          "id": "subheading_text_uppercase",
+          "label": "Text-style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "uppercase"
+        },
+        {
+          "type": "range",
+          "id": "subheading_font_size",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "subheading_font_size_mobile",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 14
+        },
+        {
+          "type": "header",
+          "content": "Heading settings"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Content",
+          "default": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nisi quas laborum nostrum animi officiis doloribus"
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "min": 20,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "heading_line_height",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.2
+        },
+        {
+          "type": "range",
+          "id": "heading_letter_spacing",
+          "min": -3,
+          "max": 3,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "select",
+          "id": "heading_text_uppercase",
+          "label": "Text-style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_top",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Top margin",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom margin",
+          "default": 40
+        },
+        {
+          "type": "paragraph",
+          "content": "Heading settings (Mobile)"
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size_mobile",
+          "min": 16,
+          "max": 45,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (Mobile)",
+          "default": 30
+        },
+        {
+          "type": "range",
+          "id": "heading_line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height (Mobile)",
+          "default": 1.2
+        },
+        {
+          "type": "range",
+          "id": "heading_letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_top_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Top margin (Mobile)",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "heading_margin_bottom_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Bottom margin (Mobile)",
+          "default": 24
+        },
+        {
+          "type": "header",
+          "content": "Footer settings"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "footer_text",
+          "label": "Content",
+          "default": "Footer text"
+        },
+        {
+          "type": "select",
+          "id": "footer_text_uppercase",
+          "label": "Text-style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "uppercase"
+        },
+        {
+          "type": "range",
+          "id": "footer_font_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "footer_font_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 12
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Content Section",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
+
+Step: 2
+Go a layout: theme.liquid
+Add this code:
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

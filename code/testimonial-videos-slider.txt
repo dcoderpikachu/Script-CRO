@@ -1,0 +1,365 @@
+<section id="section_{{ section.id }}" class="section-testimonial-videos">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-header-inner">
+        {% if section.settings.heading != blank %}
+          <h2 class="section-heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <div class="section-subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+        {% if section.settings.btn_text != blank %}
+          <div class="section-header-cta">
+            <a href="{{ section.settings.btn_link }}">
+              {{- section.settings.btn_text }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
+                <path d="M9.58594 1L15.8643 7.27833L9.58594 13.5567" stroke="#272727"></path>
+                <line y1="7.25781" x2="15.5563" y2="7.25781" stroke="#272727"></line>
+              </svg>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="testimonial-videos-wrapper">
+      {% if section.settings.enable_badge %}
+        <div class="section-testimonial-videos_badge">
+          {{ section.settings.badge_text }}
+        </div>
+      {% endif %}
+      <div class="testimonial-videos">
+        {% for block in section.blocks %}
+          {% if block.type == 'video' and block.settings.video_url != blank %}
+            <div class="testimonial-videos-video">
+              <div class="play-button">
+                {{ section.settings.play_button }}
+              </div>
+              <video width="" controls="" poster="{{ block.settings.video_thumb | img_url: 'master'}}">
+                <source src="{{ block.settings.video_url }}" type="video/mp4">
+              </video>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const videoWrappers = document.querySelectorAll(
+    "#section_{{ section.id }} .testimonial-videos-video"
+  );
+
+  videoWrappers.forEach((wrapper) => {
+    const video = wrapper.querySelector("video");
+    const playButton = wrapper.querySelector(".play-button");
+
+    video.controls = false;
+
+    const updateUI = () => {
+      if (video.paused) {
+        playButton.style.opacity = "1";
+        playButton.style.visibility = "visible";
+        video.controls = false;
+      } else {
+        playButton.style.opacity = "0";
+        playButton.style.visibility = "hidden";
+        video.controls = true;
+      }
+    };
+
+    video.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+
+    playButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      video.play();
+    });
+    video.addEventListener("play", updateUI);
+    video.addEventListener("pause", updateUI);
+  });
+
+function initTestimonialSlider() {
+  var $slider = $("#section_{{ section.id }} .testimonial-videos");
+
+  if ($slider.hasClass('slick-initialized')) {
+    $slider.slick('unslick'); // Destroy the existing slider
+  }
+
+  $slider.slick({
+    slidesToShow: "auto",
+    slidesToScroll: 1,
+    infinite: false,
+    arrows: false,
+    dots: false,
+    variableWidth: true,
+  });
+}
+  initTestimonialSlider();
+addEventListener("DOMContentLoaded", (event) => {
+    initTestimonialSlider();
+});
+
+
+$(document).on("shopify:section:load", function (e) {
+  if ($("#section_{{ section.id }}").length) {
+    initTestimonialSlider();
+  }
+});
+</script>
+<style>
+  .testimonial-videos-video {
+    position: relative;
+  }
+  .testimonial-videos-video .play-button {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 96px;
+    height: 96px;
+    z-index: 1;
+    cursor: pointer;
+  }
+  .section-testimonial-videos .section-heading {
+    font-weight: 300;
+    /* font-style: italic; */
+    font-size: 24px;
+    line-height: 33.8px;
+    margin: 0;
+    text-align: center; 
+  }
+  .section-testimonial-videos .section-subheading {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 16px 0 20px 0;
+  }
+  .section-testimonial-videos .section-header-cta a {
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    border-bottom: 1px solid #272727;
+    padding-bottom: 8px;
+  }
+  .section-testimonial-videos .section-header-cta a svg {
+    width: 15px;
+    height: 12px;
+    margin-left: 15px;
+    position: relative;
+    top: 2px;
+  }
+  .section-testimonial-videos .section-header {
+    margin-bottom: 38px;
+  }
+  .section-testimonial-videos .testimonial-videos-wrapper {
+    position: relative;
+  }
+  .section-testimonial-videos .section-testimonial-videos_badge {
+    position: absolute;
+    z-index: 1;
+    width: 127px;
+    height: 127px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    padding: 25px 10px;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 19.2px;
+    letter-spacing: 0.26px;
+    right: 16px;
+    top: -73px;
+    left: unset;
+  }
+  #section_{{ section.id }} .section-testimonial-videos_badge{
+    color: {{section.settings.badge_text_color}}; 
+    background-color: {{section.settings.badge_background_color}};
+  }
+
+  .section-testimonial-videos .slick-slide {
+    width: 224px !important;
+    margin-right: 10px !important;
+  }
+  .section-testimonial-videos video {
+    width: 224px;
+    height: 360px;
+    object-fit: cover;
+  }
+  #section_{{ section.id }} .section-heading,
+  #section_{{ section.id }} .section-subheading,
+  #section_{{ section.id }} .section-header-cta a{
+   color: {{section.settings.text_color}};
+  }
+  #section_{{ section.id }} .container{
+    background-color: {{section.settings.background_color}};
+    padding-top: 50px; 
+    padding-bottom: 50px; 
+    {% if section.settings.border_style == "rounded" %}
+    border-radius: 10px; 
+    {% endif %}
+  }
+
+  @media (min-width: 1000px) {
+     .section-testimonial-videos .section-heading{
+       text-align: left; 
+     }
+    .section-testimonial-videos .section-testimonial-videos_badge {
+      left: -80px;
+      top: -40px;
+    }
+    .section-testimonial-videos .section-header {
+      margin-bottom: 0;
+      width: 295px;
+      min-width: 295px;
+      display: flex;
+      align-items: center;
+    }
+    .testimonial-videos-wrapper {
+      max-width: calc(100% - 314px);
+    }
+    .section-testimonial-videos .container {
+      display: flex;
+      gap: 18px;
+    }
+    .section-testimonial-videos .slick-slide {
+      width: 284px !important;
+      margin-right: 19px !important;
+    }
+    .section-testimonial-videos video {
+      width: 284px;
+      height: 367px;
+      object-fit: cover;
+    }
+    #section_{{ section.id }} .container{
+    padding-top: 80px; 
+    padding-bottom: 80px;       
+    }
+  }
+
+</style>
+
+{% schema %}
+{
+  "name": "Testimonial Videos",
+  "settings": [
+    {
+      "type" : "text",
+      "id" : "heading",
+      "label" : "Heading",
+      "default" : "Wir lassen unsere Kund:innen sprechen."
+    },
+    {
+      "type" : "text",
+      "label" : "Subheading",
+      "id" : "subheading",
+      "default" : "Schau dir an, was andere über PsyCommerce zu sagen haben."
+    },
+    {
+      "type" : "text",
+      "id" : "btn_text",
+      "label" : "Button text",
+      "default" : "Jetzt mehr erfahren"
+    },
+    {
+      "type" : "url",
+      "id" : "btn_link",
+      "label": "Button link"
+    },
+   {
+      "type": "html",
+      "label": "Play button icon",
+      "id": "play_button",
+      "default": "<svg viewBox='0 0 200 200' fill='none'> <mask id='qA-6640b4e596976c0028679268' maskUnits='userSpaceOnUse' x='0' y='0' width='200' height='200' maskType='alpha'><path fill='#fff' fill-rule='evenodd' d='M200 0H0v200h200V0zM100 150c27.614 0 50-22.386 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50z'></path></mask><g mask='url(#qA-6640b4e596976c0028679268)' fill-opacity='0.5'><circle fill-opacity='0.5' fill='#ffffff' cx='100' cy='100' r='50' class='pulse'></circle><circle stroke-opacity='0.5' stroke='#ffffff' stroke-width='5' cx='100' cy='100' r='47.5' class='shine'></circle></g><path fill='#ffffff' fill-opacity='0.5' fill-rule='evenodd' d='M100 150c27.614 0 50-22.386 50-50s-22.386-50-50-50-50 22.386-50 50 22.386 50 50 50zm22-50L89 81v38l33-19z'></path><path fill='#FFFFFF' d='M89 119V81l33 19-33 19z'></path> </svg>"
+   },
+    {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Section background color"
+      },
+      {
+        "type": "select",
+        "id": "border_style",
+        "label": "Border style",
+        "options": [
+          {
+            "value": "rounded",
+            "label": "Rounded"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "square"
+      },
+      {
+        "type" : "checkbox",
+        "label": "Enable badge",
+        "id" : "enable_badge",
+        "default" : true
+      },
+      {
+        "type" : "text",
+        "label" : "Badge text",
+        "id" : "badge_text",
+        "default" : "300.000+ KUND:INNEN LIEBEN PsyCommerce"
+      },
+      {
+        "type": "color",
+        "id": "badge_text_color",
+        "label": "Text color",
+        "default": "#F7F6F5"
+      },
+      {
+        "type": "color",
+        "id": "badge_background_color",
+        "label": "Badge background color",
+        "default" : "#272727"
+      },
+  ],
+  "blocks" : [
+    {
+      "type" : "video",
+      "name" : "Video",
+      "settings": [
+        {
+          "type" : "text",
+          "label" : "Video url",
+          "id" : "video_url"
+        },
+        {
+          "type" : "image_picker",
+          "label" : "Video thumbnail",
+          "id" : "video_thumb"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name" : "Testimonial Videos"
+    }
+  ]
+}
+{% endschema %}

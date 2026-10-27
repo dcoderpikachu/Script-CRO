@@ -1,0 +1,204 @@
+Step 1: Add this schema in mini-cart.liquid section
+{
+      "type": "checkbox",
+      "id": "enable_sticky_button",
+      "label": "Enable sticky checkout button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sticky_button_position",
+      "label": "Sticky button position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_progressbar",
+      "label": "Enable sticky progressbar",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_paymenticons",
+      "label": "Enable sticky payment icons and store benefits",
+      "default": false
+    }
+
+Step 2: Add this code after  {% endschema %}
+<style>
+    #mini-cart .drawer__footer{
+      transform: none !important;
+    }
+    {% if section.settings.enable_sticky_progressbar %}
+    #mini-cart .shipping-bar{
+      position: sticky;
+      top: 0;
+      background-color: #ffffff;
+      z-index: 2;
+      margin-left: calc(var(--container-gutter) * -1);
+      margin-right: calc(var(--container-gutter) * -1);
+      width: calc(100% + calc(var(--container-gutter) * 2));
+      padding: 5px var(--container-gutter);
+    }
+      {% endif %}
+
+  {% if section.settings.enable_sticky_paymenticons %}
+     #ed-payment-bar-cart-clone.sticky{
+      position: fixed;
+      max-width: 500px;
+      width: 89vw;
+      bottom: 0;
+      padding: 5px var(--container-gutter);
+      background-color: #fff !important;
+      z-index: 9999999;
+    }
+      {% endif %}
+
+    {% if settings.progressbar_border_radious == "square" %}
+      body .shipping-bar__progress{
+        border-radius: 0;
+      }
+    {% endif %}
+    #mini-cart.drawer {
+      transform: none !important;
+      right: -100%;
+      visibility: hidden;
+      transition: right 0.6s cubic-bezier(.75, 0, .175, 1), visibility 0.6s cubic-bezier(.75, 0, .175, 1);
+      z-index: 10000;
+    }
+
+    #mini-cart.drawer[open] {
+      right: 0;
+      visibility: visible;
+    }
+
+    #mini-cart {
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    #mini-cart .drawer__content {
+      overflow: visible;
+    }
+
+    .mini-cart__order-note {
+      display: none;
+    }
+
+    .mini-cart__order-note[open] {
+      display: block;
+    }
+
+    #checkout-button-clone {
+      padding: 5px var(--container-gutter);
+      background-color: #fff;
+      z-index: 999999;
+      border-bottom: 2px solid #ffffff;
+    }
+
+    {% if section.settings.enable_sticky_button %}
+    #checkout-button-clone.sticky-checkout-btn {
+      display: block;
+      position: fixed;
+      max-width: 500px;
+      width: 89vw;
+    }
+
+    {% if section.settings.sticky_button_position == "top" %}
+    #checkout-button-clone.sticky-checkout-btn {
+      top: 0;
+    }
+    #mini-cart.drawer:has( .sticky-checkout-btn){
+       padding-top: 60px;
+     }
+    {% else %}
+    #checkout-button-clone.sticky-checkout-btn {
+      bottom: 0;
+      {% if section.settings.enable_sticky_paymenticons %}
+        bottom: var(--payment-icon-height);
+      {% endif %}
+    }
+
+    {% endif %}
+    {% endif %}
+</style>
+
+{% if section.settings.enable_sticky_button or section.settings.enable_sticky_paymenticons %}
+  <script>
+    const miniCart = document.getElementById("mini-cart");
+
+    function checkCheckoutButtonVisibility() {
+      {% if section.settings.enable_sticky_button %}
+      const checkoutButton = document.querySelector("#checkout-button-wrapper");
+      let checkoutButtonClone = document.querySelector("#checkout-button-clone");
+
+      if (checkoutButton) {
+        const rect = checkoutButton.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+        if (!checkoutButtonClone) {
+          checkoutButtonClone = checkoutButton.cloneNode(true);
+          checkoutButtonClone.id = "checkout-button-clone";
+          checkoutButtonClone.classList.add("sticky-checkout-btn");
+          if (miniCart) miniCart.appendChild(checkoutButtonClone);
+        }
+
+        if (checkoutButtonClone) {
+          checkoutButtonClone.style.display = isVisible ? "none" : "block";
+        }
+      }
+      {% endif %}
+
+      {% if section.settings.enable_sticky_paymenticons %}
+      const paymentIcons = document.querySelector("#payment-icons-and-store-benefits");
+      let paymentIconsClone = document.querySelector("#ed-payment-bar-cart-clone");
+
+      if (paymentIcons) {
+        const rect2 = paymentIcons.getBoundingClientRect();
+        const isVisible2 = rect2.top < window.innerHeight && rect2.bottom > 0;
+
+        if (!paymentIconsClone) {
+          paymentIconsClone = paymentIcons.cloneNode(true);
+          paymentIconsClone.id = "ed-payment-bar-cart-clone";
+          paymentIconsClone.classList.add("sticky");
+          document.querySelector("#mini-cart")?.appendChild(paymentIconsClone);
+        }
+
+  if (checkoutButtonClone && paymentIconsClone) {
+    const height = paymentIconsClone.offsetHeight;
+    checkoutButtonClone.style.setProperty('--payment-icon-height', `${height}px`);
+}
+
+        if (paymentIconsClone) {
+          paymentIconsClone.style.display = isVisible2 ? "none" : "block";
+        }
+      }
+      {% endif %}
+    }
+
+    if (miniCart) {
+      checkCheckoutButtonVisibility();
+      miniCart.addEventListener("scroll", checkCheckoutButtonVisibility);
+    }
+  </script>
+{% endif %}
+
+
+Step 3: Add this code in theme.js after this line this.innerHTML = fakeDiv.querySelector("cart-drawer").innerHTML;
+ setTimeout(function () {
+          try {
+            if (typeof checkCheckoutButtonVisibility === "function") {
+              checkCheckoutButtonVisibility();
+            }
+          } catch (e) {}
+        }, 800);

@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket has only a title, which is a QA/checklist question ('Was delivery time communication maintained correctly for every article?'). It has no description, comments, code or screenshots, and it does not describe a reusable CRO element."}, "in": 93, "out": 87}

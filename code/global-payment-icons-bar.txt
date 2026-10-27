@@ -1,0 +1,280 @@
+Step 1: Create a snippet  ed-payment-bar.liquid
+<div class="payment-methods-list payment-methods-list--auto" id="section_{{ section.id }}">
+  {% if settings.show_paypal %}
+    {{ 'paypal' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_master %}
+    {{ 'master' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_visa %}
+    {{ 'visa' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_amex %}
+    {{ 'american_express' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_klarna %}
+    {{ 'klarna' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_apple_pay %}
+    {{ 'apple_pay' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings['show_klarna-pay-later'] %}
+    {{ 'klarna-pay-later' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_sofort %}
+    {{ 'sofort' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_bitcoin %}
+    {{ 'bitcoin' | payment_type_svg_tag }}
+  {% endif %}
+  {% if settings.show_shopify_pay %}
+    {{ 'shopify_pay' | payment_type_svg_tag }}
+  {% endif %}
+</div>
+
+<style>
+   #section_{{ section.id }}.payment-methods-list svg {
+      {% if settings.payment_style == 'grayscale' %}
+          filter: grayscale(1) !important;
+      {% elsif settings.payment_style == 'colorful' %}
+          filter: none !important;
+      {% endif %}
+
+      }
+  #section_{{ section.id }}.payment-methods-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .ed-payment-bar-cart{
+       margin-top: 10px;
+  }
+  .ed-payment-bar-pdp, .ed-payment-bar-cart {
+    padding: 5px;
+  }
+</style>
+
+Step 2: Create a snippet  ed-klarna-custom-payment.liquid
+<div class="ed-klarna-custom-payment" id="section_{{ section.id }}">
+  <div class="inner">
+    {% if settings.rate_payment_method == 'klarna' %}
+      <img src="{{ 'klarna' | payment_type_img_url }}" alt="{{ type }}">
+    {% else %}
+      <img src="{{ 'paypal' | payment_type_img_url }}" alt="{{ type }}">
+    {% endif %}
+
+    <span>{{ settings.text_rate_payment }}</span>
+  </div>
+</div>
+
+<style>
+    #section_{{ section.id }}.ed-klarna-custom-payment img {
+    {% if settings.payment_style == 'grayscale' %}
+        filter: grayscale(1) !important;
+    {% elsif settings.payment_style == 'colorful' %}
+        filter: none !important;
+    {% endif %}
+
+    }
+    #section_{{ section.id }}.ed-klarna-custom-payment .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  #section_{{ section.id }}.ed-klarna-custom-payment .inner img {
+    margin-right: 5px;
+    filter: grayscale(100%);
+  }
+    #section_{{ section.id }}.ed-klarna-custom-payment .inner span{
+      font-size: {{settings.text_rate_payment_font_size}}px;
+     color: {{settings.text_rate_payment_color}};
+    }
+</style>
+
+Step 3: Add this schema in config/settings_schema.json
+
+{
+    "name": "Cart Styling of Payment Bar",
+    "settings": [
+        {
+        "type": "checkbox",
+        "id": "cart_payment_bar_show",
+        "label": "Display Section",
+        "info": "Uncheck to hide this section. To show it during an A/B test, use the following CSS code: .cart-payment-bar{ display: block !important; }",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Styling of payment bar"
+      },
+      {
+        "type": "color",
+        "id": "payment_bar_bg",
+        "label": "Background color"
+      },
+      {
+        "type": "select",
+        "id": "payment_bar_border_radious",
+        "label": "Border style",
+        "options": [
+          {
+            "value": "rounded",
+            "label": "Rounded"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "payment_style",
+        "label": "Styles",
+        "options": [
+          {
+            "value": "grayscale",
+            "label": "Grayscale"
+          },
+          {
+            "value": "colorful",
+            "label": "Colorful"
+          }
+        ],
+        "default": "grayscale"
+      },
+      {
+        "type": "paragraph",
+        "content": "Because of styling concerns you should not activate more than six payment icons!"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_paypal",
+        "label": "Paypal",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_master",
+        "label": "Master",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_visa",
+        "label": "Visa",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_amex",
+        "label": "Amex",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_klarna",
+        "label": "Klarna",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_apple_pay",
+        "label": "Apple-pay",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_klarna-pay-later",
+        "label": "Klarna-pay-later",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sofort",
+        "label": "Sofort",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_bitcoin",
+        "label": "Bitcoin",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shopify_pay",
+        "label": "Shopify-pay",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Rate payment"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_rate_payment_cart",
+        "label": "Show rate payment on cart page",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "rate_payment_method",
+        "label": "Rate payment method",
+        "options": [
+          {
+            "value": "klarna",
+            "label": "Klarna"
+          },
+          {
+            "value": "paypal",
+            "label": "Paypal"
+          }
+        ],
+        "default": "klarna"
+      },
+      {
+        "type": "text",
+        "id": "text_rate_payment",
+        "label": "Text",
+        "default": "Bequem auf Raten zahlen"
+      },
+      {
+        "type": "color",
+        "id": "text_rate_payment_color",
+        "label": "Text color",
+        "default": "#282828"
+      },
+      {
+        "type": "range",
+        "id": "text_rate_payment_font_size",
+        "label": "Font size",
+        "min": 10,
+        "max": 40,
+        "unit": "px",
+        "default": 15
+      }
+    ]
+  },
+
+Step 4: Add this code where you want to show the payment bar
+        <div
+          class="ed-payment-bar-cart cart-payment-bar"
+          id="ed-payment-bar-cart"
+          style=" background-color: {{settings.payment_bar_bg}}; {% if settings.payment_bar_border_radious == "rounded" %} border-radius: 10px; {% endif %}"
+        >
+          {% render 'ed-payment-bar' %}
+
+          {% if settings.show_rate_payment_cart %}
+            {% render 'ed-klarna-custom-payment' %}
+          {% endif %}
+        </div>
+        {% unless settings.cart_payment_bar_show %}
+          <style>
+            .cart-payment-bar{
+              display: none;
+            }
+          </style>
+        {% endunless %}

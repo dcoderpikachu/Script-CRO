@@ -1,0 +1,100 @@
+Step: 1
+Go to section: main-product.liquid
+Add below code at section schema
+Paste this code:
+{
+      "type": "header",
+      "content": "Buy Box"
+},
+{
+    "type": "checkbox",
+    "id": "enable_buy_box",
+    "label": "Enable Buy Box",
+    "default": false
+},
+{
+    "type": "checkbox",
+    "id": "sticky_buy_box",
+    "label": "Sticky Buy Box",
+    "default": false
+},
+{
+    "type": "color",
+    "id": "buy_box_border_color",
+    "label": "Border Color",
+    "default": "rgba(0,0,0,0)"
+},
+{
+    "type": "color",
+    "id": "buy_box_background_color",
+    "label": "Background Color",
+    "default": "rgba(0,0,0,0)"
+},
+{
+    "type": "range",
+    "id": "buy_box_border_radius",
+    "min": 0,
+    "max": 16,
+    "step": 1,
+    "unit": "px",
+    "label": "Border Radius",
+    "default": 8
+}
+
+
+
+
+
+Step: 2
+Go to snippet: product-info.liquid 
+Search for  product__info class and add below code
+Paste this code:
+
+{%- if section.settings.enable_buy_box -%}
+  <style>
+    #shopify-section-{{ section.id }} {
+      {%- if section.settings.buy_box_border_color == 'rgba(0,0,0,0)' %}
+          {%- assign border_color = settings.background | color_mix: settings.text_color, 90 -%}
+        {%- else -%}
+          {%- assign border_color = section.settings.buy_box_border_color -%}
+      {%- endif -%}
+  
+      {%- if section.settings.buy_box_background_color == 'rgba(0,0,0,0)' -%}
+        {%- assign background_color = settings.background -%}
+        {%- else -%}
+          {%- assign background_color = section.settings.buy_box_background_color -%}
+      {%- endif -%}
+      --buybox-border-color: {{ border_color.red }}, {{ border_color.green }}, {{ border_color.blue }};
+      --buybox-background-color: {{ background_color.red }}, {{ background_color.green }}, {{ background_color.blue }};
+    }
+    {%- if section.settings.sticky_buy_box -%}
+      .product__info {
+        position: sticky;
+        top: 100px;
+      }
+    {%- endif -%}
+
+  
+    .ed-pdp-buy-box {
+      border: 1px solid rgb(var(--buybox-border-color));
+      border-radius: {{ section.settings.buy_box_border_radius -}}px;
+      padding: 16px;
+      background: rgb(var(--buybox-background-color));
+    }
+    @media (max-width: 767px) {
+      .ed-pdp-buy-box {
+        padding: 12px 8px;
+      }
+      .ed-pdp-buy-box .product-meta {
+          margin-top: 0;
+      }
+    }
+  </style>  
+{%- endif -%}
+
+
+<div class="product__info">
+  {% if section.settings.enable_buy_box %} <div class="ed-pdp-buy-box">{% endif %}
+
+  {% if section.settings.enable_buy_box %}</div>{% endif %}
+</div>

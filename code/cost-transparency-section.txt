@@ -1,0 +1,1441 @@
+Step: 1
+Create a section: ed-cro-Kostentransparenz.liquid
+Paste this code:
+
+<style>
+    #section-{{ section.id }}.ed-cost-transparency-section {
+        background: {{ section.settings.background }};
+    }
+    @media (min-width: 741px) {
+        #section-{{ section.id }}.ed-cost-transparency-section {
+            padding-top: {{ section.settings.section_space_top -}}px;
+            padding-bottom: {{ section.settings.section_space_bottom -}}px;
+        }
+    }
+    @media (max-width: 740px) {
+        #section-{{ section.id }}.ed-cost-transparency-section {
+            padding-top: {{ section.settings.section_space_top_mobile -}}px;
+            padding-bottom: {{ section.settings.section_space_bottom_mobile -}}px;
+        }
+    }
+
+    #section-{{ section.id }} .ed-cost-transparency {
+      gap: {{ section.settings.gap_betweens -}}px;
+    }
+    #section-{{ section.id }} .ed-cost-transparency-left {
+      color: {{ section.settings.left_text_color }};
+      background-color: {{  section.settings.left_background }};
+    }
+    #section-{{ section.id }} .ed-cost-transparency-right {
+      color: {{ section.settings.right_text_color }};
+      background: {{ section.settings.right_background }};
+    }
+    #section-{{ section.id }} .ed-cost-transparency-left,
+    #section-{{ section.id }} .ed-cost-transparency-right {
+      border-radius: {{ section.settings.border_radius -}}px;
+    }
+  
+    {% for block in section.blocks %}
+      {%- if block.type == 'left_block' -%}
+        #section-{{ section.id }} .block-{{block.id}} ul.ed-cost-transparency-features {
+          gap: {{ block.settings.features_gap_items -}}px;
+        }
+        #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+          max-width: {{ block.settings.footer_image_max_width -}}px;
+        }
+  
+        @media (min-width: 1000px) {
+          #section-{{ section.id }} .block-{{block.id}} .ed-feature-thumbnail {
+            width: {{ block.settings.features_images_width -}}px;
+            height: {{ block.settings.features_images_width -}}px;
+          }
+          #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+            margin-top: {{ block.settings.footer_image_margin_top -}}px;
+          }
+        }
+        @media (max-width: 999px) {
+          #section-{{ section.id }} .block-{{block.id}} .ed-feature-thumbnail {
+            width: {{ block.settings.features_images_width_mobile -}}px;
+            height: {{ block.settings.features_images_width_mobile -}}px;
+          }
+          #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+            margin-top: {{ block.settings.footer_image_margin_top_mobile -}}px;
+          }
+        }
+      {%- endif -%}
+  
+      {%- if block.type == 'right_block' -%}
+        #section-{{ section.id }} .block-{{block.id}} ul.ed-cost-transparency-features {
+          gap: {{ block.settings.features_gap_items -}}px;
+        }
+        #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+          max-width: {{ block.settings.footer_image_max_width -}}px;
+        }
+  
+        @media (min-width: 1000px) {
+          #section-{{ section.id }} .block-{{block.id}} .ed-feature-thumbnail {
+            width: {{ block.settings.features_images_width -}}px;
+            height: {{ block.settings.features_images_width -}}px;
+          }
+          #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+            margin-top: {{ block.settings.footer_image_margin_top -}}px;
+          }
+        }
+        @media (max-width: 999px) {
+          #section-{{ section.id }} .block-{{block.id}} .ed-feature-thumbnail {
+            width: {{ block.settings.features_images_width_mobile -}}px;
+            height: {{ block.settings.features_images_width_mobile -}}px;
+          }
+          #section-{{ section.id }} .block-{{block.id}} .ed-cost-transparency-thumbnail {
+            margin-top: {{ block.settings.footer_image_margin_top_mobile -}}px;
+          }
+        }
+      {%- endif -%}
+    {% endfor %}
+
+
+    .ed-cost-transparency-section {
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+  
+    .ed-cost-transparency {
+      display: flex;
+      justify-content: space-between;
+    }
+  
+    .ed-cost-transparency-left,
+    .ed-cost-transparency-right {
+      flex-basis: 50%;
+      max-width: 50%;
+      position: relative;
+      padding: 55px 60px 50px;
+    }
+    .ed-cost-transparency-left.ed-1,
+    .ed-cost-transparency-right.ed-1 {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
+  
+    .ed-cost-transparency-header h3 {
+      margin-bottom: 7px;
+    }
+  
+    .ed-cost-transparency-header p {
+      margin: 0;
+      font-size: calc(var(--base-font-size) + 2px);
+    }
+  
+    ul.ed-cost-transparency-features {
+      margin-top: 45px;
+      display: flex;
+      padding: 0;
+      list-style: none;
+      margin-bottom: 0px;
+      overflow-x: scroll;
+      scrollbar-width: none;
+    }
+  
+    li.ed-cost-transparency-feature-item {
+      flex: 1;
+      text-align: center;
+    }
+  
+    .ed-feature-thumbnail {
+      margin: 0 auto;
+      background-color: #F3F2EC;
+      position: relative;
+      overflow: hidden;
+    }
+  
+    .ed-feature-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    .circle {
+      border-radius: 100%;
+    }
+    .rounded {
+        border-radius: 12px;
+    }
+  
+    .ed-cost-transparency-feature-item-title {
+      margin-top: 15px;
+      line-height: 1.3;
+      font-size: calc(var(--base-font-size) + 4px);
+    }
+  
+    .ed-cost-transparency-feature-item-title strong {
+      font-weight: 600;
+      font-size: var(--heading-h5-font-size);
+      line-height: 1;
+      display: block;
+      text-align: center;
+      margin-bottom: 3px;
+    }
+  
+    .ed-cost-transparency-content {
+      margin-top: 50px;
+    }
+  
+    .ed-cost-transparency-content h4 {
+      margin-bottom: 8px;
+    }
+  
+    .ed-cost-transparency-content p {
+      margin: 0;
+      font-size: calc(var(--base-font-size) + 2px);
+    }
+  
+    .ed-thumb-right {
+      margin-left: auto;
+      margin-right: 0;
+    }
+    .ed-thumb-center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .ed-cost-transparency-sizechart {
+      margin-top: 80px;
+    }
+  
+    .ed-cost-transparency-sizechart h4 {
+      margin: 0 0 16px;
+      color: inherit;
+    }
+  
+    ul.ed-cost-transparency-sizechart-list {
+      margin: 0;
+      list-style: none;
+      padding: 0;
+    }
+  
+    ul.ed-cost-transparency-sizechart-list li {
+      display: flex;
+      {% comment %} border-bottom: 1px dashed rgba(203, 201, 188, 0.92); {% endcomment %}
+      border-bottom: 1px solid #ffffff;
+      display: flex;
+      padding: 16px 0 10px;
+      align-items: center;
+    }
+  
+    ul.ed-cost-transparency-sizechart-list li:first-of-type {
+      border-bottom: 1px solid #ffffff;
+    }
+  
+    .ed-ct-sizechart-icon {
+      width: 50px;
+      margin-right: 10px;
+      display: flex;
+      align-items: baseline;
+    }
+  
+    .ed-ct-sizechart-icon img {
+    }
+  
+    .ed-ct-sizechart-title,
+    .ed-ct-sizechart-title p {
+      font-size: calc(var(--base-font-size) + 2px);
+      font-weight: 600;
+      letter-spacing: -0.48px;
+      line-height: normal;
+    }
+  
+    .ed-ct-sizechart-details {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: 6px;
+    }
+  
+    .ed-ct-sizechart-details-images {
+      display: flex;
+      align-items: baseline;
+    }
+  
+    .ed-ct-sizechart-details-images img {
+      width: 50px;
+      height: auto;
+    }
+  
+    .ed-ct-sizechart-details > p strong {
+      font-size: calc(var(--base-font-size) + 2px);
+      font-weight: 600;
+      letter-spacing: -0.48px;
+      line-height: normal;
+      margin: 0;
+    }
+  
+    .ed-ct-sizechart-details > p {
+      font-size: calc(var(--base-font-size) + 0px);
+      font-weight: normal;
+      letter-spacing: -0.48px;
+      line-height: normal;
+      margin: 0;
+    }
+  
+    .ed-cost-transparency-sizechart-content {
+      margin-top: 2rem;
+    }
+  
+    .ed-cost-transparency-sizechart-content p {
+      font-size: calc(var(--base-font-size) + 2px);
+    }
+  
+    @media (max-width: 999px) {
+      .ed-cost-transparency {
+        flex-direction: column;
+      }
+  
+      .ed-cost-transparency-left,
+      .ed-cost-transparency-right {
+        flex-basis: 100%;
+        max-width: 100%;
+        padding: 35px 30px;
+      }
+  
+      ul.ed-cost-transparency-features {
+        margin-top: 24px;
+        overflow-x: scroll;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+  
+      .ed-cost-transparency-feature-item-title strong {
+        font-size: calc(var(--base-font-size));
+      }
+  
+      .ed-cost-transparency-header h3 {
+        margin-bottom: 5px;
+      }
+  
+      .ed-content-thumb-wrap {
+        display: flex;
+        gap: 16px;
+      }
+      .ed-cost-transparency-header p,
+      .ed-cost-transparency-content p {
+        font-size: calc(var(--base-font-size) + 0px);
+        line-height: 1.5;
+      }
+  
+      .ed-content-thumb-wrap .ed-cost-transparency-thumbnail {
+        min-width: 90px;
+      }
+      .ed-cost-transparency-sizechart {
+        margin-top: 30px;
+      }
+  
+      .ed-cost-transparency-sizechart h4 {
+        margin-bottom: 8px;
+      }
+  
+      .ed-ct-sizechart-icon {
+        width: 30px;
+      }
+  
+      .ed-ct-sizechart-details-images img {
+        width: 50px;
+        margin-top: 5px;
+      }
+      .ed-cost-transparency-feature-item-title,
+      .ed-ct-sizechart-title,
+      .ed-ct-sizechart-title p,
+      .ed-ct-sizechart-details > p strong,
+      .ed-ct-sizechart-details > p {
+        font-size: calc(var(--base-font-size) + 0px);
+      }
+  
+      .ed-cost-transparency-sizechart-content p {
+        font-size: calc(var(--base-font-size) + 0px);
+      }
+  
+      .ed-cost-transparency-sizechart-content {
+        margin-top: 16px;
+      }
+    }
+  
+    @media (max-width: 740px) {
+      .ed-ct-sizechart-icon {
+        width: 25px;
+      }
+      .ed-cost-transparency-content {
+        margin-top: 20px;
+      }
+      .ed-ct-sizechart-details-images img {
+        width: 25px;
+        margin-top: 5px;
+      }
+      .ed-cost-transparency-feature-item-title,
+      .ed-ct-sizechart-title,
+      .ed-ct-sizechart-title p,
+      .ed-ct-sizechart-details > p strong,
+      .ed-ct-sizechart-details > p {
+        font-size: calc(var(--base-font-size) - 2px);
+      }
+    }
+</style>
+
+
+<div id="section-{{ section.id }}" class="ed-cost-transparency-section">
+    <div class="container">
+      <div class="ed-cost-transparency">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'left_block' -%}
+              <div class="ed-cost-transparency-left ed-{{ section.blocks.size }}  block-{{block.id}}">
+                <div class="ed-cost-transparency-header">
+                  {%- if block.settings.header_heading != blank -%}
+                    <h3 class="{{ block.settings.header_heading_size }}" {{ block.shopify_attributes }}>{{ block.settings.header_heading | escape }}</h3>
+                  {%- endif -%}
+                  
+                  <p {{ block.shopify_attributes }}>{{ block.settings.heading_content }}</p>
+                </div>
+        
+                <ul class="ed-cost-transparency-features">
+                  {%- for i in (1..4) -%}
+                    {%- assign feature_image_key = 'features_image_' | append: i -%}
+                    {%- assign feature_content_key = 'features_content_' | append: i -%}
+                    {%- assign feature_image = block.settings[feature_image_key] -%}
+                    {%- assign feature_content = block.settings[feature_content_key] -%}
+                  
+                    {%- if feature_image != blank or feature_content != blank -%}
+                      <li class="ed-cost-transparency-feature-item">
+                        <div class="ed-feature-thumbnail {{ block.settings.features_images_style }}" {{ block.shopify_attributes }}>
+                          {%- if feature_image != blank -%}
+                            {{- feature_image | image_url: width: feature_image.width | image_tag: sizes: '100vw', widths: '50, 75, 110, 150', alt: feature_image.alt, class: '' -}}
+                          {%- endif -%}
+                        </div>
+                        <p class="ed-cost-transparency-feature-item-title" {{ block.shopify_attributes }}>{{ feature_content }}</p>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+        
+                <div class="ed-content-thumb-wrap">
+                  <div class="ed-cost-transparency-content">
+                    {%- if block.settings.footer_heading != blank -%}
+                      <h4 class="{{ block.settings.footer_heading_size }}" {{ block.shopify_attributes }}>{{ block.settings.footer_heading | escape }}</h4>
+                    {%- endif -%}
+                    
+                    <div {{ block.shopify_attributes }}>
+                      {{ block.settings.footer_content }}
+                    </div>
+                  </div>
+        
+                  <div class="ed-cost-transparency-thumbnail {{ block.settings.footer_image_position }}" {{ block.shopify_attributes }}>
+                    {%- if block.settings.footer_image != blank -%}
+                      {{- block.settings.footer_image | image_url: width: block.settings.footer_image.width | image_tag: sizes: '100vw', widths: '100, 200,300,400,500', alt: block.settings.footer_image.alt, class: '' -}}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+              <!-- END: Left -->
+              
+              
+  
+            {%- when 'right_block' -%}
+              <div class="ed-cost-transparency-right ed-{{ section.blocks.size }} block-{{block.id}}">
+                <div class="ed-cost-transparency-header">
+                  {%- if block.settings.header_heading != blank -%}
+                    <h3 class="{{ block.settings.header_heading_size }}"  {{ block.shopify_attributes }}>{{ block.settings.header_heading | escape }}</h3>
+                  {%- endif -%}
+                  <p {{ block.shopify_attributes }}>{{ block.settings.heading_content }}</p>
+                </div>
+        
+                <ul class="ed-cost-transparency-features">
+                  {%- for i in (1..4) -%}
+                    {%- assign feature_image_key = 'features_image_' | append: i -%}
+                    {%- assign feature_content_key = 'features_content_' | append: i -%}
+                    {%- assign feature_image = block.settings[feature_image_key] -%}
+                    {%- assign feature_content = block.settings[feature_content_key] -%}
+  
+                    {%- if feature_image != blank or feature_content != blank -%}
+                      <li class="ed-cost-transparency-feature-item">
+                        <div class="ed-feature-thumbnail {{ block.settings.features_images_style }}" {{ block.shopify_attributes }}>
+                          {%- if feature_image != blank -%}
+                            {{- feature_image | image_url: width: feature_image.width | image_tag: sizes: '100vw', widths: '75, 100, 150, 200', alt: feature_image.alt, class: '' -}}
+                        {%- endif -%}
+                        </div>
+                        <p class="ed-cost-transparency-feature-item-title" {{ block.shopify_attributes }}>{{ feature_content }}</p>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+        
+                <div class="ed-cost-transparency-sizechart">
+                  {%- if block.settings.sizechart_heading != blank -%}
+                    <h4 class="{{ block.settings.sizechart_heading_size }}">{{ block.settings.sizechart_heading | escape }}</h4>
+                  {%- endif -%}
+                  
+                  <ul class="ed-cost-transparency-sizechart-list">
+                    {%- for i in (1..5) -%}
+                      {%- assign size_icon_key = 'sizechart_icon_' | append: i -%}
+                      {%- assign size_title_key = 'sizechart_title_' | append: i -%}
+                      {%- assign size_package_image_key = 'sizechart_package_image_' | append: i -%}
+                      {%- assign size_package_image_repeat_key = 'sizechart_package_image_repeat_' | append: i -%}
+                      {%- assign size_content_key = 'sizechart_content_' | append: i -%}
+  
+  
+                      {%- assign chart_icon = block.settings[size_icon_key] -%}
+                      {%- assign chart_title = block.settings[size_title_key] -%}
+                      {%- assign chart_image = block.settings[size_package_image_key] -%}
+                      {%- assign chart_image_repeat = block.settings[size_package_image_repeat_key] -%}
+                      {%- assign chart_content = block.settings[size_content_key] -%}
+                    
+                      {%- if chart_icon != blank or 
+                        chart_title != blank or
+                        chart_image != blank or
+                        chart_content != blank -%}
+                        <li>
+                          {%- if chart_icon != blank -%}
+                            <div class="ed-ct-sizechart-icon">
+                              {{- chart_icon | image_url: width: chart_icon.width | image_tag: sizes: '100vw', widths: '100', alt: chart_icon.alt -}}
+                            </div>
+                          {%- endif -%}
+  
+                          <div class="ed-ct-sizechart-title">
+                            <p {{ block.shopify_attributes }}>{{ chart_title }}</p>
+                          </div>
+                          
+                          <div class="ed-ct-sizechart-details">
+                            {%- if chart_image != blank -%}
+                              <div class="ed-ct-sizechart-details-images" {{ block.shopify_attributes }}>
+                                {%- for i in (1..chart_image_repeat) -%}
+                                  {{- chart_image | image_url: width: chart_image.width | image_tag: sizes: '100vw', widths: '100,150', alt: chart_image.alt -}}
+                                {%- endfor -%}
+                              </div>
+                            {%- endif -%}
+                            
+                            <p {{ block.shopify_attributes }}>{{ chart_content }}</p>
+                          </div>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+  
+                  <div class="ed-cost-transparency-sizechart-content">
+                    {%- if block.settings.footer_heading != blank -%}
+                      <h4 class="{{ block.settings.footer_heading_size }}" {{ block.shopify_attributes }}>{{ block.settings.footer_heading | escape }}</h4>
+                    {%- endif -%}
+                    <div {{ block.shopify_attributes }}>
+                      {{ block.settings.footer_content }}
+                    </div>
+                  </div>
+                </div>
+        
+                <div class="ed-cost-transparency-thumbnail {{ block.settings.footer_image_position }}" {{ block.shopify_attributes }}>
+                  {%- if block.settings.footer_image != blank -%}
+                    {{- block.settings.footer_image | image_url: width: block.settings.footer_image.width | image_tag: sizes: '100vw', widths: '100, 200,300,400,500', alt: block.settings.footer_image.alt, class: '' -}}
+                  {%- endif -%}
+                </div>
+              </div>
+              <!-- END: Right -->
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+</div>
+  
+
+{% schema %}
+  {
+    "name": "CRO | Kostentransparenz",
+    "tag": "section",
+    "class": "ed-cost-transparency",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings": [
+        {
+            "type": "range",
+            "id": "gap_betweens",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Gap betweens",
+            "default": 23
+        },
+        {
+            "type": "range",
+            "id": "border_radius",
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "label": "Border Radius",
+            "default": 12
+        },
+        {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#F3F2EC"
+        },
+        {
+            "type": "header",
+            "content": "Section spaces"
+        },
+        {
+            "type": "range",
+            "id": "section_space_top",
+            "min": 0,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Top space",
+            "default": 90
+        },
+        {
+            "type": "range",
+            "id": "section_space_bottom",
+            "min": 0,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Bottom space",
+            "default": 90
+        },
+        {
+            "type": "header",
+            "content": "Left settings"
+        },
+        {
+            "type": "color",
+            "id": "left_text_color",
+            "label": "Text color",
+            "default": "#041E17"
+        },
+        {
+            "type": "color",
+            "id": "left_background",
+            "label": "Background",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "header",
+            "content": "Right settings"
+        },
+        {
+            "type": "color",
+            "id": "right_text_color",
+            "label": "Text color",
+            "default": "#ffffff"
+        },
+        {
+            "type": "color",
+            "id": "right_background",
+            "label": "Background",
+            "default": "#196918"
+        },
+        {
+            "type": "header",
+            "content": "Mobile settings"
+        },
+        {
+            "type": "range",
+            "id": "section_space_top_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Top space (mobile)",
+            "default": 48
+        },
+        {
+            "type": "range",
+            "id": "section_space_bottom_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Bottom space (mobile)",
+            "default": 48
+        }
+    ],
+    "blocks": [
+      {
+        "type": "left_block",
+        "name": "Left block",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Header settings"
+          },
+          {
+            "type": "text",
+            "id": "header_heading",
+            "label": "Heading",
+            "default": "Lorem ipsum dolor nemo"
+          },
+          {
+            "type": "select",
+            "id": "header_heading_size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h3"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "heading_content",
+            "label": "content",
+            "default": "Lorem ipsum dolornulla eius modi odio:"
+          },
+          {
+            "type": "header",
+            "content": "Features settings"
+          },
+          {
+            "type": "range",
+            "id": "features_gap_items",
+            "min": 0,
+            "max": 32,
+            "step": 1,
+            "unit": "px",
+            "label": "Gap items",
+            "default": 8
+          },
+          {
+            "type": "range",
+            "id": "features_images_width",
+            "min": 10,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Images width (Desktop)",
+            "default": 106
+          },
+          {
+            "type": "range",
+            "id": "features_images_width_mobile",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Images width (Mobile)",
+            "default": 50
+          },
+          {
+            "type": "select",
+            "id": "features_images_style",
+            "label": "Images style",
+            "options": [
+              {
+                "value": "circle",
+                "label": "circle"
+              },
+              {
+                "value": "rounded",
+                "label": "Rounded"
+              },
+              {
+                "value": "default",
+                "label": "Default"
+              }
+            ],
+            "default": "circle"
+          },
+          {
+            "type": "header",
+            "content": "1st item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_1",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_1",
+            "label": "Label",
+            "default": "<strong>45%</strong> Lorem ipsum"
+          },
+          {
+            "type": "header",
+            "content": "2nd item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_2",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_2",
+            "label": "Label",
+            "default": "<strong>45%</strong> Lorem ipsum"
+          },
+          {
+            "type": "header",
+            "content": "3rd item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_3",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_3",
+            "label": "Label",
+            "default": "<strong>45%</strong> Lorem ipsum"
+          },
+          {
+            "type": "header",
+            "content": "4th item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_4",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_4",
+            "label": "Label",
+            "default": "<strong>45%</strong> Lorem ipsum"
+          },
+          {
+            "type": "header",
+            "content": "Footer settings"
+          },
+          {
+            "type": "text",
+            "id": "footer_heading",
+            "label": "Heading",
+            "default": "Lorem ipsum:"
+          },
+          {
+            "type": "select",
+            "id": "footer_heading_size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h4"
+          },
+          {
+            "type": "richtext",
+            "id": "footer_content",
+            "label": "Content",
+            "default": "<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Placeat numquam adipisci quisquam, eius laudantium reiciendis doloribus aspernatur esse. Velit, sequi.</p>"
+          },
+          {
+            "type": "paragraph",
+            "content": "Thumbnail settings"
+          },
+          {
+            "type": "image_picker",
+            "id": "footer_image",
+            "label": "Image"
+          },
+          {
+            "type": "select",
+            "id": "footer_image_position",
+            "label": "Position",
+            "options": [
+              {
+                "value": "ed-thumb-left",
+                "label": "Left"
+              },
+              {
+                "value": "ed-thumb-center",
+                "label": "Center"
+              },
+              {
+                "value": "ed-thumb-right",
+                "label": "Right"
+              }
+            ],
+            "default": "ed-thumb-right"
+          },
+          {
+            "type": "range",
+            "id": "footer_image_max_width",
+            "min": 20,
+            "max": 500,
+            "step": 5,
+            "unit": "px",
+            "label": "Max-width",
+            "default": 175
+          },
+          {
+            "type": "range",
+            "id": "footer_image_margin_top",
+            "min": 0,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Space top (desktop)",
+            "default": 32
+          },
+          {
+            "type": "range",
+            "id": "footer_image_margin_top_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Space top (mobile)",
+            "default": 32
+          }
+        ]
+      },
+      {
+        "type": "right_block",
+        "name": "Right block",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Header settings"
+          },
+          {
+            "type": "text",
+            "id": "header_heading",
+            "label": "Heading",
+            "default": "Lorem ipsum dolor libero molestiae"
+          },
+          {
+            "type": "select",
+            "id": "header_heading_size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h3"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "heading_content",
+            "label": "content",
+            "default": "Lorem ipsum dolor suscipit rerum assumenda quod repellat quibusdam!"
+          },
+          {
+            "type": "header",
+            "content": "Features settings"
+          },
+          {
+            "type": "range",
+            "id": "features_gap_items",
+            "min": 0,
+            "max": 32,
+            "step": 1,
+            "unit": "px",
+            "label": "Gap items",
+            "default": 8
+          },
+          {
+            "type": "range",
+            "id": "features_images_width",
+            "min": 10,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Images width (Desktop)",
+            "default": 106
+          },
+          {
+            "type": "range",
+            "id": "features_images_width_mobile",
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Images width (Mobile)",
+            "default": 50
+          },
+          {
+            "type": "select",
+            "id": "features_images_style",
+            "label": "Images style",
+            "options": [
+              {
+                "value": "circle",
+                "label": "circle"
+              },
+              {
+                "value": "rounded",
+                "label": "Rounded"
+              },
+              {
+                "value": "default",
+                "label": "Default"
+              }
+            ],
+            "default": "circle"
+          },
+          {
+            "type": "header",
+            "content": "1st item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_1",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_1",
+            "label": "Label",
+            "default": "Lorem"
+          },
+          {
+            "type": "header",
+            "content": "2nd item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_2",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_2",
+            "label": "Label",
+            "default": "Lorem"
+          },
+          {
+            "type": "header",
+            "content": "3rd item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_3",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_3",
+            "label": "Label",
+            "default": "Lorem"
+          },
+          {
+            "type": "header",
+            "content": "4th item"
+          },
+          {
+            "type": "image_picker",
+            "id": "features_image_4",
+            "label": "Image"
+          },
+          {
+            "type": "inline_richtext",
+            "id": "features_content_4",
+            "label": "Label",
+            "default": "Lorem"
+          },
+          {
+            "type": "header",
+            "content": "Size-chart settings"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_heading",
+            "label": "Heading",
+            "default": "Lorem ipsum dolorn amet:"
+          },
+          {
+            "type": "select",
+            "id": "sizechart_heading_size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h4"
+          },
+          {
+            "type": "header",
+            "content": "1st chart-item"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_icon_1",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_title_1",
+            "label": "Title",
+            "default": "Up to 15 kg"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_package_image_1",
+            "label": "Package image"
+          },
+          {
+            "type": "range",
+            "id": "sizechart_package_image_repeat_1",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Repeat package image",
+            "default": 1
+          },
+          {
+            "type": "inline_richtext",
+            "id": "sizechart_content_1",
+            "label": "Content",
+            "default": "<strong>0.5</strong> (approx. 5g)"
+          },
+          {
+            "type": "header",
+            "content": "2nd chart-item"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_icon_2",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_title_2",
+            "label": "Title",
+            "default": "15-45 kg"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_package_image_2",
+            "label": "Package image"
+          },
+          {
+            "type": "range",
+            "id": "sizechart_package_image_repeat_2",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Repeat package image",
+            "default": 1
+          },
+          {
+            "type": "inline_richtext",
+            "id": "sizechart_content_2",
+            "label": "Content",
+            "default": "<strong>1-2</strong> (approx. 10-20g)"
+          },
+          {
+            "type": "header",
+            "content": "3rd chart-item"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_icon_3",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_title_3",
+            "label": "Title",
+            "default": "15-45 kg"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_package_image_3",
+            "label": "Package image"
+          },
+          {
+            "type": "range",
+            "id": "sizechart_package_image_repeat_3",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Repeat package image",
+            "default": 1
+          },
+          {
+            "type": "inline_richtext",
+            "id": "sizechart_content_3",
+            "label": "Content",
+            "default": "<strong>2-3</strong> (approx. 20-30g)"
+          },
+          {
+            "type": "header",
+            "content": "4th chart-item"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_icon_4",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_title_4",
+            "label": "Title"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_package_image_4",
+            "label": "Package image"
+          },
+          {
+            "type": "range",
+            "id": "sizechart_package_image_repeat_4",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Repeat package image",
+            "default": 1
+          },
+          {
+            "type": "inline_richtext",
+            "id": "sizechart_content_4",
+            "label": "Content"
+          },
+          {
+            "type": "header",
+            "content": "5th chart-item"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_icon_5",
+            "label": "Icon"
+          },
+          {
+            "type": "text",
+            "id": "sizechart_title_5",
+            "label": "Title"
+          },
+          {
+            "type": "image_picker",
+            "id": "sizechart_package_image_5",
+            "label": "Package image"
+          },
+          {
+            "type": "range",
+            "id": "sizechart_package_image_repeat_5",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "Repeat package image",
+            "default": 1
+          },
+          {
+            "type": "inline_richtext",
+            "id": "sizechart_content_5",
+            "label": "Content"
+          },
+          {
+            "type": "header",
+            "content": "Footer settings"
+          },
+          {
+            "type": "text",
+            "id": "footer_heading",
+            "label": "Heading"
+          },
+          {
+            "type": "select",
+            "id": "footer_heading_size",
+            "label": "Heading size",
+            "options": [
+              {
+                "value": "h1",
+                "label": "H1"
+              },
+              {
+                "value": "h2",
+                "label": "H2"
+              },
+              {
+                "value": "h3",
+                "label": "H3"
+              },
+              {
+                "value": "h4",
+                "label": "H4"
+              },
+              {
+                "value": "h5",
+                "label": "H5"
+              },
+              {
+                "value": "h6",
+                "label": "H6"
+              }
+            ],
+            "default": "h4"
+          },
+          {
+            "type": "richtext",
+            "id": "footer_content",
+            "label": "Content",
+            "default": "<p>* Lorem ipsum dolor beatae ad dolor commodi aliquam molestias.</p>"
+          },
+          {
+            "type": "paragraph",
+            "content": "Thumbnail settings"
+          },
+          {
+            "type": "image_picker",
+            "id": "footer_image",
+            "label": "Image"
+          },
+          {
+            "type": "select",
+            "id": "footer_image_position",
+            "label": "Position",
+            "options": [
+              {
+                "value": "ed-thumb-left",
+                "label": "Left"
+              },
+              {
+                "value": "ed-thumb-center",
+                "label": "Center"
+              },
+              {
+                "value": "ed-thumb-right",
+                "label": "Right"
+              }
+            ],
+            "default": "ed-thumb-right"
+          },
+          {
+            "type": "range",
+            "id": "footer_image_max_width",
+            "min": 20,
+            "max": 500,
+            "step": 5,
+            "unit": "px",
+            "label": "Max-width",
+            "default": 175
+          },
+          {
+            "type": "range",
+            "id": "footer_image_margin_top",
+            "min": 0,
+            "max": 200,
+            "step": 2,
+            "unit": "px",
+            "label": "Space top (desktop)",
+            "default": 110
+          },
+          {
+            "type": "range",
+            "id": "footer_image_margin_top_mobile",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "label": "Space top (mobile)",
+            "default": 64
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "CRO | Kostentransparenz",
+        "settings": {},
+        "blocks": [
+          {
+            "type": "left_block"
+          },
+          {
+            "type": "right_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

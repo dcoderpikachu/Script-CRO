@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is a QA question asking whether reference logos render in high resolution on desktop and mobile. The description is empty, and the only comment is a reviewer confirming they look fine. It describes no reusable CRO element, only a visual check of an existing one."}, "in": 166, "out": 96}

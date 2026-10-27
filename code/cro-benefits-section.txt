@@ -1,0 +1,631 @@
+Step: 1
+Create a section: ed-cro-benefits.liquid
+Paste this code:
+
+<style>
+    #shopify-section-{{ section.id }} {
+        {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+        {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+        {%- endif -%}
+    
+        {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign heading_color = settings.heading_color -%}
+          {%- assign text_color = settings.text_color -%}
+        {%- else -%}
+          {%- assign heading_color = section.settings.text_color -%}
+          {%- assign text_color = section.settings.text_color -%}
+        {%- endif -%}
+    
+        --heading-color: {{ heading_color.red }}, {{ heading_color.green }}, {{ heading_color.blue }};
+        --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+        --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+
+        --alignment: {{ section.settings.alignment }};
+        --max-width: {{ section.settings.section_max_width -}}%;
+        --row-gap: {{ section.settings.row_gap -}}px;
+        --col-gap: {{ section.settings.column_gap -}}px;
+        --space-top: {{ section.settings.space_top -}}px;
+        --space-bottom: {{ section.settings.space_bottom -}}px;
+
+        --alignment-mobile: {{ section.settings.alignment_mobile }};
+        --row-gap-mobile: {{ section.settings.row_gap_mobile -}}px;
+        --col-gap-mobile: {{ section.settings.column_gap_mobile -}}px;
+        --space-top-mobile: {{ section.settings.space_top_mobile -}}px;
+        --space-bottom-mobile: {{ section.settings.space_bottom_mobile -}}px;
+
+        --icon-size: {{ section.settings.icon_size -}}px;
+        --title-size: {{ section.settings.title_size -}}px;
+        --title-space-top: {{ section.settings.title_space_top -}}px;
+        --title-space-bottom: {{ section.settings.title_space_bottom -}}px;
+        --content-size: {{ section.settings.content_size -}}px;
+
+        --icon-size-mobile: {{ section.settings.icon_size_mobile -}}px;
+        --title-size-mobile: {{ section.settings.title_size_mobile -}}px;
+        --title-space-top-mobile: {{ section.settings.title_space_top_mobile -}}px;
+        --title-space-bottom-mobile: {{ section.settings.title_space_bottom_mobile -}}px;
+        --content-size-mobile: {{ section.settings.content_size_mobile -}}px;
+    }
+
+    {% if section.settings.visibility == 'desktop_only' %}
+        @media (max-width: 999px) {
+            #shopify-section-{{ section.id }} {
+                display: none;
+            }
+        }
+    {% endif %}
+
+    {% if section.settings.visibility == 'mobile_only' %}
+        @media (min-width: 1000px) {
+            #shopify-section-{{ section.id }} {
+                display: none;
+            }
+        }
+    {% endif %}
+
+    .cro_benefits_wrap {
+        background: rgb(var(--section-background));
+    }
+    
+    ul.cro_benefits {
+        padding: 0;
+        list-style: none;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    
+    li.cro_benefits-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .cro_benefits-thumbnail {
+        display: flex;
+    }
+    .cro_benefits-thumbnail img, 
+    .cro_benefits-thumbnail svg {
+        width: inherit;
+        height: auto;
+        color: currentColor;
+    }
+    
+    h3.heading.cro_benefits-heading {
+        line-height: 1.5;
+        font-weight: normal;
+        word-break: break-all;
+        color: rgb(var(--heading-color));
+    }
+    p.cro_benefits-content {
+        letter-spacing: -0.24px;
+        line-height: 1.5;
+        margin: 0;
+        color: rgb(var(--text-color));
+    }
+    
+    h3.heading.cro_benefits-heading strong, 
+    h3.heading.cro_benefits-heading b {
+        font-weight: 600;
+    }
+
+    @media (min-width: 1000px) {
+        .cro_benefits_wrap {
+            padding-top: var(--space-top);
+            padding-bottom: var(--space-bottom);
+        }
+        ul.cro_benefits {
+            row-gap: var(--row-gap);
+            column-gap: var(--col-gap);
+        }
+        .cro_beneits_inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: block;
+        }
+        
+        ul.cro_benefits.two-rows-desktop {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        li.cro_benefits-item {
+            {%- if section.settings.alignment == 'left' -%}
+                align-items: flex-start;
+            {%- elsif section.settings.alignment == 'right' -%}
+                align-items: flex-end;
+            {%- else -%}
+                align-items: center;
+            {%- endif -%}
+            text-align: var(--alignment);
+        }
+        .cro_benefits-thumbnail {
+            width: var(--icon-size);
+        }
+        h3.heading.cro_benefits-heading {
+            margin-top: var(--title-space-top);
+            margin-bottom: var(--title-space-bottom);
+            font-size: var(--title-size);
+        }
+        p.cro_benefits-content {
+            font-size: var(--content-size);
+        }
+    }
+
+    @media (max-width: 999px) {
+        .cro_benefits_wrap {
+            padding-top: var(--space-top-mobile);
+            padding-bottom: var(--space-bottom-mobile);
+        }
+        
+        .cro_benefits_wrap.has-scroll-mobile .container {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        
+        ul.cro_benefits {
+            row-gap: var(--row-gap-mobile);
+            column-gap: var(--col-gap-mobile);
+        }
+        li.cro_benefits-item {
+            {%- if section.settings.alignment_mobile == 'left' -%}
+                align-items: flex-start;
+            {%- elsif section.settings.alignment_mobile == 'right' -%}
+                align-items: flex-end;
+            {%- else -%}
+                align-items: center;
+            {%- endif -%}
+            text-align: var(--alignment-mobile);
+        }
+        .cro_benefits-thumbnail {
+            width: var(--icon-size-mobile);
+        }
+        h3.heading.cro_benefits-heading {
+            margin-top: var(--title-space-top-mobile);
+            margin-bottom: var(--title-space-bottom-mobile);
+            font-size: var(--title-size-mobile);
+        }
+        p.cro_benefits-content {
+            font-size: var(--content-size-mobile);
+        }
+
+        ul.cro_benefits.stacked-mobile {
+            flex-direction: column;
+        }
+        
+        ul.cro_benefits.two-rows-mobile {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        ul.cro_benefits.scroll-mobile {
+            display: grid;
+            overflow-x: scroll;
+            grid-template-columns: none;
+            grid-auto-flow: column;
+            scrollbar-width: none;
+            grid-auto-columns: 55vw;
+            justify-content: start;
+            scroll-snap-type: x mandatory;
+        }
+        
+        ul.cro_benefits.scroll-mobile li.cro_benefits-item {
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+        }
+        ul.cro_benefits.scroll-mobile li.cro_benefits-item h3.heading.cro_benefits-heading {
+            word-break: normal;
+        }
+                
+        ul.cro_benefits.scroll-mobile li.cro_benefits-item:first-of-type {
+            margin-left: var(--container-gutter);
+        }
+        ul.cro_benefits.scroll-mobile li.cro_benefits-item:last-of-type {
+            margin-right: var(--container-gutter);
+        }
+        
+    }
+</style>
+
+<div class="cro_benefits_wrap {% if section.settings.layout_mobile == 'scroll-mobile' %}has-scroll-mobile{% endif %}">
+    <div class="container">
+        <div class="cro_beneits_inner">
+            <ul class="cro_benefits {{ section.settings.layout_mobile }} {% if section.settings.two_items_layout %}two-rows-desktop{% endif %}">
+                {%- for block in section.blocks -%}
+                    <li class="cro_benefits-item" id="block-{{ block.id }}" {{ block.shopify_attributes }}>
+                        {%- if  block.settings.icon_as_svg != blank  -%}
+                            <div class="cro_benefits-thumbnail">
+                                {{ block.settings.icon_as_svg }}
+                            </div>
+                        {%- elsif block.settings.icon_as_image != blank -%}
+                            <div class="cro_benefits-thumbnail">
+                                {{- block.settings.icon_as_image | image_url: width: block.settings.icon_as_image.width | image_tag: sizes: '100vw', widths: '50,100,150,200', alt: block.settings.icon_as_image.alt -}}
+                            </div>
+                        {%- endif -%}
+
+                        <h3 class="heading cro_benefits-heading">{{ block.settings.title }}</h3>
+                        <p class="cro_benefits-content">{{ block.settings.content }}</p>
+                    </li>
+                {%- endfor -%}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+    {
+        "name": "CRO | Benefits",
+        "class": "ed-cro-benefits-section",
+        "tag": "section",
+        "max_blocks": 4,
+        "settings": [
+            {
+                "type": "select",
+                "id": "visibility",
+                "label": "View section at",
+                "options": [
+                    {
+                        "value": "all",
+                        "label": "All"
+                    },
+                    {
+                        "value": "desktop_only",
+                        "label": "Desktop"
+                    },
+                    {
+                        "value": "mobile_only",
+                        "label": "Mobile"
+                    }
+                ],
+                "default": "all"
+            },
+            {
+                "type": "color",
+                "id": "text_color",
+                "label": "Text color",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "color",
+                "id": "background",
+                "label": "Background",
+                "default": "rgba(0,0,0,0)"
+            },
+            {
+                "type": "header",
+                "content": "Desktop settings"
+            },
+            {
+                "type": "select",
+                "id": "alignment",
+                "label": "Text-alignment",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Left"
+                    },
+                    {
+                        "value": "center",
+                        "label": "Center"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Right"
+                    }
+                ],
+                "default": "center"
+            },
+            {
+                "type": "range",
+                "id": "section_max_width",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "%",
+                "label": "Max-width",
+                "default": 100
+            },
+            {
+                "type": "checkbox",
+                "id": "two_items_layout",
+                "label": "2 items per row",
+                "default": false,
+            },
+            {
+                "type": "range",
+                "id": "row_gap",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Row-gap",
+                "default": 60
+            },
+            {
+                "type": "range",
+                "id": "column_gap",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Column-gap",
+                "default": 35
+            },
+            {
+                "type": "paragraph",
+                "content": "Section spacing"
+            },
+            {
+                "type": "range",
+                "id": "space_top",
+                "min": 0,
+                "max": 200,
+                "step": 2,
+                "unit": "px",
+                "label": "Top space",
+                "default": 90
+            },
+            {
+                "type": "range",
+                "id": "space_bottom",
+                "min": 0,
+                "max": 200,
+                "step": 2,
+                "unit": "px",
+                "label": "Bottom space",
+                "default": 90
+            },
+            {
+                "type": "header",
+                "content": "Items Desktop settings"
+            },
+            {
+                "type": "range",
+                "id": "icon_size",
+                "min": 10,
+                "max": 200,
+                "step": 2,
+                "unit": "px",
+                "label": "Icon size",
+                "default": 58
+            },
+            {
+                "type": "range",
+                "id": "title_size",
+                "min": 12,
+                "max": 30,
+                "step": 1,
+                "unit": "px",
+                "label": "Title Size",
+                "default": 20
+            },
+            {
+                "type": "range",
+                "id": "title_space_top",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "unit": "px",
+                "label": "Title space top",
+                "default": 10
+            },
+            {
+                "type": "range",
+                "id": "title_space_bottom",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "unit": "px",
+                "label": "Title space bottom",
+                "default": 20
+            },
+            {
+                "type": "range",
+                "id": "content_size",
+                "min": 12,
+                "max": 20,
+                "step": 1,
+                "unit": "px",
+                "label": "Content size",
+                "default": 16
+            },
+
+            {
+                "type": "header",
+                "content": "Mobile settings"
+            },
+            {
+                "type": "select",
+                "id": "alignment_mobile",
+                "label": "Text-alignment (mobile)",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Left"
+                    },
+                    {
+                        "value": "center",
+                        "label": "Center"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Right"
+                    }
+                ],
+                "default": "left"
+            },
+            {
+                "type": "select",
+                "id": "layout_mobile",
+                "label": "Layout",
+                "options": [
+                    {
+                        "value": "stacked-mobile",
+                        "label": "Stacked"
+                    },
+                    {
+                        "value": "scroll-mobile",
+                        "label": "Scroll"
+                    },
+                    {
+                        "value": "two-rows-mobile",
+                        "label": "2 items / row"
+                    }
+                ],
+                "default": "two-rows-mobile"
+            },
+            {
+                "type": "range",
+                "id": "row_gap_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Row-gap (mobile)",
+                "default": 35
+            },
+            {
+                "type": "range",
+                "id": "column_gap_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Column-gap (mobile)",
+                "default": 35
+            },
+            {
+                "type": "paragraph",
+                "content": "Section spacing"
+            },
+            {
+                "type": "range",
+                "id": "space_top_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 2,
+                "unit": "px",
+                "label": "Top space (mobile)",
+                "default": 48
+            },
+            {
+                "type": "range",
+                "id": "space_bottom_mobile",
+                "min": 0,
+                "max": 100,
+                "step": 2,
+                "unit": "px",
+                "label": "Bottom space (mobile)",
+                "default": 48
+            },
+            {
+                "type": "header",
+                "content": "Items Mobile settings"
+            },
+            {
+                "type": "range",
+                "id": "icon_size_mobile",
+                "min": 10,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Icon size (mobile)",
+                "default": 45
+            },
+            {
+                "type": "range",
+                "id": "title_size_mobile",
+                "min": 12,
+                "max": 30,
+                "step": 1,
+                "unit": "px",
+                "label": "Title size (mobile)",
+                "default": 16
+            },
+            {
+                "type": "range",
+                "id": "title_space_top_mobile",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "unit": "px",
+                "label": "Title space top (mobile)",
+                "default": 10
+            },
+            {
+                "type": "range",
+                "id": "title_space_bottom_mobile",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "unit": "px",
+                "label": "Title space bottom (mobile)",
+                "default": 12
+            },
+            {
+                "type": "range",
+                "id": "content_size_mobile",
+                "min": 10,
+                "max": 20,
+                "step": 1,
+                "unit": "px",
+                "label": "Conent size (mobile)",
+                "default": 14
+            },
+             
+        ],
+        "blocks": [
+            {
+                "type": "item",
+                "name": "Item",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "icon_as_image",
+                        "label": "Icon as Image",
+                        "info": "100 x 100 .svg recommended"
+                    },
+                    {
+                        "type": "html",
+                        "id": "icon_as_svg",
+                        "label": "Icon as SVG",
+                        "info": "SVG will replace icon as Image",
+                        "default": "<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewbox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" class=\"size-6\">\n  <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z\"></path>\n</svg>"
+                    },
+                    {
+                        "type": "inline_richtext",
+                        "id": "title",
+                        "label": "Title",
+                        "default": "Lorem ipsum"
+                    },
+                    {
+                        "type": "inline_richtext",
+                        "id": "content",
+                        "label": "Content",
+                        "default": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum, sunt sed omnis magnam officia soluta.",
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "CRO | Benefits",
+                "blocks": [
+                    {
+                        "type": "item"
+                    },
+                    {
+                        "type": "item"
+                    },
+                    {
+                        "type": "item"
+                    },
+                    {
+                        "type": "item"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

@@ -1,0 +1,731 @@
+Step 1: In settings_schema.json file inside cart settings add this
+
+   {
+        "type": "header",
+        "content": "Shipping Progress Bar"
+      },
+      {
+        "type": "paragraph",
+        "content": "You can change the text around the dynamic element under Actions > Edit Language > Cart > Free shipping remaining html"
+      },
+      {
+        "type": "color",
+        "id": "shipping_text_color",
+        "label": "Shipping bar text",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "shipping_bar_color",
+        "label": "Active shipping bar",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "rest_shipping_bar_color",
+        "label": "Rest of shipping bar",
+        "default": "#f8f6f3"
+      },
+      {
+        "type": "select",
+        "id": "progressbar_border_radious",
+        "label": "Progressbar border style",
+        "options": [
+          {
+            "value": "rounded",
+            "label": "Rounded"
+          },
+          {
+            "value": "square",
+            "label": "Square"
+          }
+        ],
+        "default": "rounded"
+      },
+      {
+        "type": "html",
+        "id": "progressbar_shipping_icon",
+        "label": "Progressbar shipping icon"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_free_shipping_threshold",
+        "label": "Show free shipping minimum amount",
+        "info": "Make sure that you have properly configured your [shipping rates](/admin/settings/shipping).",
+        "default": false
+      },
+
+Step 2: Add this in settings_schema.json
+{
+    "name": "Cart Free Gift",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_free_gift_show",
+        "label": "Display Section",
+        "info": "Uncheck to hide this section. To show it during an A/B test, use the following CSS code: .cart-free-gift{ display: block !important; }",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_free_item",
+        "label": "Enable Free Item"
+      },
+      {
+        "type": "text",
+        "id": "cart_free_gift_headline",
+        "label": "Cart free gift headline"
+      },
+      {
+        "type": "text",
+        "id": "cart_free_item_threshold",
+        "label": "Free gift minimum amount",
+        "default": "50"
+      },
+      {
+        "type": "product_list",
+        "id": "free_products",
+        "label": "Gift products"
+      },
+      {
+        "type": "checkbox",
+        "id": "free_gift_auto_add",
+        "label": "Auto add",
+        "default": false
+      },
+      {
+        "type": "html",
+        "id": "progressbar_gift_icon",
+        "label": "Progressbar gift icon"
+      },
+      {
+        "type": "textarea",
+        "id": "gift_msg_before",
+        "label": "Shipping bar message before condition fulfill",
+        "default": "Noch [amount] bis zu Deinem <strong> gratis Geschenk! </strong>"
+      },
+      {
+        "type": "textarea",
+        "id": "gift_msg_after",
+        "label": "Shipping bar message after condition fulfill",
+        "default": "<strong>Glückwunsch!</strong> Füge Dein gratis Geschenk hinzu!"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_gift_color",
+        "label": "Cart free gift text color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_gift_bg_color",
+        "label": "Cart free gift background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_free_item2",
+        "label": "Enable Second Free Gift"
+      },
+      {
+        "type": "text",
+        "id": "cart_free_item_threshold2",
+        "label": "Second Free Gift Threshold",
+        "default": "100",
+        "info": "Set the minimum threshold for the automatic discount code you created in Shopify."
+      },
+      {
+        "type": "html",
+        "id": "progressbar_discount_icon",
+        "label": "Progressbar Second Free Gift Icon"
+      },
+      {
+        "type": "textarea",
+        "id": "gift_msg_before2",
+        "label": "Shipping bar message before condition fulfill",
+        "default": "Noch [amount] bis zu Deinem <strong> gratis Geschenk! </strong>"
+      },
+      {
+        "type": "textarea",
+        "id": "gift_msg_after2",
+        "label": "Shipping bar message after condition fulfill",
+        "default": "<strong>Glückwunsch!</strong> Füge Dein gratis Geschenk hinzu!"
+      },
+      {
+        "type": "product_list",
+        "id": "free_products2",
+        "label": "Gift products"
+      },
+      {
+        "type": "checkbox",
+        "id": "free_gift_auto_add2",
+        "label": "Auto add",
+        "default": false
+      }
+    ]
+  },
+
+Step 3: From starting of drawer__content to <form id="mini-cart-form" action="{{ routes.cart_url }}" novalidate method="post"> replace with this code: 
+
+   {%- if settings.cart_show_free_shipping_threshold and settings.cart_free_shipping_threshold != '' -%}
+        {%- assign free_shipping_thresholds = settings.cart_free_shipping_threshold | remove: ' ' | split: ',' -%}
+        {%- assign has_found_matching_threshold = false -%}
+
+        {%- if free_shipping_thresholds.size > 1 -%}
+          {%- for threshold in free_shipping_thresholds -%}
+            {%- assign threshold_parts = threshold | split: ':' -%}
+            {%- assign currency_code = threshold_parts | first | upcase -%}
+
+            {%- if currency_code == cart.currency.iso_code -%}
+              {%- assign free_shipping_calculated_threshold = threshold_parts | last -%}
+              {%- assign has_found_matching_threshold = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign free_shipping_calculated_threshold = free_shipping_thresholds | last -%}
+          {%- assign has_found_matching_threshold = true -%}
+        {%- endif -%}
+
+        {%- if has_found_matching_threshold -%}
+          {%- assign threshold_in_cents = free_shipping_calculated_threshold | times: 100 -%}
+
+          {%- assign calculated_total_price = cart.total_price -%}
+
+          {%- for line_item in cart.items -%}
+            {%- unless line_item.requires_shipping -%}
+              {%- assign calculated_total_price = calculated_total_price | minus: line_item.final_line_price -%}
+            {%- endunless -%}
+          {%- endfor -%}
+
+          <!-- Shipping bar and free gift -->
+          {% assign enable_free_product = settings.enable_free_item %}
+          {% assign free_item_threshold = settings.cart_free_item_threshold | times: 100 %}
+          {% assign free_item_threshold2 = settings.cart_free_item_threshold2 | times: 100 %}
+          {% assign enable_free_product2 = settings.enable_free_item2 %}
+
+          {% if enable_free_product or enable_free_product2 %}
+            {% if enable_free_product2 %}
+              {% assign new_threshold_in_cents = free_item_threshold2 %}
+            {% else %}
+              {% assign new_threshold_in_cents = free_item_threshold %}
+            {% endif %}
+
+            {% if new_threshold_in_cents < free_item_threshold %}
+              {% assign new_threshold_in_cents = free_item_threshold %}
+            {% endif %}
+
+            {% if new_threshold_in_cents < threshold_in_cents %}
+              {% assign new_threshold_in_cents = threshold_in_cents %}
+            {% endif %}
+            <free-shipping-bar
+              threshold="{{ new_threshold_in_cents }}"
+              class="ed-free-shipping-bar shipping-bar shipping-gift-bar"
+              style="--progress: {{ cart.total_price | times: 1.0 | divided_by: new_threshold_in_cents | at_most: 1 }};color: {{ settings.shipping_text_color }};"
+            >
+              <span
+                class="shipping-bar__progress"
+                style="color:{{ settings.shipping_bar_color }};background-color: {{ settings.rest_shipping_bar_color }};"
+              >
+                {% if settings.cart_show_free_shipping_threshold and settings.cart_free_shipping_threshold != '' %}
+                  <span
+                    class="shipping-bar__progress_shipping_icon shipping-bar__progress_gift_icon {% if cart.total_price >= threshold_in_cents %}active{% else %}{% endif %}"
+                    style="left:{{ threshold_in_cents | times: 1.0 | divided_by: new_threshold_in_cents | times: 100 }}%;"
+                  >
+                    {{ settings.progressbar_shipping_icon }}
+                  </span>
+                {% endif %}
+
+                {% if enable_free_product %}
+                  <span
+                    class="shipping-bar__progress_gift_icon {% if cart.total_price >= free_item_threshold %}active{% else %}{% endif %}"
+                    style="left:{{ free_item_threshold | times: 1.0 | divided_by: new_threshold_in_cents | times: 100 }}%;"
+                  >
+                    {{ settings.progressbar_gift_icon }}
+                  </span>
+                {% endif %}
+
+                {% if enable_free_product2 %}
+                  <span
+                    class="shipping-bar__progress_gift_icon {% if cart.total_price >= free_item_threshold2 %}active{% else %}{% endif %}"
+                    style="left:{{ free_item_threshold2 | times: 1.0 | divided_by: new_threshold_in_cents | times: 100 }}%;"
+                  >
+                    {{ settings.progressbar_discount_icon }}
+                  </span>
+                {% endif %}
+              </span>
+
+              {%- if calculated_total_price >= new_threshold_in_cents -%}
+                <span class="shipping-bar__text text--small free_ship_text">
+                  {% if enable_free_product and enable_free_product2 %}
+                    {{ settings.gift_msg_after2 }}
+                  {% else %}
+                    {{ settings.gift_msg_after }}
+                  {% endif %}
+                </span>
+              {%- else -%}
+                {% if threshold_in_cents < free_item_threshold %}
+                  {% if calculated_total_price < threshold_in_cents %}
+                    {%- capture remaining_amount -%}{{ calculated_total_price | minus: threshold_in_cents | abs | money }}{%- endcapture -%}
+                    <span class="shipping-bar__text text--small free_ship_text">
+                      {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+                    </span>
+                  {% else %}
+                    {% if calculated_total_price < free_item_threshold %}
+                      {%- capture remaining_amount -%}{{ calculated_total_price | minus: free_item_threshold | abs | money }}{%- endcapture -%}
+                      <span class="shipping-bar__text text--small free_ship_text">
+                        {{ settings.gift_msg_before | replace: '[amount]', remaining_amount }}
+                      </span>
+                    {% else %}
+                      {%- capture remaining_amount -%}{{ calculated_total_price | minus: free_item_threshold2 | abs | money }}{%- endcapture -%}
+                      <span class="shipping-bar__text text--small free_ship_text">
+                        {{ settings.gift_msg_before2 | replace: '[amount]', remaining_amount }}
+                      </span>
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  {% if calculated_total_price < free_item_threshold %}
+                    {%- capture remaining_amount -%}{{ calculated_total_price | minus: free_item_threshold | abs | money }}{%- endcapture -%}
+                    <span class="shipping-bar__text text--small free_ship_text">
+                      {{ settings.gift_msg_before | replace: '[amount]', remaining_amount }}
+                    </span>
+                  {% elsif enable_free_product2 and calculated_total_price < free_item_threshold2 %}
+                    {%- capture remaining_amount -%}{{ calculated_total_price | minus: free_item_threshold2 | abs | money }}{%- endcapture -%}
+                    <span class="shipping-bar__text text--small free_ship_text">
+                      {{ settings.gift_msg_before2 | replace: '[amount]', remaining_amount }}
+                    </span>
+                  {% elsif calculated_total_price < threshold_in_cents %}
+                    {%- capture remaining_amount -%}{{ calculated_total_price | minus: threshold_in_cents | abs | money }}{%- endcapture -%}
+                    <span class="shipping-bar__text text--small free_ship_text">
+                      {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+                    </span>
+                  {% endif %}
+                {% endif %}
+              {%- endif -%}
+            </free-shipping-bar>
+          {% else %}
+            <free-shipping-bar
+              threshold="{{ threshold_in_cents }}"
+              class="ed-free-shipping-bar shipping-bar"
+              style="--progress: {{ cart.total_price | times: 1.0 | divided_by: threshold_in_cents | at_most: 1 }};color: {{ settings.shipping_text_color }};"
+            >
+              <span
+                class="shipping-bar__progress"
+                style="color:{{ settings.shipping_bar_color }};background-color: {{ settings.rest_shipping_bar_color }};"
+              >
+                {% if settings.cart_show_free_shipping_threshold and settings.cart_free_shipping_threshold != '' %}
+                  <span
+                    class="shipping-bar__progress_shipping_icon shipping-bar__progress_gift_icon {% if cart.total_price >= threshold_in_cents %}active{% else %}{% endif %}"
+                    style="left:{{ threshold_in_cents | times: 1.0 | divided_by: threshold_in_cents | times: 100 }}%;"
+                  >
+                    {{ settings.progressbar_shipping_icon }}
+                  </span>
+                {% endif %}
+              </span>
+              {%- if calculated_total_price >= threshold_in_cents -%}
+                <span class="shipping-bar__text text--small free_ship_text">
+                  {{- 'cart.general.free_shipping' | t -}}
+                </span>
+              {%- else -%}
+                {%- capture remaining_amount -%}{{ calculated_total_price | minus: threshold_in_cents | abs | money }}{%- endcapture -%}
+                <span class="shipping-bar__text text--small free_ship_text">
+                  {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+                </span>
+              {%- endif -%}
+            </free-shipping-bar>
+          {% endif %}
+          <!-- Shipping bar and free gift end -->
+        {%- endif -%}
+      {%- endif -%}
+
+
+Step 4: Create snippet free-gift-cart.liquid
+
+{% assign free_item_threshold = settings.cart_free_item_threshold | times: 100 %}
+{% assign free_item_threshold2 = settings.cart_free_item_threshold2 | times: 100 %}
+{%- assign calculated_total_price = cart.total_price -%}
+
+{% assign enable_free_product = settings.enable_free_item %}
+{% assign enable_free_product2 = settings.enable_free_item2 %}
+
+{% assign gift_products = settings.free_products %}
+{% assign gift_products2 = settings.free_products2 %}
+
+{% assign product_products_vid = '' %}
+{% for gift_product in gift_products %}
+  {% assign vid = gift_product.selected_or_first_available_variant.id | json %}
+  {% assign product_products_vid = product_products_vid | append: vid | append: ',' %}
+{% endfor %}
+{% assign product_products_vid = product_products_vid | split: ',' %}
+
+{% assign product_products_vid2 = '' %}
+{% for gift_product in gift_products2 %}
+  {% assign vid = gift_product.selected_or_first_available_variant.id | json %}
+  {% assign product_products_vid2 = product_products_vid2 | append: vid | append: ',' %}
+{% endfor %}
+{% assign product_products_vid2 = product_products_vid2 | split: ',' %}
+
+{% assign gift_in_cart = false %}
+{% assign gift_in_cart2 = false %}
+
+{% for item in cart.items %}
+  {% assign item_vid = item.variant.id | json %}
+  {% if product_products_vid contains item_vid %}
+    {% assign gift_in_cart = true %}
+  {% endif %}
+  {% if product_products_vid2 contains item_vid %}
+    {% assign gift_in_cart2 = true %}
+  {% endif %}
+{% endfor %}
+
+{% if enable_free_product and gift_in_cart == false %}
+  <div class="cart-free-gift">
+    <div class="free_headline">{{ settings.cart_free_gift_headline }}</div>
+    <div class="free-gift-item-wrap {% if calculated_total_price >= free_item_threshold %} active {% endif %}">
+      {% for gift_product in gift_products %}
+        <div class="free-gift-product">
+          <div class="free-gift-product-image">
+            {% if gift_product.images[0].src != blank %}
+              {{ gift_product.images.first | image_url: width: 300 | image_tag }}
+            {% endif %}
+          </div>
+          <div class="free-gift-product-info">
+            <p class="gift-product-title">{{ gift_product.title }}</p>
+            <div class="price-wrap">
+              <span>{{ gift_product.compare_at_price | money }}</span> <span>Für dich <strong>gratis</strong></span>
+            </div>
+            <div
+              class="free-gift-action"
+              data-vid="{{ gift_product.selected_or_first_available_variant.id }}"
+              data-action="add"
+            >
+              hinzufügen
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% if enable_free_product2 and gift_in_cart == true and gift_in_cart2 == false %}
+  <div class="cart-free-gift">
+    <div class="free_headline">{{ settings.cart_free_gift_headline }}</div>
+    <div class="free-gift-item-wrap {% if calculated_total_price >= free_item_threshold2 %} active {% endif %}">
+      {% for gift_product in gift_products2 %}
+        <div class="free-gift-product">
+          <div class="free-gift-product-image">
+            {% if gift_product.images[0].src != blank %}
+              {{ gift_product.images.first | image_url: width: 300 | image_tag }}
+            {% endif %}
+          </div>
+          <div class="free-gift-product-info">
+            <p class="gift-product-title">{{ gift_product.title }}</p>
+            <div class="price-wrap">
+              <span>{{ gift_product.compare_at_price | money }}</span> <span>Für dich <strong>gratis</strong></span>
+            </div>
+            <div
+              class="free-gift-action"
+              data-vid="{{ gift_product.selected_or_first_available_variant.id }}"
+              data-action="add"
+            >
+              hinzufügen
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<style>
+    .cart-free-gift .free_headline,.cart-free-gift .price-wrap span,.cart-free-gift .gift-product-title{
+      color: {{settings.cart_free_gift_color}} !important;
+    }
+    .cart-free-gift{
+      background-color: {{settings.cart_free_gift_bg_color}} !important;
+    }
+  .cart-free-gift {
+    padding: 12px 20px;
+    position: relative;
+    z-index: 1000;
+  }
+  .cart-free-gift .free_headline {
+    padding: 2px 3px;
+    border-radius: 3px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .cart-free-gift .free-gift-product-image {
+    width: 67px;
+  }
+  .cart-free-gift .free-gift-product-image img {
+    max-width: 100%;
+  }
+  .cart-free-gift .gift-product-title {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+  }
+  .cart-free-gift .price-wrap span:first-child {
+    text-decoration: line-through;
+  }
+  .cart-free-gift .price-wrap {
+    dislay: flex;
+    gap: 5px;
+  }
+  .cart-free-gift .price-wrap span {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .cart-free-gift .free-gift-action {
+    display: inline-block;
+    padding: 5px 12px;
+    background-color: #000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .cart-free-gift .free-gift-product {
+    display: flex !important;
+    align-items: center;
+    padding: 12px 0;
+    border-radius: 3px;
+  }
+  .cart-free-gift .free-gift-product-info {
+    padding: 0 11px;
+  }
+
+  .cart-free-gift .slick-dots {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .cart-free-gift .slick-dots button {
+    display: none;
+  }
+  .cart-free-gift .slick-dots li {
+    width: 6px;
+    height: 6px;
+    background-color: #d9d9d9;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .cart-free-gift .slick-dots li:not(last-child) {
+    margin-right: 6px;
+  }
+  .cart-free-gift .slick-dots li.slick-active {
+    background-color: #000;
+  }
+  .cart-free-gift .slick-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+  .cart-free-gift .slick-arrow.slick-prev {
+    left: -15px;
+  }
+  .cart-free-gift .slick-arrow.slick-prev svg {
+    transform: rotate(180deg);
+  }
+  .cart-free-gift .slick-arrow.slick-next {
+    right: -15px;
+  }
+  .cart-free-gift .slick-arrow[aria-disabled="true"] {
+    display: none !important;
+  }
+  .shipping-bar__progress_gift_icon{
+    position: absolute;
+    top: 0;
+    width: 32px;
+    height:32px;
+    border-radius: 50%;
+    border:  1px solid #707070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    top: 0;
+    transform: translateY(-50%);
+    background-color: #fff;
+  }
+  .shipping-bar__progress_gift_icon svg{
+    width: 18px;
+    height: 18px;
+  }
+  body .shipping-bar__progress{
+    margin-top: 25px;
+    margin-bottom: 12px;
+  }
+  .free-gift-item-wrap{
+    opacity: 0.5;
+    pointer-events: none;
+
+  }
+  .free-gift-item-wrap.active{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .shipping-bar__progress_gift_icon.active{
+    border-color: {{settings.shipping_bar_color}};
+  }
+  /* free gift */
+
+   {% unless settings.cart_free_gift_show %}
+    .cart-free-gift {
+      display: none;
+    }
+    {% endunless %}
+
+</style>
+
+
+Step 5: In theme.js before CartDrawer class add this code
+
+function initializeFreeGiftSlider() {
+    if (free_product_ids.length > 1) {
+      $(".free-gift-item-wrap").slick({
+        adaptiveHeight: true,
+        infinite: false,
+        dots: true,
+        arrows: true,
+        nextArrow:
+          '<button class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"> <path d="M1 13L7 7L1 1" stroke="black" stroke-linecap="round" stroke-linejoin="round"/> </svg></button>',
+        prevArrow:
+          '<button class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none"> <path d="M1 13L7 7L1 1" stroke="black" stroke-linecap="round" stroke-linejoin="round"/> </svg></button>',
+      });
+    }
+  }
+  if (enable_free_product) {
+    initializeFreeGiftSlider();
+  }
+  function update_cart() {
+    fetch(`${window.themeVariables.routes.cartUrl}.js`).then(
+      async (response2) => {
+        const cartContent = await response2.json();
+        document.documentElement.dispatchEvent(
+          new CustomEvent("cart:refresh", {
+            bubbles: true,
+            detail: {
+              cart: cartContent,
+            },
+          })
+        );
+      }
+    );
+  }
+
+  function addFreeGiftItem(id) {
+    let formData = {
+      items: [
+        {
+          id: id,
+          quantity: 1,
+        },
+      ],
+    };
+    fetch(window.Shopify.routes.root + "cart/add.js", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    }).then((response) => {
+      update_cart();
+    });
+  }
+
+  function modifyCartElements() {
+    fetch("/cart.js").then(async (res) => {
+      const cartContent = await res.json();
+      let total_price = cartContent.original_total_price;
+      let freeItemInCart = false,
+        freeItemInCart2 = false;
+      let free_product_id, free_product_id2;
+
+      for (let item of cartContent.items) {
+        if (free_product_ids.includes(item.id.toString())) {
+          freeItemInCart = true;
+          free_product_id = item.id;
+        }
+        if (free_product_ids2.includes(item.id.toString())) {
+          freeItemInCart2 = true;
+          free_product_id2 = item.id;
+        }
+      }
+
+      if (
+        total_price >= free_item_threshold &&
+        !freeItemInCart &&
+        free_gift_auto_add
+      ) {
+        addFreeGiftItem(free_product_ids[0]);
+      } else if (total_price < free_item_threshold && freeItemInCart) {
+        fetch("/cart/change.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: free_product_id.toString(), quantity: 0 }),
+        }).then(() => update_cart());
+      }
+
+      if (
+        total_price >= free_item_threshold2 &&
+        !freeItemInCart2 &&
+        free_gift_auto_add2
+      ) {
+        addFreeGiftItem(free_product_ids2[0]);
+      } else if (total_price < free_item_threshold2 && freeItemInCart2) {
+        fetch("/cart/change.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: free_product_id2.toString(),
+            quantity: 0,
+          }),
+        }).then(() => update_cart());
+      }
+    });
+  }
+
+
+Step 6: In theme.js inside CartDrawer class inside connectedCallback() method add this code: 
+this.delegate.on("click", ".free-gift-action", async function (e) {
+        e.preventDefault();
+        var vid = this.getAttribute("data-vid");
+        addFreeGiftItem(vid);
+      });
+
+
+Step 7: In theme.js after this line this.innerHTML = fakeDiv.querySelector("cart-drawer").innerHTML; add this code 
+setTimeout(function () {
+          try {
+           
+            if (enable_free_product) {
+              modifyCartElements();
+              initializeFreeGiftSlider();
+            }
+          } catch (e) {}
+        }, 800);
+
+
+Step 8: In mini-cart.liquid file before footer add this code: 
+{% render 'free-gift-cart' %}
+

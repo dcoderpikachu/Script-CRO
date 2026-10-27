@@ -1,0 +1,871 @@
+Step: 1
+Create a section: ed-cro-bekannt-aus.liquid
+Paste this code:
+
+<style>
+   :root {
+      --space-top: 100px;
+      --space-bottom: 100px;
+      --space-top-mobile: 45px;
+      --space-bottom-mobile: 45px;
+      --text-color: rgba(0,0,0,0);
+      --heading-color: #282828;
+      --heading-size: 24px;
+      --heading-margin-bottom: 45px;
+      --heading-size-mobile: 18px;
+      --heading-margin-bottom-mobile: 30px;
+      --section-background: rgba(0,0,0,0);
+      --gutter: 50px;
+      --gutter-mobile: 5px;
+      --width: 140px;
+      --width-mobile: 100px;
+      --animation-duration: 30s;
+      --dot-size: 4px;
+      --dot-bg: #ffffff;
+    }
+  #shopify-section-{{ section.id }} {
+      {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+          {%- assign section_background = settings.background -%}
+      {%- else -%}
+          {%- assign section_background = section.settings.background -%}
+      {%- endif -%}
+
+      {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+          {%- assign text_color = settings.text_color -%}
+      {%- else -%}
+          {%- assign text_color = section.settings.text_color -%}
+      {%- endif -%}
+
+      --space-top: {{ section.settings.space_top -}}px;
+      --space-bottom: {{ section.settings.space_bottom -}}px;
+      --space-top-mobile: {{ section.settings.space_top_mobile -}}px;
+      --space-bottom-mobile: {{ section.settings.space_bottom_mobile -}}px;
+      --text-color: {{ text_color }};
+      --heading-color: {{ section.settings.heading_color }};
+      --heading-size: {{ section.settings.heading_size -}}px;
+      --heading-margin-bottom: {{ section.settings.heading_m_bottom -}}px;
+      --heading-size-mobile: {{ section.settings.heading_size_mobile -}}px;
+      --heading-margin-bottom-mobile: {{ section.settings.heading_m_bottom_mobile -}}px;
+      --section-background: {{ section_background }};
+      --gutter: {{ section.settings.item_gap -}}px;
+      --gutter-mobile: {{ section.settings.item_gap_mobile -}}px;
+      --width: {{  section.settings.item_width -}}px;
+      --width-mobile: {{  section.settings.item_width_mobile -}}px;
+      --animation-duration: {{ section.settings.animation_duration -}}s;
+      --dot-size: {{ section.settings.dots_size -}}px;
+      --dot-bg: {{ section.settings.dots_bg }};
+  }
+
+  .ed_logo_bar_wrapper {
+    color: var(--text-color);
+    background-color: var(--section-background);
+  }
+  @media (min-width: 1000px) {
+    .ed_logo_bar_wrapper {
+      padding-top: var(--space-top);
+      padding-bottom: var(--space-bottom);
+    }
+  }
+
+  @media (max-width: 999px) {
+    .ed_logo_bar_wrapper {
+      padding-top: var(--space-top-mobile);
+      padding-bottom: var(--space-bottom-mobile);
+    }
+  }
+
+
+  .ed_logo_bar_wrapper {
+      position: relative;
+      overflow: hidden;
+  }
+
+  .ed_logo__bar {
+      text-align: center;
+      margin: 0;
+  }
+  .ed_logo__bar a {
+      text-decoration: none;
+  }
+  .ed_logo_bar__item {
+      display: inline-block;
+      vertical-align: middle;
+  }
+  .ed_logo_bar_heading {
+      color: var(--heading-color);
+      line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+      .ed_logo_bar_heading {
+          font-size: var(--heading-size);
+          margin-bottom: var(--heading-margin-bottom);
+      }
+      .ed_logo_bar__item {
+          width: var(--width);
+          margin: 0px var(--gutter);
+      }
+      .ed_logo_bar__item-swiper {
+          width: var(--width);
+          margin: 0px;
+      }
+
+  }
+  @media (max-width: 767px) {
+      .ed_logo_bar_heading {
+          font-size: var(--heading-size-mobile);
+          margin-bottom: var(--heading-margin-bottom-mobile);
+      }
+      .ed_logo_bar__item {
+          width: var(--width-mobile);
+          margin: 0px var(--gutter-mobile);
+      }
+      .ed_logo_bar__item-swiper {
+          width: var(--width-mobile);
+          margin: 0px;
+      }
+  }
+  .ed_logo_bar__item-dot {
+      width: var(--dot-size);
+      min-width: var(--dot-size);
+      height: var(--dot-size);
+      min-height: var(--dot-size);
+      display: block;
+      background: var(--dot-bg);
+      margin: 0 auto;
+      border-radius: 50px;
+  }
+  .ed_logo_bar__item-swiper {
+      user-select: none;
+      display: inline-block;
+      vertical-align: middle;
+  }
+  .ed_logo_bar_swiper .swiper-wrapper {
+      align-items: center;
+  }
+  .ed_logo_bar__image {
+      display: flex;
+      margin: 0 auto;
+      max-width: 100%;
+  }
+  .ed_logo_bar__image svg {
+      stroke: #ddd;
+      background: #fafafa;
+      border-radius: 8px;
+  }
+  .ed_logo_bar__image__thumbnail {
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      border: 1.5px solid #fff;
+  }
+  @media (min-width: 768px) {
+      .ed_logo_bar__image__thumbnail {
+          width: var(--width);
+          height: var(--width);
+      }
+  }
+
+  @media (max-width: 767px) {
+      .ed_logo_bar__image__thumbnail {
+          width: var(--width-mobile);
+          height: var(--width-mobile);
+      }
+  }
+  .ed_logo_bar__image__thumbnail.circle {
+      border-radius: 100%;
+  }
+  .ed_logo_bar__image__thumbnail.rounded {
+      border-radius: 16px;
+  }
+
+  .ed_logo_bar__content {
+      width: 100%;
+      display: block;
+      margin-top: 12px;
+      color: var(--text-color);
+  }
+  .ed_logo_bar__link {
+      display: block;
+  }
+
+  @keyframes ed-marquee {
+      0% {
+          transform: translate3d(0, 0, 0);
+          visibility: visible;
+      }
+      100% {
+          transform: translate3d(-100%, 0, 0);
+      }
+  }
+  .ed_logo_bar_items_wrapper {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+  }
+  .ed_logo_bar_items_wrapper * {
+      white-space: nowrap;
+  }
+  .no-js .ed_logo_bar_items_wrapper {
+      flex-wrap: wrap;
+  }
+  .ed__marquee .ed_logo_bar_items_wrapper {
+      justify-content: center;
+      flex-wrap: nowrap;
+  }
+  .no-js .ed__marquee .ed_logo_bar_items_wrapper {
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  .ed_logo_bar__contents {
+      overflow: hidden;
+      width: 100%;
+  }
+  .ed_logo_bar__marquee {
+      display: inline-flex;
+      transition: opacity 0.5s linear;
+  }
+  .ed_logo__bar .ed_marquee__animated {
+      display: flex;
+      animation-name: ed-marquee;
+      animation-duration: var(--animation-duration);
+      animation-timing-function: linear;
+      animation-play-state: paused;
+      animation-iteration-count: infinite;
+      width: -moz-max-content;
+      width: max-content;
+      will-change: transform, padding, width;
+  }
+  {%- if section.settings.pause_animation_at_hover -%}
+      .ed_logo__bar .ed_marquee__animated:hover {
+          animation-play-state: paused;
+      }
+      .ed_logo__bar:hover .ed_marquee__animated,
+      .ed_logo_bar_inner > .ed_logo__bar:hover .ed_marquee__animated {
+          animation-play-state: paused;
+      }
+  {%- endif -%}
+
+  .ed_logo_bar_inner > .ed_logo__bar .ed_marquee__animated {
+      animation-play-state: running;
+  }
+  .ed_logo_bar_wrapper .swiper-button-next:after,
+  .ed_logo_bar_wrapper .swiper-button-prev:after {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      font-size: 10px;
+      line-height: 1;
+      color: var(--text-color);
+  }
+  @media (min-width: 768px) {
+      .ed_logo_bar_wrapper .swiper-button-next:after,
+      .ed_logo_bar_wrapper .swiper-button-prev:after {
+          width: 25px;
+          height: 25px;
+      }
+  }
+
+  @media (max-width: 767px) {
+      .ed_logo_bar_wrapper .swiper-button-next:after,
+      .ed_logo_bar_wrapper .swiper-button-prev:after {
+          width: 20px;
+          height: 20px;
+      }
+  }
+</style>
+
+<div class="ed_logo_bar_wrapper">
+  <div class="{{ section.settings.logo_bar_layout }}">
+    <div class="ed_logo_bar_inner">
+      <div class="ed_logo__bar ed__marquee">
+        {%- if section.settings.heading_content != blank -%}
+          <h4 class="heading ed_logo_bar_heading" {{ section.shopify_attributes }}>
+            {{ section.settings.heading_content }}
+          </h4>
+        {%- endif -%}
+
+        <div class="ed_logo_bar__contents">
+          {%- if section.settings.logo_bar_style == 'scroll' and section.blocks.size > 5 -%}
+            <!-- Marqueue -->
+            <div class="ed_logo_bar__marquee">
+              {% for i in (1..12) %}
+                <div class="ed_logo_bar_items_wrapper ed_marquee__animated">
+                  {%- for block in section.blocks -%}
+                    <div class="ed_logo_bar__item" data-logo-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
+                      {%- capture item_contents -%}
+                          {%- case block.settings.image_style -%}
+                              {%- when 'image' -%}
+                                  <div class="ed_logo_bar__image">
+                                      {%- if block.settings.image != blank -%}
+                                          {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: '100vw', alt: block.settings.image.alt -}}
+                                      {%- else -%}
+                                          {{ 'image' | placeholder_svg_tag }}
+                                      {%- endif -%}
+                                  </div>
+                              {%- when 'thumbnail' -%}
+                                  <div class="ed_logo_bar__image ed_logo_bar__image__thumbnail {{ block.settings.thumbnail_style }}" {% if block.settings.image != blank %} style="background-image: url({{ block.settings.image | image_url: width: block.settings.image.width }})" {% endif%}>
+                                  </div>
+                          {%- endcase -%}
+                          
+                          {%- if block.settings.content != blank -%}
+                              <div class="ed_logo_bar__content">
+                                  {{ block.settings.content }}
+                              </div>
+                          {%- endif -%}
+                      {%- endcapture -%}
+
+                      {% if block.settings.url != blank %}
+                        <a
+                          href="{{ block.settings.url }}"
+                          class="ed_logo_bar__link"
+                          {% if section.settings.open_new_tab %}
+                            target="_blank"
+                          {% endif %}
+                          title="logo"
+                        >
+                          {{ item_contents }}
+                        </a>
+                      {%- else -%}
+                        {{ item_contents }}
+                      {% endif %}
+                    </div>
+
+                    {%- if section.settings.show_dots -%}
+                      <span class="ed_logo_bar__item-dot"></span>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {% endfor %}
+            </div>
+            <!-- END:Marqueue -->
+          {%- elsif section.settings.logo_bar_style == 'slides' and section.blocks.size > 5 -%}
+            <!-- Slider -->
+            <div class="swiper ed_logo_bar_swiper_{{ section.id }}">
+              <div class="swiper-wrapper">
+                {%- for block in section.blocks -%}
+                  <div class="swiper-slide">
+                    <div
+                      class="ed_logo_bar__item-swiper"
+                      data-logo-index="{{ forloop.index }}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- capture item_contents -%}
+                          {%- case block.settings.image_style -%}
+                              {%- when 'image' -%}
+                                  <div class="ed_logo_bar__image">
+                                      {%- if block.settings.image != blank -%}
+                                          {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: '100vw', alt: block.settings.image.alt -}}
+                                      {%- else -%}
+                                          {{ 'image' | placeholder_svg_tag }}
+                                      {%- endif -%}
+                                  </div>
+                              {%- when 'thumbnail' -%}
+                                  <div class="ed_logo_bar__image ed_logo_bar__image__thumbnail {{ block.settings.thumbnail_style }}" {% if block.settings.image != blank %} style="background-image: url({{ block.settings.image | image_url: width: block.settings.image.width }})" {% endif%}>
+                                  </div>
+                          {%- endcase -%}
+                          
+                          
+                          {%- if block.settings.content != blank -%}
+                              <div class="ed_logo_bar__content">
+                                  {{ block.settings.content }}
+                              </div>
+                          {%- endif -%}
+                      {%- endcapture -%}
+
+                      {% if block.settings.url != blank %}
+                        <a
+                          href="{{ block.settings.url }}"
+                          class="ed_logo_bar__link"
+                          {% if section.settings.open_new_tab %}
+                            target="_blank"
+                          {% endif %}
+                          title="logo"
+                        >
+                          {{ item_contents }}
+                        </a>
+                      {%- else -%}
+                        {{ item_contents }}
+                      {% endif %}
+                    </div>
+
+                    {%- if section.settings.show_dots -%}
+                      <span class="ed_logo_bar__item-dot"></span>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+              <div class="swiper-button-next ed_logo_bar_swiper-next"></div>
+              <div class="swiper-button-prev ed_logo_bar_swiper-prev"></div>
+            </div>
+
+            <script>
+              (function() {
+                  function loadResource(type, url) {
+                      return new Promise((resolve) => {
+                      if (document.querySelector(`${type === "css" ? "link" : "script"}[href="${url}"], [src="${url}"]`)) {
+                          return resolve(); // Already loaded
+                      }
+
+                      const element = document.createElement(type === "css" ? "link" : "script");
+
+                      if (type === "css") {
+                          element.rel = "stylesheet";
+                          element.href = url;
+                      } else {
+                          element.src = url;
+                          element.onload = resolve;
+                      }
+
+                      document.head.appendChild(element);
+                          if (type === "css") resolve(); // For CSS, resolve immediately
+                      });
+                  }
+
+                  async function initLogoBar() {
+                      await loadResource("css", "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css");
+                      await loadResource("js", "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js");
+
+                      // Wait until Swiper is available before initializing
+                      if (typeof Swiper !== 'undefined') {
+                          new Swiper(".ed_logo_bar_swiper_{{ section.id }}", {
+                              slidesPerView: {{ section.settings.slides_per_view_mobile }},
+                              spaceBetween: 15,
+                              loop: true,
+                              {% if section.settings.auto_play_slides %}
+                              autoplay: {
+                                  delay: {{ section.settings.autoplay_delay }},
+                                  disableOnInteraction: false,
+                                  pauseOnMouseEnter: true,
+                              },
+                              {% endif %}
+
+                              navigation: {
+                                  nextEl: ".ed_logo_bar_swiper-next",
+                                  prevEl: ".ed_logo_bar_swiper-prev",
+                              },
+                              breakpoints: {
+                                  768: {
+                                      slidesPerView: {{ section.settings.slides_per_view }},
+                                      spaceBetween: 20,
+                                  }
+                              },
+                          });
+                      }
+                  }
+
+                  document.addEventListener('DOMContentLoaded', initLogoBar);
+                  if (typeof Shopify !== "undefined" && Shopify.designMode) {
+                    document.addEventListener("shopify:section:load", initLogoBar);
+                  }
+              })();
+            </script>
+            <!-- END:Slider -->
+          {%- else -%}
+            <!-- Static -->
+            <div class="ed_logo_bar_items_wrapper">
+              {%- for block in section.blocks -%}
+                <div class="ed_logo_bar__item" data-logo-index="{{ forloop.index }}" {{ block.shopify_attributes }}>
+                  {%- capture item_contents -%}
+                  {%- case block.settings.image_style -%}
+                      {%- when 'image' -%}
+                          <div class="ed_logo_bar__image">
+                              {%- if block.settings.image != blank -%}
+                                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: '100vw', alt: block.settings.image.alt -}}
+                              {%- else -%}
+                                  {{ 'image' | placeholder_svg_tag }}
+                              {%- endif -%}
+                          </div>
+                      {%- when 'thumbnail' -%}
+                          <div class="ed_logo_bar__image ed_logo_bar__image__thumbnail {{ block.settings.thumbnail_style }}" {% if block.settings.image != blank %} style="background-image: url({{ block.settings.image | image_url: width: block.settings.image.width }})" {% endif%}>
+                          </div>
+                  {%- endcase -%}
+                                      
+                                      
+                  {%- if block.settings.content != blank -%}
+                          <div class="ed_logo_bar__content">
+                              {{ block.settings.content }}
+                          </div>
+                      {%- endif -%}
+                  {%- endcapture -%}
+
+                  {% if block.settings.url != blank %}
+                    <a
+                      href="{{ block.settings.url }}"
+                      class="ed_logo_bar__link"
+                      {% if section.settings.open_new_tab %}
+                        target="_blank"
+                      {% endif %}
+                      title="logo"
+                    >
+                      {{ item_contents }}
+                    </a>
+                  {%- else -%}
+                    {{ item_contents }}
+                  {% endif %}
+                </div>
+
+                {%- if forloop.index != section.blocks.size and section.settings.show_dots -%}
+                  <span class="ed_logo_bar__item-dot"></span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <!-- END:Static -->
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "CRO | Bekannt aus",
+  "class": "ed-logo-bar-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading_content",
+      "label": "Content",
+      "default": "Lorem ipsum"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#282828"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Font-size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 10,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Font-size (mobile)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "heading_m_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "heading_m_bottom_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Margin bottom (mobile)",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Logo Bar settings"
+    },
+    {
+      "type": "select",
+      "id": "logo_bar_layout",
+      "label": "Layout width",
+      "options": [
+        {
+          "value": "wrapper",
+          "label": "Container"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "logo_bar_style",
+      "label": "Style above 5 items",
+      "options": [
+        {
+          "value": "scroll",
+          "label": "Scroll"
+        },
+        {
+          "value": "slides",
+          "label": "Slides"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "scroll"
+    },
+    {
+      "type": "range",
+      "id": "dots_size",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Dots size",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "dots_bg",
+      "label": "Dots BG",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "open_new_tab",
+      "label": "Open at new tab",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "item_width",
+      "min": 40,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Item width",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Item gap",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Scroll settings"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "label": "Animation duration",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_animation_at_hover",
+      "label": "Pause animation at hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slides settings"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view",
+      "min": 5,
+      "max": 15,
+      "step": 1,
+      "label": "Slides per view",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_mobile",
+      "min": 2,
+      "max": 10,
+      "step": 0.5,
+      "label": "Slides per view (mobile)",
+      "default": 2.5
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_play_slides",
+      "label": "Autoplay slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Delay",
+      "min": 500,
+      "max": 5000,
+      "step": 500,
+      "default": 1500
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top space",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom space",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "item_width_mobile",
+      "min": 40,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Item width (mobile)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "item_gap_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Item gap (mobile)",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "image_style",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "image",
+              "label": "Image"
+            },
+            {
+              "value": "thumbnail",
+              "label": "Thumbnail"
+            }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "select",
+          "id": "thumbnail_style",
+          "label": "Thumbnail style",
+          "options": [
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "circle",
+              "label": "Circle"
+            }
+          ],
+          "default": "rounded"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | Bekannt aus",
+      "settings": {
+        "text_color": "#282828"
+      },
+      "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }, { "type": "item" }, { "type": "item" }]
+    }
+  ]
+}
+{% endschema %}

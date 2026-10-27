@@ -1,0 +1,122 @@
+Step: 1
+Go to snippet: product-item.liquid
+search product-item__info and add below code  before the end of closing  </div>
+Paste this code:
+
+{%- if settings.show_cro_type_badges and product.metafields.standard.cro_type_badges != blank -%}
+    <style>
+        .cro_type_badges__wrap {
+            margin-top: 16px;
+        }
+        
+        span.cro_type_badges {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: {{ settings.cro_type_badges_alignment }};
+            gap: 8px;
+            color: {{ settings.cro_type_badges_text_color }};
+            background: {{ settings.cro_type_badges_background }};
+            border-radius: {{ settings.cro_type_badges_border_radius -}}px;
+            padding: 3px 16px;
+            font-size: calc(var(--base-font-size) - 1px);
+        }
+
+        span.cro_type_badges svg {
+            display: flex;
+            height: auto;
+            width: calc(var(--base-font-size) + 0px);
+        }
+        span.cro_type_badges svg * {
+            color: {{ settings.cro_type_badges_svg }};
+            stroke: {{ settings.cro_type_badges_svg }};
+        }
+    </style>
+
+    <div class="cro_type_badges__wrap">
+        <span class="cro_type_badges">
+            {{ product.metafields.standard.cro_type_badges }}
+        </span>
+    </div>
+{%- endif -%}
+
+
+Step: 2
+Go to settings_schema.json
+Search "name": "Collections" and add below schema at the end
+Paste this code:
+{
+    "type": "header",
+    "content": "CRO | Type Badges"
+},
+{
+    "type": "checkbox",
+    "id": "show_cro_type_badges",
+    "label": "Show Type Badges",
+    "default": false
+},
+{
+    "type": "color",
+    "id": "cro_type_badges_svg",
+    "label": "SVG Color",
+    "default": "#323232"
+},
+{
+    "type": "color",
+    "id": "cro_type_badges_text_color",
+    "label": "Text Color",
+    "default": "#1E1F21"
+}, 
+{
+    "type": "color",
+    "id": "cro_type_badges_background",
+    "label": "Background",
+    "default": "#F7F9EE"
+},
+{
+    "type": "range",
+    "id": "cro_type_badges_border_radius",
+    "label": "Border-radius",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "default": 100
+},
+{
+    "type": "select",
+    "id": "cro_type_badges_alignment",
+    "label": "Alignment",
+    "options": [
+        {
+            "value": "flex-start",
+            "label": "Left"
+        },
+        {
+            "value": "center",
+            "label": "Center"
+        },
+        {
+            "value": "flex-end",
+            "label": "Right"
+        }
+    ],
+    "default": "center"
+},
+
+
+
+
+
+Step: 3
+Metafield setup:
+
+Name
+CRO | Type Badges
+Namespace and key
+standard.cro_type_badges
+
+Description
+Support HTML, SVG and text. use <img src=""> tag for image.
+
+Multi-line text

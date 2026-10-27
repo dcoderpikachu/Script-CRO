@@ -1,0 +1,323 @@
+Universal setup guide — CRO | PDP | Passform (theme-agnostic, OS 2.0‑first)
+
+Prerequisites
+- Duplicate your live theme before editing.
+- Create a product metafield (Admin → Settings → Custom data → Products):
+  - Name: CRO | PDP | Passform
+  - Namespace and key: standard.cro_pdp_passform
+  - Type: Single line text
+
+
+Step: 1 Create the snippet
+Create snippets/cro_pdp_passform.liquid with the following content:
+
+{% if product.metafields.standard.cro_pdp_passform.value != blank %}
+  {% assign passform_meta = product.metafields.standard.cro_pdp_passform.value %}
+
+  <style>
+    .hr-size-label {
+        position: relative;
+        overflow: hidden;
+        min-width: auto;
+        display: flex;
+        align-items: center;
+        padding-left: {{ block.settings.space_left_right -}}px;
+        padding-right: {{ block.settings.space_left_right -}}px;
+        text-align: {{ block.settings.text_alignment }};
+        color: {{ block.settings.text_color }};
+        background-color: {{ block.settings.background }};
+        font-size: {{ block.settings.text_size -}}px;
+        margin-left: {{ block.settings.gap_left_right -}}px;
+        margin-right: {{ block.settings.gap_left_right -}}px;
+        height: {{ block.settings.height -}}px;
+        {% if block.settings.border %}
+            border-bottom: 1px solid {{ block.settings.border_color }};
+        {% endif %}
+        justify-content: {{ block.settings.text_alignment }};
+    }
+    .hr-size-label.position-overlay {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    .hr-size-label-inner {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        justify-content: {{ block.settings.text_alignment }};
+        gap: 6px;
+    }
+
+    .hr-size-label-inner span {
+        display: flex;
+    }
+
+    .hr-size-label-inner p {
+        margin: 0;
+    }
+    .hr-size-label-inner span img,
+    .hr-size-label-inner span svg {
+        width: {{ block.settings.icon_as_size -}}px;
+        height: auto;
+    }
+
+    @media (min-width: 1000px) {
+        .hr-size-label.hr-size-label-mobile {
+            display: none;
+        }
+    }
+
+    {% if block.settings.hide_image_whitespaces == true  %}
+        .product__media-list .product__media-item {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        @media screen and (max-width: 740px) {
+            .product:not(.product--featured) {
+                margin-top: 0;
+                margin-bottom: 36px;
+            }
+            .hr-size-label {
+                margin-left: -24px;
+                margin-right: -24px;
+            }
+        }
+    {% endif %}
+  </style>
+
+  <div class="hr-size-label position-{{ block.settings.fit_position }}  {%if block.settings.show_at_mobile_only %} hr-size-label-mobile{% endif %}">
+    <div class="hr-size-label-inner">
+      {%- if block.settings.icon_as_image != blank -%}
+        <span>
+          {{-
+            block.settings.icon_as_image
+            | image_url: width: block.settings.icon_as_image.width
+            | image_tag: sizes: '100vw', widths: '25,50,75,100', alt: block.settings.icon_as_image.alt
+          -}}
+        </span>
+      {%- elsif block.settings.icon_as_svg != blank -%}
+        <span>
+          {{ block.settings.icon_as_svg }}
+        </span>
+      {%- endif -%}
+
+      <p>
+        {{ passform_meta }}
+      </p>
+    </div>
+  </div>
+{% endif %}
+
+
+
+
+Step: 2 Register a block in your product section schema
+Find your product section file (e.g., sections/main-product.liquid). In its {% schema %} blocks array, add:
+{
+    "name": "CRO | PDP | Passform",
+    "type": "cro_pdp_passform",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "Metafield (Required)",
+          "info": "This block require product metafield with [standard.cro_pdp_passform](/admin/settings/custom_data/product/metafields) namesampe & key."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_as_image",
+          "label": "Icon as Image",
+          "info": "18px x 18px"
+        },
+        {
+          "type": "html",
+          "id": "icon_as_svg",
+          "label": "Icon as SVG",
+          "info": "It will replace Icon as Image",
+          "default": "<svg width=\"16\" height=\"16\" viewbox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M14.7075 4.5856L11.4144 1.2931C11.3215 1.20021 11.2113 1.12653 11.0899 1.07626C10.9686 1.026 10.8385 1.00012 10.7072 1.00012C10.5758 1.00012 10.4458 1.026 10.3245 1.07626C10.2031 1.12653 10.0929 1.20021 10 1.2931L1.2925 9.99997C1.19962 10.0928 1.12594 10.2031 1.07567 10.3244C1.0254 10.4458 0.999527 10.5758 0.999527 10.7072C0.999527 10.8385 1.0254 10.9686 1.07567 11.0899C1.12594 11.2112 1.19962 11.3215 1.2925 11.4143L4.58563 14.7068C4.67849 14.7997 4.78874 14.8734 4.91008 14.9237C5.03142 14.9739 5.16147 14.9998 5.29281 14.9998C5.42415 14.9998 5.55421 14.9739 5.67555 14.9237C5.79689 14.8734 5.90714 14.7997 6 14.7068L14.7075 5.99997C14.8004 5.90711 14.8741 5.79686 14.9243 5.67552C14.9746 5.55418 15.0005 5.42412 15.0005 5.29278C15.0005 5.16144 14.9746 5.03139 14.9243 4.91005C14.8741 4.78871 14.8004 4.67846 14.7075 4.5856ZM5.2925 14L2 10.7068L4 8.70685L5.64625 10.3537C5.69271 10.4002 5.74786 10.437 5.80855 10.4622C5.86925 10.4873 5.9343 10.5002 6 10.5002C6.0657 10.5002 6.13075 10.4873 6.19145 10.4622C6.25215 10.437 6.3073 10.4002 6.35375 10.3537C6.40021 10.3073 6.43706 10.2521 6.4622 10.1914C6.48734 10.1307 6.50028 10.0657 6.50028 9.99997C6.50028 9.93427 6.48734 9.86922 6.4622 9.80852C6.43706 9.74783 6.40021 9.69268 6.35375 9.64622L4.70688 7.99997L6 6.70685L7.64625 8.35372C7.74007 8.44754 7.86732 8.50025 8 8.50025C8.13268 8.50025 8.25993 8.44754 8.35375 8.35372C8.44757 8.2599 8.50028 8.13265 8.50028 7.99997C8.50028 7.86729 8.44757 7.74004 8.35375 7.64622L6.70688 5.99997L8 4.70685L9.64625 6.35372C9.69271 6.40018 9.74786 6.43703 9.80855 6.46217C9.86925 6.48731 9.9343 6.50025 10 6.50025C10.0657 6.50025 10.1308 6.48731 10.1914 6.46217C10.2521 6.43703 10.3073 6.40018 10.3538 6.35372C10.4002 6.30727 10.4371 6.25212 10.4622 6.19142C10.4873 6.13072 10.5003 6.06567 10.5003 5.99997C10.5003 5.93427 10.4873 5.86922 10.4622 5.80852C10.4371 5.74783 10.4002 5.69268 10.3538 5.64622L8.70688 3.99997L10.7069 1.99997L14 5.2931L5.2925 14Z\" fill=\"#011931\"></path>\n</svg>"
+        },
+        {
+          "type": "range",
+          "id": "icon_as_size",
+          "min": 5,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon width",
+          "default": 18
+        },
+        {
+          "type": "checkbox",
+          "id": "show_at_mobile_only",
+          "label": "Hide at Desktop",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "fit_position",
+          "label": "Fit Position",
+          "options": [
+            {
+              "value": "overlay",
+              "label": "Overlay"
+            },
+            {
+              "value": "below_image",
+              "label": "Below Image"
+            }
+          ],
+          "default": "below_image"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Height",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "space_left_right",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Space left-right",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Text size",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text-align",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text",
+          "default": "#282828"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#F7F7F7"
+        },
+        {
+          "type": "checkbox",
+          "id": "border",
+          "label": "Border bottom",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#E0E6E9"
+        },
+        {
+          "type": "range",
+          "id": "gap_left_right",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap left-right",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_image_whitespaces",
+          "label": "Hide image whitespaces",
+          "default": false,
+          "info": "it will remove whitespace from top, left, right of the image and it will make the image section full-width"
+        }
+    ]
+},
+
+
+
+
+Step: 3 Render the block in the section
+Most OS 2.0 product sections iterate blocks. Add a case:
+{% for block in section.blocks %}
+  {% case block.type %}
+    {% when 'cro_pdp_passform' %}
+      {% render 'cro_pdp_passform', product: product, block: block, section: section %}
+  {% endcase %}
+{% endfor %}
+
+If your theme uses if/elsif:
+
+{% for block in section.blocks %}
+  {% if block.type == 'cro_pdp_passform' %}
+    {% render 'cro_pdp_passform', product: product, block: block, section: section %}
+  {% endif %}
+{% endfor %}
+
+
+Placement cookbook: search for these wrappers
+ Media: product__media-list-wrapper, product__media-list, product-media, product-gallery, gallery
+ Content: product__info-wrapper, product__info, product-form
+
+
+
+
+
+Step: 4
+Create Product Metafields with below details:
+Metafield:
+Name: CRO | PDP | Passform
+Namespace and key: standard.cro_pdp_passform
+Single line text
+
+
+
+
+
+QA checklist
+ Desktop: visible/hidden per setting; alignment correct; border optional.
+ Mobile: optional full-bleed variant; overlay position correct.
+ Icon: SVG overrides Image; alt text present for image.
+
+
+Troubleshooting
+ Not visible: ensure metafield has a value and block is added.
+
+
+Uninstall notes
+ Remove the block from the product section.
+ Delete snippets/cro_pdp_passform.liquid.

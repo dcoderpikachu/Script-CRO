@@ -1,0 +1,714 @@
+Step: 1
+Go to section: main-product.liquid
+Add new schema block "CRO | Collapsible box"
+Paste this code:
+
+{
+    "type": "cro_pdp_collapsible_box",
+    "name": "CRO | Collapsible box",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "Metafields (Required)",
+          "info": "This section relies on the proper setup of [Metaobjects](/admin/settings/custom_data) and [Metafields](/admin/settings/custom_data/product/metafields) in your store. It will only be visible on the product page once you have added Metaobject and Metafield values for a product."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show border",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#F4F5F6"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#006692"
+        },
+        {
+          "type": "color",
+          "id": "background",
+          "label": "Background",
+          "default": "#F1FAFF"
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "content_size",
+          "min": 12,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Content size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "corner_radius",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_collapsible",
+          "label": "Enable Collapsible",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "open_collapsible_as_default",
+          "label": "Open collapsible as default",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Tooltip settings"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_text_color",
+          "label": "Text color",
+          "default": "#282828"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_background",
+          "label": "Background",
+          "default": "#F4F5F6"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_border_color",
+          "label": "Border color",
+          "default": "#282828"
+        },
+        {
+          "type": "color",
+          "id": "tooltip_arrow_color",
+          "label": "Arrow color",
+          "default": "#282828"
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "heading_size_mobile",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading size (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "content_size_mobile",
+          "min": 12,
+          "max": 18,
+          "step": 1,
+          "unit": "px",
+          "label": "Content size (mobile)",
+          "default": 14
+        }
+    ]
+},
+
+
+
+Step: 2
+Create a  snippet: ed-cro-pdp-collapsible-box.liquid
+Paste this code:
+
+{% if product.metafields.standard.pdp_collapsible_box.value %}
+  {% assign collapsible_box_data = product.metafields.standard.pdp_collapsible_box.value %}
+  <style>
+    .ed_cro_pdp_collapsible_box_wrap {
+        color: {{ block.settings.text_color }};
+        background: {{  block.settings.background }};
+        {% if block.settings.show_border %}
+            border: 1px solid {{ block.settings.border_color }};
+        {% endif %}
+        padding: 12px 16px;
+        border-radius: {{ block.settings.corner_radius }}px;
+    }
+    @media (min-width:1000px) {
+        .ed_cro_pdp_collapsible_box_wrap  {
+            margin-top: {{  block.settings.space_top -}}px;
+            margin-bottom: {{ block.settings.space_bottom -}}px;
+        }
+        .ed-collapsible-toggle-heading {
+            font-size: {{ block.settings.heading_size }}px;
+        }
+        .ed-collapsible__content p {
+            font-size: {{ block.settings.content_size }}px;
+        }
+    }
+    @media (max-width:999px) {
+        .ed_cro_pdp_collapsible_box_wrap  {
+            margin-top: {{  block.settings.space_top_mobile -}}px;
+            margin-bottom: {{ block.settings.space_bottom_mobile -}}px;
+        }
+        .ed-collapsible-toggle-heading {
+            font-size: {{ block.settings.heading_size_mobile }}px;
+        }
+        .ed-collapsible__content p {
+            font-size: {{ block.settings.content_size_mobile }}px;
+        }
+    }
+
+    /* SKB Universal Collapsible  */
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible-toggle {
+        user-select: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        padding: 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        overflow: visible;
+        background: none;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        touch-action: manipulation;
+        gap: 8px;
+    }
+    .ed_cro_pdp_collapsible_box_wrap ed-collapsible {
+        border-bottom: 1px solid #e4e4e4;
+        display: block;
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap ed-collapsible-wrap ed-collapsible:last-child {
+        border-bottom: 0;
+    }
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible__content {
+        padding: 8px 0 12px;
+    }
+    .ed-collapsible-toggle--header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .ed-collapsible-toggle-heading {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap .ed-animated-arrow-down {
+        width: 24px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        background: transparent !important;
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible-toggle .ed-animated-arrow-down svg {
+        transition: transform 0.2s ease-in-out;
+        transform: rotate(0deg);
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible-toggle[aria-expanded='true'] .ed-animated-arrow-down svg {
+        transform: rotate(180deg);
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible-content {
+        overflow: hidden;
+        transition: height 0.5s ease, opacity 0.25s ease;
+        opacity: 1;
+    }
+    .ed-collapsible__content {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .ed_cro_pdp_collapsible_box_wrap .ed-collapsible-content:not([data-open]) {
+        display: block;
+        height: 0;
+        opacity: 0;
+    }
+    /* END:SKB Universal Collapsible   */
+
+    /* SKB Tooltip */
+    .skb_tooltip {
+        cursor: help;
+        position: relative;
+        display: flex;
+        font-size: 13px;
+    }
+
+    .skb_tooltip:before,
+    .skb_tooltip:after {
+        left: 50%;
+        opacity: 0;
+        position: absolute;
+        z-index: -100;
+    }
+    .skb_tooltip:before {
+        border-style: solid;
+        border-width: 1em 0.75em 0 0.75em;
+        border-color: {{ block.settings.tooltip_arrow_color }} transparent transparent transparent;
+        bottom: calc(100% + 4px);
+        content: '';
+        margin-left: -0.5em;
+    }
+
+    .skb_tooltip:after {
+        background: {{  block.settings.tooltip_background }};
+        border-radius: 0.25em;
+        bottom: 180%;
+        border: 1px solid {{ block.settings.tooltip_border_color }};
+        color: {{ block.settings.tooltip_text_color }};
+        content: attr(data-tip);
+        margin-left: -12.75em;
+        padding: 1em;
+        width: 26.5em;
+    }
+
+    .skb_tooltip:hover:before,
+    .skb_tooltip:focus:before,
+    .skb_tooltip:hover:after,
+    .skb_tooltip:focus:after {
+        opacity: 1;
+        z-index: 100;
+    }
+    @media (max-width: 999px) {
+        .skb_tooltip:after {
+        width: 20rem;
+        left: auto;
+        right: -16px;
+        }
+    }
+    /* END:SKB Tooltip */
+    .ed_cro_pdp_collapsible_box__content .ed-collapsible-toggle--header {
+        justify-content: space-between;
+    }
+    .ed_cro_pdp_collapsible_box__content_details {
+        padding: 12px 0 4px;
+    }
+
+        /* collapsible video */
+        .ed_cro_pdp_collapsible_box__video {
+            position: relative;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .cro_pdp_collapsible_box_video_poster_shadow {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+        }
+
+        button.cro_pdp_collapsible_box_video_control_btn {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        button.cro_pdp_collapsible_box_video_control_btn > svg {
+            width: 45px;
+            height: auto;
+        }
+        .ed_cro_pdp_collapsible_box__video.active .cro_pdp_collapsible_box_video_poster_shadow,
+        .ed_cro_pdp_collapsible_box__video.active button.cro_pdp_collapsible_box_video_control_btn{
+            display: none;
+        }
+
+        .ed_cro_pdp_collapsible_box__video > video {
+            aspect-ratio: 16 /9;
+            object-fit: cover;
+        }
+    /* END: collapsible video */
+
+        @media (max-width: 767px) {
+            .ed-collapsible-wrap .skb_tooltip:after {width: 18rem;}
+        }
+  </style>
+
+    {% capture collapsible_heading %}
+        <div class="ed-collapsible-toggle--header">
+            <span class="ed-collapsible-toggle-heading">{{ collapsible_box_data.title }}</span>
+            {% if collapsible_box_data.tooltip_content %}
+                <span class="skb_tooltip" data-tip="{{ collapsible_box_data.tooltip_content }}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.75 11.25C8.75 11.3983 8.70602 11.5433 8.6236 11.6667C8.54119 11.79 8.42406 11.8861 8.28701 11.9429C8.14997 11.9997 7.99917 12.0145 7.85368 11.9856C7.7082 11.9567 7.57456 11.8852 7.46967 11.7803C7.36478 11.6754 7.29335 11.5418 7.26441 11.3963C7.23547 11.2508 7.25033 11.1 7.30709 10.963C7.36386 10.8259 7.45999 10.7088 7.58333 10.6264C7.70666 10.544 7.85167 10.5 8 10.5C8.19892 10.5 8.38968 10.579 8.53033 10.7197C8.67098 10.8603 8.75 11.0511 8.75 11.25ZM8 4.5C6.62125 4.5 5.5 5.50937 5.5 6.75V7C5.5 7.13261 5.55268 7.25979 5.64645 7.35355C5.74022 7.44732 5.86739 7.5 6 7.5C6.13261 7.5 6.25979 7.44732 6.35356 7.35355C6.44732 7.25979 6.5 7.13261 6.5 7V6.75C6.5 6.0625 7.17313 5.5 8 5.5C8.82688 5.5 9.5 6.0625 9.5 6.75C9.5 7.4375 8.82688 8 8 8C7.86739 8 7.74022 8.05268 7.64645 8.14645C7.55268 8.24021 7.5 8.36739 7.5 8.5V9C7.5 9.13261 7.55268 9.25979 7.64645 9.35355C7.74022 9.44732 7.86739 9.5 8 9.5C8.13261 9.5 8.25979 9.44732 8.35356 9.35355C8.44732 9.25979 8.5 9.13261 8.5 9V8.955C9.64 8.74562 10.5 7.83625 10.5 6.75C10.5 5.50937 9.37875 4.5 8 4.5ZM14.5 8C14.5 9.28558 14.1188 10.5423 13.4046 11.6112C12.6903 12.6801 11.6752 13.5132 10.4874 14.0052C9.29973 14.4972 7.99279 14.6259 6.73192 14.3751C5.47104 14.1243 4.31285 13.5052 3.40381 12.5962C2.49477 11.6872 1.8757 10.529 1.6249 9.26809C1.37409 8.00721 1.50282 6.70028 1.99479 5.51256C2.48676 4.32484 3.31988 3.30968 4.3888 2.59545C5.45772 1.88122 6.71442 1.5 8 1.5C9.72335 1.50182 11.3756 2.18722 12.5942 3.40582C13.8128 4.62441 14.4982 6.27665 14.5 8ZM13.5 8C13.5 6.9122 13.1774 5.84883 12.5731 4.94436C11.9687 4.03989 11.1098 3.33494 10.1048 2.91866C9.09977 2.50238 7.9939 2.39346 6.92701 2.60568C5.86011 2.8179 4.8801 3.34172 4.11092 4.11091C3.34173 4.8801 2.8179 5.86011 2.60568 6.927C2.39347 7.9939 2.50238 9.09977 2.91867 10.1048C3.33495 11.1098 4.0399 11.9687 4.94437 12.5731C5.84884 13.1774 6.91221 13.5 8 13.5C9.45819 13.4983 10.8562 12.9184 11.8873 11.8873C12.9184 10.8562 13.4983 9.45818 13.5 8Z" fill="currentColor"/>
+                    </svg>
+                </span>
+            {% endif %}
+        </div>
+    {% endcapture %}
+
+    {% capture collapsible_contents %}
+        {% if collapsible_box_data.content %}
+            <p>
+                {{  collapsible_box_data.content }}
+            </p>
+        {% endif %}
+
+    <div class="ed_cro_pdp_collapsible_box__video">
+        <div class="cro_pdp_collapsible_box_video_poster_shadow"></div>
+        <button class="cro_pdp_collapsible_box_video_control_btn">
+            <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M26.25 14.6856C26.2507 14.9827 26.1745 15.2749 26.0289 15.5339C25.8832 15.7928 25.673 16.0096 25.4188 16.1633L9.66 25.8036C9.39431 25.9663 9.09001 26.0551 8.77852 26.0609C8.46703 26.0666 8.15965 25.9891 7.88813 25.8364C7.61918 25.686 7.39515 25.4667 7.23905 25.2011C7.08296 24.9354 7.00045 24.6329 7 24.3248V5.04639C7.00045 4.73826 7.08296 4.43581 7.23905 4.17015C7.39515 3.90449 7.61918 3.68519 7.88813 3.53482C8.15965 3.38208 8.46703 3.30459 8.77852 3.31036C9.09001 3.31613 9.39431 3.40494 9.66 3.56764L25.4188 13.2079C25.673 13.3616 25.8832 13.5784 26.0289 13.8374C26.1745 14.0963 26.2507 14.3885 26.25 14.6856Z" fill="white"/>
+            </svg>
+        </button>
+
+        {% assign video_poster = collapsible_box_data.video_thumbnail | image_url: width: collapsible_box_data.video_thumbnail.width %}
+        {% assign video_url = collapsible_box_data.video  | file_url %}
+
+        {% if video_poster != blank %}
+            <video poster="{{ video_poster }}" playsinline>
+              <source src="{{ video_url }}" type="video/mp4">
+          </video>
+          {% else %}
+            <video playsinline>
+              <source src="{{ video_url }}" type="video/mp4">
+            </video>
+        {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="ed_cro_pdp_collapsible_box_wrap">
+    {% if block.settings.enable_collapsible %}
+      <ed-collapsible-wrap class="ed-collapsible-wrap">
+        <ed-collapsible>
+          <button
+            class="ed-collapsible-toggle {% if block.settings.open_collapsible_as_default %}is-open{% endif %}"
+            aria-controls="block-id-pdp-collapsible-item"
+            {% if block.settings.open_collapsible_as_default %}
+              aria-expanded="true"
+            {% else %}
+              aria-expanded="false"
+            {% endif %}
+          >
+            {{ collapsible_heading }}
+            <span class="ed-animated-arrow-down">
+              <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.3538 1.35354L6.35375 6.35354C6.30732 6.40003 6.25217 6.43691 6.19147 6.46207C6.13077 6.48723 6.06571 6.50018 6 6.50018C5.9343 6.50018 5.86923 6.48723 5.80853 6.46207C5.74783 6.43691 5.69269 6.40003 5.64625 6.35354L0.646253 1.35354C0.552433 1.25972 0.499725 1.13247 0.499725 0.99979C0.499725 0.867108 0.552433 0.73986 0.646253 0.646039C0.740074 0.552219 0.867321 0.499512 1 0.499512C1.13269 0.499512 1.25993 0.552219 1.35375 0.646039L6 5.29291L10.6463 0.646039C10.6927 0.599584 10.7479 0.562734 10.8086 0.537593C10.8693 0.512452 10.9343 0.499512 11 0.499512C11.0657 0.499512 11.1308 0.512452 11.1915 0.537593C11.2521 0.562734 11.3073 0.599584 11.3538 0.646039C11.4002 0.692495 11.4371 0.747645 11.4622 0.808342C11.4873 0.869038 11.5003 0.934092 11.5003 0.99979C11.5003 1.06549 11.4873 1.13054 11.4622 1.19124C11.4371 1.25193 11.4002 1.30708 11.3538 1.35354Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </button>
+
+          <div
+            id="block-id-pdp-collapsible-item"
+            class="ed-collapsible-content"
+            {% if block.settings.open_collapsible_as_default %}
+              data-open
+            {% endif %}
+          >
+            <div class="ed-collapsible__content">
+              {{ collapsible_contents }}
+            </div>
+          </div>
+        </ed-collapsible>
+      </ed-collapsible-wrap>
+
+      <script>
+        // Universal Collapsible by Rana
+        (function () {
+          const singleOpen = false; // Set to false for multiple open accordions
+          function openContent(element) {
+            element.style.overflow = 'hidden';
+            const height = element.scrollHeight;
+
+            const keyframes = {
+              height: ['0px', `${height}px`],
+              visibility: ['hidden', 'visible'],
+              opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+            };
+
+            const animation = element.animate(keyframes, {
+              duration: 500,
+              direction: 'normal',
+              easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+              fill: 'forwards',
+            });
+
+            animation.onfinish = () => {
+              element.style.overflow = 'visible';
+              element.style.height = `${height}px`;
+              element.setAttribute('data-open', '');
+            };
+
+            if (element.hasAttribute('data-animate-items')) {
+              element.animate(
+                {
+                  opacity: [0, 1],
+                  transform: ['translateY(10px)', 'translateY(0)'],
+                },
+                {
+                  duration: 250,
+                  delay: 250,
+                  easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+                  fill: 'forwards',
+                }
+              );
+            }
+          }
+
+          function closeContent(element) {
+            const height = element.scrollHeight;
+            element.style.overflow = 'hidden';
+
+            const animation = element.animate(
+              {
+                height: [`${height}px`, '0px'],
+                visibility: ['visible', 'hidden'],
+                opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+              },
+              {
+                duration: 500,
+                direction: 'normal',
+                easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+                fill: 'forwards',
+              }
+            );
+
+            animation.onfinish = () => {
+              element.style.overflow = 'hidden';
+              element.removeAttribute('data-open');
+            };
+          }
+
+          function initCollapsibleToggle(scope = document) {
+            const wraps = scope.querySelectorAll('ed-collapsible-wrap');
+
+            wraps.forEach((wrap) => {
+              const toggles = wrap.querySelectorAll('.ed-collapsible-toggle');
+
+              toggles.forEach((toggle) => {
+                if (toggle.dataset.initialized === 'true') return;
+
+                toggle.dataset.initialized = 'true';
+
+                const contentId = toggle.getAttribute('aria-controls');
+                const content = wrap.querySelector(`#${contentId}`);
+                if (!content) return;
+
+                // Keep initial state as-is (open or closed)
+                const isInitiallyOpen = content.hasAttribute('data-open');
+                toggle.setAttribute('aria-expanded', String(isInitiallyOpen));
+                toggle.classList.toggle('is-open', isInitiallyOpen);
+
+                toggle.addEventListener('click', () => {
+                  const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+                  // If singleOpen is true, close all other open accordions in the same wrap
+                  if (singleOpen && !isOpen) {
+                    const openToggles = wrap.querySelectorAll('.ed-collapsible-toggle[aria-expanded="true"]');
+                    openToggles.forEach((otherToggle) => {
+                      if (otherToggle !== toggle) {
+                        const otherContentId = otherToggle.getAttribute('aria-controls');
+                        const otherContent = wrap.querySelector(`#${otherContentId}`);
+                        if (otherContent && otherContent.hasAttribute('data-open')) {
+                          otherToggle.setAttribute('aria-expanded', 'false');
+                          otherToggle.classList.remove('is-open');
+                          closeContent(otherContent);
+                        }
+                      }
+                    });
+                  }
+
+                  toggle.setAttribute('aria-expanded', String(!isOpen));
+                  toggle.classList.toggle('is-open', !isOpen);
+
+                  if (!isOpen) {
+                    openContent(content);
+                  } else {
+                    closeContent(content);
+                  }
+                });
+              });
+            });
+          }
+
+          // Initialize when DOM is ready
+          document.addEventListener('DOMContentLoaded', function () {
+            initCollapsibleToggle();
+          });
+
+          // Reinitialize for each section dynamically loaded
+          if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+            document.addEventListener('shopify:section:load', function (e) {
+              const section = e.target;
+              initCollapsibleToggle(section);
+            });
+          }
+        })();
+      </script>
+    {% else %}
+      <div class="ed_cro_pdp_collapsible_box__content">
+        {{ collapsible_heading }}
+        <div class="ed_cro_pdp_collapsible_box__content_details">
+          {{ collapsible_contents }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    // Play/Pause video in collapsible box
+    (function () {
+      const container = document.querySelector('.ed_cro_pdp_collapsible_box__video');
+      if (!container) return; // Exit if container is not found
+
+      const playButton = container.querySelector('.cro_pdp_collapsible_box_video_control_btn');
+      const video = container.querySelector('video');
+
+      // Exit if button or video is missing
+      if (!playButton || !video) return;
+
+      // Play video and show active state
+      playButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        video.play();
+        container.classList.add('active');
+      });
+
+      // Pause video and remove active state
+      video.addEventListener('click', function () {
+        if (!video.paused) {
+          video.pause();
+          container.classList.remove('active');
+        }
+      });
+    })();
+  </script>
+{% endif %}
+
+
+
+Step: 3 
+To show collapsible Box
+Paste this code:
+{%- when 'cro_pdp_collapsible_box' -%}
+    {% render 'ed-cro-pdp-collapsible-box', product: product, block: block, section: section %}
+
+
+
+
+Step: 4
+Create Metafield & Metaobjects with below details:
+
+Metaobject:
+============
+settings/custom_data/metaobjects/create
+
+Name: CRO | PDP | Collapsible Box
+
+
+Fields
+======
+Name: Name
+Key: cro_pdp_collapsible_box.name
+Single line text
+Description: Enter name of the product to identify this entry.
+Use this field as display name
+Required field
+
+
+Name: Title
+Key: cro_pdp_collapsible_box.title
+Single line text
+
+
+Name: Content
+Key: cro_pdp_collapsible_box.content
+Multi-line text
+
+Name: Tooltip content
+Key: cro_pdp_collapsible_box.tooltip_content
+Multi-line text
+
+Name: Video Thumbnail
+Key: cro_pdp_collapsible_box.video_thumbnail
+File > Images
+
+Name: Video
+Key: cro_pdp_collapsible_box.video
+File > Videos
+
+
+
+Metafield
+=========
+Name: PDP | Collapsible Box
+Namespace and key: standard.pdp_collapsible_box
+Types: Mixed reference > CRO | PDP | Collapsible Box

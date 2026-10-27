@@ -1,0 +1,757 @@
+Read this first (non-developer, theme-agnostic, ~5 minutes)
+What you will do:
+- Create a new snippet `snippets/ed-cro-cross-selling.liquid` and paste the code in Step 1.
+- Add a new block definition to your product section's schema (Step 2).
+- Render that block so it shows on the product page (Step 3).
+- Create the product metafield and assign products (Steps 4 and 6).
+- Add the block in the Theme Editor and save (Step 5).
+How to open the code editor:
+- Shopify Admin > Online Store > Themes > … > Edit code
+Make a safe backup first:
+- In Themes, click the … menu next to your live theme > Duplicate
+Finding the right files (names vary by theme):
+- Product section file (in `sections/`) is commonly:
+  - `main-product.liquid` (Focal/Dawn-like)
+  - or `product.liquid`, `product-template.liquid`, `product-main.liquid`
+  - If you see `templates/product.json`, open it to see which section name it loads (e.g., "main": "main-product"), then open that section in `sections/`.
+- Product form file is commonly:
+  - `snippets/product-form.liquid` (Focal/Dawn)
+  - or `snippets/main-product-form.liquid`
+  - or the form is inline inside the product section; search for `{% form 'product' %}`.
+Tip: Use the search box in the code editor and try: main-product, product-form, section.blocks, case block.type
+
+Step: 1
+Create a new snippet: ed-cro-cross-selling.liquid
+Paste this code:
+
+{% assign cross_selling_products = product.metafields.standard.cro_up_cross_selling.value %}
+
+{% if cross_selling_products != blank %}
+  {%- capture list_of_products -%}
+    {% for product in cross_selling_products %}
+      <div class="swiper-slide cro_crossselling_product">
+        <div class="cro_crossselling_product-image">
+          {% if product.featured_image != blank %}
+            {{ product.featured_image | image_url: width: 100 | image_tag }}
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'cro_crossselling_product-svg' }}
+          {% endif %}
+        </div>
+
+        <div class="cro_crossselling_product-info">
+          <div class="cro_crossselling_product-info-details">
+            <a href="{{ product.url }}" class="cro_crossselling_product--title">
+              {{- product.title }}
+              {%- if product.selected_or_first_available_variant.title != 'Default Title' -%}
+                ({{ product.selected_or_first_available_variant.title }})
+              {%- endif -%}
+            </a>
+
+            <div class="cro_crossselling_product_price">
+              <span class="cro_crossselling_product_price--regular">
+                {{- product.selected_or_first_available_variant.price | money -}}
+              </span>
+              <span class="cro_crossselling_product_price--compare">
+                {{- product.selected_or_first_available_variant.compare_at_price | money -}}
+              </span>
+            </div>
+          </div>
+          <div class="cro_crossselling_product-info-cta">
+            {%- capture product_form_id -%}product-form-{{ section.id }}-{{ product.id }}{%- endcapture -%}
+
+            {%- form 'product', product, is: 'product-form', id: product_form_id -%}
+              <input
+                type="hidden"
+                disabled
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}"
+              >
+
+              <button
+                is="loader-button"
+                form="{{ product_form_id }}"
+                type="submit"
+                data-product-add-to-cart-button
+                data-button-content="{{ block.settings.cro_up_cross_atc_title }}"
+                class="cro_crossselling_product-atc-button"
+                {% unless product.selected_or_first_available_variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {{  block.settings.cro_up_cross_atc_title }}
+              </button>
+            {%- endform -%}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {%- endcapture -%}
+
+  <style>
+    .cro_cross_selling_wrap {
+      display: none;
+    }    
+    cro-cross-selling.cro_cross_selling_wrap.active {
+      display: block;
+    }
+    @media (min-width:1000px) {
+        .cro_cross_selling_wrap  {
+            margin-top: {{  block.settings.cross_selling_space_top -}}px;
+            margin-bottom: {{ block.settings.cross_selling_space_bottom -}}px;
+        }
+    }
+    @media (max-width:999px) {
+        .cro_cross_selling_wrap  {
+            margin-top: {{  block.settings.cross_selling_space_top_mobile -}}px;
+            margin-bottom: {{ block.settings.cross_selling_space_bottom_mobile -}}px;
+        }
+    }
+
+    .cro_cross_selling__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cro_cross_selling__header-title {
+      margin: 0;
+      line-height: normal;
+      flex: auto;
+    }
+
+    .cro_cross_selling__header-controls {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: auto;
+      flex: 1 1 auto;
+      gap: 8px;
+    }
+
+    .swiper-button-next.croCrossSellingSwiper-next,
+    .swiper-button-prev.croCrossSellingSwiper-prev {
+      width: 24px;
+      height: 24px;
+      color: #1a1a1a;
+      background-color: #e8e8e8;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: unset;
+      margin-top: auto;
+      user-select: none;
+    }
+
+    .swiper-button-next.croCrossSellingSwiper-next {
+      order: 2;
+    }
+
+    .swiper-button-next.croCrossSellingSwiper-next:after,
+    .swiper-button-prev.croCrossSellingSwiper-prev:after {
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .swiper-button-next.croCrossSellingSwiper-next.swiper-button-disabled,
+    .swiper-button-prev.croCrossSellingSwiper-prev.swiper-button-disabled {
+      opacity: 0.5;
+    }
+    .swiper-button-next.croCrossSellingSwiper-next:not(.swiper-button-disabled):hover,
+    .swiper-button-prev.croCrossSellingSwiper-prev:not(.swiper-button-disabled):hover {
+      background-color: #1a1a1a;
+      color: #fff;
+    }
+    /* cross-selling-main */
+    .cro_crossselling_product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      user-select: none;
+    }
+
+    .cro_crossselling_product-image {
+      flex: 0 1 auto;
+    }
+
+    .cro_crossselling_product-info {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .cro_crossselling_product-image img {
+      width: 60px;
+      height: auto;
+    }
+
+    .cro_crossselling_product-info-details {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cro_crossselling_product--title {
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 1.5;
+      display: block;
+    }
+
+    .cro_crossselling_product_price {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    span.cro_crossselling_product_price--compare {
+      position: relative;
+      color: #747474;
+    }
+
+    .cro_crossselling_product-info-cta {
+      flex: 0 0 auto;
+    }
+
+    button.cro_crossselling_product-atc-button {
+      background: rgb(var(--primary-button-background));
+        color: rgb(var(--primary-button-text-color));
+        border-radius: 0;
+        display: block;
+        cursor: pointer;
+        border: none;
+        font-weight: normal;
+        font-size: 24px;
+        position: relative;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        line-height: 1;
+    }
+    button.cro_crossselling_product-atc-button span.loader-button__text {
+        margin-top: -3px;
+    }
+    button.cro_crossselling_product-atc-button .spinner svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    span.cro_crossselling_product_price--compare:before {
+      position: absolute;
+      inset-block-start: 50%;
+      width: 100%;
+      transform: rotate(-15deg);
+      border-block-end: 1px solid #282828;
+      content: '';
+    }
+
+    .cro_cross_selling__main {
+      display: block;
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid #e3e3e3;
+      border-radius: 6px;
+    }
+
+    /* Stack layout */
+    .cro_cross_selling__main__stack .cro_crossselling_product:not(:last-child) {
+      padding-bottom: 16px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 16px;
+    }
+    /* collapsible css */
+    .ed-collapsible-toggle {
+      user-select: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid #e4e4e4;
+      padding: 21px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      overflow: visible;
+      background: none;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+    }
+
+    .ed-animated-arrow-down {
+      width: 24px;
+      height: 24px;
+      background: #e8e8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 500px;
+    }
+
+    .ed-collapsible-toggle .ed-animated-arrow-down svg {
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .ed-collapsible-toggle[aria-expanded='true'] .ed-animated-arrow-down svg {
+      transform: rotate(180deg);
+    }
+
+    .ed-collapsible-content {
+      overflow: hidden;
+      transition: height 0.5s ease, opacity 0.25s ease;
+      opacity: 1;
+    }
+
+    .ed-collapsible-content:not([data-open]) {
+      display: block;
+      height: 0;
+      opacity: 0;
+    }
+    .cro_cross_selling_wrap .ed-collapsible {
+      border: 1px solid #ddd;
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .cro_cross_selling_wrap button.ed-collapsible-toggle {
+      padding: 16px 16px;
+      background: #f6f6f6;
+      border-radius: 0;
+    }
+
+    .cro_cross_selling_wrap .ed-collapsible__content {
+      padding: 12px;
+    }
+
+    .cro_cross_selling_wrap button.ed-collapsible-toggle[aria-expanded='false'] {
+      border: none;
+    }
+    /* End:collapsible css */
+
+    .cro_cross_selling_wrap_normal_inner {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .cro_cross_selling_wrap_normal_inner p.heading {
+        font-weight: bold;
+        margin: 0;
+        font-size: 18px;
+        line-height: normal;
+    }
+
+    .cro_cross_selling_wrap_normal_inner .ed-collapsible__content {
+        background: #F4F4F4;
+    }
+  </style>
+
+  {%- if block.settings.cro_up_cross_selling_layout == 'slides' -%}
+    <cro-cross-selling class="cro_cross_selling_wrap">
+      <div class="cro_cross_selling__header">
+        <p class="cro_cross_selling__header-title">{{ block.settings.cro_up_cross_title }}</p>
+        <div class="cro_cross_selling__header-controls">
+          <div class="swiper-button-next croCrossSellingSwiper-next"></div>
+          <div class="swiper-button-prev croCrossSellingSwiper-prev"></div>
+        </div>
+      </div>
+
+      <div class="cro_cross_selling__main">
+        <div class="swiper croCrossSellingSwiper">
+          <div class="swiper-wrapper">
+            {{ list_of_products }}
+          </div>
+        </div>
+
+        <script>
+          function loadResource(type, url) {
+            return new Promise((resolve) => {
+              if (document.querySelector(`${type === 'css' ? 'link' : 'script'}[href="${url}"], [src="${url}"]`)) {
+                return resolve(); // If already loaded, resolve immediately
+              }
+
+              const element = document.createElement(type === 'css' ? 'link' : 'script');
+
+              if (type === 'css') {
+                element.rel = 'stylesheet';
+                element.href = url;
+              } else {
+                element.src = url;
+                element.onload = resolve; // Resolve when script is loaded
+              }
+
+              document.head.appendChild(element);
+              if (type === 'css') resolve(); // Resolve immediately for CSS
+            });
+          }
+
+          async function initSwiper() {
+            await loadResource('css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
+            await loadResource('js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js');
+
+            // Initialize Swiper after script is loaded
+            new Swiper('.croCrossSellingSwiper', {
+              slidesPerView: 1,
+              spaceBetween: 0,
+              loop: false,
+              navigation: {
+                nextEl: '.croCrossSellingSwiper-next',
+                prevEl: '.croCrossSellingSwiper-prev',
+              },
+            });
+          }
+
+          // Run the function to load resources and initialize Swiper
+          initSwiper();
+        </script>
+      </div>
+    </cro-cross-selling>
+  {% elsif block.settings.cro_up_cross_selling_layout == 'stack' %}
+    <cro-cross-selling class="cro_cross_selling_wrap">
+      <ed-collapsible class="ed-collapsible">
+        {% assign unique_id = section.id %}
+
+        <button
+          class="ed-collapsible-toggle"
+          aria-controls="block-id-{{ unique_id }}"
+          aria-expanded="{% if block.settings.cro_up_cross_open_stack %}true{% else %}false{% endif %}"
+        >
+          <span class="heading">{{ block.settings.cro_up_cross_title }}</span>
+          <span class="ed-animated-arrow-down">
+            <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 5.2998L4 2.2998L1 5.2998" stroke="#1A1A1A" stroke-width="1.5" />
+            </svg>
+          </span>
+        </button>
+
+        <div
+          id="block-id-{{ unique_id }}"
+          class="ed-collapsible-content"
+          {% if block.settings.cro_up_cross_open_stack %}
+            data-open
+          {% endif %}
+        >
+          <div class="ed-collapsible__content">
+            <div class="cro_cross_selling__main__stack">
+              {{ list_of_products }}
+            </div>
+          </div>
+        </div>
+      </ed-collapsible>
+
+      <script>
+        function openContent(element) {
+          element.style.overflow = 'hidden';
+          const height = element.scrollHeight;
+
+          const keyframes = {
+            height: ['0px', `${height}px`],
+            visibility: ['hidden', 'visible'],
+            opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+          };
+
+          const animation = element.animate(keyframes, {
+            duration: 500,
+            direction: 'normal',
+            easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+            fill: 'forwards',
+          });
+
+          animation.onfinish = () => {
+            element.style.overflow = 'visible';
+            element.style.height = `${height}px`;
+            element.setAttribute('data-open', '');
+          };
+
+          if (element.hasAttribute('data-animate-items')) {
+            element.animate(
+              {
+                opacity: [0, 1],
+                transform: ['translateY(10px)', 'translateY(0)'],
+              },
+              {
+                duration: 250,
+                delay: 250,
+                easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+                fill: 'forwards',
+              }
+            );
+          }
+        }
+
+        function closeContent(element) {
+          const height = element.scrollHeight;
+
+          element.style.overflow = 'hidden';
+
+          const animation = element.animate(
+            {
+              height: [`${height}px`, '0px'],
+              visibility: ['visible', 'hidden'],
+              opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+            },
+            {
+              duration: 500,
+              direction: 'normal',
+              easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+              fill: 'forwards',
+            }
+          );
+
+          animation.onfinish = () => {
+            element.style.overflow = 'hidden';
+            element.removeAttribute('data-open');
+          };
+        }
+
+        function initCollapsibleToggle(scope = document) {
+          const toggles = scope.querySelectorAll('.ed-collapsible-toggle');
+
+          toggles.forEach((toggle) => {
+            // Prevent re-initializing the same toggle
+            if (toggle.dataset.initialized === 'true') return;
+
+            toggle.dataset.initialized = 'true';
+
+            const contentId = toggle.getAttribute('aria-controls');
+            const content = scope.querySelector(`#${contentId}`);
+            if (!content) return;
+
+            toggle.addEventListener('click', () => {
+              const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+              toggle.setAttribute('aria-expanded', String(!isOpen));
+              toggle.classList.toggle('is-open', !isOpen);
+
+              if (!isOpen) {
+                openContent(content);
+              } else {
+                closeContent(content);
+              }
+            });
+          });
+        }
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+          initCollapsibleToggle();
+        });
+
+        // Re-initialize on Shopify section load
+        if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+          document.addEventListener('shopify:section:load', function (e) {
+            const section = e.target;
+            initCollapsibleToggle(section);
+          });
+        }
+      </script>
+    </cro-cross-selling>
+  {% elsif block.settings.cro_up_cross_selling_layout == 'normal' %}
+    <cro-cross-selling class="cro_cross_selling_wrap normal">
+      <div class="cro_cross_selling_wrap_normal_inner">
+        <p class="heading">{{ block.settings.cro_up_cross_title }}</p>
+        <div class="ed-collapsible__content">
+          <div class="cro_cross_selling__main__stack">
+            {{ list_of_products }}
+          </div>
+        </div>
+      </div>
+    </cro-cross-selling>
+  {%- endif -%}
+  
+  <script>
+    document.addEventListener("cart:updated", function() {
+      const crossSelling = document.querySelector("cro-cross-selling.cro_cross_selling_wrap");
+      if (crossSelling) {
+        crossSelling.classList.add("active");
+      }
+    });
+
+    document.addEventListener("variant:added", function() {
+      const crossSelling = document.querySelector("cro-cross-selling.cro_cross_selling_wrap");
+      if (crossSelling) {
+        crossSelling.classList.add("active");
+      }
+    });
+  </script>
+{% endif %}
+
+
+
+
+Step: 2
+Where to paste (safe and theme-agnostic):
+- Open your product section file in `sections/` (see top guide for finding it).
+- Scroll to the very bottom where you see `{% schema %}` and JSON content, ending with `{% endschema %}`.
+- Inside that JSON, find the `"blocks": [ ... ]` array. If you don’t see `blocks`, add one (most product sections have it). Do NOT remove existing content.
+- Paste the following JSON object as a new item inside the `blocks` array. Ensure there is a comma between items, but never after the last one.
+- Tip: If you get a red error in the editor, you likely have a missing or extra comma or a quote. Compare carefully.
+Add new schema block "CRO | Cross selling"
+Paste this block code:
+{
+    "type": "cro_cross_selling",
+    "name": "CRO | Cross selling",
+    "limit": 1,
+    "settings": [
+        {
+          "type": "header",
+          "content": "CRO | Up/Cross-Selling"
+        },
+        {
+          "type": "range",
+          "id": "cross_selling_space_top",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "cross_selling_space_bottom",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Metafield (Required)",
+          "info": "This feature requires [product metafield](/admin/settings/custom_data/product/metafields) to be set up with the following configuration:  Name: CRO | Up/Cross-Selling, Namespace and key: standard.cro_up_cross_selling, Select type: product, List of products"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "cro_up_cross_title",
+          "label": "Heading",
+          "default": "Buy it with"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "cro_up_cross_atc_title",
+          "label": "ATC Text",
+          "default": "+ Add"
+        },
+        {
+          "type": "select",
+          "id": "cro_up_cross_selling_layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "normal",
+              "label": "Normal"
+            },
+            {
+              "value": "stack",
+              "label": "Collapsible"
+            },
+            {
+              "value": "slides",
+              "label": "Slides"
+            }
+          ],
+          "default": "slides"
+        },
+        {
+          "type": "checkbox",
+          "id": "cro_up_cross_open_stack",
+          "label": "Open collapsible as default",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "cross_selling_space_top_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space top (mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "cross_selling_space_bottom_mobile",
+          "min": -16,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Space bottom (mobile)",
+          "default": 16
+        }
+    ]
+},
+
+
+
+
+Step: 3
+Where to paste (themes differ):
+- Preferred: `snippets/product-form.liquid` (Focal/Dawn). Paste the loop anywhere AFTER the opening `{% form 'product' %}` area renders, so the block shows near the Add to cart.
+- If your theme has `snippets/main-product-form.liquid`, paste there similarly.
+- If there is no product-form snippet: open your product section (from Step 2), find `{% form 'product' %}` … `{% endform %}` and paste the loop immediately AFTER the form closes so the widget shows below the main product add to cart.
+- If nothing renders after adding the block in Step 5, move this render higher/lower in the section to your desired spot.
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'cro_cross_selling' -%}
+    {% render 'ed-cro-cross-selling', product: product, block: block,  section: section %}
+    {%- endcase -%}
+  {%- endfor -%}
+  
+
+
+
+
+Step: 4
+Create Product Metafield with below details:
+
+How to create metafield (click-path):
+- Shopify Admin > Settings > Custom data > Products > Add definition
+- Name: "CRO | Up/Cross-Selling"
+- Namespace and key: standard.cro_up_cross_selling
+- Type: Product
+- Check "List of products" (multi-select)
+- Save
+
+
+
+
+Step:5 
+- Online Store > Themes > Customize
+- Open a product page from the preview selector (top center)
+- In the left sidebar, click your main product section (e.g., Product information/Main product)
+- Click "Add block" and select "CRO | Cross selling"
+- Adjust settings (Heading, ATC text, Layout, spacing). Save.
+
+
+Step: 6
+Assign products to the metafield:
+- Shopify Admin > Products > open a product
+- Scroll to Metafields (bottom of page)
+- Find "CRO | Up/Cross-Selling"
+- Select one or more products to recommend
+- Save
+
+Troubleshooting (common issues):
+- Block not visible: Ensure you added the block in Customize (Step 5) and assigned metafield products (Step 6). Also add items to cart or change variant to trigger visibility on first load; or remove the "active on events" behavior by removing the bottom script in the snippet if you want always-on.
+- JSON error in `{% schema %}`: You likely misplaced a comma or quote. Each block in `blocks` needs commas between them, but not after the last. Quotes must wrap all keys/strings.
+- I cannot find `main-product.liquid`: Open `templates/product.json` and note the section handle under "sections" (e.g., "main": "main-product"). Then open `sections/<that-name>.liquid`.
+- My theme lacks `product-form.liquid`: Paste the render loop into the section near `{% form 'product' %}` or create `snippets/product-form.liquid` and include it where the theme includes the form.
+- Styling looks off: Adjust margins in the block settings. You can tweak CSS inside the snippet later if needed.

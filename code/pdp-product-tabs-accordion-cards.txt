@@ -1,0 +1,2040 @@
+Step: 1
+Create a new section cro_pdp_product_tabs.liquid
+Paste this code:
+<style>
+  :root {
+    --space-top: 100px;
+    --space-bottom: 100px;
+    --text-color: {{ settings.text_color.red }}, {{ settings.text_color.green }}, {{ settings.text_color.blue }};
+    --section-background: {{ settings.background.red }}, {{ settings.background.green }}, {{ settings.background.blue }};
+    --subheading-font-size: 14px;
+    --subheading-line-height: 1;
+    --heading-font-size: 45px;
+    --heading-weight: 600;
+    --heading-line-height: 1;
+    --heading-letter-spacing: -0.3px;
+    --heading-space-top: 20px;
+    --heading-space-bottom: 24px;
+    --content-font-size: 18px;
+    --content-line-height: 1.7;
+    --content-letter-spacing: 0;
+    --content-space-top: 0;
+    --content-space-bottom: 32px;
+    --modal-title-size: 36px;
+    --modal-item-heading-size: 28px;
+    --modal-item-content-size: 18px;
+    --image-corner-radius: 16px;
+    --collapsible-title-size: 16px;
+    --collapsible-content-size: 16px;
+    --collapsible-row-gap: 24px;
+    --collapsible-column-gap: 24px;
+    --collapsible-croner-radius: 16px;
+    --collapsible-background: 238, 238, 238;
+    --modal-item-image-radius: 16px;
+    --modal-button-bg: 238, 238, 238;
+
+  }
+  #shopify-section-{{ section.id }} {
+    {%- if section.settings.text_color == 'rgba(0,0,0,0)' -%}
+        {%- assign text_color = settings.text_color -%}
+    {%- else -%}
+        {%- assign text_color = section.settings.text_color -%}
+    {%- endif -%}
+    {%- if section.settings.background == 'rgba(0,0,0,0)' -%}
+        {%- assign section_background = settings.background -%}
+    {%- else -%}
+        {%- assign section_background = section.settings.background -%}
+    {%- endif %}
+
+    {%- if section.settings.collapsible_text_color == 'rgba(0,0,0,0)' -%}
+        {%- assign collapsible_text_color = settings.text_color -%}
+    {%- else -%}
+        {%- assign collapsible_text_color = section.settings.collapsible_text_color -%}
+    {%- endif %}
+    {%- if section.settings.collapsible_background == 'rgba(0,0,0,0)' -%}
+        {%- assign collapsible_background = settings.background -%}
+    {%- else -%}
+        {%- assign collapsible_background = section.settings.collapsible_background -%}
+    {%- endif %}
+
+    {%- if section.settings.modal_button_color == 'rgba(0,0,0,0)' -%}
+        {%- assign modal_button_color = settings.text_color -%}
+    {%- else -%}
+        {%- assign modal_button_color = section.settings.modal_button_color -%}
+    {%- endif %}
+    {%- if section.settings.modal_button_background == 'rgba(0,0,0,0)' -%}
+        {%- assign modal_button_background = settings.background -%}
+    {%- else -%}
+        {%- assign modal_button_background = section.settings.modal_button_background -%}
+    {%- endif %}
+
+    {%- if section.settings.modal_popup_text_color == 'rgba(0,0,0,0)' -%}
+        {%- assign modal_popup_text_color = settings.text_color -%}
+    {%- else -%}
+        {%- assign modal_popup_text_color = section.settings.modal_popup_text_color -%}
+    {%- endif -%}
+    {%- if section.settings.modal_popup_background == 'rgba(0,0,0,0)' -%}
+        {%- assign modal_popup_background = settings.background -%}
+    {%- else -%}
+        {%- assign modal_popup_background = section.settings.modal_popup_background -%}
+    {%- endif %}
+
+    --space-top: {{ section.settings.space_top_mobile -}}px;
+    --space-bottom: {{ section.settings.space_bottom_mobile -}}px;
+    --heading-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+    --text-color: {{ text_color.red }}, {{ text_color.green }}, {{ text_color.blue }};
+    --section-background: {{ section_background.red }}, {{ section_background.green }}, {{ section_background.blue }};
+    --collapsible-title-size: {{ section.settings.collapsible_title_size -}}px;
+    --collapsible-content-size: {{ section.settings.collapsible_content_size -}}px;
+    --collapsible-croner-radius: {{ section.settings.collapsible_corner_radius -}}px;
+    --collapsible-row-gap: {{ section.settings.collapsible_row_gap -}}px;
+    --collapsible-column-gap: {{ section.settings.collapsible_column_gap -}}px;
+    --collapsible-text-color: {{ collapsible_text_color.red }}, {{ collapsible_text_color.green }}, {{ collapsible_text_color.blue }};
+    --collapsible-background: {{ collapsible_background.red }}, {{ collapsible_background.green }}, {{ collapsible_background.blue }};
+    --modal-button-color: {{ modal_button_color.red }}, {{ modal_button_color.green }}, {{ modal_button_color.blue }};
+    --modal-button-bg: {{ modal_button_background.red }}, {{ modal_button_background.green }}, {{ modal_button_background.blue }};
+    --modal-popup-text-color: {{ modal_popup_text_color.red }}, {{ modal_popup_text_color.green }}, {{ modal_popup_text_color.blue }};
+    --modal-popup-background: {{ modal_popup_background.red }}, {{ modal_popup_background.green }}, {{ modal_popup_background.blue }};
+    --modal-title-size: {{ section.settings.modal_title_size -}}px;
+    --modal-item-heading-size: {{ section.settings.modal_item_heading_size -}}px;
+    --modal-item-content-size: {{ section.settings.modal_item_content_size -}}px;
+    --modal-item-image-radius: {{ section.settings.modal_item_image_radius -}}px;
+
+  }
+
+  @media (max-width: 999px) {
+    #shopify-section-{{section.id }} {
+      --collapsible-title-size: {{ section.settings.collapsible_title_size_mobile -}}px;
+      --collapsible-content-size: {{ section.settings.collapsible_content_size_mobile -}}px;
+      --collapsible-croner-radius: {{ section.settings.collapsible_corner_radius_mobile -}}px;
+      --collapsible-row-gap: {{ section.settings.collapsible_row_gap_mobile -}}px;
+      --collapsible-column-gap: {{ section.settings.collapsible_column_gap_mobile -}}px;
+      --modal-title-size: {{ section.settings.modal_title_size_mobile -}}px;
+      --modal-item-heading-size: {{ section.settings.modal_item_heading_size_mobile -}}px;
+      --modal-item-content-size: {{ section.settings.modal_item_content_size_mobile -}}px;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    #shopify-section-{{ section.id }} {
+        --space-top: {{ section.settings.space_top -}}px;
+        --space-bottom: {{ section.settings.space_bottom -}}px;
+    }
+  }
+
+  {%- for block in section.blocks -%}
+     {% case block.type %}
+        {% when 'subheading' %}
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --subheading-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --subheading-color: {{ section_color }};
+                {% else %}
+                    --subheading-color: {{ settings.heading_color }};
+                {% endif %}
+
+                --subheading-transform: {{ block.settings.text_transform }};
+                --subheading-font-size: {{ block.settings.font_size -}}px;
+                --subheading-line-height: {{ block.settings.line_height }};
+                --subheading-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --subheading-space-top: {{ block.settings.space_top -}}px;
+                --subheading-space-bottom: {{ block.settings.space_bottom -}}px;
+            }
+            @media (max-width: 999px) {
+                #shopify-section-{{ section.id }} {
+                    --subheading-font-size: {{ block.settings.font_size_mobile -}}px;
+                    --subheading-line-height: {{ block.settings.line_height_mobile }};
+                    --subheading-letter-spacing: {{ block.settings.letter_spacing_mobile -}}px;
+                    --subheading-space-top: {{ block.settings.space_top_mobile -}}px;
+                    --subheading-space-bottom: {{ block.settings.space_bottom_mobile -}}px;
+                }
+            }
+        {% when 'heading' %}
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --heading-color: {{ section_color }};
+                {% else %}
+                    --heading-color: {{ settings.heading_color }};
+                {% endif %}
+
+                {% if block.settings.enable_custom_max_width %}
+                    --heading-max-width: {{ block.settings.custom_max_width -}}px;
+                    {% assign alignment = block.settings.alignment %}
+                    {%- if alignment == 'left'  -%}
+                        --heading-margin-left: 0;
+                        --heading-margin-right: auto;
+                    {%- elsif alignment == 'right'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: 0;
+                    {%- elsif alignment == 'center'  -%}
+                        --heading-margin-left: auto;
+                        --heading-margin-right: auto;
+                    {%- endif -%}
+                {%- else -%}
+                    --heading-max-width: unset;
+                    --heading-margin-left: unset;
+                    --heading-margin-right: unset;
+                {% endif %}
+
+                --heading-transform: {{ block.settings.text_transform }};
+                --heading-font-size: {{ block.settings.font_size -}}px;
+                --heading-weight: {{ block.settings.font_weight }};
+                --heading-line-height: {{ block.settings.line_height }};
+                --heading-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --heading-space-top: {{ block.settings.space_top -}}px;
+                --heading-space-bottom: {{ block.settings.space_bottom -}}px;
+            }
+            @media (max-width: 999px) {
+                #shopify-section-{{ section.id }} {
+                    --heading-font-size: {{ block.settings.font_size_mobile -}}px;
+                    --heading-line-height: {{ block.settings.line_height_mobile }};
+                    --heading-letter-spacing: {{ block.settings.letter_spacing_mobile -}}px;
+                    --heading-weight: {{ block.settings.font_weight_mobile }};
+                    --heading-space-top: {{ block.settings.space_top_mobile -}}px;
+                    --heading-space-bottom: {{ block.settings.space_bottom_mobile -}}px;
+                }
+            }
+        {% when 'content' %}
+            #shopify-section-{{ section.id }} {
+                {% assign block_color = block.settings.text_color %}
+                {% assign section_color = section.settings.text_color %}
+
+                {% if block_color != 'rgba(0,0,0,0)' %}
+                    --content-color: {{ block_color }};
+                {% elsif section_color != 'rgba(0,0,0,0)' %}
+                    --content-color: {{ section_color }};
+                {% else %}
+                    --content-color: {{ settings.heading_color }};
+                {% endif %}
+
+                {% if block.settings.enable_custom_max_width %}
+                    --content-max-width: {{ block.settings.custom_max_width -}}px;
+                    {% assign alignment = block.settings.alignment %}
+                    {%- if alignment == 'left'  -%}
+                        --content-margin-left: 0;
+                        --content-margin-right: auto;
+                    {%- elsif alignment == 'right'  -%}
+                        --content-margin-left: auto;
+                        --content-margin-right: 0;
+                    {%- elsif alignment == 'center'  -%}
+                        --content-margin-left: auto;
+                        --content-margin-right: auto;
+                    {%- endif -%}
+                {%- else -%}
+                    --content-max-width: unset;
+                    --content-margin-left: unset;
+                    --content-margin-right: unset;
+                {% endif %}
+                --content-weight: normal;
+                --content-font-size: {{ block.settings.font_size -}}px;
+                --content-line-height: {{ block.settings.line_height }};
+                --content-letter-spacing: {{ block.settings.letter_spacing -}}px;
+                --content-space-top: {{ block.settings.space_top -}}px;
+                --content-space-bottom: {{ block.settings.space_bottom -}}px;
+            }
+            @media (max-width: 999px) {
+                #shopify-section-{{ section.id }} {
+                    --content-font-size: {{ block.settings.font_size_mobile -}}px;
+                    --content-line-height: {{ block.settings.line_height_mobile }};
+                    --content-letter-spacing: {{ block.settings.letter_spacing_mobile -}}px;
+                    --content-space-top: {{ block.settings.space_top_mobile -}}px;
+                    --content-space-bottom: {{ block.settings.space_bottom_mobile -}}px;
+                }
+            }
+        {% when 'image' %}
+          #shopify-section-{{ section.id }} {
+              --image-corner-radius: {{ block.settings.corner_radius -}}px;
+              --image-space-top: {{ block.settings.space_top -}}px;
+              --image-space-bottom: {{ block.settings.space_bottom -}}px;
+          }
+            @media (max-width: 999px) {
+              #shopify-section-{{ section.id }} {
+                --image-corner-radius: {{ block.settings.corner_radius_mobile -}}px;
+                --image-space-top: {{ block.settings.space_top_mobile -}}px;
+                --image-space-bottom: {{ block.settings.space_bottom_mobile -}}px;
+              }
+            }
+     {% endcase %}
+  {%- endfor -%}
+
+    .cro_pdp_product_tabs_section {
+        display: block;
+        color: rgb(var(--text-color));
+        background: rgb(var(--section-background));
+        {% if section.settings.background == 'rgba(0,0,0,0)' %}
+        margin-top: var(--space-top);
+        margin-bottom: var(--space-bottom);
+        {% else %}
+        padding-top: var(--space-top);
+        padding-bottom: var(--space-bottom);
+        {% endif %}
+    }
+    .cro_pdp_product_tabs_section .container  {
+        {% if section.settings.enable_custom_max_width %}
+            max-width: {{ section.settings.custom_max_width -}}px;
+        {% endif %}
+    }
+    .cro_pdp_product_tabs_section_inner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--collapsible-row-gap);
+    }
+
+    .cro_pdp_product_tabs_heading {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        align-items: center;
+        text-align: center;
+    }
+
+
+    /* Subheader CSS */
+    .cro_richtext__subheader {
+        display: block;
+        font-family: var(--subheading-family);
+        font-weight: var(--subheading-weight);
+        color: var(--subheading-color);
+        text-transform: var(--subheading-transform);
+        font-size: var(--subheading-font-size);
+        line-height: var(--subheading-line-height);
+        letter-spacing: var(--subheading-letter-spacing);
+        margin-top: var(--subheading-space-top);
+        margin-bottom: var(--subheading-space-bottom);
+    }
+    /* Header CSS */
+    .cro_richtext__header {
+        color: var(--heading-color);
+        font-family: var(--heading-family);
+        font-weight: var(--heading-weight);
+        text-align: var(--heading-alignment);
+        text-transform: var(--heading-transform);
+        font-size: var(--heading-font-size);
+        line-height: var(--heading-line-height);
+        letter-spacing: var(--heading-letter-spacing);
+        margin-top: var(--heading-space-top);
+        margin-bottom: var(--heading-space-bottom);
+        max-width: var(--heading-max-width);
+        margin-left: var(--heading-margin-left);
+        margin-right: var(--heading-margin-right);
+    }
+
+    /* Content CSS */
+    .cro_richtext__content {
+        display: block;
+        text-align: var(--content-alignment);
+        margin-top: var(--content-space-top);
+        margin-bottom: var(--content-space-bottom);
+        max-width: var(--content-max-width);
+        margin-left: var(--content-margin-left);
+        margin-right: var(--content-margin-right);
+    }
+    .cro_richtext__content * {
+        color: var(--content-color);
+        font-family: var(--content-family);
+        font-weight: var(--content-weight);
+        font-size: var(--content-font-size);
+        line-height: var(--content-line-height);
+        letter-spacing: var(--content-letter-spacing);
+        margin: 0;
+    }
+    .cro_richtext__content * strong {
+        font-weight: bold;
+        font-size: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+    }
+    .cro_richtext__content * a {
+        color: var(--content-color);
+    }
+
+    /* Image CSS */
+    .cro_pdp_product_tabs_thumbnail {
+        border-radius: var(--image-corner-radius);
+        overflow: hidden;
+        width: 100%;
+        margin-top: var(--image-space-top);
+        margin-bottom: var(--image-space-bottom);
+    }
+    .cro_pdp_product_tabs_thumbnail svg {
+        background: #F5F5F5;
+        width: 100%;
+        height: auto;
+        display: flex;
+        max-height: 500px;
+    }
+
+    /* Tabs-List CSS */
+    .cro_pdp_product_tabs_list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--collapsible-column-gap);
+        align-items: start;
+    }
+    .cro_pdp_product_tabs__item {
+        border-radius: var(--collapsible-croner-radius);
+        overflow: hidden;
+        color: rgb(var(--collapsible-text-color));
+        background-color: rgb(var(--collapsible-background));
+    }
+    .cro_pdp_product_tabs__item svg {
+        background: #F5F5F5;
+        width: 100%;
+        display: flex;
+        height: auto;
+        max-height: 300px;
+    }
+
+
+    /*  SKB Universal Collapsible  */
+    .cro_pdp_product_tabs__item  button.ed-collapsible-toggle {
+      user-select: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      overflow: visible;
+      background: none;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+      gap: 8px;
+    }
+
+    .cro_pdp_product_tabs__item  button.ed-collapsible-toggle p.heading.h6 {
+        margin: 0;
+        font-size: var(--collapsible-title-size);
+        {% if section.settings.collapsible_title_uppercase %}
+          text-transform: uppercase;
+        {% endif %}
+    }
+    .cro_pdp_product_tabs__item ed-collapsible .ed-collapsible__content p {
+      font-size: var(--collapsible-content-size);
+      line-height: 1.5;
+    }
+    span.ed-collapsible-toggle-icon {
+        display: flex;
+    }
+
+    span.ed-collapsible-toggle-icon svg.icon-minus {
+        display: none;
+    }
+
+    span.ed-collapsible-toggle-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    button.ed-collapsible-toggle.is-open span.ed-collapsible-toggle-icon svg.icon-minus {
+        display: flex;
+    }
+
+    button.ed-collapsible-toggle.is-open span.ed-collapsible-toggle-icon svg.icon-plus {
+        display: none;
+    }
+
+    .ed-collapsible__content {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-bottom: 1.5rem;
+    }
+
+
+    .cro_pdp_product_tabs__item .ed-collapsible-content {
+      overflow: hidden;
+      transition: height 0.5s ease, opacity 0.25s ease;
+      opacity: 1;
+    }
+
+    .cro_pdp_product_tabs__item .ed-collapsible-content:not([data-open]) {
+      display: block;
+      height: 0;
+      opacity: 0;
+    }
+    /*  END:SKB Universal Collapsible  */
+
+    /*  SKB Universal Modal CSS  */
+    .lock-all {
+      overflow: hidden;
+      touch-action: none;
+    }
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_button {
+      padding: 16px 32px;
+      overflow: visible;
+      border: none;
+      display: inline-flex;
+      border-radius: 50px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+      margin-right: 8px;
+      font-size: 16px;
+      background: rgb(var(--modal-button-bg));
+      color: rgb(var(--modal-button-color));
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 0 auto;
+      align-items: center;
+      font-weight: 600;
+    }
+    @media (max-width: 767px) {
+      .cro_pdp_product_tabs_modal__wrap .skb_popup_button {
+          padding: 8px 16px;
+      }
+    }
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_button  svg {
+     width: 18px;
+     height: auto;
+    }
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_button:hover {
+      box-shadow: 0 1px 3px 0 #00000026, 0 1px 2px 0 #0003;
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal {
+      position: fixed;
+      font-size: 1rem;
+      z-index: 10;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      transform: translateY(100%);
+      transition: transform 0.7s cubic-bezier(0.75, 0, 0.175, 1),
+        visibility 0.7s cubic-bezier(0.75, 0, 0.175, 1);
+      touch-action: manipulation;
+      visibility: hidden;
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal[open] {
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal__overlay {
+      position: absolute;
+      content: "";
+      height: 100vh;
+      width: 100vw;
+      left: 0;
+      bottom: calc(100% - 10px);
+      background: #000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal[open] > .skb_popup_modal__overlay {
+      visibility: visible;
+      opacity: 0.3;
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal__content {
+      position: relative;
+      display: flow-root;
+      background: rgb(var(--modal-popup-background));
+      color: rgb(var(--modal-popup-text-color));
+      border-radius: 10px 10px 0 0;
+      padding-top: 7.5rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scroll-behavior: smooth;
+      overflow: auto;
+      max-height: 90vh;
+    }
+    .skb_popup_modal__content__header {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: calc(100% - 9px);
+        display: flex;
+        justify-content: space-between;
+        padding: 2.5rem;
+        color: rgb(var(--modal-popup-text-color));
+        background: rgb(var(--modal-popup-background));
+        align-items: center;
+        z-index: 1;
+    }
+    @media (max-width: 767px) {
+      .skb_popup_modal__content__header {
+        padding: 1.5rem;
+      }
+    }
+    .skb_popup_modal__content__header h2.heading.h5 {
+        margin: 0;
+        font-size: var(--modal-title-size);
+        line-height: 1;
+        {% if section.settings.modal_title_uppercase %}
+          text-transform: uppercase;
+        {% endif %}
+    }
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_details_wrap__content {
+        padding: 0 0 4rem;
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal__close-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-right: -12px;
+    }
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_modal__close-button svg {
+        width: 20px;
+        height: auto;
+    }
+    @media (max-width: 767px) {
+      .cro_pdp_product_tabs_modal__wrap .skb_popup_modal__close-button svg {
+          width: 16px;
+      }
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_details_wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media screen and (min-width: 1000px) {
+      .cro_pdp_product_tabs_modal__wrap .skb_popup_details_wrap {
+        flex-direction: row;
+      }
+
+    }
+
+    .cro_pdp_product_tabs_modal__wrap .skb_popup_details_wrap__content {
+      width: 100%;
+    }
+
+    /*  END:SKB Universal Modal CSS  */
+
+    ul.cro_pdp_tabs_popup_content_list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    li.cro_pdp_tabs_popup_content_list__item {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .cro_pdp_tpcl_item__thumbnail img {
+      width: 100%;
+      display: flex;
+      border-radius: var(--modal-item-image-radius);
+    }
+    .cro_pdp_tpcl_item__thumbnail svg {
+        background: #f5f5f5;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border-radius:  var(--modal-item-image-radius);
+    }
+    .cro_pdp_tpcl_item__content h4.heading.h4 {
+      margin-bottom: 24px;
+      font-size: var(--modal-item-heading-size);
+      line-height: 1;
+      {% if section.settings.modal_item_uppercase_heading %}
+        text-transform: uppercase;
+      {% endif %}
+    }
+    .cro_pdp_tpcl_item__content p {
+      font-size: var(--modal-item-content-size);
+      line-height: 1.5;
+    }
+    .cro_pdp_tpcl_item__content .button.button--primary {
+      border-radius: 50px;
+      margin-top: 1rem;
+      line-height: 42px;
+    }
+
+
+    @media (min-width: 1000px) {
+      ul.cro_pdp_tabs_popup_content_list li:nth-child(odd) .cro_pdp_tpcl_item__content {
+          order: -1;
+      }
+      li.cro_pdp_tabs_popup_content_list__item {
+          grid-template-columns: 1fr 1fr;
+      }
+    }
+
+  @media (max-width: 999px) {
+    .cro_pdp_product_tabs_list {
+        grid-template-columns: 1fr;
+    }
+    li.cro_pdp_tabs_popup_content_list__item {
+        gap: 1.5rem;
+    }
+
+    .cro_pdp_tpcl_item__content h4.heading.h4 {
+        margin-bottom: 16px;
+    }
+
+  }
+</style>
+
+<div class="cro_pdp_product_tabs_section">
+  <div class="container">
+    <div class="cro_pdp_product_tabs_section_inner">
+      <div class="cro_pdp_product_tabs_heading">
+        {%- for block in section.blocks -%}
+          {% case block.type %}
+            {% when 'subheading' %}
+              <div class="cro_richtext__subheader" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+              </div>
+            {% when 'heading' %}
+              <h2 class="cro_richtext__header" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+              </h2>
+            {% when 'content' %}
+              <div class="cro_richtext__content" {{ block.shopify_attributes }}>
+                {{ block.settings.content }}
+              </div>
+            {% when 'image' %}
+              <div class="cro_pdp_product_tabs_thumbnail" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{-
+                    block.settings.image
+                    | image_url: width: block.settings.image.width
+                    | image_tag:
+                      sizes: '100vw',
+                      widths: '350,500,750,1000,1200,1400,1600,1800,2000,2200',
+                      alt: block.settings.image.alt
+                  -}}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag }}
+                {%- endif -%}
+              </div>
+          {% endcase %}
+        {%- endfor -%}
+      </div>
+
+      <div class="cro_pdp_product_tabs_list">
+        {% assign tabs_items = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'item' %}
+            {% assign tabs_items = tabs_items | plus: 1 %}
+            {% if tabs_items <= 3 %}
+              <div class="cro_pdp_product_tabs__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{-
+                    block.settings.image
+                    | image_url: width: block.settings.image.width
+                    | image_tag: sizes: '100vw', widths: '300,400,500,600,700,800', alt: block.settings.image.alt
+                  -}}
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag }}
+                {%- endif -%}
+                <ed-collapsible-wrap>
+                  <ed-collapsible>
+                    <button class="ed-collapsible-toggle" aria-controls="block-id-1" aria-expanded="false">
+                      <p class="heading h6">{{ block.settings.heading }}</p>
+                      <span class="ed-collapsible-toggle-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="icon-plus"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="icon-minus"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                      </span>
+                    </button>
+
+                    <div id="block-id-1" class="ed-collapsible-content">
+                      <div class="ed-collapsible__content">
+                        {{ block.settings.description }}
+                      </div>
+                    </div>
+                  </ed-collapsible>
+                </ed-collapsible-wrap>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="cro_pdp_product_tabs_modal__wrap">
+        <button
+          is="skb-popup-toggle-button"
+          class="skb_popup_button"
+          aria-controls="cro-pdp-product-tabs-modal-{{ section.id }}"
+          aria-expanded="false"
+        >
+          <span>{{ section.settings.modal_open_button_text }}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+
+        <skb-modal-content id="cro-pdp-product-tabs-modal-{{ section.id }}" class="skb_popup_modal">
+          <div class="skb_popup_modal__overlay"></div>
+          <div class="skb_popup_modal__content">
+            <div class="skb_popup_modal__content__header">
+              <h2 class="heading h5">{{ section.settings.modal_title }}</h2>
+              <button type="button" class="skb_popup_modal__close-button tap-area" data-action="close" title="Close">
+                <svg focusable="false" width="14" height="14" class="icon icon--close" viewBox="0 0 14 14">
+                  <path d="M13 13L1 1M13 1L1 13" stroke="currentColor" stroke-width="2" fill="none"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="skb_popup_details_wrap">
+              <div class="skb_popup_details_wrap__content">
+                <div class="container">
+                  <ul class="cro_pdp_tabs_popup_content_list">
+                    {% for block in section.blocks %}
+                      {% if block.type == 'item' %}
+                        <li class="cro_pdp_tabs_popup_content_list__item" {{ block.shopify_attributes }}>
+                          <div class="cro_pdp_tpcl_item__thumbnail">
+                            {%- if block.settings.image != blank -%}
+                              {{-
+                                block.settings.image
+                                | image_url: width: block.settings.image.width
+                                | image_tag:
+                                  sizes: '100vw',
+                                  widths: '200,300,400,500,600,800,1000',
+                                  alt: block.settings.image.alt
+                              -}}
+                            {%- else -%}
+                              {{ 'image' | placeholder_svg_tag }}
+                            {%- endif -%}
+                          </div>
+                          <div class="cro_pdp_tpcl_item__content">
+                            <h4 class="heading h4">{{ block.settings.heading }}</h4>
+                            {{ block.settings.description }}
+
+                            {% if block.settings.button_text != blank %}
+                              <a
+                                href="{{ block.settings.button_url }}"
+                                class="button button--primary button--outline"
+                                {% if block.settings.button_open_at_new_tab %}
+                                  target="_blank"
+                                {% endif %}
+                              >
+                                {{- block.settings.button_text -}}
+                              </a>
+                            {% endif %}
+                          </div>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                  <button
+                    type="button"
+                    class="skb_popup_button tap-area"
+                    data-action="close_two"
+                    title="Close"
+                  >
+                    <span>{{ section.settings.modal_close_button_text }}</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </skb-modal-content>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Universal Collapsible
+  (function () {
+    const singleOpen = true; // Set to false for multiple open accordions
+    function openContent(element) {
+      element.style.overflow = 'hidden';
+      const height = element.scrollHeight;
+
+      const keyframes = {
+        height: ['0px', `${height}px`],
+        visibility: ['hidden', 'visible'],
+        opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 1],
+      };
+
+      const animation = element.animate(keyframes, {
+        duration: 500,
+        direction: 'normal',
+        easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+        fill: 'forwards',
+      });
+
+      animation.onfinish = () => {
+        element.style.overflow = 'visible';
+        element.style.height = `${height}px`;
+        element.setAttribute('data-open', '');
+      };
+
+      if (element.hasAttribute('data-animate-items')) {
+        element.animate(
+          {
+            opacity: [0, 1],
+            transform: ['translateY(10px)', 'translateY(0)'],
+          },
+          {
+            duration: 250,
+            delay: 250,
+            easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+            fill: 'forwards',
+          }
+        );
+      }
+    }
+
+    function closeContent(element) {
+      const height = element.scrollHeight;
+      element.style.overflow = 'hidden';
+
+      const animation = element.animate(
+        {
+          height: [`${height}px`, '0px'],
+          visibility: ['visible', 'hidden'],
+          opacity: element.hasAttribute('data-animate-items') ? [0, 0] : [1, 0],
+        },
+        {
+          duration: 500,
+          direction: 'normal',
+          easing: 'cubic-bezier(0.75, 0, 0.175, 1)',
+          fill: 'forwards',
+        }
+      );
+
+      animation.onfinish = () => {
+        element.style.overflow = 'hidden';
+        element.removeAttribute('data-open');
+      };
+    }
+
+    function initCollapsibleToggle(scope = document) {
+      const wraps = scope.querySelectorAll('ed-collapsible-wrap');
+
+      wraps.forEach((wrap) => {
+        const toggles = wrap.querySelectorAll('.ed-collapsible-toggle');
+
+        toggles.forEach((toggle) => {
+          if (toggle.dataset.initialized === 'true') return;
+
+          toggle.dataset.initialized = 'true';
+
+          const contentId = toggle.getAttribute('aria-controls');
+          const content = wrap.querySelector(`#${contentId}`);
+          if (!content) return;
+
+          // Keep initial state as-is (open or closed)
+          const isInitiallyOpen = content.hasAttribute('data-open');
+          toggle.setAttribute('aria-expanded', String(isInitiallyOpen));
+          toggle.classList.toggle('is-open', isInitiallyOpen);
+
+          toggle.addEventListener('click', () => {
+            const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+            // If singleOpen is true, close all other open accordions in the same wrap
+            if (singleOpen && !isOpen) {
+              const openToggles = wrap.querySelectorAll('.ed-collapsible-toggle[aria-expanded="true"]');
+              openToggles.forEach((otherToggle) => {
+                if (otherToggle !== toggle) {
+                  const otherContentId = otherToggle.getAttribute('aria-controls');
+                  const otherContent = wrap.querySelector(`#${otherContentId}`);
+                  if (otherContent && otherContent.hasAttribute('data-open')) {
+                    otherToggle.setAttribute('aria-expanded', 'false');
+                    otherToggle.classList.remove('is-open');
+                    closeContent(otherContent);
+                  }
+                }
+              });
+            }
+
+            toggle.setAttribute('aria-expanded', String(!isOpen));
+            toggle.classList.toggle('is-open', !isOpen);
+
+            if (!isOpen) {
+              openContent(content);
+            } else {
+              closeContent(content);
+            }
+          });
+        });
+      });
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function () {
+      initCollapsibleToggle();
+    });
+
+    // Reinitialize for each section dynamically loaded
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (e) {
+        const section = e.target;
+        initCollapsibleToggle(section);
+      });
+    }
+  })();
+
+  /* ===========================================================
+    ############# SKB Universal Modal JS #############
+    ===========================================================
+    This script is designed to work with the SKB Universal Modal component.
+    It initializes the modal functionality for the section, allowing users to open and close modals
+    by clicking buttons with the `skb-popup-toggle-button` attribute.
+    It also handles the Escape key to close the modal if it is open.
+    The modal content is expected to be wrapped in a `skb-modal-content` element
+    with an ID matching the button's `aria-controls` attribute.
+  */
+  (function () {
+    window.initSKBModal = function (scope = document) {
+      const toggleButtons = scope.querySelectorAll('[is="skb-popup-toggle-button"]');
+
+      toggleButtons.forEach((button) => {
+        const targetId = button.getAttribute('aria-controls');
+        const modal = scope.querySelector(`#${targetId}`);
+        if (!modal || !modal.tagName.toLowerCase().includes('skb-modal-content')) return;
+
+        const overlay = modal.querySelector('.skb_popup_modal__overlay');
+        const closeBtn = modal.querySelector('[data-action="close"]');
+        const closeBtnTwo = modal.querySelector('[data-action="close_two"]');
+
+        function openModal() {
+          modal.setAttribute('open', '');
+          button.setAttribute('aria-expanded', 'true');
+          document.documentElement.classList.add('lock-all');
+        }
+
+        function closeModal() {
+          modal.removeAttribute('open');
+          button.setAttribute('aria-expanded', 'false');
+          document.documentElement.classList.remove('lock-all');
+        }
+
+        button.addEventListener('click', openModal);
+        closeBtn?.addEventListener('click', closeModal);
+        closeBtnTwo?.addEventListener('click', closeModal);
+        overlay?.addEventListener('click', closeModal);
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && modal.hasAttribute('open')) {
+            closeModal();
+          }
+        });
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSKBModal();
+    });
+
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (e) => {
+        initSKBModal(e.target);
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "CRO | PDP Product Tabs",
+  "settings": [
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_max_width",
+      "label": "Custom max-width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "custom_max_width",
+      "min": 200,
+      "max": 2500,
+      "step": 25,
+      "unit": "px",
+      "label": "Max-width",
+      "default": 1750
+    },
+    {
+      "type": "range",
+      "id": "space_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Space Top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "space_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Space Bottom",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Collapsible items Settings"
+    },
+    {
+      "type": "color",
+      "id": "collapsible_text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "collapsible_background",
+      "label": "Background",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsible_title_uppercase",
+      "label": "Uppercase title",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "collapsible_title_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_content_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_corner_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_row_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Row gap",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "collapsible_column_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Modal Popup Settings"
+    },
+    {
+      "type": "color",
+      "id": "modal_button_color",
+      "label": "Button color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "modal_button_background",
+      "label": "Button BG",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "text",
+      "id": "modal_open_button_text",
+      "label": "Open Button Text",
+      "default": "OPEN KEY FEATURES"
+    },
+    {
+      "type": "text",
+      "id": "modal_close_button_text",
+      "label": "Close Button Text",
+      "default": "CLOSE KEY FEATURES"
+    },
+    {
+      "type": "header",
+      "content": "Modal Popup Settings [Open]"
+    },
+    {
+      "type": "color",
+      "id": "modal_popup_text_color",
+      "label": "Text color",
+      "default": "rgba(0,0,0,0)"
+    },
+    {
+      "type": "color",
+      "id": "modal_popup_background",
+      "label": "Background",
+      "default": "rgba(255,255,255,1)"
+    },
+    {
+      "type": "header",
+      "content": "Modal Title settings"
+    },
+    {
+      "type": "text",
+      "id": "modal_title",
+      "label": "Modal Title",
+      "default": "Main features"
+    },
+    {
+      "type": "checkbox",
+      "id": "modal_title_uppercase",
+      "label": "Uppercase Title",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "modal_title_size",
+      "min": 24,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Modal Item settings"
+    },
+    {
+      "type": "range",
+      "id": "modal_item_heading_size",
+      "min": 18,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 28
+    },
+    {
+      "type": "checkbox",
+      "id": "modal_item_uppercase_heading",
+      "label": "Uppercase heading",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "modal_item_content_size",
+      "min": 12,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "modal_item_image_radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Image corner radius",
+      "default": 8
+    },
+
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "space_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Space Top (mobile)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Space Bottom (mobile)",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Collapsible settings (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "collapsible_title_size_mobile",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size (mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_content_size_mobile",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size (mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_corner_radius_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Corner radius (mobile)",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "collapsible_row_gap_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Row gap (mobile)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "collapsible_column_gap_mobile",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Column gap (mobile)",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Modal settings (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "modal_title_size_mobile",
+      "min": 18,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size (Mobile)",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "modal_item_heading_size_mobile",
+      "min": 14,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size (Mobile)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "modal_item_content_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content size (Mobile)",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "Subheading"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "uppercase"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 8,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin bottom",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.2
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin bottom (Mobile)",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "Talk about your brand"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1200,
+          "step": 25,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 800
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "select",
+          "id": "text_transform",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "initial",
+              "label": "Normal"
+            },
+            {
+              "value": "uppercase",
+              "label": "Uppercase"
+            }
+          ],
+          "default": "initial"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 16,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size",
+          "default": 45
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": -0.3
+        },
+        {
+          "type": "range",
+          "id": "font_weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "label": "Font-weight",
+          "default": 600
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin bottom",
+          "default": 24
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Size (Mobile)",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height (Mobile)",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing (Mobile)",
+          "default": -0.3
+        },
+        {
+          "type": "range",
+          "id": "font_weight_mobile",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "label": "Font-weight (mobile)",
+          "default": 600
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin top (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin bottom (Mobile)",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "content",
+      "limit": 1,
+      "name": "Content",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p><strong>Lorem ipsum</strong> dolor, sit amet consectetur adipisicing elit. Porro ipsum beatae eius inventore alias expedita ducimus quia esse labore? Ipsum cupiditate molestias minima eius ea, pariatur ut fugit eaque est rem ducimus similique sint velit impedit assumenda expedita quisquam sed repudiandae, omnis voluptate culpa, blanditiis neque. Repudiandae quis soluta optio dicta quos animi praesentium.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_max_width",
+          "label": "Custom max-width",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "custom_max_width",
+          "min": 200,
+          "max": 1400,
+          "step": 20,
+          "unit": "px",
+          "label": "Max-width",
+          "default": 1200
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "line_height",
+          "min": 1,
+          "max": 3.5,
+          "step": 0.1,
+          "label": "Line-height",
+          "default": 1.7
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin bottom",
+          "default": 32
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "font_size_mobile",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Font-size (Mobile)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "line_height_mobile",
+          "min": 1,
+          "max": 2,
+          "step": 0.1,
+          "label": "Line-height (Mobile)",
+          "default": 1.5
+        },
+        {
+          "type": "range",
+          "id": "letter_spacing_mobile",
+          "min": -5,
+          "max": 5,
+          "step": 0.1,
+          "unit": "px",
+          "label": "Letter-spacing (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin bottom (Mobile)",
+          "default": 20
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Thumbnail",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "corner_radius",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "space_top",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin bottom",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Mobile settings"
+        },
+        {
+          "type": "range",
+          "id": "corner_radius_mobile",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "label": "Corner radius (mobile)",
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "space_top_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "space_bottom_mobile",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Margin bottom (Mobile)",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "name": "Tab item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Lorem ipsum heading"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex, ab! Amet fugiat corrupti placeat veniam rerum quaerat. Nam vel consequatur nesciunt accusantium eum totam qui. Aperiam, quod distinctio! Rerum quidem odio soluta error explicabo eius quos similique placeat illo eum, distinctio animi illum ipsa libero voluptas.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_open_at_new_tab",
+          "label": "Open at new tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CRO | PDP Product Tabs",
+      "settings": {
+        "collapsible_background": "#EEEEEE",
+        "modal_button_background": "#EEEEEE"
+      },
+      "blocks": [
+        {
+          "type": "subheading"
+        },
+        {
+          "type": "heading"
+        },
+        {
+          "type": "content"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

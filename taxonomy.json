@@ -1,0 +1,66 @@
+{
+  "_about": "Master filter taxonomy for the CRO Element Library. You own this file — edit values freely. The pipeline only uses values listed here; anything it wants to add goes into _proposed for your review, never straight into the live lists.",
+  "dimensions": {
+    "element_type": [
+      "Feature",
+      "Section",
+      "Block"
+    ],
+    "page_type": [
+      "PDP",
+      "Collection",
+      "Cart",
+      "Checkout",
+      "Home",
+      "Search",
+      "Global"
+    ],
+    "cro_type": [
+      "Social Proof",
+      "Urgency",
+      "Scarcity",
+      "Trust & Risk Reduction",
+      "Merchandising & Cross-sell",
+      "Pricing & Promotions",
+      "UX & Navigation",
+      "Personalization",
+      "Value Communication"
+    ],
+    "priority": [
+      "High",
+      "Medium",
+      "Low"
+    ],
+    "impact": [
+      "High",
+      "Medium",
+      "Low"
+    ],
+    "ease": [
+      "Easy",
+      "Moderate",
+      "Complex"
+    ]
+  },
+  "multi_value": [
+    "page_type",
+    "cro_type"
+  ],
+  "_proposed": {
+    "cro_types": [
+      "Product Media",
+      "Storytelling / Brand Content",
+      "Compliance / Legal Pricing",
+      "Experimentation Enablement"
+    ],
+    "element_type": [
+      "Snippet (embedded in theme section)"
+    ],
+    "page_types": [
+      "Content Page (Shopify page / custom page template)",
+      "Landing Page",
+      "Account"
+    ]
+  },
+  "_notes": "multi_value lists which dimensions an element can hold more than one of. 'ease' = implementation effort (Easy = theme-editor/no-code, Complex = metafields + heavy Liquid). 'impact' = CRO expert's expected conversion/AOV lift, not the ticket's own priority."
+}

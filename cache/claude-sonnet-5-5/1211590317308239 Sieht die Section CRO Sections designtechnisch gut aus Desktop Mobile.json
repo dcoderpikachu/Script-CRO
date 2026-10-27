@@ -1,0 +1,1 @@
+{"rec": {"is_element": false, "reason": "The ticket is a design-review question (\"Does the CRO Sections section look good on desktop/mobile?\") with an empty description and a single comment noting a missing image. It does not define a specific, reusable CRO element, so there is no spec to extract."}, "in": 147, "out": 95}
